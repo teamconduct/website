@@ -1,0 +1,35 @@
+#button::ng-deep button {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+#button.google::ng-deep button {
+    background-color: #EEEEEE;
+}
+
+#button.apple::ng-deep button {
+    background-color: #000000;
+}
+
+#logo {
+    height: 19.5px;
+}
+
+#label {
+    white-space: nowrap;
+    padding-left: 20px;
+    margin: 0;
+}
+
+#button.google:not(.invalid) #label {
+    color: #000000;
+}
+
+#button.apple:not(.invalid) #label {
+    color: #FFFFFF;
+}
+
+#button.loading::ng-deep #label {
+    padding-right: 10px;
+}

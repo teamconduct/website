@@ -1,0 +1,265 @@
+{
+  "@@locale": "en-US",
+  "1450681028373040085": "Create an account / Log in",
+  "@1450681028373040085": {
+    "description": "Title of the sign in form to indicate that this form is used to create a new account or to log in",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "0", "column": "147" },
+        "end": { "line": "1", "column": "116" }
+      }
+    ]
+  },
+  "67223391661851230": "Enter your email to sign up or log in",
+  "@67223391661851230": {
+    "description": "Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "1", "column": "155" },
+        "end": { "line": "4", "column": "35" }
+      }
+    ]
+  },
+  "2658972849078778785": "Email",
+  "@2658972849078778785": {
+    "description": "Label for the email input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "5", "column": "94" },
+        "end": { "line": "7", "column": "26" }
+      }
+    ]
+  },
+  "8902409277457307544": "Email is required to sign up / log in",
+  "@8902409277457307544": {
+    "description": "Email is required error message of the email input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "8", "column": "214" },
+        "end": { "line": "9", "column": "72" }
+      }
+    ]
+  },
+  "1651746589178197911": "Please enter a valid email address",
+  "@1651746589178197911": {
+    "description": "Email is invalid error message of the email input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "9", "column": "207" },
+        "end": { "line": "11", "column": "50" }
+      }
+    ]
+  },
+  "5207679231055482123": "Password",
+  "@5207679231055482123": {
+    "description": "Label for the password input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "13", "column": "100" },
+        "end": { "line": "15", "column": "29" }
+      }
+    ]
+  },
+  "1001639961700563183": "Password is required to sign up / log in",
+  "@1001639961700563183": {
+    "description": "Password is required error message of the password input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "16", "column": "226" },
+        "end": { "line": "17", "column": "78" }
+      }
+    ]
+  },
+  "8614332778977970982": "The password must be at least 8 characters long",
+  "@8614332778977970982": {
+    "description": "Password is too short error message of the password input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "17", "column": "229" },
+        "end": { "line": "19", "column": "58" }
+      }
+    ]
+  },
+  "8824131836049094722": "Sign in with email",
+  "@8824131836049094722": {
+    "description": "Button label to sign up or log in with email",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "19", "column": "337" },
+        "end": { "line": "20", "column": "40" }
+      }
+    ]
+  },
+  "8567188927115571434": "Password is wrong",
+  "@8567188927115571434": {
+    "description": "Email error wrong error",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "21", "column": "183" },
+        "end": { "line": "22", "column": "39" }
+      }
+    ]
+  },
+  "4539625320577283581": "An unknown error occured",
+  "@4539625320577283581": {
+    "description": "Email error unknown",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "22", "column": "165" },
+        "end": { "line": "25", "column": "6" }
+      },
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "32", "column": "164" },
+        "end": { "line": "34", "column": "19" }
+      },
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "38", "column": "161" },
+        "end": { "line": "40", "column": "18" }
+      }
+    ]
+  },
+  "3295000368935566039": "or continue with",
+  "@3295000368935566039": {
+    "description": "Label of the divider between sign in with email and the extern auth providers",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "26", "column": "143" },
+        "end": { "line": "28", "column": "79" }
+      }
+    ]
+  },
+  "2350967451789952929": "Popup to sign in with google was closed by user",
+  "@2350967451789952929": {
+    "description": "Google error popup canceled",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "30", "column": "185" },
+        "end": { "line": "31", "column": "43" }
+      }
+    ]
+  },
+  "7187849321824070351": "Popup to sign in with google could not be shown, it was blocked by the browser",
+  "@7187849321824070351": {
+    "description": "Google error popup blocked",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "31", "column": "182" },
+        "end": { "line": "32", "column": "42" }
+      }
+    ]
+  },
+  "5699869165641551631": "Popup to sign in with apple was closed by user",
+  "@5699869165641551631": {
+    "description": "Apple error popup canceled",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "36", "column": "182" },
+        "end": { "line": "37", "column": "42" }
+      }
+    ]
+  },
+  "1173329869584519234": "Popup to sign in with apple could not be shown, it was blocked by the browser",
+  "@1173329869584519234": {
+    "description": "Apple error popup blocked",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "37", "column": "179" },
+        "end": { "line": "38", "column": "41" }
+      }
+    ]
+  },
+  "7661386684073964763": "By clicking sign in, you agree to our {$START_TAG_P_BUTTON}{$CLOSE_TAG_P_BUTTON} and {$START_TAG_P_BUTTON_1}{$CLOSE_TAG_P_BUTTON}",
+  "@7661386684073964763": {
+    "description": "ToS and privacy policy notice",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "40", "column": "93" },
+        "end": { "line": "41", "column": "16" }
+      }
+    ]
+  },
+  "6404807169120616525": "Terms of Service",
+  "@6404807169120616525": {
+    "description": "Label of ToS button",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "40", "column": "229" },
+        "end": { "line": "40", "column": "281" }
+      }
+    ]
+  },
+  "778012480271298101": "Privacy Policy",
+  "@778012480271298101": {
+    "description": "Label of privacy policy button",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "40", "column": "363" },
+        "end": { "line": "41", "column": "46" }
+      }
+    ]
+  },
+  "3481141609591792839": "Sign in with Google",
+  "@3481141609591792839": {
+    "description": "Button label to sign up or log in with google",
+    "x-meaning": "sign-in-third-party",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\sign-in-third-party\\sign-in-third-party.component.ts",
+        "start": { "line": "33", "column": "28" },
+        "end": { "line": "33", "column": "116" }
+      }
+    ]
+  },
+  "89235887016242609": "Sign in with Apple",
+  "@89235887016242609": {
+    "description": "Button label to sign up or log in with apple",
+    "x-meaning": "sign-in-third-party",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\sign-in-third-party\\sign-in-third-party.component.ts",
+        "start": { "line": "35", "column": "28" },
+        "end": { "line": "35", "column": "114" }
+      }
+    ]
+  }
+}

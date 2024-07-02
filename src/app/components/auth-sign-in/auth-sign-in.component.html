@@ -1,0 +1,41 @@
+<h2 id="top-text-1" i18n="auth-sign-in|Title of the sign in form to indicate that this form is used to create a new account or to log in">Create an account / Log in</h2>
+<p id="top-text-2" i18n="auth-sign-in|Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in">Enter your email to sign up or log in</p>
+<form [formGroup]="loginForm" id="login-form">
+    <p-floatLabel id="email-input-label">
+        <input type="email" pInputText formControlName="email" id="email-input" />
+        <label for="email-input" i18n="auth-sign-in|Label for the email input field">Email</label>
+    </p-floatLabel>
+    <ng-container *ngIf="loginForm.get('email')!.invalid && loginForm.get('email')!.dirty">
+        <small *ngIf="loginForm.get('email')!.hasError('required')" id="email-input-error-required" class="input-error p-error" i18n="auth-sign-in|Email is required error message of the email input field">Email is required to sign up / log in</small>
+        <small *ngIf="loginForm.get('email')!.hasError('email')" id="email-input-error-email" class="input-error p-error" i18n="auth-sign-in|Email is invalid error message of the email input field">Please enter a valid email address</small>
+    </ng-container>
+    <p-floatLabel *ngIf="loginForm.get('email')!.valid && loginForm.get('email')!.dirty" id="password-input-label">
+        <p-password formControlName="password" id="password-input" />
+        <label for="password-input" i18n="auth-sign-in|Label for the password input field">Password</label>
+    </p-floatLabel>
+    <ng-container *ngIf="loginForm.get('email')!.valid && loginForm.get('email')!.dirty && loginForm.get('password')!.invalid && loginForm.get('password')!.dirty">
+        <small *ngIf="loginForm.get('password')!.hasError('required')" id="password-input-error-required" class="input-error p-error" i18n="auth-sign-in|Password is required error message of the password input field">Password is required to sign up / log in</small>
+        <small *ngIf="loginForm.get('password')!.hasError('minlength')" id="password-input-error-minlength" class="input-error p-error" i18n="auth-sign-in|Password is too short error message of the password input field">The password must be at least 8 characters long</small>
+    </ng-container>
+    <p-button (onClick)="signInWithEmail()" [loading]="signInService.state === 'email'" [disabled]="signInService.state !== null" [outlined]="emailSignInProvider.error !== null" [severity]="emailSignInProvider.error === null ? undefined : 'danger'"  i18n-label="auth-sign-in|Button label to sign up or log in with email" label="Sign in with email" id="form-submit-button" />
+    <ng-container *ngIf="emailSignInProvider.error !== null">
+        <small *ngIf="emailSignInProvider.error === 'wrong-password'" id="email-error-wrong-password" class="input-error p-error" i18n="auth-sign-in|Email error wrong error">Password is wrong</small>
+        <small *ngIf="emailSignInProvider.error === 'unknown'" id="email-error-unknown" class="input-error p-error" i18n="auth-sign-in|Email error unknown">An unknown error occured</small>
+   </ng-container>
+</form>
+<p-divider align="center">
+    <small class="p-text-secondary" i18n="auth-sign-in|Label of the divider between sign in with email and the extern auth providers">or continue with</small>
+</p-divider>
+<app-sign-in-third-party (onClick)="signInWithGoogle()" type="google" [loading]="signInService.state === 'google'" [disabled]="signInService.state !== null" [invalid]="googleSignInProvider.error !== null" id="google-button" />
+<ng-container *ngIf="googleSignInProvider.error !== null">
+    <small *ngIf="googleSignInProvider.error === 'popup-canceled'" id="google-error-popup-canceled" class="input-error p-error" i18n="auth-sign-in|Google error popup canceled">Popup to sign in with google was closed by user</small>
+    <small *ngIf="googleSignInProvider.error === 'popup-blocked'" id="google-error-popup-blocked" class="input-error p-error" i18n="auth-sign-in|Google error popup blocked">Popup to sign in with google could not be shown, it was blocked by the browser</small>
+    <small *ngIf="googleSignInProvider.error === 'unknown'" id="google-error-unknown" class="input-error p-error" i18n="auth-sign-in|Google error unknown">An unknown error occured</small>
+</ng-container>
+<app-sign-in-third-party (onClick)="signInWithApple()" type="apple" [loading]="signInService.state === 'apple'" [disabled]="signInService.state !== null" [invalid]="appleSignInProvider.error !== null" id="apple-button" />
+<ng-container *ngIf="appleSignInProvider.error !== null">
+    <small *ngIf="appleSignInProvider.error === 'popup-canceled'" id="apple-error-popup-canceled" class="input-error p-error" i18n="auth-sign-in|Apple error popup canceled">Popup to sign in with apple was closed by user</small>
+    <small *ngIf="appleSignInProvider.error === 'popup-blocked'" id="apple-error-popup-blocked" class="input-error p-error" i18n="auth-sign-in|Apple error popup blocked">Popup to sign in with apple could not be shown, it was blocked by the browser</small>
+    <small *ngIf="appleSignInProvider.error === 'unknown'" id="apple-error-unknown" class="input-error p-error" i18n="auth-sign-in|Apple error unknown">An unknown error occured</small>
+</ng-container>
+<p id="tos-privacy-policy-notice" i18n="auth-sign-in|ToS and privacy policy notice">By clicking sign in, you agree to our <p-button [text]="true" severity="secondary" i18n-label="auth-sign-in|Label of ToS button" label="Terms of Service" /> and <p-button [text]="true" severity="secondary" i18n-label="auth-sign-in|Label of privacy policy button" label="Privacy Policy" /></p>

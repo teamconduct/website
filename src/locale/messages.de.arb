@@ -1,0 +1,183 @@
+{
+  "@@locale": "de-DE",
+  "1450681028373040085": "Erstelle einen Account / Anmelden",
+  "@1450681028373040085": {
+    "description": "Title of the sign in form to indicate that this form is used to create a new account or to log in",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "0", "column": "147" },
+        "end": { "line": "1", "column": "116" }
+      }
+    ]
+  },
+  "67223391661851230": "Gebe deine Email für die Registrierung oder Anmeldung ein",
+  "@67223391661851230": {
+    "description": "Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "1", "column": "139" },
+        "end": { "line": "2", "column": "126" }
+      }
+    ]
+  },
+  "2658972849078778785": "Email",
+  "@2658972849078778785": {
+    "description": "Label for the email input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "5", "column": "88" },
+        "end": { "line": "7", "column": "26" }
+      }
+    ]
+  },
+  "5207679231055482123": "Passwort",
+  "@5207679231055482123": {
+    "description": "Label for the password input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "9", "column": "94" },
+        "end": { "line": "12", "column": "20" }
+      }
+    ]
+  },
+  "8902409277457307544": "Die Email ist erforderlich für die Registrierung / Anmeldung",
+  "@8902409277457307544": {
+    "description": "Email is required error message of the email input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "7", "column": "174" },
+        "end": { "line": "8", "column": "72" }
+      }
+    ]
+  },
+  "1651746589178197911": "Bitte gebe eine gültige Email Adresse ein",
+  "@1651746589178197911": {
+    "description": "Email is invalid error message of the email input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "8", "column": "170" },
+        "end": { "line": "12", "column": "5" }
+      }
+    ]
+  },
+  "1001639961700563183": "Das Passwort ist erforderlich für die Registrierung / Anmeldung",
+  "@1001639961700563183": {
+    "description": "Password is required error message of the password input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "15", "column": "183" },
+        "end": { "line": "16", "column": "78" }
+      }
+    ]
+  },
+  "8614332778977970982": "Das Passwort muss mindestens 8 Zeichen einhalten",
+  "@8614332778977970982": {
+    "description": "Password is too short error message of the password input field",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "16", "column": "185" },
+        "end": { "line": "19", "column": "33" }
+      }
+    ]
+  },
+  "8824131836049094722": "Mit Email anmelden",
+  "@8824131836049094722": {
+    "description": "Button label to sign up or log in with email",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "19", "column": "146" },
+        "end": { "line": "21", "column": "55" }
+      }
+    ]
+  },
+  "3295000368935566039": "oder anmelden mit",
+  "@3295000368935566039": {
+    "description": "Label of the divider between sign in with email and the extern auth providers",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "22", "column": "114" },
+        "end": { "line": "24", "column": "83" }
+      }
+    ]
+  },
+  "3481141609591792839": "Mit Google anmelden",
+  "@3481141609591792839": {
+    "description": "Button label to sign up or log in with google",
+    "x-meaning": "sign-in-third-party",
+    "x-locations": [
+      {
+        "file": "src\\app\\sign-in-third-party\\sign-in-third-party.component.ts",
+        "start": { "line": "25", "column": "28" },
+        "end": { "line": "25", "column": "116" }
+      }
+    ]
+  },
+  "89235887016242609": "Mit Apple anmelden",
+  "@89235887016242609": {
+    "description": "Button label to sign up or log in with apple",
+    "x-meaning": "sign-in-third-party",
+    "x-locations": [
+      {
+        "file": "src\\app\\sign-in-third-party\\sign-in-third-party.component.ts",
+        "start": { "line": "27", "column": "28" },
+        "end": { "line": "27", "column": "114" }
+      }
+    ]
+  },
+  "7661386684073964763": "Indem Sie auf Anmelden klicken, stimmen Sie sich mit unserer {$START_TAG_P_BUTTON}{$CLOSE_TAG_P_BUTTON} und {$START_TAG_P_BUTTON_1}{$CLOSE_TAG_P_BUTTON} zu",
+  "@7661386684073964763": {
+    "description": "ToS and privacy policy notice",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "26", "column": "62" },
+        "end": { "line": "27", "column": "16" }
+      }
+    ]
+  },
+  "6404807169120616525": "Nutzungsbedingungen",
+  "@6404807169120616525": {
+    "description": "Label of ToS button",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "26", "column": "163" },
+        "end": { "line": "26", "column": "215" }
+      }
+    ]
+  },
+  "778012480271298101": "Datenschutzrichtlinie",
+  "@778012480271298101": {
+    "description": "Label of privacy policy button",
+    "x-meaning": "auth-sign-in",
+    "x-locations": [
+      {
+        "file": "src\\app\\auth-sign-in\\auth-sign-in.component.html",
+        "start": { "line": "26", "column": "262" },
+        "end": { "line": "27", "column": "46" }
+      }
+    ]
+  }
+}
