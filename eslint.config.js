@@ -40,7 +40,8 @@ module.exports = tseslint.config(
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/consistent-indexed-object-style': 'off',
             '@typescript-eslint/no-empty-function': 'off',
-            '@typescript-eslint/consistent-type-definitions': 'off'
+            '@typescript-eslint/consistent-type-definitions': 'off',
+            '@angular-eslint/component-class-suffix': 'off'
         }
     },
     {

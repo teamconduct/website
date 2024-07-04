@@ -12,7 +12,7 @@ export interface ISignInProvider {
 
     state: SignInState;
 
-    error: string | null;
+    error: 'validation-failed' | string | null;
 
     checkValidation: () => Promise<boolean> | boolean;
 
@@ -27,12 +27,12 @@ export class EmailSignInProvider implements ISignInProvider {
 
     public readonly state: SignInState = 'email';
 
-    public error: 'wrong-password' | 'unknown' | null = null;
+    public error: 'validation-failed' |'wrong-password' | 'unknown' | null = null;
 
     public constructor(
         private readonly loginForm: FormGroup<{
-            email: FormControl<null>;
-            password: FormControl<null>;
+            email: FormControl<string | null>;
+            password: FormControl<string |null>;
         }>
     ) {}
 
@@ -61,7 +61,7 @@ export class GoogleSignInProvider implements ISignInProvider {
 
     public readonly state: SignInState = 'google';
 
-    public error: 'popup-canceled' | 'popup-blocked' | 'unknown' | null = null;
+    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | null = null;
 
     public checkValidation(): boolean {
         return true;
@@ -87,7 +87,7 @@ export class AppleSignInProvider implements ISignInProvider {
 
     public readonly state: SignInState = 'apple';
 
-    public error: 'popup-canceled' | 'popup-blocked' | 'unknown' | null = null;
+    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | null = null;
 
     public checkValidation(): boolean {
         return true;
@@ -143,8 +143,10 @@ export class SignInService {
             return;
         provider.error = null;
         const isValid = await provider.checkValidation();
-        if (!isValid)
+        if (!isValid) {
+            provider.error = 'validation-failed';
             return;
+        }
         this.state = provider.state;
 
         const authResult = await this.auth(provider);

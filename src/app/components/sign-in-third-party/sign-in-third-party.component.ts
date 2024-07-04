@@ -31,9 +31,9 @@ export class SignInThirdPartyComponent {
     public get label(): string {
         switch (this.type) {
         case 'google':
-            return $localize `:sign-in-third-party|Button label to sign up or log in with google:Sign in with Google`;
+            return $localize `:Button label to sign up or log in with google:Sign in with Google`;
         case 'apple':
-            return $localize `:sign-in-third-party|Button label to sign up or log in with apple:Sign in with Apple`;
+            return $localize `:Button label to sign up or log in with apple:Sign in with Apple`;
         }
     }
 }

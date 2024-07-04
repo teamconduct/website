@@ -14,7 +14,13 @@
 </ng-template>
 
 <p-button [text]="!invalid" [plain]="true" [loading]="loading" [disabled]="disabled" [severity]="invalid ? 'danger' : undefined" (onClick)="clicked()" id="button" [class.loading]="loading" [class.invalid]="invalid" [ngClass]="type">
-    <ng-container *ngTemplateOutlet="type === 'google' ? googleLogo : null" />
-    <ng-container *ngTemplateOutlet="type === 'apple' ? appleLogo : null" />
+    @switch (type) {
+        @case ("google") {
+            <ng-container *ngTemplateOutlet="type === 'google' ? googleLogo : null" />
+        }
+        @case ("apple") {
+            <ng-container *ngTemplateOutlet="type === 'apple' ? appleLogo : null" />
+        }
+    }
     <p id="label" [class.p-error]="invalid">{{ label }}</p>
 </p-button>

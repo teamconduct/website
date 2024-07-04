@@ -1,4 +1,8 @@
-#top-text-1, #top-text-2 {
+:host {
+    display: block;
+}
+
+#title, #subtitle {
     text-align: center;
     margin-left: 20px;
     margin-right: 20px;
@@ -6,6 +10,10 @@
 
 #login-form {
     width: 100%;
+}
+
+#password-input-label {
+    display: block;
 }
 
 #email-input-label::ng-deep .p-float-label, #password-input-label::ng-deep .p-float-label {
@@ -19,11 +27,6 @@
 #form-submit-button::ng-deep button {
     width: 100%;
     margin-top: 35px;
-}
-
-.input-error {
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 #sign-in-with-google-button::ng-deep button, #sign-in-with-apple-button::ng-deep button {
