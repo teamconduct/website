@@ -1,6 +1,6 @@
 import type { ITypeBuilder } from '../typeBuilder';
 import { Flattable, type Flatten } from './Flattable';
-import { entries, keys, mapRecord, values } from '../utils/record';
+import { entries, filterRecord, keys, mapRecord, values } from '../utils/record';
 
 export class Dictionary<K, T> implements Flattable<Record<string, T>> {
 
@@ -20,6 +20,12 @@ export class Dictionary<K, T> implements Flattable<Record<string, T>> {
         return Flattable.flatten(key) as string in this.dictionary;
     }
 
+    public getOptional(key: Flatten<K> extends string ? K : never): T | null {
+        if (!this.has(key))
+            return null;
+        return this.get(key);
+    }
+
     public get keys(): string[] {
         return keys(this.dictionary);
     }
@@ -34,6 +40,10 @@ export class Dictionary<K, T> implements Flattable<Record<string, T>> {
 
     public map<U>(callbackFn: (value: T, key: string) => U): Dictionary<K, U> {
         return new Dictionary(mapRecord(this.dictionary, callbackFn));
+    }
+
+    public filter(callbackFn: (value: T, key: string) => boolean): Dictionary<K, T> {
+        return new Dictionary(filterRecord(this.dictionary, callbackFn));
     }
 
     public get flatten(): Record<string, T> {

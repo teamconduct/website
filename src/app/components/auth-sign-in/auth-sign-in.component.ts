@@ -22,7 +22,7 @@ import { enterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 })
 export class AuthSignInComponent implements OnInit {
 
-    @Input() public handleSuccessfulSignIn: (() => Promise<void> | void) | null = null;
+    @Input() public handleSuccessfulSignIn: (() => Promise<string | null> | string | null) | null = null;
 
     public loginForm = new FormGroup({
         email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
@@ -80,6 +80,10 @@ export class AuthSignInComponent implements OnInit {
     }
 
     public get signInEmailErrorMessage(): string | null {
+        if (this.emailSignInProvider.error === null)
+            return null;
+        if (typeof this.emailSignInProvider.error === 'object')
+            return this.emailSignInProvider.error.message;
         switch (this.emailSignInProvider.error) {
         case 'validation-failed':
             return $localize `:Email error validation failed:Please fill out all fields correctly`;
@@ -87,12 +91,14 @@ export class AuthSignInComponent implements OnInit {
             return $localize `:Email error wrong error:Password is wrong`;
         case 'unknown':
             return $localize `:Email error unknown:An unknown error occured`;
-        case null:
-            return null;
         }
     }
 
     public get signInGoogleErrorMessage(): string | null {
+        if (this.googleSignInProvider.error === null)
+            return null;
+        if (typeof this.googleSignInProvider.error === 'object')
+            return this.googleSignInProvider.error.message;
         switch (this.googleSignInProvider.error) {
         case 'validation-failed':
             return $localize `:Google error validation failed:Please fill out all fields correctly`;
@@ -108,6 +114,10 @@ export class AuthSignInComponent implements OnInit {
     }
 
     public get signInAppleErrorMessage(): string | null {
+        if (this.appleSignInProvider.error === null)
+            return null;
+        if (typeof this.appleSignInProvider.error === 'object')
+            return this.appleSignInProvider.error.message;
         switch (this.appleSignInProvider.error) {
         case 'validation-failed':
             return $localize `:Apple error validation failed:Please fill out all fields correctly`;

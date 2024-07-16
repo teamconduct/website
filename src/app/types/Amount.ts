@@ -15,6 +15,16 @@ export class Amount implements Flattable<number> {
         );
     }
 
+    public static get zero(): Amount {
+        return new Amount(0, 0);
+    }
+
+    public added(amount: Amount): Amount {
+        const subunitValue = this.subunitValue + amount.subunitValue;
+        const value = this.value + amount.value + Math.floor(subunitValue / 100);
+        return new Amount(value, subunitValue % 100);
+    }
+
     public get completeValue(): number {
         return this.value + this.subunitValue / 100;
     }

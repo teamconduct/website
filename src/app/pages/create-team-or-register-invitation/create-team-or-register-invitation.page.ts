@@ -10,6 +10,11 @@ import { DividerModule } from 'primeng/divider';
 import { FirebaseFunctionsService } from '../../services/firebase-functions.service';
 import { Tagged } from '../../types/Tagged';
 import { Guid } from '../../types/Guid';
+import { Router } from '@angular/router';
+import { appRoutes } from '../../app.routes';
+import { UserManagerService } from '../../services/user-manager.service';
+import { TeamId } from '../../types/Team';
+import { RandomDataGeneratorService } from '../../services/random-data-generator.service';
 
 @Component({
     selector: 'app-create-team-or-register-invitation',
@@ -22,7 +27,7 @@ import { Guid } from '../../types/Guid';
 })
 export class CreateTeamOrRegisterInvitationPage {
 
-    public createTeamState: 'loading' | 'validation-failed' | 'team-create-failed' | null = null;
+    public createTeamState: 'loading' | 'validation-failed' | 'team-create-failed'| 'navigation-failed' | null = null;
 
     public registerWithInvitationState: 'loading' | 'validation-failed' | null = null;
 
@@ -40,7 +45,13 @@ export class CreateTeamOrRegisterInvitationPage {
 
     private firebaseFunctionsService = inject(FirebaseFunctionsService);
 
+    private userManager = inject(UserManagerService);
+
+    private randomDataGenerator = inject(RandomDataGeneratorService);
+
     private changeDetectorRef = inject(ChangeDetectorRef);
+
+    private router = inject(Router);
 
     public async createTeam() {
         if (this.createTeamState === 'loading')
@@ -53,8 +64,9 @@ export class CreateTeamOrRegisterInvitationPage {
         this.createTeamState = 'loading';
 
         try {
-            await this.firebaseFunctionsService.function('team').function('new').call({
-                id: new Tagged(Guid.generate(), 'team'),
+            const teamId: TeamId = new Tagged(Guid.generate(), 'team');
+            const user = await this.firebaseFunctionsService.function('team').function('new').call({
+                id: teamId,
                 name: this.teamForm.get('name')!.value!,
                 paypalMeLink: null,
                 personId: new Tagged(Guid.generate(), 'person'),
@@ -63,13 +75,21 @@ export class CreateTeamOrRegisterInvitationPage {
                     lastName: this.teamForm.get('personLastName')!.value
                 }
             });
+            this.userManager.signedInUser = user;
+            this.userManager.currentTeamId = teamId;
+            await this.randomDataGenerator.createTestData();
         } catch {
             this.createTeamState = 'team-create-failed';
             this.changeDetectorRef.markForCheck();
             return;
         }
 
-        // TODO redirect
+        const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]);
+        if (!navigationSuccessful) {
+            this.createTeamState = 'navigation-failed';
+            this.changeDetectorRef.markForCheck();
+            return;
+        }
 
         this.teamForm.reset();
         this.createTeamState = null;
@@ -118,11 +138,14 @@ export class CreateTeamOrRegisterInvitationPage {
     public get createTeamErrorMessage(): string | null {
         if (this.createTeamState === null || this.createTeamState === 'loading')
             return null;
-        if (this.createTeamState === 'validation-failed')
+        switch (this.createTeamState) {
+        case 'validation-failed':
             return $localize `:Validation failed error message of the create team button:Please fill in all required fields`;
-        if (this.createTeamState === 'team-create-failed')
+        case 'team-create-failed':
             return $localize `:Team create failed error message of the create team button:Failed to create team`;
-        return null;
+        case 'navigation-failed':
+            return $localize `:Navigation failed error message of the create team button:Failed to navigate to the home page`;
+        }
     }
 
     public get invitationFormLinkOrCodeErrorMessage(): string | null {
@@ -138,8 +161,9 @@ export class CreateTeamOrRegisterInvitationPage {
     public get registerWithInvitationErrorMessage(): string | null {
         if (this.registerWithInvitationState === null || this.registerWithInvitationState === 'loading')
             return null;
-        if (this.registerWithInvitationState === 'validation-failed')
-            return $localize `:Validation failed error message of the register with invitation button:Invalid link or code`;
-        return null;
+        switch (this.registerWithInvitationState) {
+        case 'validation-failed':
+            return $localize `:Validation failed error message of the register with invitation button:Please fill in all required fields`;
+        }
     }
 }

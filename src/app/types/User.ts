@@ -15,6 +15,7 @@ export namespace UserId {
 
 export type User = {
     teams: Dictionary<TeamId, {
+        name: string
         personId: PersonId
         roles: UserRole[]
     }>
@@ -23,6 +24,7 @@ export type User = {
 export namespace User {
     export const builder = new ObjectTypeBuilder<Flatten<User>, User>({
         teams: new DictionaryTypeBuilder(new ObjectTypeBuilder({
+            name: new ValueTypeBuilder(),
             personId: new TaggedTypeBuilder<string, PersonId>('person', new TypeBuilder(Guid.from)),
             roles: new ArrayTypeBuilder(new ValueTypeBuilder())
         }))

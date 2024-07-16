@@ -1,0 +1,7 @@
+<p-menu [model]="teamMenu" />
+
+@let signedInPerson = signedInPerson$ | async;
+
+@if (signedInPerson !== null && signedInPerson !== 'not-found') {
+  <app-fines-list [personId]="signedInPerson.id" [fines]="signedInPerson.fines" />
+}

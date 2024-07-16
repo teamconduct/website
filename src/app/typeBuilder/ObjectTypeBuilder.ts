@@ -2,12 +2,12 @@ import { mapRecord } from '../utils';
 import type { ITypeBuilder } from './ITypeBuilder';
 
 export class ObjectTypeBuilder<
-    V extends { [K in string]: unknown },
-    T extends { [K in keyof V]: unknown }
+    V extends { [K in keyof T]: unknown },
+    T extends { [K in string]: unknown }
 > implements ITypeBuilder<V, T> {
 
     public constructor(
-        private readonly builders: { [K in keyof V]: ITypeBuilder<V[K], T[K]> }
+        private readonly builders: { [K in keyof T]: ITypeBuilder<V[K], T[K]> }
     ) {}
 
     public build(value: V): T {

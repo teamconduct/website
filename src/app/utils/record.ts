@@ -19,3 +19,11 @@ export function mapRecord<T extends Record<string, unknown>, U>(record: T, callb
         newRecord[entry.key] = callbackFn(entry.value, entry.key);
     return newRecord;
 }
+
+export function filterRecord<T>(record: Record<string, T>, callbackFn: (value: T, key: string) => boolean): Record<string, T> {
+    const newRecord = {} as Record<string, T>;
+    for (const entry of entries(record))
+        if (callbackFn(entry.value, entry.key))
+            newRecord[entry.key] = entry.value;
+    return newRecord;
+}

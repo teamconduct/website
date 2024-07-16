@@ -1,10 +1,11 @@
 import { PersonPrivateProperties } from './PersonPrivateProperties';
 import { PersonSignInProperties } from './PersonSignInProperties';
-import { FineId } from './Fine';
+import { Fine, FineId } from './Fine';
 import { ArrayTypeBuilder, ObjectTypeBuilder, OptionalTypeBuilder, TypeBuilder } from '../typeBuilder';
 import { Flatten } from './Flattable';
 import { Guid } from './Guid';
 import { Tagged, TaggedTypeBuilder } from './Tagged';
+import { Amount } from './Amount';
 
 export type PersonId = Tagged<Guid, 'person'>;
 
@@ -28,3 +29,12 @@ export namespace Person {
         signInProperties: new OptionalTypeBuilder(PersonSignInProperties.builder)
     });
 }
+
+export type PersonWithFines = Omit<Person, 'fineIds'> & {
+    fines: Fine[],
+    amounts: {
+        total: Amount,
+        payed: Amount,
+        notPayed: Amount
+    }
+};

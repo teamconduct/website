@@ -17,6 +17,10 @@ export class Tagged<T, Tag> implements Flattable<T> {
         return new Tagged(Guid.generate(), tag);
     }
 
+    public static guid<Tag>(guidString: string, tag: Tag): Tagged<Guid, Tag> {
+        return new Tagged(Guid.from(guidString), tag);
+    }
+
     public get guidString(): T extends Guid ? string : never {
         return (this.value as Guid).guidString as T extends Guid ? string : never;
     }

@@ -41,7 +41,8 @@ module.exports = tseslint.config(
             '@typescript-eslint/consistent-indexed-object-style': 'off',
             '@typescript-eslint/no-empty-function': 'off',
             '@typescript-eslint/consistent-type-definitions': 'off',
-            '@angular-eslint/component-class-suffix': 'off'
+            '@angular-eslint/component-class-suffix': 'off',
+            '@angular-eslint/no-input-rename': 'off'
         }
     },
     {

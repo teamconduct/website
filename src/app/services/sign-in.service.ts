@@ -8,11 +8,11 @@ export type SignInState = 'email' | 'google' | 'apple';
 
 export type SignInErrorCode = typeof AuthErrorCodes[keyof typeof AuthErrorCodes];
 
-export interface ISignInProvider {
+export interface ISignInProvider<ErrorState extends string> {
 
     state: SignInState;
 
-    error: 'validation-failed' | string | null;
+    error: 'validation-failed' | ErrorState | { message: string } | null;
 
     checkValidation: () => Promise<boolean> | boolean;
 
@@ -23,11 +23,11 @@ export interface ISignInProvider {
     handleAuthError(code: SignInErrorCode | null): void;
 }
 
-export class EmailSignInProvider implements ISignInProvider {
+export class EmailSignInProvider implements ISignInProvider<'validation-failed' | 'wrong-password' | 'unknown'> {
 
     public readonly state: SignInState = 'email';
 
-    public error: 'validation-failed' |'wrong-password' | 'unknown' | null = null;
+    public error: 'validation-failed' | 'wrong-password' | 'unknown' | { message: string } | null = null;
 
     public constructor(
         private readonly loginForm: FormGroup<{
@@ -57,11 +57,11 @@ export class EmailSignInProvider implements ISignInProvider {
     }
 }
 
-export class GoogleSignInProvider implements ISignInProvider {
+export class GoogleSignInProvider implements ISignInProvider<'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown'> {
 
     public readonly state: SignInState = 'google';
 
-    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | null = null;
+    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | { message: string } | null = null;
 
     public checkValidation(): boolean {
         return true;
@@ -83,11 +83,11 @@ export class GoogleSignInProvider implements ISignInProvider {
     }
 }
 
-export class AppleSignInProvider implements ISignInProvider {
+export class AppleSignInProvider implements ISignInProvider<'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown'> {
 
     public readonly state: SignInState = 'apple';
 
-    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | null = null;
+    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | { message: string } | null = null;
 
     public checkValidation(): boolean {
         return true;
@@ -116,15 +116,15 @@ export class SignInService {
 
     public state: SignInState | null = null;
 
-    private handleSuccessfulSignIn: (() => Promise<void> | void) | null = null;
+    private handleSuccessfulSignIn: (() => Promise<string | null> | string | null) | null = null;
 
     private authService = inject(AuthService);
 
-    public setHandleSuccessfulSignIn(handleSuccessfulSignIn: () => Promise<void> | void) {
+    public setHandleSuccessfulSignIn(handleSuccessfulSignIn: () => Promise<string | null> | string | null) {
         this.handleSuccessfulSignIn = handleSuccessfulSignIn;
     }
 
-    private async auth(provider: ISignInProvider): Promise<'succeeded' | 'failed'> {
+    private async auth<ErrorState extends string>(provider: ISignInProvider<ErrorState>): Promise<'succeeded' | 'failed'> {
         try {
             const authProvider = provider.getAuthProvider();
             await this.authService.signIn(authProvider);
@@ -138,7 +138,7 @@ export class SignInService {
         return 'succeeded';
     }
 
-    public async signIn(provider: ISignInProvider) {
+    public async signIn<ErrorState extends string>(provider: ISignInProvider<ErrorState>) {
         if (this.state !== null)
             return;
         provider.error = null;
@@ -155,8 +155,11 @@ export class SignInService {
             return;
         }
 
-        if (this.handleSuccessfulSignIn !== null)
-            await this.handleSuccessfulSignIn();
+        if (this.handleSuccessfulSignIn !== null) {
+            const errorMessage = await this.handleSuccessfulSignIn();
+            if (errorMessage !== null)
+                provider.error = { message: errorMessage };
+        }
 
         await provider.cleanup();
         this.state = null;

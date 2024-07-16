@@ -1,0 +1,18 @@
+<div class="flex flex-row align-items-start justify-content-between w-full py-5 border-200" [class.border-top-1]="!hideTopBorder">
+    <div class="flex flex-column align-items-start justify-content-center mr-1">
+        <p class="text-color font-bold text-2xl my-0">{{ fine.reason }}</p>
+        <p class="text-color-secondary text-lg my-0">{{ fine.date | date }}</p>
+    </div>
+    <div class="flex flex-row align-items-end justify-content-center my-auto">
+        <p class="text-color-secondary font-bold text-3xl my-0 mr-5">{{ fine.amount | amount }}</p>
+        @if (canChangeFine) {
+            <p-tag [value]="payedTag.value" [severity]="payedTag.severity" (click)="toggleFineState()" class="cursor-pointer" styleClass="py-1 px-3 text-lg font-medium">
+                <ng-template pTemplate="icon">
+                    <fa-icon [icon]="loading ? ['fas', 'spinner'] : ['fas', fine.payedState === 'payed' ? 'toggle-on' : 'toggle-off']" [animation]="loading ? 'spin' : undefined" size="2xl" class="pr-1" />
+                </ng-template>
+            </p-tag>
+        } @else {
+            <p-tag [value]="payedTag.value" [severity]="payedTag.severity" styleClass="py-1 px-3 text-lg font-medium" />
+        }
+    </div>
+</div>
