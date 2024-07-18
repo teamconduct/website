@@ -5,16 +5,18 @@ import { UserManagerService } from '../../services/user-manager.service';
 import { appRoutes } from '../../app.routes';
 import { Tagged } from '../../types/Tagged';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
-import { FinesListComponent } from '../../components/fines-list/fines-list.component';
 import { PersonId, PersonWithFines } from '../../types';
 import { AsyncPipe } from '../../pipes/async.pipe';
 import { Observable, map } from 'rxjs';
 import { TeamId } from '../../types/Team';
+import { CardModule } from 'primeng/card';
+import { PersonsListElementComponent } from '../../components/persons-list/persons-list-element/persons-list-element.component';
+import { PersonsListComponent } from '../../components/persons-list/persons-list.component';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [MenuModule, FinesListComponent, AsyncPipe],
+    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -80,5 +82,13 @@ export class HomePage implements OnInit {
                 return 'not-found';
             return persons.get(personId);
         }));
+    }
+
+    public get persons$(): Observable<PersonWithFines[]> {
+        return this.teamDataManager.persons$.pipe(
+            map(persons => {
+                return persons.values.filter(person => person.id.guidString !== this.signedInPersonId?.guidString);
+            })
+        );
     }
 }

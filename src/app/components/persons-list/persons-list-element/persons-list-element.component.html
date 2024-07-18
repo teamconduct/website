@@ -1,0 +1,58 @@
+
+@if (expanded) {
+    <div class="flex flex-column align-items-center justify-content-start w-full my-3">
+        <div (click)="toggleExpanded(false)" class="flex flex-column align-items-center justify-content-start w-full" [class.cursor-pointer]="!preview">
+            @if (canAddFine || canEditPerson || canDeletePerson) {
+                <div class="flex flex-row align-items-center justify-content-end w-full">
+                    <div class="flex flex-row align-items-center justify-content-center">
+                        @if (canDeletePerson) {
+                            <p-confirmPopup styleClass="pt-3" />
+                            <p-button i18n-label="Button label to edit person" label="Delete person" (onClick)="showDeleteConfirmation($event); $event.stopPropagation()" severity="danger" [loading]="deleteLoading" [disabled]="deleteLoading" [styleClass]="canEditPerson || canAddFine ? ' border-noround-right' : ''">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['far', 'trash-can']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                        @if (canEditPerson) {
+                            <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="$event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['far', 'pen-to-square']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                        @if (canAddFine) {
+                            <p-button i18n-label="Button label to add a new fine to person" label="Add fine" (onClick)="addFineDialogVisible = true; $event.stopPropagation()" [styleClass]="canEditPerson || canDeletePerson ? ' border-noround-left' : ''">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="flex flex-row align-items-center justify-content-start w-full mb-3">
+                <p class="text-color font-bold text-4xl my-0">{{ personName }}</p>
+            </div>
+            <div class="flex flex-row align-items-center justify-content-evenly w-full mb-5">
+                @for (payedTag of [payedTags.total, payedTags.notPayed, payedTags.payed]; track payedTag.label) {
+                    <p-tag [severity]="payedTag.severity" styleClass="py-2 px-3">
+                        <div class="flex flex-row align-items-center justify-content-center">
+                            <fa-icon [icon]="payedTag.icon" size="xl" />
+                            <p class="text-lg font-semibold ml-2 my-0">{{ payedTag.label }} {{ payedTag.amount | amount }}</p>
+                        </div>
+                    </p-tag>
+                }
+            </div>
+        </div>
+        <app-fines-list [teamId]="teamId" [personId]="person.id" [fines]="person.fines" [isPreview]="preview" class="w-85" />
+    </div>
+} @else {
+    <div (click)="toggleExpanded(true)" class="flex flex-row align-items-center justify-content-between w-full my-3" [class.cursor-pointer]="!preview">
+        <p class="text-color font-semibold text-2xl my-0">{{ personName }}</p>
+        <p-tag severity="danger" styleClass="py-2 px-3">
+            <p class="text-lg font-semibold my-0">{{ payedTags[displayAmount.type].label }} {{ displayAmount.amount | amount }}</p>
+        </p-tag>
+    </div>
+}
+
+<app-fine-detail-add-edit [teamId]="teamId" [personId]="person.id" [(visible)]="addFineDialogVisible" />

@@ -1,10 +1,10 @@
 import { DialogModule } from 'primeng/dialog';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Tag, TagModule } from 'primeng/tag';
-import { FineDetailComponent } from './fine-detail/fine-detail.component';
-import { Fine, PayedState, PersonId } from '../../types';
-import { FineAddEditComponent } from './fine-add-edit/fine-add-edit.component';
-import { TeamId } from '../../types/Team';
+import { FineDetailComponent } from '../fine-detail/fine-detail.component';
+import { Fine, PayedState, PersonId } from '../../../types';
+import { FineAddEditComponent } from '../fine-add-edit/fine-add-edit.component';
+import { TeamId } from '../../../types/Team';
 
 @Component({
     selector: 'app-fine-detail-add-edit',

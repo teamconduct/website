@@ -7,11 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { TeamId } from '../../../types/Team';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-fine-detail',
     standalone: true,
-    imports: [AmountPipe, DatePipe, ButtonModule, TagModule],
+    imports: [AmountPipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule],
+    providers: [ConfirmationService],
     templateUrl: './fine-detail.component.html',
     styleUrl: './fine-detail.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,6 +35,8 @@ export class FineDetailComponent {
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
+    private confirmationService = inject(ConfirmationService);
+
     public deleteLoading: boolean = false;
 
     public get canEditFine(): boolean {
@@ -40,6 +45,16 @@ export class FineDetailComponent {
 
     public get canDeleteFine(): boolean {
         return this.userManager.hasRole('fine-delete');
+    }
+
+    public showDeleteConfirmation(event: Event) {
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: $localize `:Message to ask for confirmation before deleting fine:Are you sure you want to delete this fine?`,
+            closeOnEscape: true,
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: () => this.deleteFine()
+        });
     }
 
     public async deleteFine() {

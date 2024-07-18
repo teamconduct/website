@@ -6,8 +6,8 @@ import { UserManagerService } from '../../../services/user-manager.service';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AmountPipe } from '../../../pipes/amount.pipe';
-import { FineDetailAddEditComponent } from '../../fine-detail-add-edit/fine-detail-add-edit.component';
 import { TeamId } from '../../../types/Team';
+import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
 
 @Component({
     selector: 'app-fines-list-element',

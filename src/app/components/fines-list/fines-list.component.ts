@@ -24,7 +24,9 @@ export class FinesListComponent {
 
     @Input({ required: true, alias: 'fines' }) public _fines!: Fine[];
 
-    @Input() public maxFines: number | null = null;
+    @Input() public isPreview: boolean = false;
+
+    public showAll: boolean = false;
 
     public sorting = new Sorting<'reason' | 'payed' | 'date' | 'amount', Fine>('payed', {
         reason: {
@@ -60,10 +62,15 @@ export class FinesListComponent {
                     return 'less';
                 return 'greater';
             },
-            fallbacks: ['reason']
+            fallbacks: ['date', 'reason']
         },
         date: {
-            compareFn: (lhs, rhs) => lhs.date.compare(rhs.date),
+            compareFn: (lhs, rhs) => {
+                const value = lhs.date.compare(rhs.date);
+                if (value === 'equal')
+                    return 'equal';
+                return value === 'less' ? 'greater' : 'less';
+            },
             fallbacks: ['reason']
         },
         amount: {
@@ -79,9 +86,12 @@ export class FinesListComponent {
     });
 
     public get fines(): Fine[] {
-        const fines = this._fines.slice(0, this.maxFines ?? undefined);
-        this.sorting.sort(fines);
-        return fines;
+        this.sorting.sort(this._fines);
+        return this._fines.slice(0, this.isPreview && !this.showAll ? 3 : this._fines.length);
+    }
+
+    public get hasMore(): boolean {
+        return this._fines.length > 3;
     }
 
     public finesType(value: any): Fine[] {

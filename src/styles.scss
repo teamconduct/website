@@ -2,7 +2,15 @@ body {
     margin: 0;
 }
 
-p-dialog.clap-width .p-dialog {
+.w-50vw {
+    width: 50vw;
+}
+
+.w-85 {
+    width: 85%;
+}
+
+p-dialog.clamp-width .p-dialog {
     min-width: 25vw;
     max-width: 75vw;
 }

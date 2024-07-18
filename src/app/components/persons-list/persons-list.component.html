@@ -1,0 +1,23 @@
+<p-dataView [value]="persons" i18n-emptyMessage="A message in person list if no person exists" emptyMessage="No persons" class="w-full" styleClass="w-full">
+
+    <ng-template pTemplate="header">
+        <div class="flex flex-row justify-content-between">
+            <div class="flex flex-row">
+                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="sorting.directionIcon" />
+                    </ng-template>
+                </p-button>
+                <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
+            </div>
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="list" let-persons>
+        @for (person of personsType(persons); track person.id.guidString; let isFirst = $first) {
+            <app-persons-list-element [teamId]="teamId" [person]="person" [expanded]="expandedPersonId?.guidString === person.id.guidString" (expandedChange)="expandedPersonId = $event" class="flex border-200" [class.border-top-1]="!isFirst" />
+        }
+    </ng-template>
+
+</p-dataView>

@@ -1,7 +1,20 @@
 <p-menu [model]="teamMenu" />
 
-@let signedInPerson = signedInPerson$ | async;
+@if (currentTeamId !== null) {
+    <div class="flex flex-column align-items-center justify-content-start">
 
-@if (currentTeamId !== null && signedInPerson !== null && signedInPerson !== 'not-found') {
-  <app-fines-list [teamId]="currentTeamId" [personId]="signedInPerson.id" [fines]="signedInPerson.fines" />
+        @let signedInPerson = signedInPerson$ | async;
+        @if (signedInPerson !== null && signedInPerson !== 'not-found') {
+            <p-card class="flex w-50vw" styleClass="w-full mb-8">
+                <app-persons-list-element [teamId]="currentTeamId" [person]="signedInPerson" [preview]="true" />
+            </p-card>
+        }
+
+        @let persons = persons$ | async;
+        @if (persons !== null) {
+            <p-card class="flex w-50vw" styleClass="w-full">
+                <app-persons-list [teamId]="currentTeamId" [persons]="persons" />
+            </p-card>
+        }
+    </div>
 }
