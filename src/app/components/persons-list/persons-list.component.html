@@ -10,6 +10,13 @@
                 </p-button>
                 <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
             </div>
+            @if (canAddPerson) {
+                <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonDialogVisible = true">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                    </ng-template>
+                </p-button>
+            }
         </div>
 
     </ng-template>
@@ -21,3 +28,5 @@
     </ng-template>
 
 </p-dataView>
+
+<app-person-add-edit [(visible)]="addPersonDialogVisible" [teamId]="teamId" />

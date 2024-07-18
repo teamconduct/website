@@ -16,11 +16,12 @@ import { FineDetailAddEditComponent } from '../../fines-list/fine-detail-add-edi
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
+import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.component';
 
 @Component({
     selector: 'app-persons-list-element',
     standalone: true,
-    imports: [FinesListComponent, TagModule, ConfirmPopupModule, AmountPipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule],
+    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, AmountPipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule],
     providers: [ConfirmationService],
     templateUrl: './persons-list-element.component.html',
     styleUrl: './persons-list-element.component.scss',
@@ -43,6 +44,8 @@ export class PersonsListElementComponent {
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
     private confirmationService = inject(ConfirmationService);
+
+    public editPersonDialogVisible: boolean = false;
 
     public addFineDialogVisible: boolean = false;
 

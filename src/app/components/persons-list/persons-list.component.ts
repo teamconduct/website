@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { TeamId } from '../../types/Team';
 import { PersonId, PersonWithFines } from '../../types';
 import { PersonsListElementComponent } from './persons-list-element/persons-list-element.component';
@@ -7,11 +7,13 @@ import { DataViewModule } from 'primeng/dataview';
 import { DropdownModule } from 'primeng/dropdown';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ButtonModule } from 'primeng/button';
+import { UserManagerService } from '../../services/user-manager.service';
+import { PersonAddEditComponent } from './person-add-edit/person-add-edit.component';
 
 @Component({
     selector: 'app-persons-list',
     standalone: true,
-    imports: [PersonsListElementComponent, DataViewModule, DropdownModule, FontAwesomeModule, ButtonModule],
+    imports: [PersonsListElementComponent, DataViewModule, DropdownModule, FontAwesomeModule, ButtonModule, PersonAddEditComponent],
     templateUrl: './persons-list.component.html',
     styleUrl: './persons-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,7 +24,11 @@ export class PersonsListComponent {
 
     @Input({ required: true, alias: 'persons' }) public _persons!: PersonWithFines[];
 
+    private userManager = inject(UserManagerService);
+
     public expandedPersonId: PersonId | null = null;
+
+    public addPersonDialogVisible: boolean = false;
 
     public sorting = new Sorting<'name' | 'payedState' | 'total' | 'notPayed', PersonWithFines>('name', {
         name: {
@@ -96,5 +102,9 @@ export class PersonsListComponent {
 
     public personsType(value: any): PersonWithFines[] {
         return value;
+    }
+
+    public get canAddPerson(): boolean {
+        return this.userManager.hasRole('person-add');
     }
 }

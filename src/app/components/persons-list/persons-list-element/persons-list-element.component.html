@@ -14,7 +14,7 @@
                             </p-button>
                         }
                         @if (canEditPerson) {
-                            <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="$event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
+                            <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="editPersonDialogVisible = true; $event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
                                 <ng-template pTemplate="icon">
                                     <fa-icon [icon]="['far', 'pen-to-square']" class="mr-2" />
                                 </ng-template>
@@ -56,3 +56,4 @@
 }
 
 <app-fine-detail-add-edit [teamId]="teamId" [personId]="person.id" [(visible)]="addFineDialogVisible" />
+<app-person-add-edit [(visible)]="editPersonDialogVisible" [teamId]="teamId" [person]="person" />
