@@ -6,16 +6,20 @@ import { UserManagerService } from '../../../services/user-manager.service';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AmountPipe } from '../../../pipes/amount.pipe';
+import { FineDetailAddEditComponent } from '../../fine-detail-add-edit/fine-detail-add-edit.component';
+import { TeamId } from '../../../types/Team';
 
 @Component({
     selector: 'app-fines-list-element',
     standalone: true,
-    imports: [AmountPipe, DatePipe, TagModule, FontAwesomeModule],
+    imports: [AmountPipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent],
     templateUrl: './fines-list-element.component.html',
     styleUrl: './fines-list-element.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinesListElementComponent {
+
+    @Input({ required: true }) public teamId!: TeamId;
 
     @Input({ required: true }) public personId!: PersonId;
 
@@ -31,26 +35,19 @@ export class FinesListElementComponent {
 
     public loading: boolean = false;
 
-    public get payedTag(): { value: string; severity: Tag['severity'] } {
-        switch (this.fine.payedState) {
-        case 'payed':
-            return {
-                value: $localize `:Payed fine state:Paid`,
-                severity: 'secondary'
-            };
-        case 'notPayed':
-            return {
-                value: $localize `:Unpayed fine state:Open`,
-                severity: 'danger'
-            };
-        }
-    }
+    public detailsShown: boolean = false;
 
     public get canChangeFine(): boolean {
         return this.userManager.hasRole('fine-update');
     }
 
+    public get payedTag(): { value: string, severity: Tag['severity'] } {
+        return PayedState.payedTag(this.fine.payedState);
+    }
+
     public async toggleFineState() {
+        if (this.loading)
+            return;
         const teamId = this.userManager.currentTeamId;
         if (teamId === null)
             return;
@@ -66,5 +63,9 @@ export class FinesListElementComponent {
             this.loading = false;
             this.changeDetector.markForCheck();
         });
+    }
+
+    public showDetails() {
+        this.detailsShown = true;
     }
 }

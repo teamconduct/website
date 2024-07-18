@@ -2,6 +2,6 @@
 
 @let signedInPerson = signedInPerson$ | async;
 
-@if (signedInPerson !== null && signedInPerson !== 'not-found') {
-  <app-fines-list [personId]="signedInPerson.id" [fines]="signedInPerson.fines" />
+@if (currentTeamId !== null && signedInPerson !== null && signedInPerson !== 'not-found') {
+  <app-fines-list [teamId]="currentTeamId" [personId]="signedInPerson.id" [fines]="signedInPerson.fines" />
 }

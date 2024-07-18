@@ -2,6 +2,20 @@ body {
     margin: 0;
 }
 
-.p-button-label {
-    font-weight: normal;
+p-dialog.clap-width .p-dialog {
+    min-width: 25vw;
+    max-width: 75vw;
+}
+
+.p-float-label input:focus ~ label,
+.p-float-label input.p-filled ~ label,
+.p-float-label textarea:focus ~ label,
+.p-float-label textarea.p-filled ~ label,
+.p-float-label .p-inputwrapper-focus ~ label,
+.p-float-label .p-inputwrapper-filled ~ label {
+    top: -0.5rem;
+}
+
+p-floatlabel.w-full .p-float-label {
+    width: 100%;
 }

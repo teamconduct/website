@@ -1,0 +1,19 @@
+<form [formGroup]="fineForm" class="flex flex-column align-items-center justify-content-start">
+    <p-floatLabel class="flex py-3 w-full">
+        <input pInputText formControlName="reason" inputId="reason-input" class="w-full" />
+        <label for="reason-input" i18n="Label for the reason input field">Reason</label>
+    </p-floatLabel>
+    <p-floatLabel class="flex py-3 w-full">
+        <p-inputNumber formControlName="amount" inputId="amount-input" mode="currency" currency="EUR" class="w-full" styleClass="w-full" />
+        <label for="amount-input" i18n="Label for the amount input field">Amount</label>
+    </p-floatLabel>
+    <p-floatLabel class="flex py-3 w-full">
+        <p-calendar formControlName="date" inputId="date-input" [inline]="true" styleClass="w-full" />
+        <label for="date-input" i18n="Label for the date input field">Date</label>
+    </p-floatLabel>
+    @if (fine === null) {
+        <p-button (onClick)="addOrUpdateFine('add')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to add fine" label="Add fine" class="w-full pt-3" styleClass="w-full" />
+    } @else {
+        <p-button (onClick)="addOrUpdateFine('update')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to save fine" label="Save fine" class="w-full pt-3" styleClass="w-full" />
+    }
+</form>

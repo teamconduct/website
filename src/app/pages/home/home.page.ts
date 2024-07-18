@@ -9,6 +9,7 @@ import { FinesListComponent } from '../../components/fines-list/fines-list.compo
 import { PersonId, PersonWithFines } from '../../types';
 import { AsyncPipe } from '../../pipes/async.pipe';
 import { Observable, map } from 'rxjs';
+import { TeamId } from '../../types/Team';
 
 @Component({
     selector: 'app-home',
@@ -58,6 +59,10 @@ export class HomePage implements OnInit {
     public ngOnInit() {
         if (this.userManager.currentTeamId !== null)
             this.teamDataManager.startObserve(this.userManager.currentTeamId);
+    }
+
+    public get currentTeamId(): TeamId | null {
+        return this.userManager.currentTeamId;
     }
 
     public get signedInPersonId(): PersonId | null {

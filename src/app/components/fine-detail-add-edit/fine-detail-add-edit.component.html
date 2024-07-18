@@ -1,0 +1,20 @@
+<p-dialog [visible]="visible" (visibleChange)="visibleChange.emit()" [modal]="true" [dismissableMask]="false" [draggable]="false" [resizable]="false" class="clap-width">
+    <ng-template pTemplate="header">
+        @if (state === 'detail' && fine !== null) {
+            <div class="flex flex-row align-items-center justify-content-start">
+                <p-tag [value]="payedTag(fine.payedState).value" [severity]="payedTag(fine.payedState).severity" />
+                <p class="text-color text-xl font-semibold my-0 pl-3">{{ fine.reason }}</p>
+            </div>
+        } @else if (fine === null) {
+                <p class="text-color text-xl font-semibold my-0" i18n="Header of create new fine dialog">New fine</p>
+
+        } @else {
+            <p class="text-color text-xl font-semibold my-0" i18n="Header of edit fine dialog">Edit fine</p>
+        }
+    </ng-template>
+    @if (state === 'detail' && fine !== null) {
+        <app-fine-detail [teamId]="teamId" [personId]="personId" [fine]="fine" (editFine)="setState('edit')" (fineDeleted)="visibleChange.emit(false)" />
+    } @else {
+        <app-fine-add-edit [teamId]="teamId" [personId]="personId" [fine]="fine" (finally)="setState('detail')" />
+    }
+</p-dialog>
