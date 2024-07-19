@@ -26,7 +26,7 @@ export class FineAddEditComponent implements OnInit {
 
     @Input({ required: true }) public personId!: PersonId;
 
-    @Input({ required: true }) public fine!: Fine | null;
+    @Input() public fine: Fine | null = null;
 
     @Output() public readonly finally = new EventEmitter<void>();
 

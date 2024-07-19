@@ -1,0 +1,31 @@
+<p-dataView [value]="fineTemplates" i18n-emptyMessage="A message in fine templates list has no fine templates" emptyMessage="No fine templates" class="w-full" styleClass="w-full">
+
+    <ng-template pTemplate="header">
+        <div class="flex flex-row justify-content-between">
+            <div class="flex flex-row">
+                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="sorting.directionIcon" />
+                    </ng-template>
+                </p-button>
+                <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
+            </div>
+            @if (canAddFineTemplate) {
+                <p-button i18n-label="Button label to add a fine template" label="Add fine template" (onClick)="addFineTemplateDialogVisible = true">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                    </ng-template>
+                </p-button>
+            }
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="list" let-fineTemplates>
+        @for (fineTemplate of fineTemplatesType(fineTemplates); track fineTemplate.id.guidString; let isFirst = $first) {
+            <app-fine-templates-list-element [teamId]="teamId" [fineTemplate]="fineTemplate" [hideTopBorder]="isFirst" />
+        }
+    </ng-template>
+
+</p-dataView>
+
+<app-fine-template-detail-add-edit [(visible)]="addFineTemplateDialogVisible" [teamId]="teamId" />

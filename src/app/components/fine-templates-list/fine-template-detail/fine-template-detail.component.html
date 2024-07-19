@@ -1,0 +1,17 @@
+<div class="flex flex-column align-items-center justify-content-start">
+    @if (fineTemplate.multiple !== null) {
+        <p class="text-color-secondary my-0 pt-5 pb-3">{{ multipleDescription(fineTemplate.multiple) }}</p>
+    }
+    <p class="text-color font-bold text-6xl my-0 pb-2">{{ fineTemplate.amount | amount }}</p>
+    @if (canDeleteFineTemplate || canEditFineTemplate) {
+        <div class="flex flex-row w-full mt-5">
+            @if (canEditFineTemplate) {
+                <p-button i18n-label="Button label to edit something" label="Edit" class="flex-1" (onClick)="editFineTemplate.emit()" [styleClass]="'w-full' + (canDeleteFineTemplate ? ' border-noround-right' : '')" />
+            }
+            @if (canDeleteFineTemplate) {
+                <p-confirmPopup styleClass="pt-3" />
+                <p-button [loading]="deleteLoading" [disabled]="deleteLoading" i18n-label="Button label to delete something" label="Delete" class="flex-1" severity="danger" (onClick)="showDeleteConfirmation($event)" [styleClass]="'w-full' + (canEditFineTemplate ? ' border-noround-left' : '')" />
+            }
+        </div>
+    }
+</div>

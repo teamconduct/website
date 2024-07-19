@@ -1,0 +1,11 @@
+<div class="flex flex-row align-items-start justify-content-between w-full py-5 border-200 cursor-pointer" [class.border-top-1]="!hideTopBorder" (click)="showDetails()">
+    <div class="flex flex-column align-items-start justify-content-center mr-1">
+        <p class="text-color font-bold text-2xl my-0">{{ fineTemplate.reason }}</p>
+        @if (fineTemplate.multiple !== null) {
+            <p class="text-color-secondary text-lg my-0">{{ multipleDescription(fineTemplate.multiple) }}</p>
+        }
+    </div>
+    <p class="text-color font-bold text-3xl my-0 mr-5">{{ fineTemplate.amount | amount }}</p>
+</div>
+
+<app-fine-template-detail-add-edit [(visible)]="detailsShown" [teamId]="teamId" [fineTemplate]="fineTemplate" />

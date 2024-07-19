@@ -1,0 +1,25 @@
+<form [formGroup]="fineTemplateForm" class="flex flex-column align-items-center justify-content-start">
+    <p-floatLabel class="flex py-3 w-full">
+        <input pInputText formControlName="reason" inputId="reason-input" class="w-full" />
+        <label for="reason-input" i18n="Label for the reason input field">Reason</label>
+    </p-floatLabel>
+    <p-floatLabel class="flex py-3 w-full">
+        <p-inputNumber formControlName="amount" inputId="amount-input" mode="currency" currency="EUR" class="w-full" styleClass="w-full" />
+        <label for="amount-input" i18n="Label for the amount input field">Amount</label>
+    </p-floatLabel>
+    <p-floatLabel class="flex py-3 w-full">
+        <p-dropdown formControlName="multipleItem" inputId="multipleItem-input" [options]="multipleOptions" optionLabel="label" optionValue="key" class="w-full" styleClass="w-full" appendTo="body" />
+        <label for="multipleItem-input" i18n="Label for mutliple item input">Repeat per</label>
+    </p-floatLabel>
+    @if (fineTemplateForm.get('multipleItem')!.value! !== 'none') {
+        <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
+            <p-inputNumber formControlName="multipleMaxCount" inputId="multipleMaxCount-input" [min]="1" [showButtons]="true" [suffix]="' ' + multipleMaxCountSuffix" class="w-full" styleClass="w-full" />
+            <label for="multipleMaxCount-input" i18n="Label for the multiple max count input with hint to leave empty for no maximal count">Maximal (leave empty for no maximum)</label>
+        </p-floatLabel>
+    }
+    @if (fineTemplate === null) {
+        <p-button (onClick)="addOrUpdateFineTemplate('add')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to add fine template" label="Add fine template" class="w-full pt-3" styleClass="w-full" />
+    } @else {
+        <p-button (onClick)="addOrUpdateFineTemplate('update')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to save fine template" label="Save fine template" class="w-full pt-3" styleClass="w-full" />
+    }
+</form>
