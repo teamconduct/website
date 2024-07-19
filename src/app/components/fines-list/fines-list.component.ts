@@ -87,14 +87,14 @@ export class FinesListComponent {
         }
     });
 
-    public get fines$(): Observable<{ fines: Fine[], hasMore: boolean } | null> {
+    public get fines$(): Observable<{ list: Fine[], hasMore: boolean } | null> {
         return this.teamDataManager.persons$.map(persons => {
             if (!persons.has(this.personId))
                 return null;
             const fines = persons.get(this.personId).fines;
             this.sorting.sort(fines);
             return {
-                fines: fines.slice(0, this.isPreview && !this.showAll ? 3 : undefined),
+                list: fines.slice(0, this.isPreview && !this.showAll ? 3 : undefined),
                 hasMore: fines.length > 3
             };
         });
