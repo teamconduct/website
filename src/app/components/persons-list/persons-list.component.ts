@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
-import { TeamId } from '../../types/Team';
-import { FineTemplate, PersonId, PersonWithFines } from '../../types';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { PersonId, PersonWithFines } from '../../types';
 import { PersonsListElementComponent } from './persons-list-element/persons-list-element.component';
 import { Sorting } from '../../types/Sorting';
 import { DataViewModule } from 'primeng/dataview';
@@ -9,24 +8,23 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ButtonModule } from 'primeng/button';
 import { UserManagerService } from '../../services/user-manager.service';
 import { PersonAddEditComponent } from './person-add-edit/person-add-edit.component';
+import { Observable } from '../../types/Observable';
+import { TeamDataManagerService } from '../../services/team-data-manager.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-persons-list',
     standalone: true,
-    imports: [PersonsListElementComponent, DataViewModule, DropdownModule, FontAwesomeModule, ButtonModule, PersonAddEditComponent],
+    imports: [PersonsListElementComponent, DataViewModule, DropdownModule, FontAwesomeModule, ButtonModule, PersonAddEditComponent, AsyncPipe],
     templateUrl: './persons-list.component.html',
     styleUrl: './persons-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonsListComponent {
 
-    @Input({ required: true }) public teamId!: TeamId;
-
-    @Input({ required: true }) public fineTemplates!: FineTemplate[];
-
-    @Input({ required: true, alias: 'persons' }) public _persons!: PersonWithFines[];
-
     private userManager = inject(UserManagerService);
+
+    private teamDataManager = inject(TeamDataManagerService);
 
     public expandedPersonId: PersonId | null = null;
 
@@ -97,9 +95,12 @@ export class PersonsListComponent {
         }
     });
 
-    public get persons(): PersonWithFines[] {
-        this.sorting.sort(this._persons);
-        return this._persons;
+    public get persons$(): Observable<PersonWithFines[]> {
+        return this.teamDataManager.persons$.map(personsDict => {
+            const persons = personsDict.values;
+            this.sorting.sort(persons);
+            return persons;
+        });
     }
 
     public personsType(value: any): PersonWithFines[] {

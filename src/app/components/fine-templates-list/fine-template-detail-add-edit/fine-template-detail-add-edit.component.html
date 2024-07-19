@@ -11,8 +11,8 @@
         }
     </ng-template>
     @if (state === 'detail' && fineTemplate !== null) {
-        <app-fine-template-detail [teamId]="teamId" [fineTemplate]="fineTemplate" (editFineTemplate)="setState('edit')" (fineTemplateDeleted)="visibleChange.emit(false)" />
+        <app-fine-template-detail [fineTemplate]="fineTemplate" (editFineTemplate)="state = 'edit'" (fineTemplateDeleted)="visibleChange.emit(false)" />
     } @else {
-        <app-fine-template-add-edit [teamId]="teamId" [fineTemplate]="fineTemplate" (finally)="setState('detail')" />
+        <app-fine-template-add-edit [fineTemplate]="fineTemplate" (finally)="visibleChange.emit(false)" />
     }
 </p-dialog>

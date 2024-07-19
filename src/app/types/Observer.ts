@@ -3,7 +3,7 @@ import { CollectionReference, DocumentReference, onSnapshot, query } from '@angu
 import { ITypeBuilder } from '../typeBuilder';
 import { Dictionary } from './Dictionary';
 import { Flatten } from './Flattable';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from './Observable';
 
 export class Observer<Id, T> {
 
@@ -25,7 +25,7 @@ export class Observer<Id, T> {
 
     private startDocument(document: DocumentReference<Flatten<T>>): Observable<T> {
         this.stop();
-        const observer = new Subject<T>();
+        const observer = new Observable<T>();
         this.unsubscribe = onSnapshot(document, snapshot => {
             if (!snapshot.exists())
                 return;
@@ -33,12 +33,12 @@ export class Observer<Id, T> {
             observer.next(data);
         }, error => observer.error(error),
         () => observer.complete());
-        return observer.asObservable();
+        return observer;
     }
 
     private startCollection(collection: CollectionReference<Flatten<T>>): Observable<Dictionary<Id, T>> {
         this.stop();
-        const observer = new Subject<Dictionary<Id, T>>();
+        const observer = new Observable<Dictionary<Id, T>>();
         this.unsubscribe = onSnapshot(query(collection), snapshot => {
             const data = new Dictionary<Id, T>();
             snapshot.forEach(snapshot => {
@@ -51,7 +51,7 @@ export class Observer<Id, T> {
             observer.next(data);
         }, error => observer.error(error),
         () => observer.complete());
-        return observer.asObservable();
+        return observer;
     }
 
     public stop() {

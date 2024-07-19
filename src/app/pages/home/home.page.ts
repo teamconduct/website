@@ -5,14 +5,13 @@ import { UserManagerService } from '../../services/user-manager.service';
 import { appRoutes } from '../../app.routes';
 import { Tagged } from '../../types/Tagged';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
-import { FineTemplate, PersonId, PersonWithFines } from '../../types';
+import { PersonId, PersonWithFines } from '../../types';
 import { AsyncPipe } from '../../pipes/async.pipe';
-import { Observable, map } from 'rxjs';
-import { TeamId } from '../../types/Team';
 import { CardModule } from 'primeng/card';
 import { PersonsListElementComponent } from '../../components/persons-list/persons-list-element/persons-list-element.component';
 import { PersonsListComponent } from '../../components/persons-list/persons-list.component';
 import { FineTemplatesListComponent } from '../../components/fine-templates-list/fine-templates-list.component';
+import { Observable } from '../../types/Observable';
 
 @Component({
     selector: 'app-home',
@@ -64,10 +63,6 @@ export class HomePage implements OnInit {
             this.teamDataManager.startObserve(this.userManager.currentTeamId);
     }
 
-    public get currentTeamId(): TeamId | null {
-        return this.userManager.currentTeamId;
-    }
-
     public get signedInPersonId(): PersonId | null {
         if (this.userManager.signedInUser === null || this.userManager.currentTeamId === null)
             return null;
@@ -76,24 +71,16 @@ export class HomePage implements OnInit {
         return this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId;
     }
 
-    public get signedInPerson$(): Observable<PersonWithFines | 'not-found'> {
-        return this.teamDataManager.persons$.pipe(map(persons => {
-            const personId = this.signedInPersonId;
-            if (personId === null || !persons.has(personId))
-                return 'not-found';
+    public get signedInPerson$(): Observable<PersonWithFines | null> {
+        return this.teamDataManager.persons$.map(persons => {
+            if (this.userManager.signedInUser === null || this.userManager.currentTeamId === null)
+                return null;
+            if (!this.userManager.signedInUser.teams.has(this.userManager.currentTeamId))
+                return null;
+            const personId = this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId;
+            if (!persons.has(personId))
+                return null;
             return persons.get(personId);
-        }));
-    }
-
-    public get persons$(): Observable<PersonWithFines[]> {
-        return this.teamDataManager.persons$.pipe(
-            map(persons => {
-                return persons.values.filter(person => person.id.guidString !== this.signedInPersonId?.guidString);
-            })
-        );
-    }
-
-    public get fineTemplates$(): Observable<FineTemplate[]> {
-        return this.teamDataManager.fineTemplates$.pipe(map(fineTemplates => fineTemplates.values));
+        });
     }
 }

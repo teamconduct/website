@@ -1,37 +1,40 @@
-<p-dataView [value]="fines" i18n-emptyMessage="A message in fine list if person has no fines" emptyMessage="This person currently has no fines" class="w-full" styleClass="w-full">
+@let fines = fines$ | async;
+@if (fines !== null) {
+    <p-dataView [value]="fines.fines" i18n-emptyMessage="A message in fine list if person has no fines" emptyMessage="This person currently has no fines" class="w-full" styleClass="w-full">
 
-    <ng-template pTemplate="header">
-        <div class="flex flex-row justify-content-between">
-            <div class="flex flex-row">
-                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
-                    <ng-template pTemplate="icon">
-                        <fa-icon [icon]="sorting.directionIcon" />
-                    </ng-template>
-                </p-button>
-                <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
-            </div>
-            @if(isPreview && hasMore) {
-                @if (showAll) {
-                    <p-button i18n-label="Button label to tell that all fines are visible in fine list" label="All fines" (onClick)="showAll = false">
+        <ng-template pTemplate="header">
+            <div class="flex flex-row justify-content-between">
+                <div class="flex flex-row">
+                    <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
                         <ng-template pTemplate="icon">
-                            <fa-icon [icon]="['far', 'eye']" class="mr-2" />
+                            <fa-icon [icon]="sorting.directionIcon" />
                         </ng-template>
                     </p-button>
-                } @else {
-                    <p-button i18n-label="Button label to tell that some fine are hidden in fine list" label="Some fines are hidden" (onClick)="showAll = true">
-                        <ng-template pTemplate="icon">
-                            <fa-icon [icon]="['far', 'eye-slash']" class="mr-2" />
-                        </ng-template>
-                    </p-button>
+                    <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
+                </div>
+                @if(isPreview && fines.hasMore) {
+                    @if (showAll) {
+                        <p-button i18n-label="Button label to tell that all fines are visible in fine list" label="All fines" (onClick)="showAll = false">
+                            <ng-template pTemplate="icon">
+                                <fa-icon [icon]="['far', 'eye']" class="mr-2" />
+                            </ng-template>
+                        </p-button>
+                    } @else {
+                        <p-button i18n-label="Button label to tell that some fine are hidden in fine list" label="Some fines are hidden" (onClick)="showAll = true">
+                            <ng-template pTemplate="icon">
+                                <fa-icon [icon]="['far', 'eye-slash']" class="mr-2" />
+                            </ng-template>
+                        </p-button>
+                    }
                 }
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="list" let-fines>
+            @for (fine of finesType(fines); track fine.id.guidString; let isFirst = $first) {
+                <app-fines-list-element [personId]="personId" [fine]="fine" [hideTopBorder]="isFirst" />
             }
-        </div>
-    </ng-template>
+        </ng-template>
 
-    <ng-template pTemplate="list" let-fines>
-        @for (fine of finesType(fines); track fine.id.guidString; let isFirst = $first) {
-            <app-fines-list-element [teamId]="teamId" [personId]="personId" [fineTemplates]="fineTemplates" [fine]="fine" [hideTopBorder]="isFirst" />
-        }
-    </ng-template>
-
-</p-dataView>
+    </p-dataView>
+}

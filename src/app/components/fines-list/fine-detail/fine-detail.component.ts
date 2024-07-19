@@ -6,7 +6,6 @@ import { UserManagerService } from '../../../services/user-manager.service';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
-import { TeamId } from '../../../types/Team';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 
@@ -20,8 +19,6 @@ import { ConfirmationService } from 'primeng/api';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FineDetailComponent {
-
-    @Input({ required: true }) public teamId!: TeamId;
 
     @Input({ required: true }) public personId!: PersonId;
 
@@ -58,12 +55,15 @@ export class FineDetailComponent {
     }
 
     public async deleteFine() {
+        if (this.userManager.currentTeamId === null)
+            return;
+
         if (this.deleteLoading)
             return;
         this.deleteLoading = true;
 
         await this.firebaseFunctions.function('fine').function('delete').call({
-            teamId: this.teamId,
+            teamId: this.userManager.currentTeamId,
             personId: this.personId,
             id: this.fine.id
         });

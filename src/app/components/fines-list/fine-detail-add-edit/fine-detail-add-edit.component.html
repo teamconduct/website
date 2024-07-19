@@ -12,8 +12,8 @@
         }
     </ng-template>
     @if (state === 'detail' && fine !== null) {
-        <app-fine-detail [teamId]="teamId" [personId]="personId" [fine]="fine" (editFine)="setState('edit')" (fineDeleted)="visibleChange.emit(false)" />
+        <app-fine-detail [personId]="personId" [fine]="fine" (editFine)="state = 'edit'" (fineDeleted)="visibleChange.emit(false)" />
     } @else {
-        <app-fine-add-edit [teamId]="teamId" [personId]="personId" [fineTemplates]="fineTemplates" [fine]="fine" (finally)="visibleChange.emit(false)" />
+        <app-fine-add-edit [personId]="personId" [fine]="fine" (finally)="visibleChange.emit(false)" />
     }
 </p-dialog>

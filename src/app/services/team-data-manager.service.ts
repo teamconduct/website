@@ -5,9 +5,9 @@ import { Firestore, doc, collection, DocumentReference, CollectionReference } fr
 import { Flatten } from '../types/Flattable';
 import { Observer } from '../types/Observer';
 import { values } from '../utils';
-import { combineLatest, map, Observable } from 'rxjs';
 import { Dictionary } from '../types/Dictionary';
 import { compactMap } from '../utils/compactMap';
+import { combine, Observable } from '../types/Observable';
 
 @Injectable({
     providedIn: 'root'
@@ -42,7 +42,7 @@ export class TeamDataManagerService {
         this.fineTemplates$ = this.observers.fineTemplates.start(fineTemplatesCollection);
         this.fines$ = this.observers.fines.start(finesCollection);
 
-        this.persons$ = combineLatest([persons$, this.fines$]).pipe(map(([persons, fines]) => {
+        this.persons$ = combine(persons$, this.fines$, (persons, fines) => {
             return persons.map<PersonWithFines>(person => {
                 const personFines = compactMap(person.fineIds, fineId => fines.getOptional(fineId));
                 return {
@@ -57,7 +57,7 @@ export class TeamDataManagerService {
                     }), { total: Amount.zero, payed: Amount.zero, notPayed: Amount.zero })
                 };
             });
-        }));
+        });
     }
 
     public stopObserve() {

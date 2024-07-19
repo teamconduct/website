@@ -4,13 +4,13 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { TeamId } from '../../../types/Team';
 import { Amount, FineTemplate, FineTemplateMultiple, FineTemplateMultipleItem } from '../../../types';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { markAllAsDirty } from '../../../../utils/markAllAsDirty';
 import { Tagged } from '../../../types/Tagged';
 import { DropdownModule } from 'primeng/dropdown';
 import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
+import { UserManagerService } from '../../../services/user-manager.service';
 
 @Component({
     selector: 'app-fine-template-add-edit',
@@ -23,11 +23,11 @@ import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 })
 export class FineTemplateAddEditComponent implements OnInit {
 
-    @Input({ required: true }) public teamId!: TeamId;
-
     @Input() public fineTemplate: FineTemplate | null = null;
 
     @Output() public readonly finally = new EventEmitter<void>();
+
+    private userManager = inject(UserManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -72,6 +72,9 @@ export class FineTemplateAddEditComponent implements OnInit {
     }
 
     public async addOrUpdateFineTemplate(functionKey: 'add' | 'update') {
+        if (this.userManager.currentTeamId === null)
+            return;
+
         if (this.state === 'loading')
             return;
         markAllAsDirty(this.fineTemplateForm);
@@ -90,7 +93,7 @@ export class FineTemplateAddEditComponent implements OnInit {
             };
         }
         await this.firebaseFunctions.function('fineTemplate').function(functionKey).call({
-            teamId: this.teamId,
+            teamId: this.userManager.currentTeamId,
             fineTemplate: {
                 id: this.fineTemplate === null ? Tagged.generate('fineTemplate') : this.fineTemplate.id,
                 reason: this.fineTemplateForm.get('reason')!.value!,

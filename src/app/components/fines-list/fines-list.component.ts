@@ -1,32 +1,30 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Fine, FineTemplate, PersonId } from '../../types';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { Fine, PersonId } from '../../types';
 import { DataViewModule } from 'primeng/dataview';
 import { FinesListElementComponent } from './fines-list-element/fines-list-element.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Sorting } from '../../types/Sorting';
-import { TeamId } from '../../types/Team';
+import { Observable } from '../../types/Observable';
+import { TeamDataManagerService } from '../../services/team-data-manager.service';
+import { AsyncPipe } from '../../pipes/async.pipe';
 
 @Component({
     selector: 'app-fines-list',
     standalone: true,
-    imports: [DataViewModule, FinesListElementComponent, DropdownModule, ButtonModule, FontAwesomeModule],
+    imports: [DataViewModule, FinesListElementComponent, DropdownModule, ButtonModule, FontAwesomeModule, AsyncPipe],
     templateUrl: './fines-list.component.html',
     styleUrl: './fines-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinesListComponent {
 
-    @Input({ required: true }) public teamId!: TeamId;
-
     @Input({ required: true }) public personId!: PersonId;
 
-    @Input({ required: true }) public fineTemplates!: FineTemplate[];
-
-    @Input({ required: true, alias: 'fines' }) public _fines!: Fine[];
-
     @Input() public isPreview: boolean = false;
+
+    public teamDataManager = inject(TeamDataManagerService);
 
     public showAll: boolean = false;
 
@@ -89,13 +87,17 @@ export class FinesListComponent {
         }
     });
 
-    public get fines(): Fine[] {
-        this.sorting.sort(this._fines);
-        return this._fines.slice(0, this.isPreview && !this.showAll ? 3 : this._fines.length);
-    }
-
-    public get hasMore(): boolean {
-        return this._fines.length > 3;
+    public get fines$(): Observable<{ fines: Fine[], hasMore: boolean } | null> {
+        return this.teamDataManager.persons$.map(persons => {
+            if (!persons.has(this.personId))
+                return null;
+            const fines = persons.get(this.personId).fines;
+            this.sorting.sort(fines);
+            return {
+                fines: fines.slice(0, this.isPreview && !this.showAll ? 3 : undefined),
+                hasMore: fines.length > 3
+            };
+        });
     }
 
     public finesType(value: any): Fine[] {

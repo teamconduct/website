@@ -8,13 +8,15 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { markAllAsDirty } from '../../../../utils/markAllAsDirty';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
-import { TeamId } from '../../../types/Team';
 import { Tagged } from '../../../types/Tagged';
 import { UtcDate } from '../../../types/UtcDate';
 import { AsyncPipe } from '../../../pipes/async.pipe';
 import { DropdownModule } from 'primeng/dropdown';
 import { AmountPipe } from '../../../pipes/amount.pipe';
 import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
+import { UserManagerService } from '../../../services/user-manager.service';
+import { TeamDataManagerService } from '../../../services/team-data-manager.service';
+import { Observable } from '../../../types/Observable';
 
 @Component({
     selector: 'app-fine-add-edit',
@@ -28,15 +30,15 @@ import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 })
 export class FineAddEditComponent implements OnInit {
 
-    @Input({ required: true }) public teamId!: TeamId;
-
     @Input({ required: true }) public personId!: PersonId;
-
-    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input() public fine: Fine | null = null;
 
     @Output() public readonly finally = new EventEmitter<void>();
+
+    private userManager = inject(UserManagerService);
+
+    private teamDataManager = inject(TeamDataManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -75,8 +77,12 @@ export class FineAddEditComponent implements OnInit {
         }
     }
 
-    public get fineTemplateOptions(): { label: string, value: FineTemplate | 'ownFine' }[] {
-        this.fineTemplates.sort((lhs, rhs) => {
+    public get fineTemplates$(): Observable<FineTemplate[]> {
+        return this.teamDataManager.fineTemplates$.map(fineTemplatesDict => fineTemplatesDict.values);
+    }
+
+    public fineTemplateOptions(fineTemplates: FineTemplate[]): { label: string, value: FineTemplate | 'ownFine' }[] {
+        fineTemplates.sort((lhs, rhs) => {
             const lhsReason = lhs.reason.toUpperCase();
             const rhsReason = rhs.reason.toUpperCase();
             if (lhsReason === rhsReason)
@@ -88,7 +94,7 @@ export class FineAddEditComponent implements OnInit {
                 label: $localize `:Label of fine reason dropdown in add fine for own reason:Create own fine`,
                 value: 'ownFine'
             },
-            ...this.fineTemplates.map(template => {
+            ...fineTemplates.map(template => {
                 return {
                     label: `${template.reason} | ${this.amountPipe.transform(template.amount)}`,
                     value: template
@@ -113,6 +119,9 @@ export class FineAddEditComponent implements OnInit {
     }
 
     public async addOrUpdateFine(functionKey: 'add' | 'update') {
+        if (this.userManager.currentTeamId === null)
+            return;
+
         if (this.state === 'loading')
             return;
         markAllAsDirty(this.fineForm);
@@ -127,7 +136,7 @@ export class FineAddEditComponent implements OnInit {
         const amount = fineTemplateValue === 'ownFine' ? Amount.from(this.fineForm.get('amount')!.value!) : fineTemplateValue.amount.multiplied(this.fineForm.get('fineTemplateTimes')!.value!);
 
         await this.firebaseFunctions.function('fine').function(functionKey).call({
-            teamId: this.teamId,
+            teamId: this.userManager.currentTeamId,
             personId: this.personId,
             fine: {
                 id: this.fine === null ? Tagged.generate('fine') : this.fine.id,

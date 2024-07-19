@@ -1,7 +1,8 @@
 <form [formGroup]="fineForm" class="flex flex-column align-items-center justify-content-start">
-    @if (fine === null) {
+    @let fineTemplates = fineTemplates$ | async;
+    @if (fine === null && fineTemplates !== null) {
         <p-floatLabel class="flex py-3 w-full">
-            <p-dropdown formControlName="fineTemplate" inputId="fine-template-input" [options]="fineTemplateOptions" optionLabel="label" optionValue="value" placeholder="Select a fine template" [filter]="true" class="w-full" styleClass="w-full" />
+            <p-dropdown formControlName="fineTemplate" inputId="fine-template-input" [options]="fineTemplateOptions(fineTemplates)" optionLabel="label" optionValue="value" placeholder="Select a fine template" [filter]="true" class="w-full" styleClass="w-full" />
             <label for="fine-template-input" i18n="Label for the fine template input field">Fine template</label>
         </p-floatLabel>
         @let fineTemplateValue = fineForm.get('fineTemplate')!.value;

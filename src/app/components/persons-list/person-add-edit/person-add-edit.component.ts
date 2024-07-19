@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
-import { TeamId } from '../../../types/Team';
 import { Person } from '../../../types';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
@@ -9,6 +8,7 @@ import { Tagged } from '../../../types/Tagged';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { UserManagerService } from '../../../services/user-manager.service';
 
 @Component({
     selector: 'app-person-add-edit',
@@ -20,13 +20,13 @@ import { InputTextModule } from 'primeng/inputtext';
 })
 export class PersonAddEditComponent implements OnInit {
 
-    @Input({ required: true }) public teamId!: TeamId;
-
     @Input() public person: Omit<Person, 'fineIds' | 'signInProperties'> | null = null;
 
     @Input({ required: true }) public visible!: boolean;
 
     @Output() public readonly visibleChange = new EventEmitter<boolean>();
+
+    private userManager = inject(UserManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -47,6 +47,9 @@ export class PersonAddEditComponent implements OnInit {
     }
 
     public async addOrUpdatePerson(functionKey: 'add' | 'update') {
+        if (this.userManager.currentTeamId === null)
+            return;
+
         if (this.state === 'loading')
             return;
         markAllAsDirty(this.personForm);
@@ -57,7 +60,7 @@ export class PersonAddEditComponent implements OnInit {
         this.state = 'loading';
 
         await this.firebaseFunctions.function('person').function(functionKey).call({
-            teamId: this.teamId,
+            teamId: this.userManager.currentTeamId,
             person: {
                 id: this.person === null ? Tagged.generate('person') : this.person.id,
                 properties: {

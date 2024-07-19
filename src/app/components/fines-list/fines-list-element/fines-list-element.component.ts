@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
-import { Fine, FineTemplate, PayedState, PersonId } from '../../../types';
+import { Fine, PayedState, PersonId } from '../../../types';
 import { Tag, TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AmountPipe } from '../../../pipes/amount.pipe';
-import { TeamId } from '../../../types/Team';
 import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
 
 @Component({
@@ -19,11 +18,7 @@ import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-
 })
 export class FinesListElementComponent {
 
-    @Input({ required: true }) public teamId!: TeamId;
-
     @Input({ required: true }) public personId!: PersonId;
-
-    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input({ required: true }) public fine!: Fine;
 
@@ -65,9 +60,5 @@ export class FinesListElementComponent {
             this.loading = false;
             this.changeDetector.markForCheck();
         });
-    }
-
-    public showDetails() {
-        this.detailsShown = true;
     }
 }

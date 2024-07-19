@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { TeamId } from '../../../types/Team';
-import { Amount, FineTemplate, PayedState, PersonId, PersonWithFines } from '../../../types';
+import { Amount, PayedState, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
 import { Tag, TagModule } from 'primeng/tag';
 import { AmountPipe } from '../../../pipes/amount.pipe';
@@ -28,10 +27,6 @@ import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.compo
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonsListElementComponent {
-
-    @Input({ required: true }) public teamId!: TeamId;
-
-    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input({ required: true }) public person!: PersonWithFines;
 
@@ -125,12 +120,15 @@ export class PersonsListElementComponent {
     }
 
     public async deletePerson() {
+        if (this.userManager.currentTeamId === null)
+            return;
+
         if (this.deleteLoading)
             return;
         this.deleteLoading = true;
 
         await this.firebaseFunctions.function('person').function('delete').call({
-            teamId: this.teamId,
+            teamId: this.userManager.currentTeamId,
             id: this.person.id
         });
 

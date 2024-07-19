@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, inject, Pipe, PipeTransform } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from '../types/Observable';
 
 @Pipe({
     name: 'async',
@@ -13,7 +13,7 @@ export class AsyncPipe implements PipeTransform {
 
     private changeDetector = inject(ChangeDetectorRef);
 
-    public transform<T>(observable: Observable<T>): T | null {
+    public transform<T>(observable: Observable<T>): T {
         if (this.currentObservable === observable)
             return this.currentValue;
         this.currentObservable = observable;
@@ -21,6 +21,8 @@ export class AsyncPipe implements PipeTransform {
             this.currentValue = value;
             this.changeDetector.markForCheck();
         });
+        if (this.currentValue === null)
+            return this.currentObservable.value;
         return this.currentValue;
     }
 }
