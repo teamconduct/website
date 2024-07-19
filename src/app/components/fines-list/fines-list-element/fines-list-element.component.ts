@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
-import { Fine, PayedState, PersonId } from '../../../types';
+import { Fine, FineTemplate, PayedState, PersonId } from '../../../types';
 import { Tag, TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
@@ -22,6 +22,8 @@ export class FinesListElementComponent {
     @Input({ required: true }) public teamId!: TeamId;
 
     @Input({ required: true }) public personId!: PersonId;
+
+    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input({ required: true }) public fine!: Fine;
 

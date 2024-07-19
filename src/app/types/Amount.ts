@@ -25,6 +25,12 @@ export class Amount implements Flattable<number> {
         return new Amount(value, subunitValue % 100);
     }
 
+    public multiplied(factor: number): Amount {
+        const subunitValue = this.subunitValue * factor;
+        const value = this.value * factor + Math.floor(subunitValue / 100);
+        return new Amount(value, subunitValue % 100);
+    }
+
     public get completeValue(): number {
         return this.value + this.subunitValue / 100;
     }

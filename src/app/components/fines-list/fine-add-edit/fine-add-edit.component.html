@@ -1,16 +1,28 @@
 <form [formGroup]="fineForm" class="flex flex-column align-items-center justify-content-start">
-    <p-floatLabel class="flex py-3 w-full">
-        <input pInputText formControlName="reason" inputId="reason-input" class="w-full" />
-        <label for="reason-input" i18n="Label for the reason input field">Reason</label>
-    </p-floatLabel>
-    <p-floatLabel class="flex py-3 w-full">
-        <p-inputNumber formControlName="amount" inputId="amount-input" mode="currency" currency="EUR" class="w-full" styleClass="w-full" />
-        <label for="amount-input" i18n="Label for the amount input field">Amount</label>
-    </p-floatLabel>
-    <p-floatLabel class="flex py-3 w-full">
-        <p-calendar formControlName="date" inputId="date-input" [inline]="true" styleClass="w-full" />
-        <label for="date-input" i18n="Label for the date input field">Date</label>
-    </p-floatLabel>
+    @if (fine === null) {
+        <p-floatLabel class="flex py-3 w-full">
+            <p-dropdown formControlName="fineTemplate" inputId="fine-template-input" [options]="fineTemplateOptions" optionLabel="label" optionValue="value" placeholder="Select a fine template" [filter]="true" class="w-full" styleClass="w-full" />
+            <label for="fine-template-input" i18n="Label for the fine template input field">Fine template</label>
+        </p-floatLabel>
+        @let fineTemplateValue = fineForm.get('fineTemplate')!.value;
+        @if (fineTemplateValue !== null && fineTemplateValue !== 'ownFine' && fineTemplateValue!.multiple !== null) {
+            <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
+                <p-inputNumber formControlName="fineTemplateTimes" inputId="fineTemplateTimes-input" [min]="1" [max]="fineTemplateTimesMaximum ?? undefined" [showButtons]="true" [suffix]="' ' + fineTemplateTimesSuffix" class="w-full" styleClass="w-full" />
+                <label for="fineTemplateTimes-input" i18n="Label for fine template times in fine add">Times</label>
+            </p-floatLabel>
+        }
+    }
+    @if (fineForm.get('fineTemplate')!.value === 'ownFine') {
+        <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
+            <input pInputText formControlName="reason" inputId="reason-input" class="w-full" />
+            <label for="reason-input" i18n="Label for the reason input field">Reason</label>
+        </p-floatLabel>
+        <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
+            <p-inputNumber formControlName="amount" inputId="amount-input" mode="currency" currency="EUR" class="w-full" styleClass="w-full" />
+            <label for="amount-input" i18n="Label for the amount input field">Amount</label>
+        </p-floatLabel>
+    }
+    <p-calendar formControlName="date" [inline]="true" class="w-full" styleClass="w-full" />
     @if (fine === null) {
         <p-button (onClick)="addOrUpdateFine('add')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to add fine" label="Add fine" class="w-full pt-3" styleClass="w-full" />
     } @else {

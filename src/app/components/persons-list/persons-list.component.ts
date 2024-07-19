@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { TeamId } from '../../types/Team';
-import { PersonId, PersonWithFines } from '../../types';
+import { FineTemplate, PersonId, PersonWithFines } from '../../types';
 import { PersonsListElementComponent } from './persons-list-element/persons-list-element.component';
 import { Sorting } from '../../types/Sorting';
 import { DataViewModule } from 'primeng/dataview';
@@ -21,6 +21,8 @@ import { PersonAddEditComponent } from './person-add-edit/person-add-edit.compon
 export class PersonsListComponent {
 
     @Input({ required: true }) public teamId!: TeamId;
+
+    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input({ required: true, alias: 'persons' }) public _persons!: PersonWithFines[];
 
@@ -51,8 +53,8 @@ export class PersonsListComponent {
     }, {
         name: {
             compareFn: (lhs, rhs) => {
-                const lhsName = lhs.properties.lastName === null ? lhs.properties.firstName : `${lhs.properties.firstName} ${lhs.properties.lastName}`;
-                const rhsName = rhs.properties.lastName === null ? rhs.properties.firstName : `${rhs.properties.firstName} ${rhs.properties.lastName}`;
+                const lhsName = (lhs.properties.lastName === null ? lhs.properties.firstName : `${lhs.properties.firstName} ${lhs.properties.lastName}`).toUpperCase();
+                const rhsName = (rhs.properties.lastName === null ? rhs.properties.firstName : `${rhs.properties.firstName} ${rhs.properties.lastName}`).toUpperCase();
                 if (lhsName === rhsName)
                     return 'equal';
                 return lhsName < rhsName ? 'less' : 'greater';

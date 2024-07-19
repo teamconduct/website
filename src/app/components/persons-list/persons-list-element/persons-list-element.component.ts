@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TeamId } from '../../../types/Team';
-import { Amount, PayedState, PersonId, PersonWithFines } from '../../../types';
+import { Amount, FineTemplate, PayedState, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
 import { Tag, TagModule } from 'primeng/tag';
 import { AmountPipe } from '../../../pipes/amount.pipe';
@@ -30,6 +30,8 @@ import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.compo
 export class PersonsListElementComponent {
 
     @Input({ required: true }) public teamId!: TeamId;
+
+    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input({ required: true }) public person!: PersonWithFines;
 

@@ -30,7 +30,7 @@
 
     <ng-template pTemplate="list" let-fines>
         @for (fine of finesType(fines); track fine.id.guidString; let isFirst = $first) {
-            <app-fines-list-element [teamId]="teamId" [personId]="personId" [fine]="fine" [hideTopBorder]="isFirst" />
+            <app-fines-list-element [teamId]="teamId" [personId]="personId" [fineTemplates]="fineTemplates" [fine]="fine" [hideTopBorder]="isFirst" />
         }
     </ng-template>
 

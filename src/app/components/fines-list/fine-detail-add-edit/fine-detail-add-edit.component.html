@@ -14,6 +14,6 @@
     @if (state === 'detail' && fine !== null) {
         <app-fine-detail [teamId]="teamId" [personId]="personId" [fine]="fine" (editFine)="setState('edit')" (fineDeleted)="visibleChange.emit(false)" />
     } @else {
-        <app-fine-add-edit [teamId]="teamId" [personId]="personId" [fine]="fine" (finally)="setState('detail')" />
+        <app-fine-add-edit [teamId]="teamId" [personId]="personId" [fineTemplates]="fineTemplates" [fine]="fine" (finally)="visibleChange.emit(false)" />
     }
 </p-dialog>

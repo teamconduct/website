@@ -40,9 +40,11 @@ export class FineTemplatesListComponent {
     }, {
         reason: {
             compareFn: (lhs, rhs) => {
-                if (lhs.reason === rhs.reason)
+                const lhsReason = lhs.reason.toUpperCase();
+                const rhsReason = rhs.reason.toUpperCase();
+                if (lhsReason === rhsReason)
                     return 'equal';
-                return lhs.reason < rhs.reason ? 'less' : 'greater';
+                return lhsReason < rhsReason ? 'less' : 'greater';
             },
             fallbacks: []
         },

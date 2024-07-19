@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Fine, PersonId } from '../../types';
+import { Fine, FineTemplate, PersonId } from '../../types';
 import { DataViewModule } from 'primeng/dataview';
 import { FinesListElementComponent } from './fines-list-element/fines-list-element.component';
 import { DropdownModule } from 'primeng/dropdown';
@@ -21,6 +21,8 @@ export class FinesListComponent {
     @Input({ required: true }) public teamId!: TeamId;
 
     @Input({ required: true }) public personId!: PersonId;
+
+    @Input({ required: true }) public fineTemplates!: FineTemplate[];
 
     @Input({ required: true, alias: 'fines' }) public _fines!: Fine[];
 
@@ -48,9 +50,11 @@ export class FinesListComponent {
     }, {
         reason: {
             compareFn: (lhs, rhs) => {
-                if (lhs.reason === rhs.reason)
+                const lhsReason = lhs.reason.toUpperCase();
+                const rhsReason = rhs.reason.toUpperCase();
+                if (lhsReason === rhsReason)
                     return 'equal';
-                return lhs.reason < rhs.reason ? 'less' : 'greater';
+                return lhsReason < rhsReason ? 'less' : 'greater';
             },
             fallbacks: []
         },

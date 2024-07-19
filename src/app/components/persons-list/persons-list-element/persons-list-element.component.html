@@ -44,7 +44,7 @@
                 }
             </div>
         </div>
-        <app-fines-list [teamId]="teamId" [personId]="person.id" [fines]="person.fines" [isPreview]="preview" class="w-85" />
+        <app-fines-list [teamId]="teamId" [personId]="person.id" [fineTemplates]="fineTemplates" [fines]="person.fines" [isPreview]="preview" class="w-85" />
     </div>
 } @else {
     <div (click)="toggleExpanded(true)" class="flex flex-row align-items-center justify-content-between w-full my-3" [class.cursor-pointer]="!preview">
@@ -55,5 +55,5 @@
     </div>
 }
 
-<app-fine-detail-add-edit [teamId]="teamId" [personId]="person.id" [(visible)]="addFineDialogVisible" />
+<app-fine-detail-add-edit [teamId]="teamId" [personId]="person.id" [fineTemplates]="fineTemplates" [(visible)]="addFineDialogVisible" />
 <app-person-add-edit [(visible)]="editPersonDialogVisible" [teamId]="teamId" [person]="person" />

@@ -23,7 +23,7 @@
 
     <ng-template pTemplate="list" let-persons>
         @for (person of personsType(persons); track person.id.guidString; let isFirst = $first) {
-            <app-persons-list-element [teamId]="teamId" [person]="person" [expanded]="expandedPersonId?.guidString === person.id.guidString" (expandedChange)="expandedPersonId = $event" class="flex border-200" [class.border-top-1]="!isFirst" />
+            <app-persons-list-element [teamId]="teamId" [fineTemplates]="fineTemplates" [person]="person" [expanded]="expandedPersonId?.guidString === person.id.guidString" (expandedChange)="expandedPersonId = $event" class="flex border-200" [class.border-top-1]="!isFirst" />
         }
     </ng-template>
 
