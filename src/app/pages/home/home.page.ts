@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { UserManagerService } from '../../services/user-manager.service';
 import { appRoutes } from '../../app.routes';
@@ -12,11 +12,14 @@ import { PersonsListElementComponent } from '../../components/persons-list/perso
 import { PersonsListComponent } from '../../components/persons-list/persons-list.component';
 import { FineTemplatesListComponent } from '../../components/fine-templates-list/fine-templates-list.component';
 import { Observable } from '../../types/Observable';
+import { NotificationService } from '../../services/notification.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent],
+    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule],
+    providers: [MessageService],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,6 +29,10 @@ export class HomePage implements OnInit {
     private userManager = inject(UserManagerService);
 
     private teamDataManager = inject(TeamDataManagerService);
+
+    private notificationService = inject(NotificationService);
+
+    private messageService = inject(MessageService);
 
     public get teamMenu(): MenuItem[] {
         if (this.userManager.signedInUser === null)
@@ -37,7 +44,7 @@ export class HomePage implements OnInit {
             disabled: teamId === currentTeamId?.guidString,
             command: () => {
                 this.userManager.currentTeamId = Tagged.guid(teamId, 'team');
-                this.teamDataManager.startObserve(this.userManager.currentTeamId);
+                void this.onTeamSelected();
             }
         })).values;
         return [
@@ -59,8 +66,25 @@ export class HomePage implements OnInit {
     }
 
     public ngOnInit() {
-        if (this.userManager.currentTeamId !== null)
-            this.teamDataManager.startObserve(this.userManager.currentTeamId);
+        void this.onTeamSelected();
+    }
+
+    private async onTeamSelected() {
+        if (this.signedInPersonId === null ||this.userManager.currentTeamId == null)
+            return;
+        this.teamDataManager.startObserve(this.userManager.currentTeamId);
+        const messageSubject = await this.notificationService.register();
+        if (messageSubject !== null) {
+            messageSubject.subscribe(message => {
+                this.messageService.add({
+                    severity: 'info',
+                    summary: message.title,
+                    detail: message.body,
+                    life: 7500
+                });
+            });
+        }
+        await this.notificationService.subscribe('new-fine', 'fine-state-change', 'fine-reminder');
     }
 
     public get signedInPersonId(): PersonId | null {
@@ -73,12 +97,8 @@ export class HomePage implements OnInit {
 
     public get signedInPerson$(): Observable<PersonWithFines | null> {
         return this.teamDataManager.persons$.map(persons => {
-            if (this.userManager.signedInUser === null || this.userManager.currentTeamId === null)
-                return null;
-            if (!this.userManager.signedInUser.teams.has(this.userManager.currentTeamId))
-                return null;
-            const personId = this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId;
-            if (!persons.has(personId))
+            const personId = this.signedInPersonId;
+            if (personId === null || !persons.has(personId))
                 return null;
             return persons.get(personId);
         });

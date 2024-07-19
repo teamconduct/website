@@ -15,6 +15,7 @@ import { appRoutes } from '../../app.routes';
 import { UserManagerService } from '../../services/user-manager.service';
 import { TeamId } from '../../types/Team';
 import { RandomDataGeneratorService } from '../../services/random-data-generator.service';
+import { isProduction } from '../../../environments/environment';
 
 @Component({
     selector: 'app-create-team-or-register-invitation',
@@ -77,7 +78,10 @@ export class CreateTeamOrRegisterInvitationPage {
             });
             this.userManager.signedInUser = user;
             this.userManager.currentTeamId = teamId;
-            await this.randomDataGenerator.createTestData();
+
+            if (!isProduction)
+                await this.randomDataGenerator.createTestData();
+
         } catch {
             this.createTeamState = 'team-create-failed';
             this.changeDetectorRef.markForCheck();

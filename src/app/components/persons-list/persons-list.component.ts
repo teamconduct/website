@@ -30,7 +30,7 @@ export class PersonsListComponent {
 
     public addPersonDialogVisible: boolean = false;
 
-    public sorting = new Sorting<'name' | 'payedState' | 'total' | 'notPayed', PersonWithFines>('name', {
+    public sorting = new Sorting<'name' | 'payedState' | 'total' | 'notPayed', PersonWithFines>('payedState', {
         name: {
             label: $localize `:Dropdown label to sort persons by name:Sort by name`,
             direction: 'letters'
@@ -68,8 +68,8 @@ export class PersonsListComponent {
                 if (lhsAmount !== 0 &&  rhsAmount !== 0)
                     return 'equal';
                 if (lhsAmount === 0)
-                    return 'less';
-                return 'greater';
+                    return 'greater';
+                return 'less';
             },
             fallbacks: ['name']
         },

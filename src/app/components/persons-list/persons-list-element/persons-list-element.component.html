@@ -49,7 +49,7 @@
 } @else {
     <div (click)="toggleExpanded(true)" class="flex flex-row align-items-center justify-content-between w-full my-3" [class.cursor-pointer]="!preview">
         <p class="text-color font-semibold text-2xl my-0">{{ personName }}</p>
-        <p-tag severity="danger" styleClass="py-2 px-3">
+        <p-tag [severity]="payedTags[displayAmount.type].severity" styleClass="py-2 px-3">
             <p class="text-lg font-semibold my-0">{{ payedTags[displayAmount.type].label }} {{ displayAmount.amount | amount }}</p>
         </p-tag>
     </div>
