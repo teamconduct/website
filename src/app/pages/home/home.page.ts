@@ -14,11 +14,12 @@ import { FineTemplatesListComponent } from '../../components/fine-templates-list
 import { Observable } from '../../types/Observable';
 import { NotificationService } from '../../services/notification.service';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule],
+    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule],
     providers: [MessageService],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
@@ -33,6 +34,8 @@ export class HomePage implements OnInit {
     private notificationService = inject(NotificationService);
 
     private messageService = inject(MessageService);
+
+    public visibleState: 'persons' | 'fineTemplates' = 'persons';
 
     public get teamMenu(): MenuItem[] {
         if (this.userManager.signedInUser === null)
@@ -102,5 +105,14 @@ export class HomePage implements OnInit {
                 return null;
             return persons.get(personId);
         });
+    }
+
+    public get visibleStateIndex(): number {
+        switch (this.visibleState) {
+        case 'persons':
+            return 0;
+        case 'fineTemplates':
+            return 1;
+        }
     }
 }
