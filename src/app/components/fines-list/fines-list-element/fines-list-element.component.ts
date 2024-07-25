@@ -7,20 +7,21 @@ import { DatePipe } from '../../../pipes/date.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AmountPipe } from '../../../pipes/amount.pipe';
 import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'app-fines-list-element',
     standalone: true,
-    imports: [AmountPipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent],
+    imports: [AmountPipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule],
     templateUrl: './fines-list-element.component.html',
     styleUrl: './fines-list-element.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinesListElementComponent {
 
-    @Input({ required: true }) public personId!: PersonId;
+    @Input({ required: true }) public personId!: PersonId | null;
 
-    @Input({ required: true }) public fine!: Fine;
+    @Input({ required: true }) public fine!: Fine | null;
 
     @Input() public hideTopBorder: boolean = false;
 
@@ -38,12 +39,14 @@ export class FinesListElementComponent {
         return this.userManager.hasRole('fine-update');
     }
 
-    public get payedTag(): { value: string, severity: Tag['severity'] } {
+    public get payedTag(): { value: string, severity: Tag['severity'] } | null {
+        if (this.fine === null)
+            return null;
         return PayedState.payedTag(this.fine.payedState);
     }
 
     public async toggleFineState() {
-        if (this.loading)
+        if (this.loading || this.personId === null || this.fine === null)
             return;
         const teamId = this.userManager.currentTeamId;
         if (teamId === null)

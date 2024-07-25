@@ -16,11 +16,12 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'app-persons-list-element',
     standalone: true,
-    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, AmountPipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule],
+    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, AmountPipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule],
     providers: [ConfirmationService],
     templateUrl: './persons-list-element.component.html',
     styleUrl: './persons-list-element.component.scss',
@@ -28,7 +29,7 @@ import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.compo
 })
 export class PersonsListElementComponent {
 
-    @Input({ required: true }) public person!: PersonWithFines;
+    @Input({ required: true }) public person!: PersonWithFines | null;
 
     @Input() public expanded: boolean = true;
 
@@ -48,29 +49,31 @@ export class PersonsListElementComponent {
 
     public deleteLoading: boolean = false;
 
-    public get personName(): string {
+    public get personName(): string | null {
+        if (this.person === null)
+            return null;
         if (this.person.properties.lastName === null)
             return this.person.properties.firstName;
         return `${this.person.properties.firstName} ${this.person.properties.lastName}`;
     }
 
-    public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, amount: Amount, severity: Tag['severity'], icon: IconDefinition }> {
+    public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, amount: Amount | null, severity: Tag['severity'], icon: IconDefinition }> {
         return {
             total: {
                 label: $localize `:Label of totla amount:Total`,
-                amount: this.person.amounts.total,
+                amount: this.person === null ? null : this.person.amounts.total,
                 severity: 'info',
                 icon: faWallet
             },
             notPayed:{
                 label: $localize `:Label of not payed amount:Open`,
-                amount: this.person.amounts.notPayed,
+                amount: this.person === null ? null : this.person.amounts.notPayed,
                 severity: PayedState.payedTag('notPayed').severity,
                 icon: faEnvelopeOpen
             },
             payed: {
                 label: $localize `:Label of payed amount:Paid`,
-                amount: this.person.amounts.payed,
+                amount: this.person === null ? null : this.person.amounts.payed,
                 severity: PayedState.payedTag('payed').severity,
                 icon: faEnvelope
             }
@@ -86,12 +89,18 @@ export class PersonsListElementComponent {
     }
 
     public get canDeletePerson(): boolean {
-        if (this.userManager.currentTeamId !== null && this.userManager.signedInUser !== null && this.userManager.signedInUser.teams.has(this.userManager.currentTeamId) && this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId.guidString === this.person.id.guidString)
+        if (this.userManager.currentTeamId === null || this.userManager.signedInUser === null || !this.userManager.signedInUser.teams.has(this.userManager.currentTeamId))
+            return false;
+        if (this.person === null)
+            return true;
+        if (this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId.guidString === this.person.id.guidString)
             return false;
         return this.userManager.hasRole('person-delete');
     }
 
-    public get displayAmount(): { type: 'notPayed' | 'total', amount: Amount } {
+    public get displayAmount(): { type: 'notPayed' | 'total', amount: Amount } | null {
+        if (this.person === null)
+            return null;
         if (this.person.amounts.notPayed.completeValue === 0)
             return {
                 type: 'total',
@@ -104,12 +113,14 @@ export class PersonsListElementComponent {
     }
 
     public toggleExpanded(toVisible: boolean) {
-        if (this.preview)
+        if (this.preview || this.person === null)
             return;
         this.expandedChange.emit(toVisible ? this.person.id : null);
     }
 
     public showDeleteConfirmation(event: Event) {
+        if (this.person === null)
+            return;
         this.confirmationService.confirm({
             target: event.target as EventTarget,
             message: $localize `:Message to ask for confirmation before deleting person:Are you sure you want to delete this person?`,
@@ -120,7 +131,7 @@ export class PersonsListElementComponent {
     }
 
     public async deletePerson() {
-        if (this.userManager.currentTeamId === null)
+        if (this.userManager.currentTeamId === null || this.person === null)
             return;
 
         if (this.deleteLoading)

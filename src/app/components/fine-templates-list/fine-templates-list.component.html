@@ -1,38 +1,38 @@
 @let fineTemplates = fineTemplates$ | async;
-@if (fineTemplates !== null) {
-    <p-dataView [value]="fineTemplates" class="w-full" styleClass="w-full">
+<p-dataView [value]="fineTemplates ?? nullFineTemplates" class="w-full" styleClass="w-full">
 
-        <ng-template pTemplate="header">
-            <div class="flex flex-row justify-content-between">
-                <div class="flex flex-row">
-                    <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
-                        <ng-template pTemplate="icon">
-                            <fa-icon [icon]="sorting.directionIcon" />
-                        </ng-template>
-                    </p-button>
-                    <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
-                </div>
-                @if (canAddFineTemplate) {
-                    <p-button i18n-label="Button label to add a fine template" label="Add fine template" (onClick)="addFineTemplateDialogVisible = true">
-                        <ng-template pTemplate="icon">
-                            <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
-                        </ng-template>
-                    </p-button>
-                }
+    <ng-template pTemplate="header">
+        <div class="flex flex-row justify-content-between">
+            <div class="flex flex-row">
+                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="sorting.directionIcon" />
+                    </ng-template>
+                </p-button>
+                <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
             </div>
-        </ng-template>
-
-        <ng-template pTemplate="list" let-fineTemplates>
-            @for (fineTemplate of fineTemplatesType(fineTemplates); track fineTemplate.id.guidString; let isFirst = $first) {
-                <app-fine-templates-list-element [fineTemplate]="fineTemplate" [hideTopBorder]="isFirst" />
+            @if (canAddFineTemplate) {
+                <p-button i18n-label="Button label to add a fine template" label="Add fine template" (onClick)="addFineTemplateDialogVisible = true">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                    </ng-template>
+                </p-button>
             }
-        </ng-template>
+        </div>
+    </ng-template>
 
-        <ng-template pTemplate="empty">
-            <p class="text-2xl font-bold text-center my-0 pt-5" i18n="Message when there are no fine templates">No fine templates</p>
-        </ng-template>
+    <ng-template pTemplate="list" let-fineTemplates>
+        @for (fineTemplate of fineTemplatesType(fineTemplates); track fineTemplate !== null ? fineTemplate.id.guidString : null; let isFirst = $first) {
+            <app-fine-templates-list-element [fineTemplate]="fineTemplate" [hideTopBorder]="isFirst" />
+        }
+    </ng-template>
 
-    </p-dataView>
+    <ng-template pTemplate="empty">
+        <p class="text-2xl font-bold text-center my-0 pt-5" i18n="Message when there are no fine templates">No fine templates</p>
+    </ng-template>
 
+</p-dataView>
+
+@if (fineTemplates !== null) {
     <app-fine-template-detail-add-edit [(visible)]="addFineTemplateDialogVisible" />
 }

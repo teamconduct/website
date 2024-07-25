@@ -20,7 +20,7 @@ import { AsyncPipe } from '../../pipes/async.pipe';
 })
 export class FinesListComponent {
 
-    @Input({ required: true }) public personId!: PersonId;
+    @Input({ required: true }) public personId!: PersonId | null;
 
     @Input() public isPreview: boolean = false;
 
@@ -89,7 +89,7 @@ export class FinesListComponent {
 
     public get fines$(): Observable<{ list: Fine[], hasMore: boolean } | null> {
         return this.teamDataManager.persons$.map(persons => {
-            if (!persons.has(this.personId))
+            if (this.personId === null || !persons.has(this.personId))
                 return null;
             const fines = persons.get(this.personId).fines;
             this.sorting.sort(fines);
@@ -100,7 +100,11 @@ export class FinesListComponent {
         });
     }
 
-    public finesType(value: any): Fine[] {
+    public get nullFines(): null[] {
+        return new Array(3).fill(null);
+    }
+
+    public finesType(value: any): (Fine | null)[] {
         return value;
     }
 }

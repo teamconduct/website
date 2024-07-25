@@ -103,7 +103,11 @@ export class PersonsListComponent {
         });
     }
 
-    public personsType(value: any): PersonWithFines[] {
+    public get nullPersons(): null[] {
+        return new Array(10).fill(null);
+    }
+
+    public personsType(value: any): (PersonWithFines | null)[] {
         return value;
     }
 

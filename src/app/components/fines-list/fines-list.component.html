@@ -1,44 +1,42 @@
 @let fines = fines$ | async;
-@if (fines !== null) {
-    <p-dataView [value]="fines.list" class="w-full" styleClass="w-full">
+<p-dataView [value]="fines !== null ? fines.list : nullFines" class="w-full" styleClass="w-full">
 
-        <ng-template pTemplate="header">
-            <div class="flex flex-row justify-content-between">
-                <div class="flex flex-row">
-                    <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+    <ng-template pTemplate="header">
+        <div class="flex flex-row justify-content-between">
+            <div class="flex flex-row">
+                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="sorting.directionIcon" />
+                    </ng-template>
+                </p-button>
+                <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
+            </div>
+            @if(isPreview && fines !== null && fines.hasMore) {
+                @if (showAll) {
+                    <p-button i18n-label="Button label to tell that all fines are visible in fine list" label="All fines" (onClick)="showAll = false">
                         <ng-template pTemplate="icon">
-                            <fa-icon [icon]="sorting.directionIcon" />
+                            <fa-icon [icon]="['far', 'eye']" class="mr-2" />
                         </ng-template>
                     </p-button>
-                    <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
-                </div>
-                @if(isPreview && fines.hasMore) {
-                    @if (showAll) {
-                        <p-button i18n-label="Button label to tell that all fines are visible in fine list" label="All fines" (onClick)="showAll = false">
-                            <ng-template pTemplate="icon">
-                                <fa-icon [icon]="['far', 'eye']" class="mr-2" />
-                            </ng-template>
-                        </p-button>
-                    } @else {
-                        <p-button i18n-label="Button label to tell that some fine are hidden in fine list" label="Some fines are hidden" (onClick)="showAll = true">
-                            <ng-template pTemplate="icon">
-                                <fa-icon [icon]="['far', 'eye-slash']" class="mr-2" />
-                            </ng-template>
-                        </p-button>
-                    }
+                } @else {
+                    <p-button i18n-label="Button label to tell that some fine are hidden in fine list" label="Some fines are hidden" (onClick)="showAll = true">
+                        <ng-template pTemplate="icon">
+                            <fa-icon [icon]="['far', 'eye-slash']" class="mr-2" />
+                        </ng-template>
+                    </p-button>
                 }
-            </div>
-        </ng-template>
-
-        <ng-template pTemplate="list" let-fines>
-            @for (fine of finesType(fines); track fine.id.guidString; let isFirst = $first) {
-                <app-fines-list-element [personId]="personId" [fine]="fine" [hideTopBorder]="isFirst" />
             }
-        </ng-template>
+        </div>
+    </ng-template>
 
-        <ng-template pTemplate="empty">
-            <p class="text-2xl font-bold text-center my-0 pt-5" i18n="Message when there are no finea">This person has no fines</p>
-        </ng-template>
+    <ng-template pTemplate="list" let-fines>
+        @for (fine of finesType(fines); track fine !== null ? fine.id.guidString : null; let isFirst = $first) {
+            <app-fines-list-element [personId]="personId" [fine]="fine" [hideTopBorder]="isFirst" />
+        }
+    </ng-template>
 
-    </p-dataView>
-}
+    <ng-template pTemplate="empty">
+        <p class="text-2xl font-bold text-center my-0 pt-5" i18n="Message when there are no finea">This person has no fines</p>
+    </ng-template>
+
+</p-dataView>

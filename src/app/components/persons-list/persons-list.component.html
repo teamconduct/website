@@ -1,39 +1,39 @@
 @let persons = persons$ | async;
-@if (persons !== null) {
-    <p-dataView [value]="persons" class="w-full" styleClass="w-full">
+<p-dataView [value]="persons ?? nullPersons" class="w-full" styleClass="w-full">
 
-        <ng-template pTemplate="header">
-            <div class="flex flex-row justify-content-between">
-                <div class="flex flex-row">
-                    <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
-                        <ng-template pTemplate="icon">
-                            <fa-icon [icon]="sorting.directionIcon" />
-                        </ng-template>
-                    </p-button>
-                    <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
-                </div>
-                @if (canAddPerson) {
-                    <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonDialogVisible = true">
-                        <ng-template pTemplate="icon">
-                            <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
-                        </ng-template>
-                    </p-button>
-                }
+    <ng-template pTemplate="header">
+        <div class="flex flex-row justify-content-between">
+            <div class="flex flex-row">
+                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="sorting.directionIcon" />
+                    </ng-template>
+                </p-button>
+                <p-dropdown [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" styleClass="border-noround-left border-left-none"/>
             </div>
-
-        </ng-template>
-
-        <ng-template pTemplate="list" let-persons>
-            @for (person of personsType(persons); track person.id.guidString; let isFirst = $first) {
-                <app-persons-list-element [person]="person" [expanded]="expandedPersonId?.guidString === person.id.guidString" (expandedChange)="expandedPersonId = $event" class="flex border-200" [class.border-top-1]="!isFirst" />
+            @if (canAddPerson) {
+                <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonDialogVisible = true">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                    </ng-template>
+                </p-button>
             }
-        </ng-template>
+        </div>
 
-        <ng-template pTemplate="empty">
-            <p class="text-2xl font-bold text-center my-0 pt-5" i18n="Message when there are no persons">No persons</p>
-        </ng-template>
+    </ng-template>
 
-    </p-dataView>
+    <ng-template pTemplate="list" let-persons>
+        @for (person of personsType(persons); track person !== null ? person.id.guidString : null; let isFirst = $first) {
+            <app-persons-list-element [person]="person" [expanded]="person !== null ? expandedPersonId?.guidString === person.id.guidString : false" (expandedChange)="expandedPersonId = $event" class="flex border-200" [class.border-top-1]="!isFirst" />
+        }
+    </ng-template>
 
+    <ng-template pTemplate="empty">
+        <p class="text-2xl font-bold text-center my-0 pt-5" i18n="Message when there are no persons">No persons</p>
+    </ng-template>
+
+</p-dataView>
+
+@if (persons !== null) {
     <app-person-add-edit [(visible)]="addPersonDialogVisible" />
 }

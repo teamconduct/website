@@ -1,20 +1,35 @@
-<div class="flex flex-row align-items-start justify-content-between w-full py-5 border-200 cursor-pointer" [class.border-top-1]="!hideTopBorder" (click)="detailsShown = true">
-    <div class="flex flex-column align-items-start justify-content-center mr-1">
-        <p class="text-color font-bold text-2xl my-0">{{ fine.reason }}</p>
-        <p class="text-color-secondary text-lg my-0">{{ fine.date | date }}</p>
+<div class="flex flex-row align-items-start justify-content-between w-full py-5 border-200" [class.border-top-1]="!hideTopBorder" [class.cursor-pointer]="fine !== null"  (click)="detailsShown = true">
+    <div class="flex flex-column align-items-start justify-content-center mr-1 w-full">
+        @if (fine !== null) {
+            <p class="text-color font-bold text-2xl my-0">{{ fine.reason }}</p>
+            <p class="text-color-secondary text-lg my-0">{{ fine.date | date }}</p>
+        } @else {
+            <p-skeleton height="1.5rem" width="60%" class="mb-1" />
+            <p-skeleton height="1.125rem" width="30%" />
+        }
     </div>
     <div class="flex flex-row align-items-end justify-content-center my-auto">
-        <p class="text-color font-bold text-3xl my-0 mr-5">{{ fine.amount | amount }}</p>
-        @if (canChangeFine) {
+        @if (fine !== null) {
+            <p class="text-color font-bold text-3xl my-0 mr-5">{{ fine.amount | amount }}</p>
+        } @else {
+            <p-skeleton height="1.75rem" width="5rem" class="mr-5" />
+        }
+        @if (canChangeFine && payedTag !== null) {
             <p-tag [value]="payedTag.value"  [severity]="payedTag.severity" (click)="toggleFineState(); $event.stopPropagation()" styleClass="py-1 px-3 text-lg font-medium cursor-pointer">
                 <ng-template pTemplate="icon">
                     <fa-icon [icon]="loading ? ['fas', 'spinner'] : ['fas', 'sliders']" [animation]="loading ? 'spin' : undefined" size="xl" class="pr-1" />
                 </ng-template>
             </p-tag>
-        } @else {
+        } @else if (payedTag !== null) {
             <p-tag [value]="payedTag.value" [severity]="payedTag.severity" styleClass="py-1 px-3 text-lg font-medium" />
+        } @else {
+            <p-tag severity="secondary" styleClass="py-1 px-3 text-lg font-medium">
+                <p-skeleton height="1.125rem" width="5rem" />
+            </p-tag>
         }
     </div>
 </div>
 
-<app-fine-detail-add-edit [(visible)]="detailsShown" [personId]="personId" [fine]="fine" />
+@if (personId !== null && fine !== null) {
+    <app-fine-detail-add-edit [(visible)]="detailsShown" [personId]="personId" [fine]="fine" />
+}

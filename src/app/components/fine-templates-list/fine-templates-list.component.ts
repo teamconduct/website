@@ -68,7 +68,11 @@ export class FineTemplatesListComponent {
         });
     }
 
-    public fineTemplatesType(value: any): FineTemplate[] {
+    public get nullFineTemplates(): null[] {
+        return new Array(10).fill(null);
+    }
+
+    public fineTemplatesType(value: any): (FineTemplate | null)[] {
         return value;
     }
 
