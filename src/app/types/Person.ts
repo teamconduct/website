@@ -28,6 +28,12 @@ export namespace Person {
         fineIds: new ArrayTypeBuilder(FineId.builder),
         signInProperties: new OptionalTypeBuilder(PersonSignInProperties.builder)
     });
+
+    export function name(person: Person | PersonWithFines): string {
+        if (person.properties.lastName === null)
+            return person.properties.firstName;
+        return `${person.properties.firstName} ${person.properties.lastName}`;
+    }
 }
 
 export type PersonWithFines = Omit<Person, 'fineIds'> & {

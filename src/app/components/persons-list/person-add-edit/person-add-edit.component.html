@@ -1,27 +1,31 @@
 <p-dialog [visible]="visible" (visibleChange)="visibleChange.emit()" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" class="clamp-width">
 
     <ng-template pTemplate="header">
-        @if (person === null) {
-            <p class="text-color text-xl font-semibold my-0" i18n="Header of create new person dialog">New person</p>
-        } @else {
-            <p class="text-color text-xl font-semibold my-0" i18n="Header of edit person dialog">Edit person</p>
+        @if (visible) {
+            @if (person === null) {
+                <p class="text-color text-xl font-semibold my-0" i18n="Header of create new person dialog">New person</p>
+            } @else {
+                <p class="text-color text-xl font-semibold my-0" i18n="Header of edit person dialog">Edit person</p>
+            }
         }
     </ng-template>
 
-    <form [formGroup]="personForm" class="flex flex-column align-items-center justify-content-start">
-        <p-floatLabel class="flex py-3 w-full">
-            <input pInputText formControlName="firstName" inputId="firstName-input" class="w-full" />
-            <label for="firstName-input" i18n="Label for the first name input field">First name</label>
-        </p-floatLabel>
-        <p-floatLabel class="flex py-3 w-full">
-            <input pInputText formControlName="lastName" inputId="lastName-input" class="w-full" />
-            <label for="lastName-input" i18n="Label for the optional last name input field">Last name (optional)</label>
-        </p-floatLabel>
-        @if (person === null) {
-            <p-button (onClick)="addOrUpdatePerson('add')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to add person" label="Add person" class="w-full pt-3" styleClass="w-full" />
-        } @else {
-            <p-button (onClick)="addOrUpdatePerson('update')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to save person" label="Save person" class="w-full pt-3" styleClass="w-full" />
-        }
-    </form>
+    @if (visible) {
+        <form [formGroup]="personForm" class="flex flex-column align-items-center justify-content-start">
+            <p-floatLabel class="flex py-3 w-full">
+                <input pInputText formControlName="firstName" inputId="firstName-input" class="w-full" />
+                <label for="firstName-input" i18n="Label for the first name input field">First name</label>
+            </p-floatLabel>
+            <p-floatLabel class="flex py-3 w-full">
+                <input pInputText formControlName="lastName" inputId="lastName-input" class="w-full" />
+                <label for="lastName-input" i18n="Label for the optional last name input field">Last name (optional)</label>
+            </p-floatLabel>
+            @if (person === null) {
+                <p-button (onClick)="addOrUpdatePerson('add')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to add person" label="Add person" class="w-full pt-3" styleClass="w-full" />
+            } @else {
+                <p-button (onClick)="addOrUpdatePerson('update')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to save person" label="Save person" class="w-full pt-3" styleClass="w-full" />
+            }
+        </form>
+    }
 
 </p-dialog>

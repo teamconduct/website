@@ -15,11 +15,12 @@ import { Observable } from '../../types/Observable';
 import { NotificationService } from '../../services/notification.service';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
+import { FineDetailAddEditComponent } from '../../components/fines-list/fine-detail-add-edit/fine-detail-add-edit.component';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule],
+    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule, FineDetailAddEditComponent],
     providers: [MessageService],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
@@ -36,6 +37,8 @@ export class HomePage implements OnInit {
     private messageService = inject(MessageService);
 
     public visibleState: 'persons' | 'fineTemplates' = 'persons';
+
+    public addMultipleFinesDialogVisible = false;
 
     public get teamMenu(): MenuItem[] {
         if (this.userManager.signedInUser === null)
@@ -64,7 +67,17 @@ export class HomePage implements OnInit {
                         routerLink: `/${appRoutes.signUp}`
                     }
                 ]
-            }
+            },
+            ...(this.userManager.hasRole('fine-add') ? [{
+                label: 'Fines',
+                items: [
+                    {
+                        label: 'Add multiple fines',
+                        icon: 'pi pi-fw pi-plus',
+                        command: () => this.addMultipleFinesDialogVisible = true
+                    }
+                ]
+            }] : [])
         ];
     }
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Amount, PayedState, PersonId, PersonWithFines } from '../../../types';
+import { Amount, PayedState, Person, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
 import { Tag, TagModule } from 'primeng/tag';
 import { AmountPipe } from '../../../pipes/amount.pipe';
@@ -52,9 +52,7 @@ export class PersonsListElementComponent {
     public get personName(): string | null {
         if (this.person === null)
             return null;
-        if (this.person.properties.lastName === null)
-            return this.person.properties.firstName;
-        return `${this.person.properties.firstName} ${this.person.properties.lastName}`;
+        return Person.name(this.person);
     }
 
     public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, amount: Amount | null, severity: Tag['severity'], icon: IconDefinition }> {

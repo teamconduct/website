@@ -15,7 +15,7 @@ import { FineAddEditComponent } from '../fine-add-edit/fine-add-edit.component';
 })
 export class FineDetailAddEditComponent implements OnChanges {
 
-    @Input({ required: true }) public personId!: PersonId;
+    @Input() public personId: PersonId | null = null;
 
     @Input() public fine: Fine | null = null;
 

@@ -1,18 +1,22 @@
 <p-dialog [visible]="visible" (visibleChange)="visibleChange.emit()" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" class="clamp-width">
     <ng-template pTemplate="header">
-        @if (state === 'detail' && fineTemplate !== null) {
-            <div class="flex flex-row align-items-center justify-content-start">
-                <p class="text-color text-xl font-semibold my-0 pl-3">{{ fineTemplate.reason }}</p>
-            </div>
-        } @else if (fineTemplate === null) {
-            <p class="text-color text-xl font-semibold my-0" i18n="Header of create new fine template dialog">New fine template</p>
-        } @else {
-            <p class="text-color text-xl font-semibold my-0" i18n="Header of edit fine template dialog">Edit fine template</p>
+        @if (visible) {
+            @if (state === 'detail' && fineTemplate !== null) {
+                <div class="flex flex-row align-items-center justify-content-start">
+                    <p class="text-color text-xl font-semibold my-0 pl-3">{{ fineTemplate.reason }}</p>
+                </div>
+            } @else if (fineTemplate === null) {
+                <p class="text-color text-xl font-semibold my-0" i18n="Header of create new fine template dialog">New fine template</p>
+            } @else {
+                <p class="text-color text-xl font-semibold my-0" i18n="Header of edit fine template dialog">Edit fine template</p>
+            }
         }
     </ng-template>
-    @if (state === 'detail' && fineTemplate !== null) {
-        <app-fine-template-detail [fineTemplate]="fineTemplate" (editFineTemplate)="state = 'edit'" (fineTemplateDeleted)="visibleChange.emit(false)" />
-    } @else {
-        <app-fine-template-add-edit [fineTemplate]="fineTemplate" (finally)="visibleChange.emit(false)" />
+    @if (visible) {
+        @if (state === 'detail' && fineTemplate !== null) {
+            <app-fine-template-detail [fineTemplate]="fineTemplate" (editFineTemplate)="state = 'edit'" (fineTemplateDeleted)="visibleChange.emit(false)" />
+        } @else {
+            <app-fine-template-add-edit [fineTemplate]="fineTemplate" (finally)="visibleChange.emit(false)" />
+        }
     }
 </p-dialog>

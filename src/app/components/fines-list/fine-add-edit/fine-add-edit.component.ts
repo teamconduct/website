@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { PersonId, Fine, Amount, FineTemplate, FineTemplateMultipleItem } from '../../../types';
+import { PersonId, Fine, Amount, FineTemplate, FineTemplateMultipleItem, PersonWithFines, Person } from '../../../types';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -17,11 +17,12 @@ import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { TeamDataManagerService } from '../../../services/team-data-manager.service';
 import { Observable } from '../../../types/Observable';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
     selector: 'app-fine-add-edit',
     standalone: true,
-    imports: [ReactiveFormsModule, InputTextModule, ButtonModule, FloatLabelModule, CalendarModule, InputNumberModule, AsyncPipe, DropdownModule],
+    imports: [ReactiveFormsModule, InputTextModule, ButtonModule, FloatLabelModule, CalendarModule, InputNumberModule, AsyncPipe, DropdownModule, MultiSelectModule],
     providers: [AmountPipe],
     templateUrl: './fine-add-edit.component.html',
     styleUrl: './fine-add-edit.component.scss',
@@ -30,7 +31,7 @@ import { Observable } from '../../../types/Observable';
 })
 export class FineAddEditComponent implements OnInit {
 
-    @Input({ required: true }) public personId!: PersonId;
+    @Input() public personId: PersonId | null = null;
 
     @Input() public fine: Fine | null = null;
 
@@ -47,27 +48,30 @@ export class FineAddEditComponent implements OnInit {
     public state: 'error' | 'loading' | null = null;
 
     public fineForm = new FormGroup({
+        personIds: new FormControl<PersonId[]>([], [Validators.required]),
         fineTemplate: new FormControl<FineTemplate | 'ownFine' | null>(null, [Validators.required]),
         fineTemplateTimes: new FormControl<number>(1, []),
         reason: new FormControl<string | null>(null, []),
         amount: new FormControl<number | null>(null, []),
         date: new FormControl<Date>(new Date(), [Validators.required])
-    }, { validators: (control) => {
+    }, { validators: control => {
         if (control.get('fineTemplate')!.value !== 'ownFine')
             return null;
-        const isReasonValid = control.get('reason')!.value !== null;
-        const isAmountValid = control.get('amount')!.value !== null;
-        if (isReasonValid && isAmountValid)
+        const reasonValid = control.get('reason')!.value !== null && control.get('reason')!.value !== '';
+        const amountValid = control.get('amount')!.value !== null && control.get('amount')!.value !== 0;
+        if (reasonValid && amountValid)
             return null;
         return {
-            reasonRequired: !isReasonValid,
-            amountRequired: !isAmountValid
+            reasonRequired: !reasonValid,
+            amountRequired: !amountValid
         };
     }});
 
     public ngOnInit() {
+        this.fineForm.get('personIds')!.setValue(this.personId !== null ? [this.personId] : []);
         if (this.fine) {
             this.fineForm.setValue({
+                personIds: this.personId !== null ? [this.personId] : [],
                 fineTemplate: 'ownFine',
                 fineTemplateTimes: 1,
                 reason: this.fine.reason,
@@ -77,8 +81,26 @@ export class FineAddEditComponent implements OnInit {
         }
     }
 
+    public get persons$(): Observable<PersonWithFines[]> {
+        return this.teamDataManager.persons$.map(personsDict => personsDict.values);
+    }
+
     public get fineTemplates$(): Observable<FineTemplate[]> {
         return this.teamDataManager.fineTemplates$.map(fineTemplatesDict => fineTemplatesDict.values);
+    }
+
+    public personsOptions(persons: PersonWithFines[]): { label: string, value: PersonId }[] {
+        persons.sort((lhs, rhs) => {
+            const lhsName = Person.name(lhs).toUpperCase();
+            const rhsName = Person.name(rhs).toUpperCase();
+            if (lhsName === rhsName)
+                return 0;
+            return lhsName < rhsName ? -1 : 1;
+        });
+        return persons.map(person => ({
+            label: Person.name(person),
+            value: person.id
+        }));
     }
 
     public fineTemplateOptions(fineTemplates: FineTemplate[]): { label: string, value: FineTemplate | 'ownFine' }[] {
@@ -94,12 +116,10 @@ export class FineAddEditComponent implements OnInit {
                 label: $localize `:Label of fine reason dropdown in add fine for own reason:Create own fine`,
                 value: 'ownFine'
             },
-            ...fineTemplates.map(template => {
-                return {
-                    label: `${template.reason} | ${this.amountPipe.transform(template.amount)}`,
-                    value: template
-                };
-            })
+            ...fineTemplates.map(template => ({
+                label: `${template.reason} | ${this.amountPipe.transform(template.amount)}`,
+                value: template
+            }))
         ];
     }
 
@@ -135,17 +155,19 @@ export class FineAddEditComponent implements OnInit {
         const reason = fineTemplateValue === 'ownFine' ? this.fineForm.get('reason')!.value! : fineTemplateValue.reason;
         const amount = fineTemplateValue === 'ownFine' ? Amount.from(this.fineForm.get('amount')!.value!) : fineTemplateValue.amount.multiplied(this.fineForm.get('fineTemplateTimes')!.value!);
 
-        await this.firebaseFunctions.function('fine').function(functionKey).call({
-            teamId: this.userManager.currentTeamId,
-            personId: this.personId,
-            fine: {
-                id: this.fine === null ? Tagged.generate('fine') : this.fine.id,
-                reason: reason,
-                date: UtcDate.fromDate(this.fineForm.get('date')!.value!),
-                amount: amount,
-                payedState: this.fine === null ? 'notPayed' : this.fine.payedState
-            }
-        });
+        for (const personId of this.fineForm.get('personIds')!.value!) {
+            await this.firebaseFunctions.function('fine').function(functionKey).call({
+                teamId: this.userManager.currentTeamId,
+                personId: personId,
+                fine: {
+                    id: this.fine === null ? Tagged.generate('fine') : this.fine.id,
+                    reason: reason,
+                    date: UtcDate.fromDate(this.fineForm.get('date')!.value!),
+                    amount: amount,
+                    payedState: this.fine === null ? 'notPayed' : this.fine.payedState
+                }
+            });
+        }
 
         this.fineForm.reset();
         this.state = null;
