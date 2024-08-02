@@ -1,77 +1,84 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { DialogModule } from 'primeng/dialog';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Person } from '../../../types';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
-import { markAllAsDirty } from '../../../../utils/markAllAsDirty';
-import { Tagged } from '../../../types/Tagged';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { UserManagerService } from '../../../services/user-manager.service';
+import { FormElement, SubmitableForm } from '../../../types/SubmitableForm';
+import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
+import { Tagged } from '../../../types/Tagged';
 
 @Component({
     selector: 'app-person-add-edit',
     standalone: true,
-    imports: [DialogModule, ReactiveFormsModule, FloatLabelModule, InputTextModule, ButtonModule],
+    imports: [AddEditFormDialogComponent],
     templateUrl: './person-add-edit.component.html',
     styleUrl: './person-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PersonAddEditComponent implements OnInit {
-
-    @Input() public person: Omit<Person, 'fineIds' | 'signInProperties'> | null = null;
+export class PersonAddEditComponent extends SubmitableForm<{
+    firstName: FormControl<string | null>
+    lastName: FormControl<string | null>
+}, 'no-team-id'> {
 
     @Input({ required: true }) public visible!: boolean;
 
     @Output() public readonly visibleChange = new EventEmitter<boolean>();
 
+    @Input() public person: Omit<Person, 'fineIds' | 'signInProperties'> | null = null;
+
     private userManager = inject(UserManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
-    public state: 'error' | 'loading' | null = null;
-
-    public personForm = new FormGroup({
-        firstName: new FormControl<string | null>(null, [Validators.required]),
-        lastName: new FormControl<string | null>(null, [])
-    });
-
-    public ngOnInit() {
-        if (this.person) {
-            this.personForm.setValue({
-                firstName: this.person.properties.firstName,
-                lastName: this.person.properties.lastName
-            });
-        }
+    public constructor() {
+        super({
+            firstName: {
+                control: new FormControl<string | null>('', [Validators.required]),
+                element: FormElement.input($localize `:Label for the first name input field:First name`)
+            },
+            lastName: {
+                control: new FormControl<string | null>(null, []),
+                element: FormElement.input($localize `:Label for the optional last name input field:Last name (optional)`)
+            }
+        }, {
+            'no-team-id': $localize `:Error message that no team ID is set:Cannot assiciate the person with a team`
+        });
     }
 
-    public async addOrUpdatePerson(functionKey: 'add' | 'update') {
+    public get headerLabel(): string {
+        if (this.person === null)
+            return $localize `:Header label for adding a person:Add a new person`;
+        return $localize `:Header label for editing a person:Edit ${Person.name(this.person)}`;
+    }
+
+    public get buttonLabel(): string {
+        if (this.person === null)
+            return $localize `:Button label to add person:Add person`;
+        return $localize `:Button label to save person:Save person`;
+    }
+
+    public override reset() {
+        super.reset();
+        if (this.person === null)
+            return;
+        this.setValue({
+            firstName: this.person.properties.firstName,
+            lastName: this.person.properties.lastName
+        });
+    }
+
+    public override async submit(): Promise<'no-team-id' | void> {
         if (this.userManager.currentTeamId === null)
-            return;
-
-        if (this.state === 'loading')
-            return;
-        markAllAsDirty(this.personForm);
-        if (this.personForm.invalid) {
-            this.state = 'error';
-            return;
-        }
-        this.state = 'loading';
-
-        await this.firebaseFunctions.function('person').function(functionKey).call({
+            return 'no-team-id';
+        await this.firebaseFunctions.function('person').function(this.person === null ? 'add' : 'update').call({
             teamId: this.userManager.currentTeamId,
             person: {
-                id: this.person === null ? Tagged.generate('person') : this.person.id,
+                id: this.person !== null ? this.person.id : Tagged.generate('person'),
                 properties: {
-                    firstName: this.personForm.get('firstName')!.value!,
-                    lastName: this.personForm.get('lastName')!.value
+                    firstName: this.get('firstName')!.value!,
+                    lastName: this.get('lastName')!.value
                 }
             }
         });
-
-        this.personForm.reset();
-        this.state = null;
-        this.visibleChange.emit(false);
     }
 }

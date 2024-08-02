@@ -155,7 +155,10 @@ export class FineAddEditComponent implements OnInit {
         const reason = fineTemplateValue === 'ownFine' ? this.fineForm.get('reason')!.value! : fineTemplateValue.reason;
         const amount = fineTemplateValue === 'ownFine' ? Amount.from(this.fineForm.get('amount')!.value!) : fineTemplateValue.amount.multiplied(this.fineForm.get('fineTemplateTimes')!.value!);
 
-        for (const personId of this.fineForm.get('personIds')!.value!) {
+        const personIds = this.fineForm.get('personIds')!.value!;
+        await Promise.all(personIds.map(async personId => {
+            if (this.userManager.currentTeamId === null)
+                return;
             await this.firebaseFunctions.function('fine').function(functionKey).call({
                 teamId: this.userManager.currentTeamId,
                 personId: personId,
@@ -167,7 +170,7 @@ export class FineAddEditComponent implements OnInit {
                     payedState: this.fine === null ? 'notPayed' : this.fine.payedState
                 }
             });
-        }
+        }));
 
         this.fineForm.reset();
         this.state = null;

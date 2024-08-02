@@ -34,6 +34,6 @@ export const routes: Routes = [
     { path: appRoutes.signIn, component: SignInPage },
     { path: appRoutes.signUp, component: CreateTeamOrRegisterInvitationPage },
     { path: appRoutes.home, component: HomePage, canActivate: [UserIsSignInGuardService] },
-    { path: '', pathMatch: 'full', redirectTo: appRoutes.home },
+    { path: '', pathMatch: 'full', redirectTo: appRoutes.signIn },
     { path: '**', pathMatch: 'full', redirectTo: appRoutes.home }
 ];

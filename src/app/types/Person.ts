@@ -29,7 +29,7 @@ export namespace Person {
         signInProperties: new OptionalTypeBuilder(PersonSignInProperties.builder)
     });
 
-    export function name(person: Person | PersonWithFines): string {
+    export function name(person: { properties: Person['properties'] }): string {
         if (person.properties.lastName === null)
             return person.properties.firstName;
         return `${person.properties.firstName} ${person.properties.lastName}`;
