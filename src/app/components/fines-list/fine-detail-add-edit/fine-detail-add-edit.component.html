@@ -1,25 +1,18 @@
-<p-dialog [visible]="visible" (visibleChange)="visibleChange.emit()" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" class="clamp-width">
+<p-dialog [visible]="visible && state === 'detail' && personId !== null && fine !== null" (visibleChange)="visibleChange.emit($event)" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" class="clamp-width">
+
     <ng-template pTemplate="header">
-        @if (visible) {
-            @if (state === 'detail' && fine !== null) {
-                <div class="flex flex-row align-items-center justify-content-start">
-                    <p-tag [value]="payedTag(fine.payedState).value" [severity]="payedTag(fine.payedState).severity" />
-                    <p class="text-color text-xl font-semibold my-0 pl-3">{{ fine.reason }}</p>
-                </div>
-            } @else if (fine === null) {
-                <p class="text-color text-xl font-semibold my-0" i18n="Header of create new fine dialog">New fine</p>
-            } @else {
-                <p class="text-color text-xl font-semibold my-0" i18n="Header of edit fine dialog">Edit fine</p>
-            }
+        @if (personId !== null && fine !== null) {
+            <div class="flex flex-row align-items-center justify-content-start">
+                <p-tag [value]="payedTag(fine.payedState).value" [severity]="payedTag(fine.payedState).severity" />
+                <p class="text-color text-xl font-semibold my-0 pl-3">{{ fine.reason }}</p>
+            </div>
         }
     </ng-template>
-    @if (visible) {
-        @if (state === 'detail' && fine !== null) {
-            @if (personId !== null) {
-                <app-fine-detail [personId]="personId" [fine]="fine" (editFine)="state = 'edit'" (fineDeleted)="visibleChange.emit(false)" />
-            }
-        } @else {
-            <app-fine-add-edit [personId]="personId" [fine]="fine" (finally)="visibleChange.emit(false)" />
-        }
+
+    @if (personId !== null && fine !== null) {
+        <app-fine-detail [personId]="personId" [fine]="fine" (editFine)="state = 'edit'" (fineDeleted)="visibleChange.emit(false)" />
     }
+
 </p-dialog>
+
+<app-fine-add-edit [personId]="personId" [fine]="fine" [visible]="visible && (state === 'edit' || personId === null || fine === null)" (visibleChange)="visibleChange.emit($event)" />

@@ -15,13 +15,13 @@ import { FineAddEditComponent } from '../fine-add-edit/fine-add-edit.component';
 })
 export class FineDetailAddEditComponent implements OnChanges {
 
-    @Input() public personId: PersonId | null = null;
-
-    @Input() public fine: Fine | null = null;
-
     @Input({ required: true }) public visible!: boolean;
 
     @Output() public readonly visibleChange = new EventEmitter<boolean>();
+
+    @Input() public personId: PersonId | null = null;
+
+    @Input() public fine: Fine | null = null;
 
     public state: 'detail' | 'edit' = 'detail';
 

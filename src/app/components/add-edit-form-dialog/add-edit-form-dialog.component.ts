@@ -17,7 +17,7 @@ export class AddEditFormDialogComponent<TControl extends SubmitableForm.TControl
 
     @Output() public readonly visibleChange = new EventEmitter<boolean>();
 
-    @Input({ required: true }) public form!: SubmitableForm<TControl, TError>;
+    @Input({ required: true }) public form!: SubmitableForm<TControl, TError> | any;
 
     @Input({ required: true }) public headerLabel!: string;
 

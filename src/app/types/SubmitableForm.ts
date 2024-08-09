@@ -1,21 +1,6 @@
 import { AbstractControl, FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn } from '@angular/forms';
 import { markAllAsDirty } from '../../utils/markAllAsDirty';
 import { LoadingState } from './LoadingState';
-import { mapRecord } from '../utils';
-
-export type FormElement = FormElement.Input;
-
-export namespace FormElement {
-
-    export function input(label: string): Input {
-        return { type: 'input', label };
-    }
-
-    export type Input = {
-        type: 'input';
-        label: string;
-    }
-}
 
 export class SubmitableForm<
     TControl extends SubmitableForm.TControlRequirement = any,
@@ -24,10 +9,6 @@ export class SubmitableForm<
 
     public loadingState = new LoadingState<'input' | 'server' | TError>();
 
-    public formElements: {
-        [K in keyof TControl]: FormElement
-    };
-
     public successHandlers: (() => void)[] = [];
 
     public errorMessages: {
@@ -35,20 +16,14 @@ export class SubmitableForm<
     };
 
     public constructor(
-        controls: {
-            [K in keyof TControl]: {
-                control: TControl[K];
-                element: FormElement;
-            }
-        },
+        controls: TControl,
         errorMessages: {
             [K in TError]: string;
         },
         validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
         asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null
     ) {
-        super(mapRecord(controls, control => control.control) as TControl, validatorOrOpts, asyncValidator);
-        this.formElements = mapRecord(controls, control => control.element);
+        super(controls, validatorOrOpts, asyncValidator);
         this.errorMessages = {
             input: $localize `:Error message that not all required fields are valid:Please fill in all required fields`,
             server: $localize `:Error message that an internal server error has occured:An error occurred, please try again later`,
@@ -61,7 +36,6 @@ export class SubmitableForm<
     }
 
     public get errorMessage(): string | null {
-        console.log(this.loadingState.error);
         if (this.loadingState.isFailure())
             return this.errorMessages[this.loadingState.error];
         return null;

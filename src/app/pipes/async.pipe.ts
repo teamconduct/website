@@ -13,7 +13,7 @@ export class AsyncPipe implements PipeTransform {
 
     private changeDetector = inject(ChangeDetectorRef);
 
-    public transform<T>(observable: Observable<T>): T {
+    public transform<T>(observable: Observable<T>): T | null {
         if (this.currentObservable === observable)
             return this.currentValue;
         this.currentObservable = observable;

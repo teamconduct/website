@@ -3,14 +3,15 @@ import { Person } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
-import { FormElement, SubmitableForm } from '../../../types/SubmitableForm';
+import { SubmitableForm } from '../../../types/SubmitableForm';
 import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
 import { Tagged } from '../../../types/Tagged';
+import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
 
 @Component({
     selector: 'app-person-add-edit',
     standalone: true,
-    imports: [AddEditFormDialogComponent],
+    imports: [AddEditFormDialogComponent, FormElementComponent],
     templateUrl: './person-add-edit.component.html',
     styleUrl: './person-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,14 +33,8 @@ export class PersonAddEditComponent extends SubmitableForm<{
 
     public constructor() {
         super({
-            firstName: {
-                control: new FormControl<string | null>('', [Validators.required]),
-                element: FormElement.input($localize `:Label for the first name input field:First name`)
-            },
-            lastName: {
-                control: new FormControl<string | null>(null, []),
-                element: FormElement.input($localize `:Label for the optional last name input field:Last name (optional)`)
-            }
+            firstName: new FormControl<string | null>(null, [Validators.required]),
+            lastName: new FormControl<string | null>(null, [])
         }, {
             'no-team-id': $localize `:Error message that no team ID is set:Cannot assiciate the person with a team`
         });

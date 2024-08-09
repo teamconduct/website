@@ -1,1 +1,11 @@
-<app-add-edit-form-dialog [form]="this" [headerLabel]="headerLabel" [buttonLabel]="buttonLabel" [visible]="visible" (visibleChange)="visibleChange.emit($event)" />
+<app-add-edit-form-dialog [form]="this" [headerLabel]="headerLabel" [buttonLabel]="buttonLabel" [visible]="visible" (visibleChange)="visibleChange.emit($event)">
+
+    <app-form-element type="input" [formControl]="get('firstName')"
+        i18n-label="Label for the first name input field" label="First name"
+    />
+
+    <app-form-element type="input" [formControl]="get('lastName')"
+        i18n-label="Label for the optional last name input field" label="Last name (optional)"
+    />
+
+</app-add-edit-form-dialog>

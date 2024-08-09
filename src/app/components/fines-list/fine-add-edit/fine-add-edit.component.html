@@ -1,39 +1,40 @@
-<form [formGroup]="fineForm" class="flex flex-column align-items-center justify-content-start">
-    @let persons = persons$ | async;
-    @if (personId === null && persons !== null) {
-        <p-floatLabel class="flex py-3 w-full">
-            <p-multiSelect formControlName="personIds" inputId="person-input" [options]="personsOptions(persons)" optionLabel="label" optionValue="value" i18n-placeholder="Placeholder for select person in fine add and edit" placeholder="Select persons" i18-nselectedItemsLabel="Label for select persons if more than max persons are selected" selectedItemsLabel="{0} persons selected" [filter]="true" class="w-full" styleClass="w-full" />
-            <label for="person-input" i18n="Label for the person input field">Persons</label>
-        </p-floatLabel>
+<app-add-edit-form-dialog [form]="this" [headerLabel]="headerLabel" [buttonLabel]="buttonLabel" [visible]="visible" (visibleChange)="visibleChange.emit($event)">
+
+    @let personOptions = personOptions$ | async;
+    @if (personId === null && personOptions !== null) {
+        <app-form-element type="multiselect" [formControl]="get('personIds')" [options]="personOptions"
+            i18n-label="Label for select person in fine add and edit" label="Persons"
+            i18n-placeholder="Placeholder for select person in fine add and edit" placeholder="Select persons"
+            i18n-selectedItemsLabel="Label for select persons if more than max persons are selected" selectedItemsLabel="{0} persons selected"
+        />
     }
-    @let fineTemplates = fineTemplates$ | async;
-    @if (fine === null && fineTemplates !== null) {
-        <p-floatLabel class="flex py-3 w-full">
-            <p-dropdown formControlName="fineTemplate" inputId="fine-template-input" [options]="fineTemplateOptions(fineTemplates)" optionLabel="label" optionValue="value" i18n-placeholder="Placeholder for select a fine template in fine add and edit" placeholder="Select a fine template" [filter]="true" class="w-full" styleClass="w-full" />
-            <label for="fine-template-input" i18n="Label for the fine template input field">Fine template</label>
-        </p-floatLabel>
-        @let fineTemplateValue = fineForm.get('fineTemplate')!.value;
-        @if (fineTemplateValue !== null && fineTemplateValue !== 'ownFine' && fineTemplateValue!.multiple !== null) {
-            <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
-                <p-inputNumber formControlName="fineTemplateTimes" inputId="fineTemplateTimes-input" [min]="1" [max]="fineTemplateTimesMaximum ?? undefined" [showButtons]="true" [suffix]="' ' + fineTemplateTimesSuffix" class="w-full" styleClass="w-full" />
-                <label for="fineTemplateTimes-input" i18n="Label for fine template times in fine add">Times</label>
-            </p-floatLabel>
+
+    @let fineTemplateOptions = fineTemplateOptions$ | async;
+    @if (fine === null && fineTemplateOptions !== null) {
+        <app-form-element type="dropdown" [formControl]="get('fineTemplate')" [options]="fineTemplateOptions"
+            i18n-label="Label for select a fine template in fine add and edit" label="Fine template"
+            i18n-placeholder="Placeholder for select a fine template in fine add and edit" placeholder="Select a fine template"
+        />
+
+        @let selectedFineTemplate = get('fineTemplate')!.value;
+        @if (selectedFineTemplate !== null && selectedFineTemplate !== 'ownFine' && selectedFineTemplate!.multiple !== null) {
+            <app-form-element type="number" [formControl]="get('fineTemplateTimes')" [min]="1" [max]="fineTemplateTimesMaximum" [suffix]="fineTemplateTimesSuffix" [showButtons]="true"
+                i18n-label="Label for the number of times input field" label="Times"
+            />
         }
     }
-    @if (fineForm.get('fineTemplate')!.value === 'ownFine') {
-        <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
-            <input pInputText formControlName="reason" inputId="reason-input" class="w-full" />
-            <label for="reason-input" i18n="Label for the reason input field">Reason</label>
-        </p-floatLabel>
-        <p-floatLabel @enterLeaveAnimation class="flex py-3 w-full">
-            <p-inputNumber formControlName="amount" inputId="amount-input" mode="currency" currency="EUR" class="w-full" styleClass="w-full" />
-            <label for="amount-input" i18n="Label for the amount input field">Amount</label>
-        </p-floatLabel>
+
+    @if (get('fineTemplate')!.value === 'ownFine') {
+
+        <app-form-element type="input" [formControl]="get('reason')"
+            i18n-label="Label for the reason input field" label="Reason"
+        />
+
+        <app-form-element type="currency" [formControl]="get('amount')" currency="EUR"
+            i18n-label="Label for the amount input field" label="Amount"
+        />
     }
-    <p-calendar formControlName="date" [inline]="true" class="w-full" styleClass="w-full" />
-    @if (fine === null) {
-        <p-button (onClick)="addOrUpdateFine('add')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to add fine" label="Add fine" class="w-full pt-3" styleClass="w-full" />
-    } @else {
-        <p-button (onClick)="addOrUpdateFine('update')" [loading]="state === 'loading'" [disabled]="state === 'loading'" [severity]="state === 'error' ? 'danger' : undefined" i18n-label="Button label to save fine" label="Save fine" class="w-full pt-3" styleClass="w-full" />
-    }
-</form>
+
+    <app-form-element type="date" [formControl]="get('date')" [inline]="true" />
+
+</app-add-edit-form-dialog>

@@ -1,0 +1,33 @@
+<ng-template #formElement>
+    @switch (type) {
+        @case ('input') {
+            <input pInputText [formControl]="formControl" [attr.inputId]="inputId.guidString" class="w-full" />
+        }
+        @case ('currency') {
+            <p-inputNumber [formControl]="formControl" [attr.inputId]="inputId.guidString" mode="currency" [currency]="currency ?? undefined" class="w-full" styleClass="w-full" />
+        }
+        @case ('number') {
+            <p-inputNumber [formControl]="formControl" [attr.inputId]="inputId.guidString" [min]="min ?? undefined" [max]="max ?? undefined" [showButtons]="showButtons" [suffix]="suffix === null ? undefined : ' ' + suffix" class="w-full" styleClass="w-full" />
+        }
+        @case ('dropdown') {
+            <p-dropdown [formControl]="formControl" [attr.inputId]="inputId.guidString" [options]="options ?? undefined" optionLabel="label" optionValue="key" [placeholder]="placeholder ?? undefined" [filter]="filter" appendTo="body" class="w-full" styleClass="w-full" />
+        }
+        @case ('multiselect') {
+            <p-multiSelect [formControl]="formControl" [attr.inputId]="inputId.guidString" [options]="options ?? undefined" optionLabel="label" optionValue="key" [placeholder]="placeholder ?? undefined" [selectedItemsLabel]="selectedItemsLabel ?? undefined" [filter]="filter" appendTo="body" class="w-full" styleClass="w-full" />
+        }
+        @case ('date') {
+            <p-calendar [formControl]="formControl" [attr.inputId]="inputId.guidString" [inline]="inline" class="w-full" styleClass="w-full" />
+        }
+    }
+</ng-template>
+
+@if (label !== null) {
+    <p-floatLabel class="flex py-3 w-full">
+        <ng-container *ngTemplateOutlet="formElement" />
+        <label [for]="inputId.guidString">{{ label }}</label>
+    </p-floatLabel>
+} @else {
+    <div class="flex py-3 w-full">
+        <ng-container *ngTemplateOutlet="formElement" />
+    </div>
+}

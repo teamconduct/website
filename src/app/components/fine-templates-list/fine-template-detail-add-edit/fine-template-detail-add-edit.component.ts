@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
-import { TagModule } from 'primeng/tag';
 import { FineTemplateDetailComponent } from '../fine-template-detail/fine-template-detail.component';
 import { FineTemplateAddEditComponent } from '../fine-template-add-edit/fine-template-add-edit.component';
 import { FineTemplate } from '../../../types';
@@ -8,7 +7,7 @@ import { FineTemplate } from '../../../types';
 @Component({
     selector: 'app-fine-template-detail-add-edit',
     standalone: true,
-    imports: [DialogModule, TagModule, FineTemplateDetailComponent, FineTemplateAddEditComponent],
+    imports: [DialogModule, FineTemplateDetailComponent, FineTemplateAddEditComponent],
     templateUrl: './fine-template-detail-add-edit.component.html',
     styleUrl: './fine-template-detail-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
