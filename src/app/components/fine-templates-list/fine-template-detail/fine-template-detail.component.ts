@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { AmountPipe } from '../../../pipes/amount.pipe';
+import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
@@ -10,7 +10,7 @@ import { UserManagerService } from '../../../services/user-manager.service';
 @Component({
     selector: 'app-fine-template-detail',
     standalone: true,
-    imports: [AmountPipe, ButtonModule, ConfirmPopupModule],
+    imports: [FineValuePipe, ButtonModule, ConfirmPopupModule],
     providers: [ConfirmationService],
     templateUrl: './fine-template-detail.component.html',
     styleUrl: './fine-template-detail.component.scss',

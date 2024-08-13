@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Fine, PersonId } from '../../../types';
-import { AmountPipe } from '../../../pipes/amount.pipe';
+import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 @Component({
     selector: 'app-fine-detail',
     standalone: true,
-    imports: [AmountPipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule],
+    imports: [FineValuePipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule],
     providers: [ConfirmationService],
     templateUrl: './fine-detail.component.html',
     styleUrl: './fine-detail.component.scss',

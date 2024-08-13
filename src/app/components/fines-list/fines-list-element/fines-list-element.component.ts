@@ -5,14 +5,14 @@ import { FirebaseFunctionsService } from '../../../services/firebase-functions.s
 import { UserManagerService } from '../../../services/user-manager.service';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AmountPipe } from '../../../pipes/amount.pipe';
+import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'app-fines-list-element',
     standalone: true,
-    imports: [AmountPipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule],
+    imports: [FineValuePipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule],
     templateUrl: './fines-list-element.component.html',
     styleUrl: './fines-list-element.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

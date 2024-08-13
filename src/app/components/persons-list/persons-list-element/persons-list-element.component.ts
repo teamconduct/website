@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Amount, PayedState, Person, PersonId, PersonWithFines } from '../../../types';
+import { PayedState, Person, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
 import { Tag, TagModule } from 'primeng/tag';
-import { AmountPipe } from '../../../pipes/amount.pipe';
+import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
@@ -17,11 +17,12 @@ import { ConfirmationService } from 'primeng/api';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { SummedFineValue } from '../../../types/SummedFineValue';
 
 @Component({
     selector: 'app-persons-list-element',
     standalone: true,
-    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, AmountPipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule],
+    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, FineValuePipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule],
     providers: [ConfirmationService],
     templateUrl: './persons-list-element.component.html',
     styleUrl: './persons-list-element.component.scss',
@@ -55,23 +56,23 @@ export class PersonsListElementComponent {
         return Person.name(this.person);
     }
 
-    public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, amount: Amount | null, severity: Tag['severity'], icon: IconDefinition }> {
+    public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, value: SummedFineValue | null, severity: Tag['severity'], icon: IconDefinition }> {
         return {
             total: {
-                label: $localize `:Label of totla amount:Total`,
-                amount: this.person === null ? null : this.person.amounts.total,
+                label: $localize `:Label of total amount:Total`,
+                value: this.person === null ? null : this.person.fineValues.total,
                 severity: 'info',
                 icon: faWallet
             },
             notPayed:{
                 label: $localize `:Label of not payed amount:Open`,
-                amount: this.person === null ? null : this.person.amounts.notPayed,
+                value: this.person === null ? null : this.person.fineValues.notPayed,
                 severity: PayedState.payedTag('notPayed').severity,
                 icon: faEnvelopeOpen
             },
             payed: {
                 label: $localize `:Label of payed amount:Paid`,
-                amount: this.person === null ? null : this.person.amounts.payed,
+                value: this.person === null ? null : this.person.fineValues.payed,
                 severity: PayedState.payedTag('payed').severity,
                 icon: faEnvelope
             }
@@ -96,17 +97,17 @@ export class PersonsListElementComponent {
         return this.userManager.hasRole('person-delete');
     }
 
-    public get displayAmount(): { type: 'notPayed' | 'total', amount: Amount } | null {
+    public get displayValue(): { type: 'notPayed' | 'total', value: SummedFineValue } | null {
         if (this.person === null)
             return null;
-        if (this.person.amounts.notPayed.completeValue === 0)
+        if (this.person.fineValues.notPayed.isZero)
             return {
                 type: 'total',
-                amount: this.person.amounts.total
+                value: this.person.fineValues.total
             };
         return {
             type: 'notPayed',
-            amount: this.person.amounts.notPayed
+            value: this.person.fineValues.notPayed
         };
     }
 

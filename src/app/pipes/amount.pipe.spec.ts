@@ -1,4 +1,4 @@
-import { AmountPipe } from './amount.pipe';
+import { AmountPipe } from './fineValue.pipe';
 
 describe('AmountPipe', () => {
   it('create an instance', () => {

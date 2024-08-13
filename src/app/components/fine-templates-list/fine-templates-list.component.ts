@@ -11,6 +11,7 @@ import { FineTemplateDetailAddEditComponent } from './fine-template-detail-add-e
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { Observable } from '../../types/Observable';
 import { AsyncPipe } from '@angular/common';
+import { FineValue } from '../../types/FineValue';
 
 @Component({
     selector: 'app-fine-templates-list',
@@ -28,12 +29,12 @@ export class FineTemplatesListComponent {
 
     public addFineTemplateDialogVisible: boolean = false;
 
-    public sorting = new Sorting<'reason' | 'amount', FineTemplate>('reason', {
+    public sorting = new Sorting<'reason' | 'value', FineTemplate>('reason', {
         reason: {
             label: $localize `:Dropdown label to sort fine template by reason:Sort by reason`,
             direction: 'letters'
         },
-        amount: {
+        value: {
             label: $localize `:Dropdown label to sort fine template by amount:Sort by amount`,
             direction: 'numbers'
         }
@@ -48,14 +49,8 @@ export class FineTemplatesListComponent {
             },
             fallbacks: []
         },
-        amount: {
-            compareFn: (lhs, rhs) => {
-                const lhsAmount = lhs.amount.completeValue;
-                const rhsAmount = rhs.amount.completeValue;
-                if (lhsAmount === rhsAmount)
-                    return 'equal';
-                return lhsAmount < rhsAmount ? 'less' : 'greater';
-            },
+        value: {
+            compareFn: (lhs, rhs) => FineValue.compare(lhs.value, rhs.value),
             fallbacks: ['reason']
         }
     });

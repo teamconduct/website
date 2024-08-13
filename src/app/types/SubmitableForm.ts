@@ -1,6 +1,10 @@
-import { AbstractControl, FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ɵFormGroupRawValue } from '@angular/forms';
 import { markAllAsDirty } from '../../utils/markAllAsDirty';
 import { LoadingState } from './LoadingState';
+import { Observable } from 'rxjs';
+
+type ValidatorFn<TControl extends SubmitableForm.TControlRequirement> = (control: AbstractControl<ɵFormGroupRawValue<TControl>>) => ValidationErrors | null;
+type AsyncValidatorFn<TControl extends SubmitableForm.TControlRequirement> = (control: AbstractControl<ɵFormGroupRawValue<TControl>>) => Promise<ValidationErrors | null> | Observable<ValidationErrors | null>;
 
 export class SubmitableForm<
     TControl extends SubmitableForm.TControlRequirement = any,
@@ -20,8 +24,8 @@ export class SubmitableForm<
         errorMessages: {
             [K in TError]: string;
         },
-        validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-        asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null
+        validatorOrOpts?: ValidatorFn<TControl> | ValidatorFn<TControl>[] | null,
+        asyncValidator?: AsyncValidatorFn<TControl> | AsyncValidatorFn<TControl>[] | null
     ) {
         super(controls, validatorOrOpts, asyncValidator);
         this.errorMessages = {

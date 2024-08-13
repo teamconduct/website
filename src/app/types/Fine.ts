@@ -1,5 +1,5 @@
 import { TypeBuilder, ObjectTypeBuilder, ValueTypeBuilder } from '../typeBuilder';
-import { Amount } from './Amount';
+import { FineValue } from './FineValue';
 import { Flatten } from './Flattable';
 import { Guid } from './Guid';
 import { PayedState } from './PayedState';
@@ -17,7 +17,7 @@ export type Fine = {
     payedState: PayedState,
     date: UtcDate,
     reason: string,
-    amount: Amount
+    value: FineValue
 }
 
 export namespace Fine {
@@ -26,6 +26,6 @@ export namespace Fine {
         payedState: new ValueTypeBuilder(),
         date: new TypeBuilder(UtcDate.decode),
         reason: new ValueTypeBuilder(),
-        amount: Amount.builder
+        value: FineValue.builder
     });
 }

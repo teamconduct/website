@@ -5,7 +5,7 @@ import { FirebaseFunctionsService } from '../../../services/firebase-functions.s
 import { Tagged } from '../../../types/Tagged';
 import { UtcDate } from '../../../types/UtcDate';
 import { AsyncPipe } from '../../../pipes/async.pipe';
-import { AmountPipe } from '../../../pipes/amount.pipe';
+import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { TeamDataManagerService } from '../../../services/team-data-manager.service';
@@ -13,12 +13,13 @@ import { Observable } from '../../../types/Observable';
 import { SubmitableForm } from '../../../types/SubmitableForm';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
 import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
+import { FineValue, FineValueItem } from '../../../types/FineValue';
 
 @Component({
     selector: 'app-fine-add-edit',
     standalone: true,
     imports: [AsyncPipe, AddEditFormDialogComponent, FormElementComponent],
-    providers: [AmountPipe],
+    providers: [FineValuePipe],
     templateUrl: './fine-add-edit.component.html',
     styleUrl: './fine-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +30,9 @@ export class FineAddEditComponent extends SubmitableForm<{
     fineTemplate: FormControl<FineTemplate | 'ownFine' | null>
     fineTemplateTimes: FormControl<number | null>
     reason: FormControl<string | null>
+    fineValueType: FormControl<'amount' | FineValueItem | null>
     amount: FormControl<number | null>
+    fineValueItemCount: FormControl<number | null>
     date: FormControl<Date | null>
 }, 'no-team-id'> {
 
@@ -47,7 +50,7 @@ export class FineAddEditComponent extends SubmitableForm<{
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
-    private amountPipe = inject(AmountPipe);
+    private fineValuePipe = inject(FineValuePipe);
 
     public constructor() {
         super({
@@ -55,22 +58,71 @@ export class FineAddEditComponent extends SubmitableForm<{
             fineTemplate: new FormControl<FineTemplate | 'ownFine' | null>(null, [Validators.required]),
             fineTemplateTimes: new FormControl<number | null>(null, []),
             reason: new FormControl<string | null>(null, []),
+            fineValueType: new FormControl<'amount' | FineValueItem | null>(null, []),
             amount: new FormControl<number | null>(null, []),
+            fineValueItemCount: new FormControl<number | null>(null, []),
             date: new FormControl<Date | null>(null, [Validators.required])
         }, {
             'no-team-id': $localize `:Error message when the team ID is not set:Cannot assiciate the fine with a team`
-        }, control => {
-            if (control.get('fineTemplate')!.value !== 'ownFine')
-                return null;
-            const reasonValid = control.get('reason')!.value !== null && control.get('reason')!.value !== '';
-            const amountValid = control.get('amount')!.value !== null && control.get('amount')!.value !== 0;
-            if (reasonValid && amountValid)
-                return null;
-            return {
-                reasonRequired: !reasonValid,
-                amountRequired: !amountValid
-            };
-        });
+        }, [
+            control => {
+                const fineTemplate = control.get('fineTemplate')!.value;
+                if (fineTemplate === null || fineTemplate === 'ownFine')
+                    return null;
+                if (fineTemplate.multiple === null)
+                    return null;
+                const fineTemplateTimes = control.get('fineTemplateTimes')!.value;
+                if (fineTemplateTimes !== null && fineTemplateTimes > 0)
+                    return null;
+                control.get('fineTemplateTimes')!.setErrors({ required: true });
+                return {
+                    fineTemplateTimesRequired: true
+                };
+            },
+            control => {
+                const fineTemplate = control.get('fineTemplate')!.value;
+                if (fineTemplate !== 'ownFine')
+                    return null;
+                const reason = control.get('reason')!.value;
+                const reasonValid = reason !== null && reason !== '';
+                if (!reasonValid)
+                    control.get('reason')!.setErrors({ required: true });
+                const fineValueType = control.get('fineValueType')!.value;
+                if (fineValueType === null) {
+                    control.get('fineValueType')!.setErrors({ required: true });
+                    return {
+                        reasonRequired: !reasonValid,
+                        fineValueTypeRequired: true
+                    };
+                }
+                switch (fineValueType) {
+                case 'amount': {
+                    const amount = control.get('amount')!.value;
+                    const amountValid = amount !== null && amount > 0;
+                    if (!amountValid)
+                        control.get('amount')!.setErrors({ required: true });
+                    if (reasonValid && amountValid)
+                        return null;
+                    return {
+                        reasonRequired: !reasonValid,
+                        amountRequired: !amountValid
+                    };
+                }
+                default: {
+                    const fineValueItemCount = control.get('fineValueItemCount')!.value;
+                    const fineValueItemCountValid = fineValueItemCount !== null && fineValueItemCount > 0;
+                    if (!fineValueItemCountValid)
+                        control.get('fineValueItemCount')!.setErrors({ required: true });
+                    if (reasonValid && fineValueItemCountValid)
+                        return null;
+                    return {
+                        reasonRequired: !reasonValid,
+                        fineValueItemCountRequired: !fineValueItemCountValid
+                    };
+                }
+                }
+            }
+        ]);
     }
 
     public get headerLabel(): string {
@@ -113,11 +165,11 @@ export class FineAddEditComponent extends SubmitableForm<{
             });
             return [
                 {
-                    label: $localize `:Label of fine reason dropdown in add fine for own reason:Create own fine`,
+                    label: $localize `:Label of fine reason dropdown in add fine for own reason:Create own fine reason`,
                     key: 'ownFine'
                 },
                 ...fineTemplates.map(template => ({
-                    label: `${template.reason} | ${this.amountPipe.transform(template.amount)}`,
+                    label: `${template.reason} | ${this.fineValuePipe.transform(template.value)}`,
                     key: template
                 }))
             ];
@@ -139,11 +191,34 @@ export class FineAddEditComponent extends SubmitableForm<{
         return FineTemplateMultipleItem.description(fineTemplateValue.multiple.item, 'inText', isPlural);
     }
 
+    public get fineValueTypeOptions(): { label: string, key: 'amount' | FineValueItem }[] {
+        return [
+            {
+                label: $localize `:Fine value type selection, amount:Amount`,
+                key: 'amount'
+            },
+            ...FineValueItem.all.map(item => ({
+                label: FineValueItem.description(item),
+                key: item
+            }))
+        ];
+    }
+
+    public get fineValueItemCountSuffix(): string {
+        const fineValueType = this.get('fineValueType')!.value;
+        if (fineValueType === null || fineValueType === 'amount')
+            return '';
+        const count = this.get('fineValueItemCount')!.value;
+        return FineValueItem.description(fineValueType, count !== 1);
+    }
+
     public override reset() {
         super.reset();
         this.get('personIds')!.setValue(this.personId !== null ? [this.personId] : []);
         this.get('fineTemplateTimes')!.setValue(1);
         this.get('date')!.setValue(new Date());
+        this.get('fineValueType')!.setValue('amount');
+        this.get('fineValueItemCount')!.setValue(1);
         if (this.fine === null)
             return;
         this.setValue({
@@ -151,20 +226,43 @@ export class FineAddEditComponent extends SubmitableForm<{
             fineTemplate: 'ownFine',
             fineTemplateTimes: 1,
             reason: this.fine.reason,
-            amount: this.fine.amount.completeValue,
+            fineValueType: this.fine.value.type === 'amount' ? 'amount' : this.fine.value.item,
+            amount: this.fine.value.type === 'amount' ? this.fine.value.amount.completeValue : null,
+            fineValueItemCount: this.fine.value.type === 'item' ? this.fine.value.count : 1,
             date: this.fine.date.toDate
         });
+    }
+
+    private get fineTemplate(): { reason: string, value: FineValue } {
+        const fineTemplateValue = this.get('fineTemplate')!.value!;
+        if (fineTemplateValue !== 'ownFine') {
+            return {
+                reason: fineTemplateValue.reason,
+                value: FineValue.multiply(fineTemplateValue.value, this.get('fineTemplateTimes')!.value!)
+            };
+        }
+        let value: FineValue;
+        const fineValueType = this.get('fineValueType')!.value!;
+        switch (fineValueType) {
+        case 'amount':
+            value = FineValue.amount(Amount.from(this.get('amount')!.value!));
+            break;
+        default:
+            value = FineValue.item(fineValueType, this.get('fineValueItemCount')!.value!);
+            break;
+        }
+        return {
+            reason: this.get('reason')!.value!,
+            value: value
+        };
     }
 
     public override async submit(): Promise<'no-team-id' | void> {
         if (this.userManager.currentTeamId === null)
             return 'no-team-id';
 
-        const fineTemplateValue = this.get('fineTemplate')!.value!;
-        const reason = fineTemplateValue === 'ownFine' ? this.get('reason')!.value! : fineTemplateValue.reason;
-        const amount = fineTemplateValue === 'ownFine' ? Amount.from(this.get('amount')!.value!) : fineTemplateValue.amount.multiplied(this.get('fineTemplateTimes')!.value!);
-
         const personIds = this.get('personIds')!.value!;
+        const fineTemplate = this.fineTemplate;
         await Promise.all(personIds.map(async personId => {
             if (this.userManager.currentTeamId === null)
                 return;
@@ -173,9 +271,9 @@ export class FineAddEditComponent extends SubmitableForm<{
                 personId: personId,
                 fine: {
                     id: this.fine === null ? Tagged.generate('fine') : this.fine.id,
-                    reason: reason,
+                    reason: fineTemplate.reason,
+                    value: fineTemplate.value,
                     date: UtcDate.fromDate(this.get('date')!.value!),
-                    amount: amount,
                     payedState: this.fine === null ? 'notPayed' : this.fine.payedState
                 }
             });

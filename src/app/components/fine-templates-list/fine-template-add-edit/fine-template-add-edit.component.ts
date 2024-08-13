@@ -7,6 +7,7 @@ import { UserManagerService } from '../../../services/user-manager.service';
 import { SubmitableForm } from '../../../types/SubmitableForm';
 import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
+import { FineValue, FineValueItem } from '../../../types/FineValue';
 
 @Component({
     selector: 'app-fine-template-add-edit',
@@ -18,7 +19,9 @@ import { FormElementComponent } from '../../add-edit-form/form-element/form-elem
 })
 export class FineTemplateAddEditComponent extends SubmitableForm<{
     reason: FormControl<string | null>
+    fineValueType: FormControl<'amount' | FineValueItem | null>
     amount: FormControl<number | null>
+    fineValueItemCount: FormControl<number | null>
     multipleItem: FormControl<FineTemplateMultipleItem | 'none' | null>
     multipleMaxCount: FormControl<number | null>
 }, 'no-team-id'>  {
@@ -36,12 +39,62 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
     public constructor() {
         super({
             reason: new FormControl<string | null>(null, [Validators.required]),
-            amount: new FormControl<number | null>(null, [Validators.required]),
+            fineValueType: new FormControl<'amount' | FineValueItem | null>(null, [Validators.required]),
+            amount: new FormControl<number | null>(null, []),
+            fineValueItemCount: new FormControl<number | null>(null, []),
             multipleItem: new FormControl<FineTemplateMultipleItem | 'none' | null>(null, []),
             multipleMaxCount: new FormControl<number | null>(null, [Validators.min(1)])
         }, {
             'no-team-id': $localize `:Error message that no team ID is set:Cannot assiciate the fine template with a team`
-        });
+        }, [
+            control => {
+                const fineValueType = control.get('fineValueType')!.value;
+                if (fineValueType === null || fineValueType !== 'amount')
+                    return null;
+                const amount = control.get('amount')!.value;
+                const amountValid = amount !== null && amount > 0;
+                if (amountValid)
+                    return null;
+                control.get('amount')!.setErrors({ required: true });
+                return {
+                    amountRequired: true
+                };
+            },
+            control => {
+                const fineValueType = control.get('fineValueType')!.value;
+                if (fineValueType === null || fineValueType === 'amount')
+                    return null;
+                const itemCount = control.get('fineValueItemCount')!.value;
+                const itemCountValid = itemCount !== null && itemCount > 0;
+                if (itemCountValid)
+                    return null;
+                control.get('fineValueItemCount')!.setErrors({ required: true });
+                return {
+                    itemCountRequired: !itemCountValid
+                };
+            }
+        ]);
+    }
+
+    public get fineValueTypeOptions(): { label: string, key: 'amount' | FineValueItem }[] {
+        return [
+            {
+                label: $localize `:Fine value type selection, amount:Amount`,
+                key: 'amount'
+            },
+            ...FineValueItem.all.map(item => ({
+                label: FineValueItem.description(item),
+                key: item
+            }))
+        ];
+    }
+
+    public get fineValueItemCountSuffix(): string {
+        const fineValueType = this.get('fineValueType')!.value;
+        if (fineValueType === null || fineValueType === 'amount')
+            return '';
+        const count = this.get('fineValueItemCount')!.value;
+        return FineValueItem.description(fineValueType, count !== 1);
     }
 
     public get multipleOptions(): { label: string, key: FineTemplateMultipleItem | 'none' }[] {
@@ -78,11 +131,15 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
 
     public override reset() {
         super.reset();
+        this.get('fineValueType')!.setValue('amount');
+        this.get('fineValueItemCount')!.setValue(1);
         if (this.fineTemplate === null)
             return;
         this.setValue({
             reason: this.fineTemplate.reason,
-            amount: this.fineTemplate.amount.completeValue,
+            fineValueType: this.fineTemplate.value.type === 'amount' ? 'amount' : this.fineTemplate.value.item,
+            amount: this.fineTemplate.value.type === 'amount' ? this.fineTemplate.value.amount.completeValue : null,
+            fineValueItemCount: this.fineTemplate.value.type === 'item' ? this.fineTemplate.value.count : 1,
             multipleItem: this.fineTemplate.multiple === null ? null : this.fineTemplate.multiple.item,
             multipleMaxCount: this.fineTemplate.multiple === null ? null : this.fineTemplate.multiple.maxCount
         });
@@ -91,6 +148,17 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
     public override async submit(): Promise<'no-team-id' | void> {
         if (this.userManager.currentTeamId === null)
             return 'no-team-id';
+
+        let value: FineValue;
+        const fineValueType = this.get('fineValueType')!.value!;
+        switch (fineValueType) {
+        case 'amount':
+            value = FineValue.amount(Amount.from(this.get('amount')!.value!));
+            break;
+        default:
+            value = FineValue.item(fineValueType, this.get('fineValueItemCount')!.value!);
+            break;
+        }
 
         let multiple: FineTemplateMultiple | null = null;
         const multipleItem = this.get('multipleItem')!.value;
@@ -105,7 +173,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
             fineTemplate: {
                 id: this.fineTemplate === null ? Tagged.generate('fineTemplate') : this.fineTemplate.id,
                 reason: this.get('reason')!.value!,
-                amount: Amount.from(this.get('amount')!.value!),
+                value: value,
                 multiple: multiple
             }
         });

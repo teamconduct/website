@@ -5,7 +5,7 @@ import { ArrayTypeBuilder, ObjectTypeBuilder, OptionalTypeBuilder, TypeBuilder }
 import { Flatten } from './Flattable';
 import { Guid } from './Guid';
 import { Tagged, TaggedTypeBuilder } from './Tagged';
-import { Amount } from './Amount';
+import { SummedFineValue } from './SummedFineValue';
 
 export type PersonId = Tagged<Guid, 'person'>;
 
@@ -38,9 +38,9 @@ export namespace Person {
 
 export type PersonWithFines = Omit<Person, 'fineIds'> & {
     fines: Fine[],
-    amounts: {
-        total: Amount,
-        payed: Amount,
-        notPayed: Amount
+    fineValues: {
+        total: SummedFineValue,
+        payed: SummedFineValue,
+        notPayed: SummedFineValue
     }
 };

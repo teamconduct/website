@@ -10,7 +10,7 @@
     </div>
     <div class="flex flex-row align-items-end justify-content-center my-auto">
         @if (fine !== null) {
-            <p class="text-color font-bold text-3xl my-0 mr-5">{{ fine.amount | amount }}</p>
+            <p class="text-color font-bold text-3xl my-0 mr-5">{{ fine.value | fineValue }}</p>
         } @else {
             <p-skeleton height="1.75rem" width="5rem" class="mr-5" />
         }

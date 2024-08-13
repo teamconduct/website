@@ -11,6 +11,7 @@ import { PersonAddEditComponent } from './person-add-edit/person-add-edit.compon
 import { Observable } from '../../types/Observable';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { AsyncPipe } from '@angular/common';
+import { SummedFineValue } from '../../types/SummedFineValue';
 
 @Component({
     selector: 'app-persons-list',
@@ -61,36 +62,22 @@ export class PersonsListComponent {
         },
         payedState: {
             compareFn: (lhs, rhs) => {
-                const lhsAmount = lhs.amounts.payed.completeValue;
-                const rhsAmount = rhs.amounts.payed.completeValue;
-                if (lhsAmount === 0 && rhsAmount === 0)
+                if (lhs.fineValues.payed.isZero && rhs.fineValues.payed.isZero)
                     return 'equal';
-                if (lhsAmount !== 0 &&  rhsAmount !== 0)
+                if (!lhs.fineValues.payed.isZero && !rhs.fineValues.payed.isZero)
                     return 'equal';
-                if (lhsAmount === 0)
+                if (lhs.fineValues.payed.isZero)
                     return 'greater';
                 return 'less';
             },
             fallbacks: ['name']
         },
         total: {
-            compareFn: (lhs, rhs) => {
-                const lhsAmount = lhs.amounts.total.completeValue;
-                const rhsAmount = rhs.amounts.total.completeValue;
-                if (lhsAmount === rhsAmount)
-                    return 'equal';
-                return lhsAmount < rhsAmount ? 'less' : 'greater';
-            },
+            compareFn: (lhs, rhs) => SummedFineValue.compare(lhs.fineValues.total, rhs.fineValues.total),
             fallbacks: ['name']
         },
         notPayed: {
-            compareFn: (lhs, rhs) => {
-                const lhsAmount = lhs.amounts.notPayed.completeValue;
-                const rhsAmount = rhs.amounts.notPayed.completeValue;
-                if (lhsAmount === rhsAmount)
-                    return 'equal';
-                return lhsAmount < rhsAmount ? 'less' : 'greater';
-            },
+            compareFn: (lhs, rhs) => SummedFineValue.compare(lhs.fineValues.notPayed, rhs.fineValues.notPayed),
             fallbacks: ['name']
         }
     });

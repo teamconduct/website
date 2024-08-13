@@ -1,6 +1,6 @@
 <div class="flex flex-column align-items-center justify-content-start">
     <p class="text-color-secondary my-0 pt-5 pb-3">{{ fine.date | date }}</p>
-    <p class="text-color font-bold text-6xl my-0 pb-5">{{ fine.amount | amount }}</p>
+    <p class="text-color font-bold text-6xl my-0 pb-5">{{ fine.value | fineValue }}</p>
     @if (canDeleteFine || canEditFine) {
         <div class="flex flex-row w-full mt-5">
             @if (canEditFine) {

@@ -10,7 +10,7 @@
         }
     </div>
     @if (fineTemplate !== null) {
-        <p class="text-color font-bold text-3xl my-0 mr-5">{{ fineTemplate.amount | amount }}</p>
+        <p class="text-color font-bold text-3xl my-0 mr-5">{{ fineTemplate.value | fineValue }}</p>
     } @else {
         <p-skeleton height="1.75rem" width="5rem" class="ml-auto mr-5 w-auto" />
     }

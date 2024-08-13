@@ -4,9 +4,20 @@
         i18n-label="Label for the reason input field" label="Reason"
     />
 
-    <app-form-element type="currency" [formControl]="get('amount')" currency="EUR"
-        i18n-label="Label for the amount input field" label="Amount"
+    <app-form-element type="dropdown" [formControl]="get('fineValueType')" [options]="fineValueTypeOptions"
+        i18n-label="Label for the fine value type dropdown" label="Cost"
     />
+
+    @let selectedFineValueType = get('fineValueType')!.value;
+    @if (selectedFineValueType === 'amount') {
+        <app-form-element type="currency" [formControl]="get('amount')" currency="EUR"
+            i18n-label="Label for the amount input field" label="Amount"
+        />
+    } @else if (selectedFineValueType !== null) {
+        <app-form-element type="number" [formControl]="get('fineValueItemCount')" [min]="1" [showButtons]="true" [suffix]="fineValueItemCountSuffix"
+            i18n-label="Label for the fine value item count input field" label="Count"
+        />
+    }
 
     <app-form-element type="dropdown" [formControl]="get('multipleItem')" [options]="multipleOptions"
         i18n-label="Label for the multiple item dropdown" label="Reapeat per"
@@ -15,7 +26,7 @@
     @let selectedMultipleItem = get('multipleItem')!.value;
     @if (selectedMultipleItem !== null && selectedMultipleItem !== 'none') {
         <app-form-element type="number" [formControl]="get('multipleMaxCount')" [min]="1" [showButtons]="true" [suffix]="multipleMaxCountSuffix"
-            i18n-label="Label for the multiple max count input field" label="Maximal (leave empty for no maximum)"
+            i18n-label="Label for the multiple max count input field" label="Repeat maximal (leave empty for no maximum)"
         />
     }
 

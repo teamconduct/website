@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Team, TeamId } from '../types/Team';
-import { Amount, Fine, FineId, FineTemplate, FineTemplateId, Person, PersonId, PersonWithFines } from '../types';
+import { Fine, FineId, FineTemplate, FineTemplateId, Person, PersonId, PersonWithFines } from '../types';
 import { Firestore, doc, collection, DocumentReference, CollectionReference } from '@angular/fire/firestore';
 import { Flatten } from '../types/Flattable';
 import { Observer } from '../types/Observer';
@@ -8,6 +8,7 @@ import { values } from '../utils';
 import { Dictionary } from '../types/Dictionary';
 import { compactMap } from '../utils/compactMap';
 import { combine, Observable } from '../types/Observable';
+import { SummedFineValue } from '../types/SummedFineValue';
 
 @Injectable({
     providedIn: 'root'
@@ -50,11 +51,14 @@ export class TeamDataManagerService {
                     properties: person.properties,
                     signInProperties: person.signInProperties,
                     fines: personFines,
-                    amounts: personFines.reduce((amounts, fine) => ({
-                        total: amounts.total.added(fine.amount),
-                        payed: amounts.payed.added(fine.payedState === 'payed' ?  fine.amount : Amount.zero),
-                        notPayed: amounts.notPayed.added(fine.payedState === 'notPayed' ?  fine.amount : Amount.zero)
-                    }), { total: Amount.zero, payed: Amount.zero, notPayed: Amount.zero })
+                    fineValues: personFines.reduce((fineValues, fine) => {
+                        fineValues.total.add(fine.value);
+                        if (fine.payedState === 'payed')
+                            fineValues.payed.add(fine.value);
+                        if (fine.payedState === 'notPayed')
+                            fineValues.notPayed.add(fine.value);
+                        return fineValues;
+                    }, { total: new SummedFineValue(), payed: new SummedFineValue(), notPayed: new SummedFineValue() })
                 };
             });
         });

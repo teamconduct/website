@@ -6,6 +6,7 @@ import { UtcDate } from '../types/UtcDate';
 import { UserManagerService } from './user-manager.service';
 import { FirebaseFunctionsService } from './firebase-functions.service';
 import { isProduction } from '../../environments/environment';
+import { FineValue } from '../types/FineValue';
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +19,7 @@ export class RandomDataGeneratorService {
 
     private async createTestPersons(teamId: TeamId, personId: PersonId): Promise<PersonId[]> {
         const personIds: PersonId[] = [personId];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 1; i <= 10; i++) {
             const personId: PersonId = Tagged.generate('person');
             personIds.push(personId);
             await this.firebaseFunctionsService.function('person').function('add').call({
@@ -36,13 +37,13 @@ export class RandomDataGeneratorService {
     }
 
     private async createTestFineTemplates(teamId: TeamId) {
-        for (let i = 0; i < 50; i++) {
+        for (let i = 1; i <= 50; i++) {
             await this.firebaseFunctionsService.function('fineTemplate').function('add').call({
                 teamId: teamId,
                 fineTemplate: {
                     id: Tagged.generate('fineTemplate'),
                     reason: `Test Fine Template ${i}`,
-                    amount: new Amount(i, 0),
+                    value: Math.random() < 0.5 ? FineValue.amount(new Amount(i, 0)) : FineValue.item('crateOfBeer', i),
                     multiple: Math.random() < 0.5 ? null : {
                         item: 'item',
                         maxCount: Math.random() < 0.5 ? null : Math.floor(Math.random() * 10)
@@ -53,14 +54,14 @@ export class RandomDataGeneratorService {
     }
 
     private async createTestFines(teamId: TeamId, personIds: PersonId[]) {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 1; i <= 100; i++) {
             await this.firebaseFunctionsService.function('fine').function('add').call({
                 teamId: teamId,
                 personId: personIds[Math.floor(Math.random() * personIds.length)],
                 fine: {
                     id: Tagged.generate('fine'),
                     reason: `Test Fine ${i}`,
-                    amount: new Amount(i, 0),
+                    value: Math.random() < 0.5 ? FineValue.amount(new Amount(i, 0)) : FineValue.item('crateOfBeer', i),
                     date: UtcDate.now,
                     payedState: Math.random() < 0.5 ? 'payed' : 'notPayed'
                 }

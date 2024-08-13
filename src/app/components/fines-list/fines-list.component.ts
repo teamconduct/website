@@ -9,6 +9,7 @@ import { Sorting } from '../../types/Sorting';
 import { Observable } from '../../types/Observable';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { AsyncPipe } from '../../pipes/async.pipe';
+import { FineValue } from '../../types/FineValue';
 
 @Component({
     selector: 'app-fines-list',
@@ -28,7 +29,7 @@ export class FinesListComponent {
 
     public showAll: boolean = false;
 
-    public sorting = new Sorting<'reason' | 'payed' | 'date' | 'amount', Fine>('payed', {
+    public sorting = new Sorting<'reason' | 'payed' | 'date' | 'value', Fine>('payed', {
         reason: {
             label: $localize `:Dropdown label to sort fine by reason:Sort by reason`,
             direction: 'letters'
@@ -41,7 +42,7 @@ export class FinesListComponent {
             label: $localize `:Dropdown label to sort fine by date:Sort by date`,
             direction: 'basic'
         },
-        amount: {
+        value: {
             label: $localize `:Dropdown label to sort fine by amount:Sort by amount`,
             direction: 'numbers'
         }
@@ -75,14 +76,8 @@ export class FinesListComponent {
             },
             fallbacks: ['reason']
         },
-        amount: {
-            compareFn: (lhs, rhs) => {
-                const lhsAmount = lhs.amount.completeValue;
-                const rhsAmount = rhs.amount.completeValue;
-                if (lhsAmount === rhsAmount)
-                    return 'equal';
-                return lhsAmount < rhsAmount ? 'less' : 'greater';
-            },
+        value: {
+            compareFn: (lhs, rhs) => FineValue.compare(lhs.value, rhs.value),
             fallbacks: ['reason']
         }
     });
