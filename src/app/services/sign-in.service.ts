@@ -154,7 +154,6 @@ export class SignInService {
             this.state = null;
             return;
         }
-
         if (this.handleSuccessfulSignIn !== null) {
             const errorMessage = await this.handleSuccessfulSignIn();
             if (errorMessage !== null)

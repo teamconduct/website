@@ -20,18 +20,18 @@ export class FineValuePipe implements PipeTransform {
         if (typeof fineValue === 'number')
             return formatter.format(fineValue);
         if (fineValue instanceof Amount)
-            return formatter.format(fineValue.completeValue);
+            return this.transform(fineValue.completeValue, currency);
         if (!(fineValue instanceof SummedFineValue)) {
             if (fineValue.type === 'amount')
-                return formatter.format(fineValue.amount.completeValue);
+                return this.transform(fineValue.amount.completeValue, currency);
             switch (fineValue.item) {
             case 'crateOfBeer':
                 if (fineValue.count === 1)
                     return $localize `:Amount description of create of beer, singluar:One Create of Beer`;
-                return $localize `:Amount description of create of beer, plural:${fineValue.count} Creates of Beer`;
+                return $localize `:Amount description of create of beer, plural:${fineValue.count}\u00A0Creates of Beer`;
             }
         }
-        let description = formatter.format(fineValue.amount.completeValue);
+        let description = this.transform(fineValue.amount.completeValue, currency);
         for (const { key, value } of entries(fineValue.items)) {
             if (value === 0)
                 continue;

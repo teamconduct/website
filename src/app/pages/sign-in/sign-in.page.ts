@@ -26,7 +26,7 @@ export class SignInPage {
     public async handleSuccessfulSignIn(): Promise<string | null> {
         try {
             const user = await this.firebaseFunctionsService.function('user').function('login').call(null);
-            this.userManager.signedInUser = user;
+            this.userManager.setUser(user);
             const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]);
             if (!navigationSuccessful)
                 return $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;

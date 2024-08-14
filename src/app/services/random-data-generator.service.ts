@@ -19,7 +19,7 @@ export class RandomDataGeneratorService {
 
     private async createTestPersons(teamId: TeamId, personId: PersonId): Promise<PersonId[]> {
         const personIds: PersonId[] = [personId];
-        for (let i = 1; i <= 10; i++) {
+        await Promise.all(new Array(10).fill(null).map(async (_, i) => {
             const personId: PersonId = Tagged.generate('person');
             personIds.push(personId);
             await this.firebaseFunctionsService.function('person').function('add').call({
@@ -32,12 +32,12 @@ export class RandomDataGeneratorService {
                     }
                 }
             });
-        }
+        }));
         return personIds;
     }
 
     private async createTestFineTemplates(teamId: TeamId) {
-        for (let i = 1; i <= 50; i++) {
+        await Promise.all(new Array(50).fill(null).map(async (_, i) => {
             await this.firebaseFunctionsService.function('fineTemplate').function('add').call({
                 teamId: teamId,
                 fineTemplate: {
@@ -50,11 +50,11 @@ export class RandomDataGeneratorService {
                     }
                 }
             });
-        }
+        }));
     }
 
     private async createTestFines(teamId: TeamId, personIds: PersonId[]) {
-        for (let i = 1; i <= 100; i++) {
+        await Promise.all(new Array(100).fill(null).map(async (_, i) => {
             await this.firebaseFunctionsService.function('fine').function('add').call({
                 teamId: teamId,
                 personId: personIds[Math.floor(Math.random() * personIds.length)],
@@ -66,16 +66,16 @@ export class RandomDataGeneratorService {
                     payedState: Math.random() < 0.5 ? 'payed' : 'notPayed'
                 }
             });
-        }
+        }));
     }
 
     public async createTestData() {
         if (isProduction)
             return;
-        if (this.userManager.signedInUser === null || this.userManager.currentTeamId === null)
+        if (this.userManager.user$.value === null || this.userManager.selectedTeamId$.value === null)
             return;
-        const teamId = this.userManager.currentTeamId;
-        const personId = this.userManager.signedInUser.teams.get(teamId)!.personId;
+        const teamId = this.userManager.selectedTeamId$.value;
+        const personId = this.userManager.user$.value.teams.get(teamId)!.personId;
         const personIds = await this.createTestPersons(teamId, personId);
         await this.createTestFineTemplates(teamId);
         await this.createTestFines(teamId, personIds);

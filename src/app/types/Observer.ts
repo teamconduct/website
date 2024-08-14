@@ -14,18 +14,18 @@ export class Observer<Id, T> {
         private readonly builder: ITypeBuilder<Flatten<T>, T>
     ) {}
 
-    public start(document: DocumentReference<Flatten<T>>): Observable<T>;
-    public start(collection: CollectionReference<Flatten<T>>): Observable<Dictionary<Id, T>>;
-    public start(documentOrCollection: DocumentReference<Flatten<T>> | CollectionReference<Flatten<T>>): Observable<T> | Observable<Dictionary<Id, T>> {
+    public start(document: DocumentReference<Flatten<T>>, initialValue?: T | null): Observable<T>;
+    public start(collection: CollectionReference<Flatten<T>>, initialValue?: Dictionary<Id, T> | null): Observable<Dictionary<Id, T>>;
+    public start(documentOrCollection: DocumentReference<Flatten<T>> | CollectionReference<Flatten<T>>, initialValue: T | Dictionary<Id, T> | null = null): Observable<T> | Observable<Dictionary<Id, T>> {
         if (documentOrCollection instanceof DocumentReference)
-            return this.startDocument(documentOrCollection);
+            return this.startDocument(documentOrCollection, initialValue as T | null);
         else
-            return this.startCollection(documentOrCollection);
+            return this.startCollection(documentOrCollection, initialValue as Dictionary<Id, T> | null);
     }
 
-    private startDocument(document: DocumentReference<Flatten<T>>): Observable<T> {
+    private startDocument(document: DocumentReference<Flatten<T>>, initialValue: T | null): Observable<T> {
         this.stop();
-        const observer = new Observable<T>();
+        const observer = new Observable<T>(initialValue);
         this.unsubscribe = onSnapshot(document, snapshot => {
             if (!snapshot.exists())
                 return;
@@ -36,9 +36,9 @@ export class Observer<Id, T> {
         return observer;
     }
 
-    private startCollection(collection: CollectionReference<Flatten<T>>): Observable<Dictionary<Id, T>> {
+    private startCollection(collection: CollectionReference<Flatten<T>>, initialValue: Dictionary<Id, T> | null): Observable<Dictionary<Id, T>> {
         this.stop();
-        const observer = new Observable<Dictionary<Id, T>>();
+        const observer = new Observable<Dictionary<Id, T>>(initialValue);
         this.unsubscribe = onSnapshot(query(collection), snapshot => {
             const data = new Dictionary<Id, T>();
             snapshot.forEach(snapshot => {

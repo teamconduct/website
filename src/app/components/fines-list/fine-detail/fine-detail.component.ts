@@ -1,3 +1,4 @@
+import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Fine, PersonId } from '../../../types';
 import { FineValuePipe } from '../../../pipes/fineValue.pipe';
@@ -8,11 +9,12 @@ import { TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { AsyncPipe } from '../../../pipes/async.pipe';
 
 @Component({
     selector: 'app-fine-detail',
     standalone: true,
-    imports: [FineValuePipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule],
+    imports: [FineValuePipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule, AsyncPipe],
     providers: [ConfirmationService],
     templateUrl: './fine-detail.component.html',
     styleUrl: './fine-detail.component.scss',
@@ -36,12 +38,12 @@ export class FineDetailComponent {
 
     public deleteLoading: boolean = false;
 
-    public get canEditFine(): boolean {
-        return this.userManager.hasRole('fine-update');
+    public get canEditFine$(): Observable<boolean> {
+        return this.userManager.hasRole('fine-manager');
     }
 
-    public get canDeleteFine(): boolean {
-        return this.userManager.hasRole('fine-delete');
+    public get canDeleteFine$(): Observable<boolean> {
+        return this.userManager.hasRole('fine-manager');
     }
 
     public showDeleteConfirmation(event: Event) {
@@ -55,7 +57,8 @@ export class FineDetailComponent {
     }
 
     public async deleteFine() {
-        if (this.userManager.currentTeamId === null)
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null)
             return;
 
         if (this.deleteLoading)
@@ -63,7 +66,7 @@ export class FineDetailComponent {
         this.deleteLoading = true;
 
         await this.firebaseFunctions.function('fine').function('delete').call({
-            teamId: this.userManager.currentTeamId,
+            teamId: selectedTeamId,
             personId: this.personId,
             id: this.fine.id
         });

@@ -5,17 +5,18 @@ import { UserManagerService } from '../../services/user-manager.service';
 import { appRoutes } from '../../app.routes';
 import { Tagged } from '../../types/Tagged';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
-import { PersonId, PersonWithFines } from '../../types';
+import { PersonId, PersonWithFines, User } from '../../types';
 import { AsyncPipe } from '../../pipes/async.pipe';
 import { CardModule } from 'primeng/card';
 import { PersonsListElementComponent } from '../../components/persons-list/persons-list-element/persons-list-element.component';
 import { PersonsListComponent } from '../../components/persons-list/persons-list.component';
 import { FineTemplatesListComponent } from '../../components/fine-templates-list/fine-templates-list.component';
-import { Observable } from '../../types/Observable';
+import { combine, Observable } from '../../types/Observable';
 import { NotificationService } from '../../services/notification.service';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { FineDetailAddEditComponent } from '../../components/fines-list/fine-detail-add-edit/fine-detail-add-edit.component';
+import { TeamId } from '../../types/Team';
 
 @Component({
     selector: 'app-home',
@@ -28,7 +29,7 @@ import { FineDetailAddEditComponent } from '../../components/fines-list/fine-det
 })
 export class HomePage implements OnInit {
 
-    private userManager = inject(UserManagerService);
+    public userManager = inject(UserManagerService);
 
     private teamDataManager = inject(TeamDataManagerService);
 
@@ -40,17 +41,13 @@ export class HomePage implements OnInit {
 
     public addMultipleFinesDialogVisible = false;
 
-    public get teamMenu(): MenuItem[] {
-        if (this.userManager.signedInUser === null)
-            return [];
-        const currentTeamId = this.userManager.currentTeamId;
-        const teamsItems = this.userManager.signedInUser.teams.map<MenuItem>((team, teamId) => ({
+    public teamMenu(user: User, selectedTeamId: TeamId | null, canAddFine: boolean): MenuItem[] {
+        const teamsItems = user.teams.map<MenuItem>((team, teamId) => ({
             label: team.name,
             icon: 'pi pi-fw pi-users',
-            disabled: teamId === currentTeamId?.guidString,
+            disabled: teamId === selectedTeamId?.guidString,
             command: () => {
-                this.userManager.currentTeamId = Tagged.guid(teamId, 'team');
-                void this.onTeamSelected();
+                void this.onTeamSelected(Tagged.guid(teamId, 'team'));
             }
         })).values;
         return [
@@ -59,7 +56,7 @@ export class HomePage implements OnInit {
                 items: teamsItems
             },
             {
-                label: 'Manage Teams',
+                label: 'Manage Your Teams',
                 items: [
                     {
                         label: 'Add Team',
@@ -68,7 +65,7 @@ export class HomePage implements OnInit {
                     }
                 ]
             },
-            ...(this.userManager.hasRole('fine-add') ? [{
+            ...(canAddFine ? [{
                 label: 'Fines',
                 items: [
                     {
@@ -82,14 +79,24 @@ export class HomePage implements OnInit {
     }
 
     public ngOnInit() {
-        void this.onTeamSelected();
+        this.userManager.getAllCookies();
+        const teamId = this.userManager.selectedTeamId$.value;
+        if (teamId !== null)
+            void this.onTeamSelected(teamId);
     }
 
-    private async onTeamSelected() {
-        if (this.signedInPersonId === null ||this.userManager.currentTeamId == null)
-            return;
-        this.teamDataManager.startObserve(this.userManager.currentTeamId);
-        const messageSubject = await this.notificationService.register();
+    private async onTeamSelected(teamId: TeamId) {
+        this.userManager.setTeamId(teamId);
+        this.teamDataManager.startObserve(teamId);
+        this.userManager.currentPersonId$.subscribe(currentPersonId => {
+            if (currentPersonId === null)
+                return;
+            void this.registerSubscribeNotifications(teamId, currentPersonId);
+        });
+    }
+
+    private async registerSubscribeNotifications(teamId: TeamId, personId: PersonId) {
+        const messageSubject = await this.notificationService.register(teamId, personId);
         if (messageSubject !== null) {
             messageSubject.subscribe(message => {
                 this.messageService.add({
@@ -100,23 +107,14 @@ export class HomePage implements OnInit {
                 });
             });
         }
-        await this.notificationService.subscribe('new-fine', 'fine-state-change', 'fine-reminder');
-    }
-
-    public get signedInPersonId(): PersonId | null {
-        if (this.userManager.signedInUser === null || this.userManager.currentTeamId === null)
-            return null;
-        if (!this.userManager.signedInUser.teams.has(this.userManager.currentTeamId))
-            return null;
-        return this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId;
+        await this.notificationService.subscribe(teamId, personId, 'new-fine', 'fine-state-change', 'fine-reminder');
     }
 
     public get signedInPerson$(): Observable<PersonWithFines | null> {
-        return this.teamDataManager.persons$.map(persons => {
-            const personId = this.signedInPersonId;
-            if (personId === null || !persons.has(personId))
+        return combine(this.userManager.currentPersonId$, this.teamDataManager.persons$, (currentPersonId, persons) => {
+            if (currentPersonId === null || !persons.has(currentPersonId))
                 return null;
-            return persons.get(personId);
+            return persons.get(currentPersonId);
         });
     }
 

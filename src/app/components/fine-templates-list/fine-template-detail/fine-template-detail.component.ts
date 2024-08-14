@@ -1,3 +1,4 @@
+import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { ButtonModule } from 'primeng/button';
@@ -6,11 +7,12 @@ import { ConfirmationService } from 'primeng/api';
 import { FineTemplate, FineTemplateMultiple } from '../../../types';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
+import { AsyncPipe } from '../../../pipes/async.pipe';
 
 @Component({
     selector: 'app-fine-template-detail',
     standalone: true,
-    imports: [FineValuePipe, ButtonModule, ConfirmPopupModule],
+    imports: [FineValuePipe, ButtonModule, ConfirmPopupModule, AsyncPipe],
     providers: [ConfirmationService],
     templateUrl: './fine-template-detail.component.html',
     styleUrl: './fine-template-detail.component.scss',
@@ -32,12 +34,12 @@ export class FineTemplateDetailComponent {
 
     public deleteLoading: boolean = false;
 
-    public get canEditFineTemplate(): boolean {
-        return this.userManager.hasRole('fineTemplate-update');
+    public get canEditFineTemplate$(): Observable<boolean> {
+        return this.userManager.hasRole('fineTemplate-manager');
     }
 
-    public get canDeleteFineTemplate(): boolean {
-        return this.userManager.hasRole('fineTemplate-delete');
+    public get canDeleteFineTemplate$(): Observable<boolean> {
+        return this.userManager.hasRole('fineTemplate-manager');
     }
 
     public multipleDescription(multiple: Exclude<FineTemplate['multiple'], null>): string {
@@ -55,7 +57,8 @@ export class FineTemplateDetailComponent {
     }
 
     public async deleteFineTemplate() {
-        if (this.userManager.currentTeamId === null)
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null)
             return;
 
         if (this.deleteLoading)
@@ -63,7 +66,7 @@ export class FineTemplateDetailComponent {
         this.deleteLoading = true;
 
         await this.firebaseFunctions.function('fineTemplate').function('delete').call({
-            teamId: this.userManager.currentTeamId,
+            teamId: selectedTeamId,
             id: this.fineTemplate.id
         });
 

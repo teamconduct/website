@@ -98,7 +98,7 @@ export class PersonsListComponent {
         return value;
     }
 
-    public get canAddPerson(): boolean {
-        return this.userManager.hasRole('person-add');
+    public get canAddPerson$(): Observable<boolean> {
+        return this.userManager.hasRole('person-manager');
     }
 }

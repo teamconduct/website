@@ -146,7 +146,8 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
     }
 
     public override async submit(): Promise<'no-team-id' | void> {
-        if (this.userManager.currentTeamId === null)
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null)
             return 'no-team-id';
 
         let value: FineValue;
@@ -169,7 +170,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
             };
         }
         await this.firebaseFunctions.function('fineTemplate').function(this.fineTemplate === null ? 'add' : 'update').call({
-            teamId: this.userManager.currentTeamId,
+            teamId: selectedTeamId,
             fineTemplate: {
                 id: this.fineTemplate === null ? Tagged.generate('fineTemplate') : this.fineTemplate.id,
                 reason: this.get('reason')!.value!,

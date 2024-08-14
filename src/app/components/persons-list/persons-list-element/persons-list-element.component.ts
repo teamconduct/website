@@ -1,3 +1,4 @@
+import { combine, Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { PayedState, Person, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
@@ -18,11 +19,13 @@ import { FirebaseFunctionsService } from '../../../services/firebase-functions.s
 import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SummedFineValue } from '../../../types/SummedFineValue';
+import { TeamDataManagerService } from '../../../services/team-data-manager.service';
+import { AsyncPipe } from '../../../pipes/async.pipe';
 
 @Component({
     selector: 'app-persons-list-element',
     standalone: true,
-    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, FineValuePipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule],
+    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, FineValuePipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule, AsyncPipe],
     providers: [ConfirmationService],
     templateUrl: './persons-list-element.component.html',
     styleUrl: './persons-list-element.component.scss',
@@ -39,6 +42,8 @@ export class PersonsListElementComponent {
     @Input() preview: boolean = false;
 
     private userManager = inject(UserManagerService);
+
+    private teamDataManager = inject(TeamDataManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -79,22 +84,20 @@ export class PersonsListElementComponent {
         };
     };
 
-    public get canAddFine(): boolean {
-        return this.userManager.hasRole('fine-add');
+    public get canAddFine$(): Observable<boolean> {
+        return this.userManager.hasRole('fine-manager');
     }
 
-    public get canEditPerson(): boolean {
-        return this.userManager.hasRole('person-update');
+    public get canEditPerson$(): Observable<boolean> {
+        return this.userManager.hasRole('person-manager');
     }
 
-    public get canDeletePerson(): boolean {
-        if (this.userManager.currentTeamId === null || this.userManager.signedInUser === null || !this.userManager.signedInUser.teams.has(this.userManager.currentTeamId))
-            return false;
-        if (this.person === null)
-            return true;
-        if (this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId.guidString === this.person.id.guidString)
-            return false;
-        return this.userManager.hasRole('person-delete');
+    public get canDeletePerson$(): Observable<boolean> {
+        return combine(this.userManager.hasRole('person-manager'), this.userManager.currentPersonId$, (canDeletePerson, currentPersonId) => {
+            if (this.person === null || currentPersonId === null || this.person.id.guidString === currentPersonId.guidString)
+                return false;
+            return canDeletePerson;
+        });
     }
 
     public get displayValue(): { type: 'notPayed' | 'total', value: SummedFineValue } | null {
@@ -109,6 +112,17 @@ export class PersonsListElementComponent {
             type: 'notPayed',
             value: this.person.fineValues.notPayed
         };
+    }
+
+    public get paypalMeLink$(): Observable<string | null> {
+        return combine(this.teamDataManager.team$, this.userManager.currentPersonId$, (team, currentPersonId) => {
+            if (this.person === null || currentPersonId === null || this.person.id.guidString !== currentPersonId.guidString)
+                return null;
+            if (team.paypalMeLink === null)
+                return null;
+            return `${team.paypalMeLink}/${this.person.fineValues.notPayed.amount.completeValue}EUR`;
+
+        });
     }
 
     public toggleExpanded(toVisible: boolean) {
@@ -130,7 +144,8 @@ export class PersonsListElementComponent {
     }
 
     public async deletePerson() {
-        if (this.userManager.currentTeamId === null || this.person === null)
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null || this.person === null)
             return;
 
         if (this.deleteLoading)
@@ -138,7 +153,7 @@ export class PersonsListElementComponent {
         this.deleteLoading = true;
 
         await this.firebaseFunctions.function('person').function('delete').call({
-            teamId: this.userManager.currentTeamId,
+            teamId: selectedTeamId,
             id: this.person.id
         });
 

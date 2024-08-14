@@ -15,7 +15,8 @@ export class UserIsSignInGuardService {
     private router = inject(Router);
 
     public canActivate(): boolean {
-        const user = this.userManager.signedInUser;
+        this.userManager.getAllCookies();
+        const user = this.userManager.user$.value;
         if (!user) {
             void this.router.navigate([appRoutes.signIn]);
             return false;

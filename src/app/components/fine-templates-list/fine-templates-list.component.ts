@@ -71,7 +71,7 @@ export class FineTemplatesListComponent {
         return value;
     }
 
-    public get canAddFineTemplate(): boolean {
-        return this.userManager.hasRole('fineTemplate-add');
+    public get canAddFineTemplate$(): Observable<boolean> {
+        return this.userManager.hasRole('fineTemplate-manager');
     }
 }

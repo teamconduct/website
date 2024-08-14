@@ -1,59 +1,87 @@
-import { UserRole } from './../types/UserRole';
 import { Flattable, Flatten } from './../types/Flattable';
 import { inject, Injectable } from '@angular/core';
-import { User } from '../types';
+import { PersonId, PersonWithFines, User, UserRole } from '../types';
 import { TeamId } from '../types/Team';
 import { CookieService } from 'ngx-cookie-service';
 import { ITypeBuilder } from '../typeBuilder';
+import { combine, Observable } from '../types/Observable';
+import { TeamDataManagerService } from './team-data-manager.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserManagerService {
 
-    private cache = new Map<string, string>();
-
     private cookieService = inject(CookieService);
+
+    private teamDataManager = inject(TeamDataManagerService);
+
+    public user$ = new Observable<User>();
+
+    public selectedTeamId$ = new Observable<TeamId>();
+
+    public setUser(user: User) {
+        this.user$.next(user);
+        this.setCookie('user', user);
+    }
+
+    public setTeamId(teamId: TeamId) {
+        this.selectedTeamId$.next(teamId);
+        this.setCookie('teamId', teamId);
+    }
+
+    public getAllCookies() {
+        const user = this.getCookie('user', User.builder);
+        if (user !== null)
+            this.user$.next(user);
+        const teamId = this.getCookie('teamId', TeamId.builder);
+        if (teamId !== null)
+            this.selectedTeamId$.next(teamId);
+    }
 
     private setCookie(key: string, value: any) {
         const json = JSON.stringify(Flattable.flatten(value));
-        this.cache.set(key, json);
         this.cookieService.set(key, json);
     }
 
     private getCookie<T>(key: string, builder: ITypeBuilder<Flatten<T>, T>): T | null {
-        let json: string | null = null;
-        if (this.cache.has(key))
-            json = this.cache.get(key) ?? null;
-        if (this.cookieService.check(key))
-            json = this.cookieService.get(key);
-        if (json === null)
+        if (!this.cookieService.check(key))
             return null;
+        const json = this.cookieService.get(key);
         return builder.build(JSON.parse(json));
     }
 
-    public set signedInUser(user: User) {
-        this.setCookie('user', user);
+    private clearCookie(key: string) {
+        this.cookieService.delete(key);
     }
 
-    public get signedInUser(): User | null {
-        return this.getCookie('user', User.builder);
+    public reset() {
+        this.clearCookie('user');
+        this.clearCookie('teamId');
     }
 
-    public set currentTeamId(teamId: TeamId) {
-        this.setCookie('teamId', teamId);
+    public get currentPersonId$(): Observable<PersonId | null> {
+        return combine(this.user$, this.selectedTeamId$, (user, teamId) => {
+            if (!user.teams.has(teamId))
+                return null;
+            return user.teams.get(teamId).personId;
+        });
     }
 
-    public get currentTeamId(): TeamId | null {
-        return this.getCookie('teamId', TeamId.builder);
+    public get currentPerson$(): Observable<PersonWithFines | null> {
+        return combine(this.currentPersonId$, this.teamDataManager.persons$, (personId, persons) => {
+            if (personId === null)
+                return null;
+            return persons.get(personId);
+        });
     }
 
-    public hasRole(...roles: [UserRole, ...UserRole[]]): boolean {
-        const user = this.signedInUser;
-        const teamId = this.currentTeamId;
-        if (user === null || teamId === null || !user.teams.has(teamId))
-            return false;
-        const userRoles = user.teams.get(teamId).roles;
-        return roles.every(role => userRoles.includes(role));
+    public hasRole(...roles: UserRole[]): Observable<boolean> {
+        return this.currentPerson$.map(person => {
+            if (person === null || person.signInProperties === null)
+                return false;
+            const personRoles = person.signInProperties.roles;
+            return roles.every(role => personRoles.includes(role));
+        });
     }
 }

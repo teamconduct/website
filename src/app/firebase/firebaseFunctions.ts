@@ -1,3 +1,4 @@
+import { userRoleEditFunction } from './functions/userRoleEditFunction';
 import { fineAddFunction } from './functions/fineAddFunction';
 import { fineDeleteFunction } from './functions/fineDeleteFunction';
 import { fineTemplateAddFunction } from './functions/fineTemplateAddFunction';
@@ -22,7 +23,7 @@ export const firebaseFunctions = {
     },
     user: {
         login: userLoginFunction,
-        roleEdit: userLoginFunction
+        roleEdit: userRoleEditFunction
     },
     paypalMe: {
         edit: paypalMeEditFunction

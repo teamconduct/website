@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { FirebaseFunctionsService } from './firebase-functions.service';
 import { UserManagerService } from './user-manager.service';
-import { PersonId } from '../types';
 import { NotificationSubscription } from '../types/PersonNotificationProperties';
 import { getToken, Messaging, NotificationPayload, onMessage } from '@angular/fire/messaging';
 import { Subject } from 'rxjs';
+import { TeamId } from '../types/Team';
+import { PersonId } from '../types';
 
 @Injectable({
     providedIn: 'root'
@@ -17,14 +18,6 @@ export class NotificationService {
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
-    private get signedInPersonId(): PersonId | null {
-        if (this.userManager.signedInUser === null || this.userManager.currentTeamId === null)
-            return null;
-        if (!this.userManager.signedInUser.teams.has(this.userManager.currentTeamId))
-            return null;
-        return this.userManager.signedInUser.teams.get(this.userManager.currentTeamId).personId;
-    }
-
     private async requestPermission(): Promise<string | null> {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted')
@@ -33,15 +26,13 @@ export class NotificationService {
         return await getToken(this.messaging, { serviceWorkerRegistration: registration });
     }
 
-    public async register(): Promise<Subject<NotificationPayload> | null> {
-        if (this.signedInPersonId === null || this.userManager.currentTeamId === null)
-            return null;
+    public async register(teamId: TeamId, personId: PersonId): Promise<Subject<NotificationPayload> | null> {
         const token = await this.requestPermission();
         if (token === null)
             return null;
         await this.firebaseFunctions.function('notification').function('register').call({
-            teamId: this.userManager.currentTeamId,
-            personId: this.signedInPersonId,
+            teamId: teamId,
+            personId: personId,
             token: token
         });
         const messageSubject = new Subject<NotificationPayload>();
@@ -56,12 +47,10 @@ export class NotificationService {
         return messageSubject;
     }
 
-    public async subscribe(...subscriptions: NotificationSubscription[]) {
-        if (this.signedInPersonId === null || this.userManager.currentTeamId === null)
-            return;
+    public async subscribe(teamId: TeamId, personId: PersonId, ...subscriptions: NotificationSubscription[]) {
         await this.firebaseFunctions.function('notification').function('subscribe').call({
-            teamId: this.userManager.currentTeamId,
-            personId: this.signedInPersonId,
+            teamId: teamId,
+            personId: personId,
             subscriptions: subscriptions
         });
     }

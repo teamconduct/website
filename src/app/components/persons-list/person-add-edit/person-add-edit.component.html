@@ -8,4 +8,30 @@
         i18n-label="Label for the optional last name input field" label="Last name (optional)"
     />
 
+    @if (person !== null && person.signInProperties !== null) {
+        <div class="flex flex-column align-items-center justify-content-center w-full">
+
+            <div class="flex flex-row align-items-center justify-content-end w-full">
+                <p-button (onClick)="userRoleChangerVisible = !userRoleChangerVisible" [label]="userRoleChangerVisibleButtonLabel" [text]="true">
+                    <ng-template pTemplate="icon">
+                        <fa-icon [icon]="['fas', userRoleChangerVisible ? 'caret-up' : 'caret-down']" size="lg" class="mr-2" />
+                    </ng-template>
+                </p-button>
+            </div>
+
+            @if (userRoleChangerVisible) {
+                <div class="flex flex-column align-items-center justify-content-center w-full">
+                    @let userRoleButtons = (userRoleButtons$ | async) ?? [];
+                    @for (userRoleButton of userRoleButtons; track userRoleButton.role; let isLast = $last) {
+                        <div class="flex flex-row align-items-center justify-content-between w-full border-text-color-secondary" [class.border-bottom-1]="!isLast">
+                            <p class="text-lg py-0">{{ userRoleButton.label }}</p>
+                            <p-button (onClick)="toggleUserRole(userRoleButton.role)" [label]="userRoleButton.selected ? 'Assigned' : 'Denied'" [disabled]="userRoleButton.disabled" [severity]="userRoleButton.selected ? 'primary' : 'secondary'" [outlined]="!userRoleButton.selected" />
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
+    }
+
 </app-add-edit-form-dialog>

@@ -76,8 +76,8 @@ export class CreateTeamOrRegisterInvitationPage {
                     lastName: this.teamForm.get('personLastName')!.value
                 }
             });
-            this.userManager.signedInUser = user;
-            this.userManager.currentTeamId = teamId;
+            this.userManager.setUser(user);
+            this.userManager.setTeamId(teamId);
 
             if (!isProduction)
                 await this.randomDataGenerator.createTestData();

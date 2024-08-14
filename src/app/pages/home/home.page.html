@@ -1,4 +1,9 @@
-<p-menu [model]="teamMenu" class="fixed" />
+@let user = userManager.user$ | async;
+@let selectedTeamId = userManager.selectedTeamId$ | async;
+@let canAddFine = (userManager.hasRole('fine-manager') | async) ?? false;
+@if (user !== null) {
+    <p-menu [model]="teamMenu(user, selectedTeamId, canAddFine)" class="fixed" />
+}
 
 <div class="flex flex-column align-items-center justify-content-start w-50vw mx-auto">
 

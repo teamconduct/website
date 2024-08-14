@@ -1,3 +1,4 @@
+import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import { Fine, PayedState, PersonId } from '../../../types';
 import { Tag, TagModule } from 'primeng/tag';
@@ -8,11 +9,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FineValuePipe } from '../../../pipes/fineValue.pipe';
 import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { AsyncPipe } from '../../../pipes/async.pipe';
 
 @Component({
     selector: 'app-fines-list-element',
     standalone: true,
-    imports: [FineValuePipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule],
+    imports: [FineValuePipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule, AsyncPipe],
     templateUrl: './fines-list-element.component.html',
     styleUrl: './fines-list-element.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -35,8 +37,8 @@ export class FinesListElementComponent {
 
     public detailsShown: boolean = false;
 
-    public get canChangeFine(): boolean {
-        return this.userManager.hasRole('fine-update');
+    public get canChangeFine$(): Observable<boolean> {
+        return this.userManager.hasRole('fine-manager');
     }
 
     public get payedTag(): { value: string, severity: Tag['severity'] } | null {
@@ -48,12 +50,12 @@ export class FinesListElementComponent {
     public async toggleFineState() {
         if (this.loading || this.personId === null || this.fine === null)
             return;
-        const teamId = this.userManager.currentTeamId;
-        if (teamId === null)
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null)
             return;
         this.loading = true;
         await this.firebaseFunctions.function('fine').function('update').call({
-            teamId: teamId,
+            teamId: selectedTeamId,
             personId: this.personId,
             fine: {
                 ...this.fine,

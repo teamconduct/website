@@ -258,16 +258,15 @@ export class FineAddEditComponent extends SubmitableForm<{
     }
 
     public override async submit(): Promise<'no-team-id' | void> {
-        if (this.userManager.currentTeamId === null)
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null)
             return 'no-team-id';
 
         const personIds = this.get('personIds')!.value!;
         const fineTemplate = this.fineTemplate;
         await Promise.all(personIds.map(async personId => {
-            if (this.userManager.currentTeamId === null)
-                return;
             await this.firebaseFunctions.function('fine').function(this.fine === null ? 'add' : 'update').call({
-                teamId: this.userManager.currentTeamId,
+                teamId: selectedTeamId,
                 personId: personId,
                 fine: {
                     id: this.fine === null ? Tagged.generate('fine') : this.fine.id,

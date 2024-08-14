@@ -1,8 +1,20 @@
 @if (expanded) {
     <div class="flex flex-column align-items-center justify-content-start w-full my-3">
         <div (click)="toggleExpanded(false)" class="flex flex-column align-items-center justify-content-start w-full" [class.cursor-pointer]="!preview && person !== null">
+            @let canAddFine = (canAddFine$ | async) ?? false;
+            @let canEditPerson = (canEditPerson$ | async) ?? false;
+            @let canDeletePerson = (canDeletePerson$ | async) ?? false;
             @if (canAddFine || canEditPerson || canDeletePerson) {
                 <div class="flex flex-row align-items-center justify-content-end w-full mb-2">
+
+                    @let paypalMeLink = paypalMeLink$ | async;
+                    @if (paypalMeLink !== null) {
+                        <a [href]="paypalMeLink" target="_blank" class="p-button flex flex-row align-items-center justify-content-center mr-2 no-underline">
+                            <p class="font-medium text-lg my-0 mr-2" i18n="Label of pay with PayPal.me link button">Pay now with PayPal</p>
+                            <fa-icon [icon]="['fab', 'paypal']" size="lg" />
+                        </a>
+                    }
+
                     <div class="flex flex-row align-items-center justify-content-center">
                         @if (canDeletePerson) {
                             <p-confirmPopup styleClass="pt-3" />
@@ -38,7 +50,7 @@
             </div>
             <div class="flex flex-row align-items-center justify-content-evenly w-full mb-5">
                 @for (payedTag of [payedTags.total, payedTags.notPayed, payedTags.payed]; track payedTag.label) {
-                    <p-tag [severity]="payedTag.severity" styleClass="py-2 px-3">
+                    <p-tag [severity]="payedTag.severity" class="px-2" styleClass="py-2 px-3">
                         <div class="flex flex-row align-items-center justify-content-center">
                             <fa-icon [icon]="payedTag.icon" size="xl" class="mr-2" />
                             <p class="text-lg font-semibold my-0 mr-2">{{ payedTag.label }}</p>
