@@ -17,11 +17,13 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { FineDetailAddEditComponent } from '../../components/fines-list/fine-detail-add-edit/fine-detail-add-edit.component';
 import { TeamId } from '../../types/Team';
+import { Router } from '@angular/router';
+import { PaypalMeAddEditComponent } from '../../components/paypal-me-add-edit/paypal-me-add-edit.component';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule, FineDetailAddEditComponent],
+    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule, FineDetailAddEditComponent, PaypalMeAddEditComponent],
     providers: [MessageService],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
@@ -37,11 +39,15 @@ export class HomePage implements OnInit {
 
     private messageService = inject(MessageService);
 
+    private router = inject(Router);
+
     public visibleState: 'persons' | 'fineTemplates' = 'persons';
 
     public addMultipleFinesDialogVisible = false;
 
-    public teamMenu(user: User, selectedTeamId: TeamId | null, canAddFine: boolean): MenuItem[] {
+    public editPaypalMeLinkDialogVisible = false;
+
+    public teamMenu(user: User, selectedTeamId: TeamId | null, canAddFine: boolean, canManageTeam: boolean): MenuItem[] {
         const teamsItems = user.teams.map<MenuItem>((team, teamId) => ({
             label: team.name,
             icon: 'pi pi-fw pi-users',
@@ -52,21 +58,21 @@ export class HomePage implements OnInit {
         })).values;
         return [
             {
-                label: 'Your Teams',
+                label: $localize `:Label for the teams menu item:Your Teams`,
                 items: teamsItems
             },
             {
-                label: 'Manage Your Teams',
+                label: $localize `:Label for the add team menu item:Manage Your Teams`,
                 items: [
                     {
-                        label: 'Add Team',
+                        label: $localize `:Label for the add team menu item:Add a new team`,
                         icon: 'pi pi-fw pi-plus',
                         routerLink: `/${appRoutes.signUp}`
                     }
                 ]
             },
             ...(canAddFine ? [{
-                label: 'Fines',
+                label: $localize `:Label for the fines menu item:Manage Fines`,
                 items: [
                     {
                         label: 'Add multiple fines',
@@ -74,7 +80,26 @@ export class HomePage implements OnInit {
                         command: () => this.addMultipleFinesDialogVisible = true
                     }
                 ]
-            }] : [])
+            }] : []),
+            {
+                label: 'Settings',
+                items: [
+                    ...(canManageTeam ? [{
+                        label: $localize `:Label for the edit paypal.me link menu item:Edit paypal.me`,
+                        icon: 'pi pi-fw pi-pencil',
+                        command: () => this.editPaypalMeLinkDialogVisible = true
+                    }] : []),
+                    {
+                        label: $localize `:Label for the sign out menu item:Log Out`,
+                        icon: 'pi pi-fw pi-sign-out',
+                        command: () => {
+                            this.teamDataManager.reset();
+                            this.userManager.reset();
+                            void this.router.navigate([`/${appRoutes.signIn}`]);
+                        }
+                    }
+                ]
+            }
         ];
     }
 

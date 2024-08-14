@@ -67,4 +67,12 @@ export class TeamDataManagerService {
     public stopObserve() {
         values(this.observers).forEach(observer => observer.stop());
     }
+
+    public reset() {
+        this.stopObserve();
+        this.team$ = new Observable<Team>();
+        this.persons$ = new Observable<Dictionary<PersonId, PersonWithFines>>();
+        this.fineTemplates$ = new Observable<Dictionary<FineTemplateId, FineTemplate>>();
+        this.fines$ = new Observable<Dictionary<FineId, Fine>>();
+    }
 }

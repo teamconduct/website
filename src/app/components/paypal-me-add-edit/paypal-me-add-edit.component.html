@@ -1,0 +1,8 @@
+@let paypalMeLink = (teamDataManager.team$ | async)?.paypalMeLink ?? null;
+<app-add-edit-form-dialog [form]="this" [headerLabel]="headerLabel(paypalMeLink)" [buttonLabel]="buttonLabel(paypalMeLink)" [visible]="visible" (visibleChange)="visibleChange.emit($event)">
+
+    <app-form-element type="input" [formControl]="get('link')"
+        i18n-label="Label for the PayPal.Me link input field" label="PayPal.Me link (leave empty to remove)"
+    />
+
+</app-add-edit-form-dialog>

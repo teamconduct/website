@@ -1,8 +1,9 @@
 @let user = userManager.user$ | async;
 @let selectedTeamId = userManager.selectedTeamId$ | async;
 @let canAddFine = (userManager.hasRole('fine-manager') | async) ?? false;
+@let canManageTeam = (userManager.hasRole('team-manager') | async) ?? false;
 @if (user !== null) {
-    <p-menu [model]="teamMenu(user, selectedTeamId, canAddFine)" class="fixed" />
+    <p-menu [model]="teamMenu(user, selectedTeamId, canAddFine, canManageTeam)" class="fixed" />
 }
 
 <div class="flex flex-column align-items-center justify-content-start w-50vw mx-auto">
@@ -30,5 +31,7 @@
 </div>
 
 <app-fine-detail-add-edit [(visible)]="addMultipleFinesDialogVisible" />
+
+<app-paypal-me-add-edit [(visible)]="editPaypalMeLinkDialogVisible" />
 
 <p-toast />

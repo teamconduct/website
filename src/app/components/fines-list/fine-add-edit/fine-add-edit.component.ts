@@ -136,6 +136,7 @@ export class FineAddEditComponent extends SubmitableForm<{
             return $localize `:Button label to add fine:Add fine`;
         return $localize `:Button label to save fine:Save fine`;
     }
+
     public get personOptions$(): Observable<{ label: string, key: PersonId }[]> {
         return this.teamDataManager.persons$.map(personsDict => {
             const persons = personsDict.values;
