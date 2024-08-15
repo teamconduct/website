@@ -21,6 +21,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { SummedFineValue } from '../../../types/SummedFineValue';
 import { TeamDataManagerService } from '../../../services/team-data-manager.service';
 import { AsyncPipe } from '../../../pipes/async.pipe';
+import { appRoutes } from '../../../app.routes';
 
 @Component({
     selector: 'app-persons-list-element',
@@ -100,6 +101,10 @@ export class PersonsListElementComponent {
         });
     }
 
+    public get canInvitePerson$(): Observable<boolean> {
+        return this.userManager.hasRole('team-manager').map(isTeamManager => isTeamManager && this.person !== null && this.person.signInProperties === null);
+    }
+
     public get displayValue(): { type: 'notPayed' | 'total', value: SummedFineValue } | null {
         if (this.person === null)
             return null;
@@ -129,6 +134,44 @@ export class PersonsListElementComponent {
         if (this.preview || this.person === null)
             return;
         this.expandedChange.emit(toVisible ? this.person.id : null);
+    }
+
+    public showInvitationDialog(event: Event) {
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null || this.person === null)
+            return;
+        let loadingCanceled = false;
+        const loadingConfirmationDialog = this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: $localize `:Message to wait for invitation to be loading:Invitation is loading, please wait...`,
+            acceptVisible: false,
+            rejectLabel: $localize `:Label of the button to cancel the dialog:Cancel`,
+            closeOnEscape: true,
+            reject: () => loadingCanceled = true
+        });
+        void this.firebaseFunctions.function('invitation').function('invite').call({
+            teamId: selectedTeamId,
+            personId: this.person.id
+        }).then(invitationId => {
+            loadingConfirmationDialog.close();
+            if (loadingCanceled)
+                return;
+            const team = this.teamDataManager.team$.value;
+            if (team === null)
+                return;
+            const baseUrl = `${location.protocol}//${location.hostname}${location.port !== '' ? (':' + location.port) : ''}`;
+            const invitationLink = `${baseUrl}/${appRoutes.signIn}?code=${invitationId.value}`;
+            this.confirmationService.confirm({
+                target: event.target as EventTarget,
+                message: $localize `:Message to show when invitation was successful:Invitation was successful! Give this link to the person: ${invitationLink}`,
+                rejectLabel: $localize `:Label of the button to close the dialog:Close`,
+                acceptLabel: $localize `:Label of the button to copy invitation link and close the dialog:Copy link and Close`,
+                closeOnEscape: true,
+                accept: () => {
+                    void navigator.clipboard.writeText($localize `:Text to copy invitation link:Hello ${this.personName}, you have been invited to your team ${team.name} to manage the team fines. Click on the link to log in: ${invitationLink}`);
+                }
+            });
+        });
     }
 
     public showDeleteConfirmation(event: Event) {

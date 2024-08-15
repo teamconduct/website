@@ -1,9 +1,9 @@
 import { Router, Routes } from '@angular/router';
 import { SignInPage } from './pages/sign-in/sign-in.page';
-import { CreateTeamOrRegisterInvitationPage } from './pages/create-team-or-register-invitation/create-team-or-register-invitation.page';
 import { inject, Injectable } from '@angular/core';
 import { UserManagerService } from './services/user-manager.service';
 import { HomePage } from './pages/home/home.page';
+import { CreateTeamPage } from './pages/create-team/create-team.page';
 
 @Injectable({
     providedIn: 'root'
@@ -27,13 +27,13 @@ export class UserIsSignInGuardService {
 
 export const appRoutes = {
     signIn: $localize `:Internal path to sign in page:sign-in`,
-    signUp: $localize `:Internal path to sign up page:sign-up`,
+    createTeam: $localize `:Internal path to create team page:create-team`,
     home: $localize `:Internal path to home page:home`
 };
 
 export const routes: Routes = [
     { path: appRoutes.signIn, component: SignInPage },
-    { path: appRoutes.signUp, component: CreateTeamOrRegisterInvitationPage },
+    { path: appRoutes.createTeam, component: CreateTeamPage },
     { path: appRoutes.home, component: HomePage, canActivate: [UserIsSignInGuardService] },
     { path: '', pathMatch: 'full', redirectTo: appRoutes.signIn },
     { path: '**', pathMatch: 'full', redirectTo: appRoutes.home }

@@ -6,7 +6,6 @@ import { ErrorMessageComponent } from '../../components/error-message/error-mess
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { enterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 import { markAllAsDirty } from '../../../utils/markAllAsDirty';
-import { DividerModule } from 'primeng/divider';
 import { FirebaseFunctionsService } from '../../services/firebase-functions.service';
 import { Tagged } from '../../types/Tagged';
 import { Guid } from '../../types/Guid';
@@ -18,30 +17,22 @@ import { RandomDataGeneratorService } from '../../services/random-data-generator
 import { isProduction } from '../../../environments/environment';
 
 @Component({
-    selector: 'app-create-team-or-register-invitation',
+    selector: 'app-create-team',
     standalone: true,
-    imports: [ReactiveFormsModule, ButtonModule, InputTextModule, ErrorMessageComponent, FloatLabelModule, DividerModule],
-    templateUrl: './create-team-or-register-invitation.page.html',
-    styleUrl: './create-team-or-register-invitation.page.scss',
+    imports: [ReactiveFormsModule, ButtonModule, InputTextModule, ErrorMessageComponent, FloatLabelModule],
+    templateUrl: './create-team.page.html',
+    styleUrl: './create-team.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [enterLeaveAnimation]
 })
-export class CreateTeamOrRegisterInvitationPage {
+export class CreateTeamPage {
 
     public createTeamState: 'loading' | 'validation-failed' | 'team-create-failed'| 'navigation-failed' | null = null;
-
-    public registerWithInvitationState: 'loading' | 'validation-failed' | null = null;
 
     public teamForm = new FormGroup({
         name: new FormControl<string | null>(null, [Validators.required]),
         personFirstName: new FormControl<string | null>(null, [Validators.required]),
         personLastName: new FormControl<string | null>(null)
-    });
-
-    private inviationIdRegex = new RegExp($localize `:Pattern to get the invitation id from link or plain id, must be in named group id:^(?:(?:https:\/\/)?(?:www\.)?teamconduct\.com\/invitation\/)?(?<id>[0-9a-fA-F]{12})$`);
-
-    public invitationForm = new FormGroup({
-        linkOrCode: new FormControl<string | null>(null, [Validators.required, Validators.pattern(this.inviationIdRegex)])
     });
 
     private firebaseFunctionsService = inject(FirebaseFunctionsService);
@@ -100,23 +91,6 @@ export class CreateTeamOrRegisterInvitationPage {
         this.changeDetectorRef.markForCheck();
     }
 
-    public async registerWithInvitation() {
-        if (this.registerWithInvitationState === 'loading')
-            return;
-        markAllAsDirty(this.invitationForm);
-        if (this.invitationForm.invalid) {
-            this.registerWithInvitationState = 'validation-failed';
-            return;
-        }
-        this.registerWithInvitationState = 'loading';
-
-        // TODO
-
-        this.invitationForm.reset();
-        this.registerWithInvitationState = null;
-        this.changeDetectorRef.markForCheck();
-    }
-
     public get teamFormNameErrorMessage(): string | null {
         if (!this.teamForm.get('name')!.invalid || !this.teamForm.get('name')!.dirty)
             return null;
@@ -149,25 +123,6 @@ export class CreateTeamOrRegisterInvitationPage {
             return $localize `:Team create failed error message of the create team button:Failed to create team`;
         case 'navigation-failed':
             return $localize `:Navigation failed error message of the create team button:Failed to navigate to the home page`;
-        }
-    }
-
-    public get invitationFormLinkOrCodeErrorMessage(): string | null {
-        if (!this.invitationForm.get('linkOrCode')!.invalid || !this.invitationForm.get('linkOrCode')!.dirty)
-            return null;
-        if (this.invitationForm.get('linkOrCode')!.hasError('required'))
-            return $localize `:Link or code is required error message of the link or code input field:Link or code is required to register an invitation`;
-        if (this.invitationForm.get('linkOrCode')!.hasError('pattern'))
-            return $localize `:Invalid link or code error message of the link or code input field:Invalid link or code`;
-        return null;
-    }
-
-    public get registerWithInvitationErrorMessage(): string | null {
-        if (this.registerWithInvitationState === null || this.registerWithInvitationState === 'loading')
-            return null;
-        switch (this.registerWithInvitationState) {
-        case 'validation-failed':
-            return $localize `:Validation failed error message of the register with invitation button:Please fill in all required fields`;
         }
     }
 }

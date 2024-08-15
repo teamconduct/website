@@ -1,26 +1,30 @@
-<h2 id="title" i18n="Title of the sign in form to indicate that this form is used to create a new account or to log in">Create an account / Log in</h2>
-<p id="subtitle" i18n="Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in">Enter your email to sign up or log in</p>
-<form [formGroup]="loginForm" id="login-form">
-    <p-floatLabel id="email-input-label">
-        <input type="email" pInputText formControlName="email" id="email-input" />
-        <label for="email-input" i18n="Label for the email input field">Email</label>
-    </p-floatLabel>
-    <app-error-message [message]="loginFormEmailErrorMessage" />
-    @if (loginForm.get('email')!.valid && loginForm.get('email')!.dirty) {
-        <p-floatLabel @enterLeaveAnimation id="password-input-label">
-            <p-password formControlName="password" id="password-input" />
-            <label for="password-input" i18n="Label for the password input field">Password</label>
+<div class="flex flex-column align-items-center justify-content-start w-85 mx-auto">
+    <h2 i18n="Title of the sign in form to indicate that this form is used to create a new account or to log in">Create an account / Log in</h2>
+    <p i18n="Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in">Enter your email to sign up or log in</p>
+    <form [formGroup]="loginForm" class="flex flex-column align-items-center justify-content-start w-6">
+        <p-floatLabel class="flex w-full">
+            <input type="email" pInputText formControlName="email" id="email-input" class="w-full" />
+            <label for="email-input" i18n="Label for the email input field">Email</label>
         </p-floatLabel>
-        <app-error-message [message]="loginFormPasswordErrorMessage" />
-    }
-    <p-button (onClick)="signInWithEmail()" [loading]="signInService.state === 'email'" [disabled]="signInService.state !== null" [severity]="emailSignInProvider.error === null ? undefined : 'danger'"  i18n-label="Button label to sign up or log in with email" label="Sign in with email" id="form-submit-button" />
-    <app-error-message [message]="signInEmailErrorMessage" />
-</form>
-<p-divider align="center">
-    <small class="p-text-secondary" i18n="Label of the divider between sign in with email and the extern auth providers">or continue with</small>
-</p-divider>
-<app-sign-in-third-party (onClick)="signInWithGoogle()" type="google" [loading]="signInService.state === 'google'" [disabled]="signInService.state !== null" [invalid]="googleSignInProvider.error !== null" id="google-button" />
-<app-error-message [message]="signInGoogleErrorMessage"/>
-<app-sign-in-third-party (onClick)="signInWithApple()" type="apple" [loading]="signInService.state === 'apple'" [disabled]="signInService.state !== null" [invalid]="appleSignInProvider.error !== null" id="apple-button" />
-<app-error-message [message]="signInAppleErrorMessage" />
-<p id="tos-privacy-policy-notice" i18n="ToS and privacy policy notice">By clicking sign in, you agree to our <p-button [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" /> and <p-button [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" /></p>
+        <app-error-message [message]="loginFormEmailErrorMessage" class="w-full" />
+        @if (loginForm.get('email')!.valid && loginForm.get('email')!.dirty) {
+            <p-floatLabel @enterLeaveAnimation class="flex pt-5 w-full">
+                <p-password formControlName="password" id="password-input" class="w-full" styleClass="w-full" inputStyleClass="w-full" />
+                <label for="password-input" i18n="Label for the password input field">Password</label>
+            </p-floatLabel>
+            <app-error-message [message]="loginFormPasswordErrorMessage" class="w-full" />
+        }
+        <p-button (onClick)="signInWithEmail()" [loading]="signInService.state === 'email'" [disabled]="signInService.state !== null" [severity]="emailSignInProvider.error === null ? undefined : 'danger'"  i18n-label="Button label to sign up or log in with email" label="Sign in with email" class="w-full pt-5" styleClass="w-full" />
+        <app-error-message [message]="signInEmailErrorMessage" class="w-full" />
+    </form>
+    <p-divider align="center" class="w-6" styleClass="my-5">
+        <small class="p-text-secondary" i18n="Label of the divider between sign in with email and the extern auth providers">or continue with</small>
+    </p-divider>
+    <div class="flex flex-column align-items-center justify-content-start w-6 mx-auto">
+        <app-sign-in-third-party (onClick)="signInWithGoogle()" type="google" [loading]="signInService.state === 'google'" [disabled]="signInService.state !== null" [invalid]="googleSignInProvider.error !== null" class="w-full" />
+        <app-error-message [message]="signInGoogleErrorMessage" class="w-full" />
+        <app-sign-in-third-party (onClick)="signInWithApple()" type="apple" [loading]="signInService.state === 'apple'" [disabled]="signInService.state !== null" [invalid]="appleSignInProvider.error !== null" class="w-full pt-3" />
+        <app-error-message [message]="signInAppleErrorMessage" class="w-full" />
+    </div>
+    <p i18n="ToS and privacy policy notice" class="my-0 pt-4 text-color-secondary">By clicking sign in, you agree to our <p-button [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" /> and <p-button [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" /></p>
+</div>

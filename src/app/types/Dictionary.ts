@@ -26,6 +26,10 @@ export class Dictionary<K, T> implements Flattable<Record<string, T>> {
         return this.get(key);
     }
 
+    public get isEmpty(): boolean {
+        return this.values.length === 0;
+    }
+
     public get keys(): string[] {
         return keys(this.dictionary);
     }

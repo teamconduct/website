@@ -67,7 +67,7 @@ export class HomePage implements OnInit {
                     {
                         label: $localize `:Label for the add team menu item:Add a new team`,
                         icon: 'pi pi-fw pi-plus',
-                        routerLink: `/${appRoutes.signUp}`
+                        routerLink: `/${appRoutes.createTeam}`
                     }
                 ]
             },

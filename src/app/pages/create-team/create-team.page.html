@@ -1,0 +1,25 @@
+<div class="flex flex-column align-items-center justify-content-start w-85 mx-auto">
+    <h2 i18n="Title of create your team">Create your team</h2>
+    <p i18n="Subtitle of create your team">You are not associated to any team. Create your team.</p>
+    <form [formGroup]="teamForm" class="flex flex-column align-items-center justify-content-start w-6">
+        <p-floatLabel class="flex w-full">
+            <input type="text" pInputText formControlName="name" id="name-input" class="w-full" />
+            <label for="name-input" i18n="Label for the name input field">Team name</label>
+        </p-floatLabel>
+        <app-error-message [message]="teamFormNameErrorMessage" class="w-full" />
+        @if (teamForm.get('name')!.valid && teamForm.get('name')!.dirty) {
+            <p-floatLabel @enterLeaveAnimation class="flex pt-5 w-full" >
+                <input type="text" pInputText formControlName="personFirstName" id="first-name-input" class="w-full" />
+                <label for="first-name-input" i18n="Label for the first name input field">First name</label>
+            </p-floatLabel>
+            <app-error-message [message]="teamFormLastNameErrorMessage" class="w-full" />
+            <p-floatLabel @enterLeaveAnimation class="flex pt-5 w-full" >
+                <input type="text" pInputText formControlName="personLastName" id="last-name-input" class="w-full" />
+                <label for="last-name-input" i18n="Label for the optional last name input field">Last name (optional)</label>
+            </p-floatLabel>
+            <app-error-message [message]="teamFormLastNameErrorMessage" class="w-full" />
+        }
+        <p-button (onClick)="createTeam()" [loading]="createTeamState === 'loading'" [disabled]="createTeamState === 'loading'" [severity]="createTeamState === null || createTeamState === 'loading' ? undefined : 'danger'"  i18n-label="Button label to create team" label="Create team" class="w-full pt-5" styleClass="w-full" />
+        <app-error-message [message]="createTeamErrorMessage" class="w-full" />
+    </form>
+</div>

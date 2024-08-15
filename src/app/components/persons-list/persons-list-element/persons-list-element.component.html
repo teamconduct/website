@@ -10,9 +10,18 @@
                     @let paypalMeLink = paypalMeLink$ | async;
                     @if (paypalMeLink !== null) {
                         <a [href]="paypalMeLink" target="_blank" class="p-button flex flex-row align-items-center justify-content-center mr-2 no-underline">
-                            <p class="font-medium text-lg my-0 mr-2" i18n="Label of pay with PayPal.me link button">Pay now with PayPal</p>
-                            <fa-icon [icon]="['fab', 'paypal']" size="lg" />
+                            <fa-icon [icon]="['fab', 'paypal']" />
+                            <p class="text-lg my-0 ml-2" i18n="Label of pay with PayPal.me link button">Pay now with PayPal</p>
                         </a>
+                    }
+
+                    @let canInvitePerson = (canInvitePerson$ | async) ?? false;
+                    @if (canInvitePerson) {
+                        <p-button i18n-label="Button label to invite person" label="Invite person" (onClick)="showInvitationDialog($event); $event.stopPropagation()" styleClass="mr-2">
+                            <ng-template pTemplate="icon">
+                                <fa-icon [icon]="['far', 'envelope']" class="mr-2" />
+                            </ng-template>
+                        </p-button>
                     }
 
                     <div class="flex flex-row align-items-center justify-content-center">

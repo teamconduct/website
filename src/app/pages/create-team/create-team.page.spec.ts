@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateTeamOrRegisterInvitationPage } from './create-team-or-register-invitation.page';
+import { CreateTeamOrRegisterInvitationPage } from './create-team.page';
 
 describe('CreateTeamOrRegisterInvitationPage', () => {
   let component: CreateTeamOrRegisterInvitationPage;

@@ -60,6 +60,15 @@ export class UserManagerService {
         this.clearCookie('teamId');
     }
 
+
+    public get currentTeamName$(): Observable<string | null> {
+        return combine(this.user$, this.selectedTeamId$, (user, teamId) => {
+            if (!user.teams.has(teamId))
+                return null;
+            return user.teams.get(teamId).name;
+        });
+    }
+
     public get currentPersonId$(): Observable<PersonId | null> {
         return combine(this.user$, this.selectedTeamId$, (user, teamId) => {
             if (!user.teams.has(teamId))
