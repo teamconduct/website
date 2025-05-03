@@ -1,7 +1,7 @@
 import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Fine, PersonId } from '../../../types';
-import { FineValuePipe } from '../../../pipes/fineValue.pipe';
+import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { ButtonModule } from 'primeng/button';
@@ -10,11 +10,12 @@ import { FirebaseFunctionsService } from '../../../services/firebase-functions.s
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { AsyncPipe } from '../../../pipes/async.pipe';
+import { configuration } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-fine-detail',
     standalone: true,
-    imports: [FineValuePipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule, AsyncPipe],
+    imports: [FineAmountPipe, DatePipe, ButtonModule, TagModule, ConfirmPopupModule, AsyncPipe],
     providers: [ConfirmationService],
     templateUrl: './fine-detail.component.html',
     styleUrl: './fine-detail.component.scss',
@@ -68,7 +69,8 @@ export class FineDetailComponent {
         await this.firebaseFunctions.function('fine').function('delete').call({
             teamId: selectedTeamId,
             personId: this.personId,
-            id: this.fine.id
+            id: this.fine.id,
+            configuration: configuration
         });
 
         this.deleteLoading = false;

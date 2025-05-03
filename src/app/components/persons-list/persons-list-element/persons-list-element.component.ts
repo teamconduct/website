@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output
 import { PayedState, Person, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
 import { Tag, TagModule } from 'primeng/tag';
-import { FineValuePipe } from '../../../pipes/fineValue.pipe';
+import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
@@ -26,7 +26,7 @@ import { appRoutes } from '../../../app.routes';
 @Component({
     selector: 'app-persons-list-element',
     standalone: true,
-    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, FineValuePipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule, AsyncPipe],
+    imports: [FinesListComponent, TagModule, ConfirmPopupModule, PersonAddEditComponent, FineAmountPipe, FontAwesomeModule, DividerModule, ButtonModule, FineDetailAddEditComponent, DialogModule, SkeletonModule, AsyncPipe],
     providers: [ConfirmationService],
     templateUrl: './persons-list-element.component.html',
     styleUrl: './persons-list-element.component.scss',

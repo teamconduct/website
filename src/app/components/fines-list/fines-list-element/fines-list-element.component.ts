@@ -6,15 +6,16 @@ import { FirebaseFunctionsService } from '../../../services/firebase-functions.s
 import { UserManagerService } from '../../../services/user-manager.service';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { FineValuePipe } from '../../../pipes/fineValue.pipe';
+import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
 import { SkeletonModule } from 'primeng/skeleton';
 import { AsyncPipe } from '../../../pipes/async.pipe';
+import { configuration } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-fines-list-element',
     standalone: true,
-    imports: [FineValuePipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule, AsyncPipe],
+    imports: [FineAmountPipe, DatePipe, TagModule, FontAwesomeModule, FineDetailAddEditComponent, SkeletonModule, AsyncPipe],
     templateUrl: './fines-list-element.component.html',
     styleUrl: './fines-list-element.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -60,7 +61,8 @@ export class FinesListElementComponent {
             fine: {
                 ...this.fine,
                 payedState: PayedState.toggled(this.fine.payedState)
-            }
+            },
+            configuration: configuration
         }).finally(() => {
             this.loading = false;
             this.changeDetector.markForCheck();

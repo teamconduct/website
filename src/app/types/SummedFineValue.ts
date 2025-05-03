@@ -1,24 +1,20 @@
 import { keys, values } from '../utils';
-import { Amount } from './Amount';
-import { FineValue, FineValueItem } from './FineValue';
+import { MoneyAmount } from './MoneyAmount';
+import { FineAmount } from './FineAmount';
 
 export class SummedFineValue {
 
-    public items: Record<FineValueItem, number> = {
+    public items: Record<FineAmount.Item.Type, number> = {
         'crateOfBeer': 0
     };
 
-    public amount = Amount.zero;
+    public amount = MoneyAmount.zero;
 
-    public add(fineValue: FineValue) {
-        switch (fineValue.type) {
-        case 'amount':
-            this.amount = this.amount.added(fineValue.amount);
-            break;
-        case 'item':
-            this.items[fineValue.item] += fineValue.count;
-            break;
-        }
+    public add(fineAmount: FineAmount) {
+        if (fineAmount instanceof FineAmount.Money)
+            this.amount = this.amount.added(fineAmount.amount);
+        else if (fineAmount instanceof FineAmount.Item)
+            this.items[fineAmount.item] += fineAmount.count;
     }
 
     public get isZero(): boolean {

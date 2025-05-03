@@ -123,12 +123,10 @@ export class PersonAddEditComponent extends SubmitableForm<{
             return 'no-team-id';
         await this.firebaseFunctions.function('person').function(this.person === null ? 'add' : 'update').call({
             teamId: selectedTeamId,
-            person: {
-                id: this.person !== null ? this.person.id : Tagged.generate('person'),
-                properties: {
-                    firstName: this.get('firstName')!.value!,
-                    lastName: this.get('lastName')!.value
-                }
+            id: this.person !== null ? this.person.id : Tagged.generate('person'),
+            properties: {
+                firstName: this.get('firstName')!.value!,
+                lastName: this.get('lastName')!.value
             }
         });
         if (this.person !== null && this.selectedUserRoles !== null) {

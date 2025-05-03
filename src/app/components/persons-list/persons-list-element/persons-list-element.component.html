@@ -64,7 +64,7 @@
                             <fa-icon [icon]="payedTag.icon" size="xl" class="mr-2" />
                             <p class="text-lg font-semibold my-0 mr-2">{{ payedTag.label }}</p>
                             @if (payedTag.value !== null) {
-                                <p class="text-lg font-semibold my-0">{{ payedTag.value | fineValue }}</p>
+                                <p class="text-lg font-semibold my-0">{{ payedTag.value | fineAmount }}</p>
                             } @else {
                                 <p-skeleton height="1.125rem" width="3rem" />
                             }
@@ -84,7 +84,7 @@
         }
         @if (displayValue !== null) {
             <p-tag [severity]="payedTags[displayValue.type].severity" styleClass="py-2 px-3">
-                <p class="text-lg font-semibold my-0">{{ payedTags[displayValue.type].label }} {{ displayValue.value | fineValue }}</p>
+                <p class="text-lg font-semibold my-0">{{ payedTags[displayValue.type].label }} {{ displayValue.value | fineAmount }}</p>
             </p-tag>
         } @else {
             <p-tag severity="secondary" styleClass="py-2 px-3">

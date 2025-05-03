@@ -28,18 +28,35 @@ export class SignInPage {
     private route = inject(ActivatedRoute);
 
     public async handleSuccessfulSignIn(): Promise<string | null> {
-        const result = await this.getUserAndNavigateToHome();
-        if (result !== 'not-found')
-            return result;
+
+        const invitationResult = await this.getInvitationAndNavigateToHome();
+        if (invitationResult !== 'no-invitation')
+            return invitationResult;
+
+        const loginResult = await this.getUserAndNavigateToHome();
+        if (loginResult !== 'not-found')
+            return loginResult;
+
+        const navigationSuccessful = await this.router.navigate([`/${appRoutes.createTeam}`]);
+        if (!navigationSuccessful)
+            return $localize `:Error message that navigation to sign up page has failed:Failed to navigate to the sign up page.`;
+        return null;
+    }
+
+    private async getInvitationAndNavigateToHome(): Promise<'no-invitation' | string | null> {
         const invitationId = this.route.snapshot.queryParamMap.get('code');
-        if (invitationId === null) {
-            const navigationSuccessful = await this.router.navigate([`/${appRoutes.createTeam}`]);
-            if (!navigationSuccessful)
-                return $localize `:Error message that navigation to sign up page has failed:Failed to navigate to the sign up page.`;
-            return null;
+        if (invitationId === null)
+            return 'no-invitation';
+        try {
+            const user = await this.firebaseFunctionsService.function('invitation').function('register').call(new Tagged(invitationId, 'invitation'));
+            return await this.setUserAndNavigateToHome(user);
+        } catch (error) {
+            if ((error as FunctionsError).code as FunctionsErrorCodeCore === 'not-found')
+                return $localize `:Error message that sign in has failed with invalid invitation code:Invitation code is invalid.`;
+            if ((error as FunctionsError).code as FunctionsErrorCodeCore === 'already-exists')
+                return $localize `:Error message that sign in has failed with already used invitation code:Invitation code has already been used.`;
+            return $localize `:Error message that sign in has failed with invitation code:Failed to sign in with invitation code.`;
         }
-        const user = await this.firebaseFunctionsService.function('invitation').function('register').call(new Tagged(invitationId, 'invitation'));
-        return await this.setUserAndNavigateToHome(user);
     }
 
     private async getUserAndNavigateToHome(): Promise<'not-found' | string | null> {

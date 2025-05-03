@@ -9,7 +9,7 @@ import { Sorting } from '../../types/Sorting';
 import { Observable } from '../../types/Observable';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { AsyncPipe } from '../../pipes/async.pipe';
-import { FineValue } from '../../types/FineValue';
+import { FineAmount } from '../../types/FineAmount';
 
 @Component({
     selector: 'app-fines-list',
@@ -29,7 +29,7 @@ export class FinesListComponent {
 
     public showAll: boolean = false;
 
-    public sorting = new Sorting<'reason' | 'payed' | 'date' | 'value', Fine>('payed', {
+    public sorting = new Sorting<'reason' | 'payed' | 'date' | 'amount', Fine>('payed', {
         reason: {
             label: $localize `:Dropdown label to sort fine by reason:Sort by reason`,
             direction: 'letters'
@@ -42,7 +42,7 @@ export class FinesListComponent {
             label: $localize `:Dropdown label to sort fine by date:Sort by date`,
             direction: 'basic'
         },
-        value: {
+        amount: {
             label: $localize `:Dropdown label to sort fine by amount:Sort by amount`,
             direction: 'numbers'
         }
@@ -76,8 +76,8 @@ export class FinesListComponent {
             },
             fallbacks: ['reason']
         },
-        value: {
-            compareFn: (lhs, rhs) => FineValue.compare(lhs.value, rhs.value),
+        amount: {
+            compareFn: (lhs, rhs) => FineAmount.compare(lhs.amount, rhs.amount),
             fallbacks: ['reason']
         }
     });

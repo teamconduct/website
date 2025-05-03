@@ -10,12 +10,14 @@ export namespace TeamId {
 }
 
 export type Team = {
+    id: TeamId,
     name: string,
     paypalMeLink: string | null
 }
 
 export namespace Team {
     export const builder = new ObjectTypeBuilder<Flatten<Team>, Team>({
+        id: TeamId.builder,
         name: new ValueTypeBuilder(),
         paypalMeLink: new ValueTypeBuilder()
     });

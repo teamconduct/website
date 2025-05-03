@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { PersonId, Amount } from '../types';
+import { PersonId, MoneyAmount } from '../types';
 import { Tagged } from '../types/Tagged';
 import { TeamId } from '../types/Team';
 import { UtcDate } from '../types/UtcDate';
 import { UserManagerService } from './user-manager.service';
 import { FirebaseFunctionsService } from './firebase-functions.service';
-import { isProduction } from '../../environments/environment';
-import { FineValue } from '../types/FineValue';
+import { configuration, isProduction } from '../../environments/environment';
+import { FineAmount } from '../types/FineAmount';
 
 @Injectable({
     providedIn: 'root'
@@ -24,12 +24,10 @@ export class RandomDataGeneratorService {
             personIds.push(personId);
             await this.firebaseFunctionsService.function('person').function('add').call({
                 teamId: teamId,
-                person: {
-                    id: personId,
-                    properties: {
-                        firstName: `Test${i}`,
-                        lastName: 'Person'
-                    }
+                id: personId,
+                properties: {
+                    firstName: `Test${i}`,
+                    lastName: 'Person'
                 }
             });
         }));
@@ -43,8 +41,8 @@ export class RandomDataGeneratorService {
                 fineTemplate: {
                     id: Tagged.generate('fineTemplate'),
                     reason: `Test Fine Template ${i}`,
-                    value: Math.random() < 0.5 ? FineValue.amount(new Amount(i, 0)) : FineValue.item('crateOfBeer', i),
-                    multiple: Math.random() < 0.5 ? null : {
+                    amount: Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i),
+                    repetition: Math.random() < 0.5 ? null : {
                         item: 'item',
                         maxCount: Math.random() < 0.5 ? null : Math.floor(Math.random() * 10)
                     }
@@ -61,10 +59,11 @@ export class RandomDataGeneratorService {
                 fine: {
                     id: Tagged.generate('fine'),
                     reason: `Test Fine ${i}`,
-                    value: Math.random() < 0.5 ? FineValue.amount(new Amount(i, 0)) : FineValue.item('crateOfBeer', i),
+                    amount: Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i),
                     date: UtcDate.now,
                     payedState: Math.random() < 0.5 ? 'payed' : 'notPayed'
-                }
+                },
+                configuration: configuration
             });
         }));
     }

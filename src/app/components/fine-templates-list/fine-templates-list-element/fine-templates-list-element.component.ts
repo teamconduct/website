@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FineValuePipe } from '../../../pipes/fineValue.pipe';
+import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { FineTemplateDetailAddEditComponent } from '../fine-template-detail-add-edit/fine-template-detail-add-edit.component';
-import { FineTemplate, FineTemplateMultiple } from '../../../types';
+import { FineTemplate, FineTemplateRepetition } from '../../../types';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
     selector: 'app-fine-templates-list-element',
     standalone: true,
-    imports: [FineValuePipe, FineTemplateDetailAddEditComponent, SkeletonModule],
+    imports: [FineAmountPipe, FineTemplateDetailAddEditComponent, SkeletonModule],
     templateUrl: './fine-templates-list-element.component.html',
     styleUrl: './fine-templates-list-element.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,7 +20,7 @@ export class FineTemplatesListElementComponent {
 
     public detailsShown: boolean = false;
 
-    public multipleDescription(multiple: Exclude<FineTemplate['multiple'], null>): string {
-        return FineTemplateMultiple.description(multiple);
+    public repetitionDescription(multiple: Exclude<FineTemplate['repetition'], null>): string {
+        return FineTemplateRepetition.description(multiple);
     }
 }

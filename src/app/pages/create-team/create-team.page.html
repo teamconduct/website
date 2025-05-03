@@ -1,7 +1,7 @@
 <div class="flex flex-column align-items-center justify-content-start w-85 mx-auto">
-    <h2 i18n="Title of create your team">Create your team</h2>
-    <p i18n="Subtitle of create your team">You are not associated to any team. Create your team.</p>
-    <form [formGroup]="teamForm" class="flex flex-column align-items-center justify-content-start w-6">
+    <h2 i18n="Title of create your team" class="text-center">Create your team</h2>
+    <p i18n="Subtitle of create your team" class="text-center">You are not associated to any team. Create your team.</p>
+    <form [formGroup]="teamForm" class="flex flex-column align-items-center justify-content-start md:w-6 w-full">
         <p-floatLabel class="flex w-full">
             <input type="text" pInputText formControlName="name" id="name-input" class="w-full" />
             <label for="name-input" i18n="Label for the name input field">Team name</label>

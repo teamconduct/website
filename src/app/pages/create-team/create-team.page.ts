@@ -73,7 +73,7 @@ export class CreateTeamPage {
             if (!isProduction)
                 await this.randomDataGenerator.createTestData();
 
-        } catch {
+        } catch (error) {
             this.createTeamState = 'team-create-failed';
             this.changeDetectorRef.markForCheck();
             return;

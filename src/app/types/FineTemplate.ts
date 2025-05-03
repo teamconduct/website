@@ -1,9 +1,9 @@
-import { FineTemplateMultiple } from './FineTemplateMultiple';
+import { FineTemplateRepetition } from './FineTemplateRepetition';
 import { TypeBuilder, ObjectTypeBuilder, ValueTypeBuilder, OptionalTypeBuilder } from '../typeBuilder';
 import { Flatten } from './Flattable';
 import { Guid } from './Guid';
 import { Tagged, TaggedTypeBuilder } from './Tagged';
-import { FineValue } from './FineValue';
+import { FineAmount } from './FineAmount';
 
 export type FineTemplateId = Tagged<Guid, 'fineTemplate'>;
 
@@ -14,15 +14,15 @@ export namespace FineTemplateId {
 export type FineTemplate = {
     id: FineTemplateId,
     reason: string,
-    value: FineValue,
-    multiple: FineTemplateMultiple | null
+    amount: FineAmount,
+    repetition: FineTemplateRepetition | null
 }
 
 export namespace FineTemplate {
     export const builder = new ObjectTypeBuilder<Flatten<FineTemplate>, FineTemplate>({
         id: FineTemplateId.builder,
         reason: new ValueTypeBuilder(),
-        value: FineValue.builder,
-        multiple: new OptionalTypeBuilder(FineTemplateMultiple.builder)
+        amount: FineAmount.builder,
+        repetition: new OptionalTypeBuilder(FineTemplateRepetition.builder)
     });
 }

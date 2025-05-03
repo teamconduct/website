@@ -1,10 +1,10 @@
 import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { FineValuePipe } from '../../../pipes/fineValue.pipe';
+import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-import { FineTemplate, FineTemplateMultiple } from '../../../types';
+import { FineTemplate, FineTemplateRepetition } from '../../../types';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { AsyncPipe } from '../../../pipes/async.pipe';
@@ -12,7 +12,7 @@ import { AsyncPipe } from '../../../pipes/async.pipe';
 @Component({
     selector: 'app-fine-template-detail',
     standalone: true,
-    imports: [FineValuePipe, ButtonModule, ConfirmPopupModule, AsyncPipe],
+    imports: [FineAmountPipe, ButtonModule, ConfirmPopupModule, AsyncPipe],
     providers: [ConfirmationService],
     templateUrl: './fine-template-detail.component.html',
     styleUrl: './fine-template-detail.component.scss',
@@ -42,8 +42,8 @@ export class FineTemplateDetailComponent {
         return this.userManager.hasRole('fineTemplate-manager');
     }
 
-    public multipleDescription(multiple: Exclude<FineTemplate['multiple'], null>): string {
-        return FineTemplateMultiple.description(multiple);
+    public repetitionDescription(multiple: Exclude<FineTemplate['repetition'], null>): string {
+        return FineTemplateRepetition.description(multiple);
     }
 
     public showDeleteConfirmation(event: Event) {

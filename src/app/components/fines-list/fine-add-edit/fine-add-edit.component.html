@@ -17,7 +17,7 @@
         />
 
         @let selectedFineTemplate = get('fineTemplate')!.value;
-        @if (selectedFineTemplate !== null && selectedFineTemplate !== 'ownFine' && selectedFineTemplate!.multiple !== null) {
+        @if (selectedFineTemplate !== null && selectedFineTemplate !== 'ownFine' && selectedFineTemplate!.repetition !== null) {
             <app-form-element type="number" [formControl]="get('fineTemplateTimes')" [min]="1" [max]="fineTemplateTimesMaximum" [suffix]="fineTemplateTimesSuffix" [showButtons]="true"
                 i18n-label="Label for the number of times input field" label="Times"
             />
