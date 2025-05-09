@@ -9,7 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-add-edit.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { AsyncPipe } from '../../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { configuration } from '../../../../environments/environment';
 
 @Component({

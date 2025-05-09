@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { AsyncPipe } from '../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { AddEditFormDialogComponent } from '../add-edit-form-dialog/add-edit-form-dialog.component';
 import { FormElementComponent } from '../add-edit-form/form-element/form-element.component';
 import { SubmitableForm } from '../../types/SubmitableForm';

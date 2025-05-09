@@ -10,7 +10,7 @@ import { FormElementComponent } from '../../add-edit-form/form-element/form-elem
 import { Observable } from '../../../types/Observable';
 import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AsyncPipe } from '../../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({

@@ -44,7 +44,6 @@ export class FirebaseFunctionsCaller<Functions extends FirebaseFunctions> { // T
         parameters: FirebaseFunctions.FunctionParameters<Functions>
     ): Promise<FirebaseFunctions.FunctionReturnType<Functions>> {
         const flattenParameters = Flattable.flatten(parameters);
-        console.log(this.name, flattenParameters);
         const macTag = this.createMacTag(flattenParameters);
         const callableFunction = httpsCallable(this.functionsInstance, this.name);
         const response = await callableFunction({
@@ -53,7 +52,6 @@ export class FirebaseFunctionsCaller<Functions extends FirebaseFunctions> { // T
             parameters: flattenParameters
         });
         const result = Result.from<Flatten<FirebaseFunctions.FunctionReturnType<Functions>>>(response.data);
-        console.log(this.name, result);
         const flattenReturnValue = result.get();
         return (this.firebaseFunction as FirebaseFunction<any, FirebaseFunctions.FunctionReturnType<Functions>>).returnTypeBuilder.build(flattenReturnValue);
     }

@@ -20,7 +20,7 @@ import { PersonAddEditComponent } from '../person-add-edit/person-add-edit.compo
 import { SkeletonModule } from 'primeng/skeleton';
 import { SummedFineValue } from '../../../types/SummedFineValue';
 import { TeamDataManagerService } from '../../../services/team-data-manager.service';
-import { AsyncPipe } from '../../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { appRoutes } from '../../../app.routes';
 
 @Component({

@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { Tagged } from '../../../types/Tagged';
 import { UtcDate } from '../../../types/UtcDate';
-import { AsyncPipe } from '../../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { UserManagerService } from '../../../services/user-manager.service';

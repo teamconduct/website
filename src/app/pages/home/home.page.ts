@@ -6,7 +6,7 @@ import { appRoutes } from '../../app.routes';
 import { Tagged } from '../../types/Tagged';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { PersonId, PersonWithFines, User } from '../../types';
-import { AsyncPipe } from '../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { PersonsListElementComponent } from '../../components/persons-list/persons-list-element/persons-list-element.component';
 import { PersonsListComponent } from '../../components/persons-list/persons-list.component';

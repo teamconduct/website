@@ -7,7 +7,7 @@ import { ConfirmationService } from 'primeng/api';
 import { FineTemplate, FineTemplateRepetition } from '../../../types';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
-import { AsyncPipe } from '../../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-fine-template-detail',

@@ -8,7 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Sorting } from '../../types/Sorting';
 import { Observable } from '../../types/Observable';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
-import { AsyncPipe } from '../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { FineAmount } from '../../types/FineAmount';
 
 @Component({

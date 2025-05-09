@@ -9,7 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-import { AsyncPipe } from '../../../pipes/async.pipe';
+import { AsyncPipe } from '@angular/common';
 import { configuration } from '../../../../environments/environment';
 
 @Component({
