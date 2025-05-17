@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 import { DialogModule } from 'primeng/dialog';
 import { FineTemplateDetailComponent } from '../fine-template-detail/fine-template-detail.component';
 import { FineTemplateAddEditComponent } from '../fine-template-add-edit/fine-template-add-edit.component';
-import { FineTemplate } from '../../../types';
+import { FineTemplate } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fine-template-detail-add-edit',

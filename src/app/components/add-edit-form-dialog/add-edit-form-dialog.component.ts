@@ -11,7 +11,7 @@ import { AddEditFormComponent } from '../add-edit-form/add-edit-form.component';
     styleUrl: './add-edit-form-dialog.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddEditFormDialogComponent<TControl extends SubmitableForm.TControlRequirement, TError extends SubmitableForm.TErrorRequirement> implements OnInit {
+export class AddEditFormDialogComponent<TControl extends SubmitableForm.ControlRequirement, TError extends SubmitableForm.ErrorRequirement> implements OnInit {
 
     @Input({ required: true }) public visible!: boolean;
 
@@ -27,3 +27,4 @@ export class AddEditFormDialogComponent<TControl extends SubmitableForm.TControl
         this.form.addSuccessHandler(() => this.visibleChange.emit(false));
     }
 }
+

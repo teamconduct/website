@@ -1,18 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { FirebaseFunctionsService } from './firebase-functions.service';
-import { UserManagerService } from './user-manager.service';
-import { NotificationSubscription } from '../types/PersonNotificationProperties';
+import { NotificationProperties, Team, Person } from '@stevenkellner/team-conduct-api';
 import { getToken, Messaging, NotificationPayload, onMessage } from '@angular/fire/messaging';
 import { Subject } from 'rxjs';
-import { TeamId } from '../types/Team';
-import { PersonId } from '../types';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NotificationService {
-
-    private userManager = inject(UserManagerService);
 
     private messaging = inject(Messaging);
 
@@ -26,11 +21,11 @@ export class NotificationService {
         return await getToken(this.messaging, { serviceWorkerRegistration: registration });
     }
 
-    public async register(teamId: TeamId, personId: PersonId): Promise<Subject<NotificationPayload> | null> {
+    public async register(teamId: Team.Id, personId: Person.Id): Promise<Subject<NotificationPayload> | null> {
         const token = await this.requestPermission();
         if (token === null)
             return null;
-        await this.firebaseFunctions.function('notification').function('register').call({
+        await this.firebaseFunctions.functions.notification.register.execute({
             teamId: teamId,
             personId: personId,
             token: token
@@ -47,8 +42,8 @@ export class NotificationService {
         return messageSubject;
     }
 
-    public async subscribe(teamId: TeamId, personId: PersonId, ...subscriptions: NotificationSubscription[]) {
-        await this.firebaseFunctions.function('notification').function('subscribe').call({
+    public async subscribe(teamId: Team.Id, personId: Person.Id, ...subscriptions: NotificationProperties.Subscription[]) {
+        await this.firebaseFunctions.functions.notification.subscribe.execute({
             teamId: teamId,
             personId: personId,
             subscriptions: subscriptions

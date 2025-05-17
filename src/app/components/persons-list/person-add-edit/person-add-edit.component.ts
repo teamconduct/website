@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Person, UserRole } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { SubmitableForm } from '../../../types/SubmitableForm';
 import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
-import { Tagged } from '../../../types/Tagged';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
 import { Observable } from '../../../types/Observable';
 import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AsyncPipe } from '@angular/common';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { Person, PersonPrivateProperties, UserRole } from '@stevenkellner/team-conduct-api';
+import { Tagged } from '@stevenkellner/typescript-common-functionality';
 
 @Component({
     selector: 'app-person-add-edit',
@@ -57,7 +57,7 @@ export class PersonAddEditComponent extends SubmitableForm<{
                 return null;
             return UserRole.all.map(role => ({
                 role: role,
-                label: UserRole.description(role),
+                label: UserRole.formatted(role),
                 selected: selectedUserRoles.includes(role),
                 disabled: role === 'team-manager' && person.id.guidString === currentPersonId.guidString
             }));
@@ -94,7 +94,7 @@ export class PersonAddEditComponent extends SubmitableForm<{
     public get headerLabel(): string {
         if (this.person === null)
             return $localize `:Header label for adding a person:Add a new person`;
-        return $localize `:Header label for editing a person:Edit ${Person.name(this.person)}`;
+        return $localize `:Header label for editing a person:Edit ${this.person.name}`;
     }
 
     public get buttonLabel(): string {
@@ -121,16 +121,14 @@ export class PersonAddEditComponent extends SubmitableForm<{
         const selectedTeamId = this.userManager.selectedTeamId$.value;
         if (selectedTeamId === null)
             return 'no-team-id';
-        await this.firebaseFunctions.function('person').function(this.person === null ? 'add' : 'update').call({
+        const addOrUpdateFunction = this.person === null ? this.firebaseFunctions.functions.person.add : this.firebaseFunctions.functions.person.update;
+        await addOrUpdateFunction.execute({
             teamId: selectedTeamId,
             id: this.person !== null ? this.person.id : Tagged.generate('person'),
-            properties: {
-                firstName: this.get('firstName')!.value!,
-                lastName: this.get('lastName')!.value
-            }
+            properties: new PersonPrivateProperties(this.get('firstName')!.value!, this.get('lastName')!.value)
         });
         if (this.person !== null && this.selectedUserRoles !== null) {
-            await this.firebaseFunctions.function('user').function('roleEdit').call({
+            await this.firebaseFunctions.functions.user.roleEdit.execute({
                 teamId: selectedTeamId,
                 personId: this.person.id,
                 roles: this.selectedUserRoles

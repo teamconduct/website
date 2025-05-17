@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AppleAuthProvider, AuthService, EmailAuthProvider, GoogleAuthProvider, IAuthProvider } from './auth.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { markAllAsDirty } from '../../utils/markAllAsDirty';
+import { markAllAsDirty } from '../utils/markAllAsDirty';
 import { AuthErrorCodes } from '@angular/fire/auth';
 
 export type SignInState = 'email' | 'google' | 'apple';

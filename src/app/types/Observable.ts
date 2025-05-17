@@ -1,49 +1,16 @@
-import { BehaviorSubject, Observer, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-export class Observable<T> {
-
-    private behaviorSubject: BehaviorSubject<T | null>;
+export class Observable<T> extends BehaviorSubject<T | null> {
 
     public constructor(initialValue: T | null = null) {
-        this.behaviorSubject = new BehaviorSubject<T | null>(initialValue);
-    }
-
-    public get value(): T | null {
-        return this.behaviorSubject.value;
-    }
-
-    public next(value: T) {
-        this.behaviorSubject.next(value);
-    }
-
-    public error(error: any) {
-        this.behaviorSubject.error(error);
-    }
-
-    public complete() {
-        this.behaviorSubject.complete();
-    }
-
-    public subscribe(observerOrNext?: Partial<Observer<T>> | ((value: T) => void)): Subscription {
-        return this.behaviorSubject.subscribe({
-            next: value => {
-                if (value !== null) {
-                    if (typeof observerOrNext === 'function')
-                        observerOrNext(value);
-                    else if (typeof observerOrNext === 'object' && observerOrNext.next !== undefined)
-                        observerOrNext.next(value);
-                }
-
-            },
-            error: typeof observerOrNext === 'object' ? observerOrNext.error : undefined,
-            complete: typeof observerOrNext === 'object' ? observerOrNext.complete : undefined
-        });
+        super(initialValue);
     }
 
     public map<U>(transformFn: (value: T) => U): Observable<U> {
-        const observable = new Observable<U>(this.value !== null ? transformFn(this.value) : null);
+        const transform = (value: T | null) => value !== null ? transformFn(value) : null;
+        const observable = new Observable<U>(transform(this.value));
         this.subscribe({
-            next: value => observable.next(transformFn(value)),
+            next: value => observable.next(transform(value)),
             error: error => observable.error(error),
             complete: () => observable.complete()
         });
@@ -51,28 +18,16 @@ export class Observable<T> {
     }
 }
 
-export function combine<T1, T2, U>(observable1: Observable<T1>, observable2: Observable<T2>, combine: (value1: T1, value2: T2) => U): Observable<U> {
-    const combineWithNull = (value1: T1 | null, value2: T2 | null): U | null => {
-        if (value1 === null || value2 === null)
-            return null;
-        return combine(value1, value2);
-    };
-    const observable = new Observable<U>(combineWithNull(observable1.value, observable2.value));
+export function combine<T1, T2, U>(observable1: Observable<T1>, observable2: Observable<T2>, combineFn: (value1: T1, value2: T2) => U): Observable<U> {
+    const combine = (value1: T1 | null, value2: T2 | null) => (value1 !== null && value2 !== null) ? combineFn(value1, value2) : null;
+    const observable = new Observable<U>(combine(observable1.value, observable2.value));
     observable1.subscribe({
-        next: value1 => {
-            const value2 = observable2.value;
-            if (value2 !== null)
-                observable.next(combine(value1, value2));
-        },
+        next: value => observable.next(combine(value, observable2.value)),
         error: error => observable.error(error),
         complete: () => observable.complete()
     });
     observable2.subscribe({
-        next: value2 => {
-            const value1 = observable1.value;
-            if (value1 !== null)
-                observable.next(combine(value1, value2));
-        },
+        next: value => observable.next(combine(observable1.value, value)),
         error: error => observable.error(error),
         complete: () => observable.complete()
     });

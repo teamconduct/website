@@ -3,9 +3,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { UserManagerService } from '../../services/user-manager.service';
 import { appRoutes } from '../../app.routes';
-import { Tagged } from '../../types/Tagged';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
-import { PersonId, PersonWithFines, User } from '../../types';
 import { AsyncPipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { PersonsListElementComponent } from '../../components/persons-list/persons-list-element/persons-list-element.component';
@@ -16,9 +14,10 @@ import { NotificationService } from '../../services/notification.service';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { FineDetailAddEditComponent } from '../../components/fines-list/fine-detail-add-edit/fine-detail-add-edit.component';
-import { TeamId } from '../../types/Team';
 import { Router } from '@angular/router';
 import { PaypalMeAddEditComponent } from '../../components/paypal-me-add-edit/paypal-me-add-edit.component';
+import { Person, Team, User } from '@stevenkellner/team-conduct-api';
+import { PersonWithFines } from '../../types/PersonWithFines';
 
 @Component({
     selector: 'app-home',
@@ -47,13 +46,13 @@ export class HomePage implements OnInit {
 
     public editPaypalMeLinkDialogVisible = false;
 
-    public teamMenu(user: User, selectedTeamId: TeamId | null, canAddFine: boolean, canManageTeam: boolean): MenuItem[] {
+    public teamMenu(user: User, selectedTeamId: Team.Id | null, canAddFine: boolean, canManageTeam: boolean): MenuItem[] {
         const teamsItems = user.teams.map<MenuItem>((team, teamId) => ({
             label: team.name,
             icon: 'pi pi-fw pi-users',
-            disabled: teamId === selectedTeamId?.guidString,
+            disabled: teamId.guidString === selectedTeamId?.guidString,
             command: () => {
-                void this.onTeamSelected(Tagged.guid(teamId, 'team'));
+                void this.onTeamSelected(teamId);
             }
         })).values;
         return [
@@ -110,7 +109,7 @@ export class HomePage implements OnInit {
             void this.onTeamSelected(teamId);
     }
 
-    private async onTeamSelected(teamId: TeamId) {
+    private async onTeamSelected(teamId: Team.Id) {
         this.userManager.setTeamId(teamId);
         this.teamDataManager.startObserve(teamId);
         this.userManager.currentPersonId$.subscribe(currentPersonId => {
@@ -120,7 +119,7 @@ export class HomePage implements OnInit {
         });
     }
 
-    private async registerSubscribeNotifications(teamId: TeamId, personId: PersonId) {
+    private async registerSubscribeNotifications(teamId: Team.Id, personId: Person.Id) {
         const messageSubject = await this.notificationService.register(teamId, personId);
         if (messageSubject !== null) {
             messageSubject.subscribe(message => {

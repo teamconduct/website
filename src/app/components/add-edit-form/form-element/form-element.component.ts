@@ -7,7 +7,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
-import { Guid } from '../../../types/Guid';
+import { Guid } from '@stevenkellner/typescript-common-functionality';
 
 @Component({
     selector: 'app-form-element',

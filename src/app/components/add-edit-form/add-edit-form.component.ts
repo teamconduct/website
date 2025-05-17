@@ -12,7 +12,7 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
     styleUrl: './add-edit-form.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddEditFormComponent<TControl extends SubmitableForm.TControlRequirement, TError extends SubmitableForm.TErrorRequirement> {
+export class AddEditFormComponent<TControl extends SubmitableForm.ControlRequirement, TError extends SubmitableForm.ErrorRequirement> {
 
     @Input({ required: true }) public form!: SubmitableForm<TControl, TError>;
 

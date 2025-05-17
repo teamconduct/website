@@ -1,5 +1,5 @@
 import { inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
-import { UtcDate } from '../types/UtcDate';
+import { UtcDate } from '@stevenkellner/typescript-common-functionality';
 
 @Pipe({
     name: 'date',

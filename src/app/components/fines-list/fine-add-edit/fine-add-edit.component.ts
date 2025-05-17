@@ -1,9 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { PersonId, Fine, MoneyAmount, FineTemplate, FineTemplateRepetition, Person } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
-import { Tagged } from '../../../types/Tagged';
-import { UtcDate } from '../../../types/UtcDate';
 import { AsyncPipe } from '@angular/common';
 import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { enterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
@@ -13,8 +10,9 @@ import { Observable } from '../../../types/Observable';
 import { SubmitableForm } from '../../../types/SubmitableForm';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
 import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
-import { FineAmount } from '../../../types/FineAmount';
 import { configuration } from '../../../../environments/environment';
+import { Fine, FineAmount, FineTemplate, FineTemplateRepetition, MoneyAmount, Person } from '@stevenkellner/team-conduct-api';
+import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
 
 @Component({
     selector: 'app-fine-add-edit',
@@ -27,7 +25,7 @@ import { configuration } from '../../../../environments/environment';
     animations: [enterLeaveAnimation]
 })
 export class FineAddEditComponent extends SubmitableForm<{
-    personIds: FormControl<PersonId[] | null>
+    personIds: FormControl<Person.Id[] | null>
     fineTemplate: FormControl<FineTemplate | 'ownFine' | null>
     fineTemplateTimes: FormControl<number | null>
     reason: FormControl<string | null>
@@ -41,7 +39,7 @@ export class FineAddEditComponent extends SubmitableForm<{
 
     @Output() public readonly visibleChange = new EventEmitter<boolean>();
 
-    @Input() public personId: PersonId | null = null;
+    @Input() public personId: Person.Id | null = null;
 
     @Input() public fine: Fine | null = null;
 
@@ -55,7 +53,7 @@ export class FineAddEditComponent extends SubmitableForm<{
 
     public constructor() {
         super({
-            personIds: new FormControl<PersonId[] | null>(null, [Validators.required]),
+            personIds: new FormControl<Person.Id[] | null>(null, [Validators.required]),
             fineTemplate: new FormControl<FineTemplate | 'ownFine' | null>(null, [Validators.required]),
             fineTemplateTimes: new FormControl<number | null>(null, []),
             reason: new FormControl<string | null>(null, []),
@@ -138,18 +136,18 @@ export class FineAddEditComponent extends SubmitableForm<{
         return $localize `:Button label to save fine:Save fine`;
     }
 
-    public get personOptions$(): Observable<{ label: string, key: PersonId }[]> {
+    public get personOptions$(): Observable<{ label: string, key: Person.Id }[]> {
         return this.teamDataManager.persons$.map(personsDict => {
             const persons = personsDict.values;
             persons.sort((lhs, rhs) => {
-                const lhsName = Person.name(lhs).toUpperCase();
-                const rhsName = Person.name(rhs).toUpperCase();
+                const lhsName = lhs.name.toUpperCase();
+                const rhsName = rhs.name.toUpperCase();
                 if (lhsName === rhsName)
                     return 0;
                 return lhsName < rhsName ? -1 : 1;
             });
             return persons.map(person => ({
-                label: Person.name(person),
+                label: person.name,
                 key: person.id
             }));
         });
@@ -189,8 +187,8 @@ export class FineAddEditComponent extends SubmitableForm<{
         const fineTemplateValue = this.get('fineTemplate')!.value;
         if (fineTemplateValue === null || fineTemplateValue === 'ownFine' || fineTemplateValue.repetition === null)
             return '';
-        const isPlural = this.get('fineTemplateTimes')!.value! > 1;
-        return FineTemplateRepetition.Item.description(fineTemplateValue.repetition.item, 'inText', isPlural);
+        const count = this.get('fineTemplateTimes')!.value ?? 0;
+        return new FineTemplateRepetition(fineTemplateValue.repetition.item, null).formattedWithoutCount(count);
     }
 
     public get fineValueTypeOptions(): { label: string, key: 'amount' | FineAmount.Item.Type }[] {
@@ -200,7 +198,7 @@ export class FineAddEditComponent extends SubmitableForm<{
                 key: 'amount'
             },
             ...FineAmount.Item.Type.all.map(item => ({
-                label: FineAmount.Item.Type.description(item),
+                label: FineAmount.Item.Type.formatted(item),
                 key: item
             }))
         ];
@@ -210,8 +208,8 @@ export class FineAddEditComponent extends SubmitableForm<{
         const fineValueType = this.get('fineValueType')!.value;
         if (fineValueType === null || fineValueType === 'amount')
             return '';
-        const count = this.get('fineValueItemCount')!.value;
-        return FineAmount.Item.Type.description(fineValueType, count !== 1);
+        const count = this.get('fineValueItemCount')!.value ?? 0;
+        return new FineAmount.Item(fineValueType, count).formattedWithoutCount();
     }
 
     public override reset() {
@@ -240,14 +238,14 @@ export class FineAddEditComponent extends SubmitableForm<{
         if (fineTemplateValue !== 'ownFine') {
             return {
                 reason: fineTemplateValue.reason,
-                value: FineAmount.multiply(fineTemplateValue.amount, this.get('fineTemplateTimes')!.value!)
+                value: fineTemplateValue.amount.multiplied(this.get('fineTemplateTimes')!.value!)
             };
         }
         let value: FineAmount;
         const fineValueType = this.get('fineValueType')!.value!;
         switch (fineValueType) {
         case 'amount':
-            value = FineAmount.money(MoneyAmount.from(this.get('amount')!.value!));
+            value = FineAmount.money(MoneyAmount.builder.build(this.get('amount')!.value!));
             break;
         default:
             value = FineAmount.item(fineValueType, this.get('fineValueItemCount')!.value!);
@@ -267,16 +265,17 @@ export class FineAddEditComponent extends SubmitableForm<{
         const personIds = this.get('personIds')!.value!;
         const fineTemplate = this.fineTemplate;
         await Promise.all(personIds.map(async personId => {
-            await this.firebaseFunctions.function('fine').function(this.fine === null ? 'add' : 'update').call({
+            const addOrUpdateFunction = this.fine === null ? this.firebaseFunctions.functions.fine.add : this.firebaseFunctions.functions.fine.update;
+            await addOrUpdateFunction.execute({
                 teamId: selectedTeamId,
                 personId: personId,
-                fine: {
-                    id: this.fine === null ? Tagged.generate('fine') : this.fine.id,
-                    reason: fineTemplate.reason,
-                    amount: fineTemplate.value,
-                    date: UtcDate.fromDate(this.get('date')!.value!),
-                    payedState: this.fine === null ? 'notPayed' : this.fine.payedState
-                },
+                fine: new Fine(
+                    this.fine === null ? Tagged.generate('fine') : this.fine.id,
+                    this.fine === null ? 'notPayed' : this.fine.payedState,
+                    UtcDate.fromDate(this.get('date')!.value!),
+                    fineTemplate.reason,
+                    fineTemplate.value
+                ),
                 configuration: configuration
             });
         }));

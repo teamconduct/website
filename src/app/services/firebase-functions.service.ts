@@ -1,58 +1,59 @@
 import { inject, Injectable } from '@angular/core';
-import { Functions as FunctionsInstance, httpsCallable } from '@angular/fire/functions';
-import { FirebaseFunction, FirebaseFunctions } from '../firebase/FirebaseFunction';
-import { firebaseFunctions } from '../firebase/firebaseFunctions';
-import { Flattable, Flatten } from '../types/Flattable';
-import { Result } from '../types/Result';
-import { HMAC } from '../utils/HMAC';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { macKey } from '../../environments/environment';
+import { BaseClientFirebaseFunction, FirebaseFunction, FirebaseFunctionContext, FirebaseFunctionsContext, FirebaseRequestContext, FirebaseScheduleContext, FunctionsError } from '@stevenkellner/firebase-function';
+import { firebaseFunctionsContext } from '@stevenkellner/team-conduct-api';
+import { BytesCoder, mapRecord, Result } from '@stevenkellner/typescript-common-functionality';
+
+export class ClientFirebaseFunction<Parameters, ReturnType> extends BaseClientFirebaseFunction<Parameters, ReturnType> {
+
+    public constructor(
+        FirebaseFunction: FirebaseFunction.Constructor<Parameters, ReturnType>,
+        macKey: Uint8Array,
+        private readonly functions: Functions,
+        private readonly name: string
+    ) {
+        super(FirebaseFunction, macKey);
+    }
+
+    public async executeWithResult(parameters: Parameters): Promise<Result<ReturnType, FunctionsError>> {
+        const functionCallable = httpsCallable<FirebaseFunction.ParametersData<Parameters>, Result.Flatten<ReturnType, FunctionsError>>(this.functions, this.name);
+        const httpsCallableResult = await functionCallable(this.parametersData(parameters));
+        return this.result(httpsCallableResult.data);
+    }
+}
+
+export type ClientFirebaseFunctions<Context extends FirebaseFunctionsContext> =
+    Context extends FirebaseFunctionContext<infer Parameters, infer ReturnType> ? ClientFirebaseFunction<Parameters, ReturnType> :
+        Context extends FirebaseRequestContext<any, any> ? null :
+            Context extends FirebaseScheduleContext ? null :
+                Context extends { [key: string]: FirebaseFunctionsContext } ? { [Key in keyof Context]: ClientFirebaseFunctions<Context[Key]> } : never;
+
+export function createClientFirebaseFunctions<Context extends FirebaseFunctionsContext>(
+    context: Context,
+    functions: Functions,
+    macKey: Uint8Array,
+    name: string = ''
+): ClientFirebaseFunctions<Context> {
+    if (context instanceof FirebaseFunctionContext)
+        return new ClientFirebaseFunction(context.Constructor, macKey, functions, name) as ClientFirebaseFunctions<Context>;
+    if (context instanceof FirebaseRequestContext)
+        return null as ClientFirebaseFunctions<Context>;
+    if (context instanceof FirebaseScheduleContext)
+        return null as ClientFirebaseFunctions<Context>;
+    return mapRecord(context as Record<string, FirebaseFunctionsContext>, (context, key) => createClientFirebaseFunctions(context, functions, macKey, name === '' ? key : `${name}-${key}`)) as ClientFirebaseFunctions<Context>;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class FirebaseFunctionsService {
 
-    private functionsInstance = inject(FunctionsInstance);
+    private functionsInstance = inject(Functions);
 
-    public function<Key extends FirebaseFunctions.IsRecord<typeof firebaseFunctions> extends true ? keyof typeof firebaseFunctions & string : never>(
-        key: Key
-    ): FirebaseFunctionsCaller<typeof firebaseFunctions extends { [key: string]: FirebaseFunctions } ? typeof firebaseFunctions[Key] : never> {
-        return new FirebaseFunctionsCaller(this.functionsInstance, firebaseFunctions[key], key);
-    }
-}
+    public readonly functions: ReturnType<typeof createClientFirebaseFunctions<typeof firebaseFunctionsContext>>;
 
-export class FirebaseFunctionsCaller<Functions extends FirebaseFunctions> { // TODO: use firebase-api functions instead
-
-    public constructor(
-        private readonly functionsInstance: FunctionsInstance,
-        private readonly firebaseFunction: Functions,
-        private readonly name: string
-    ) {}
-
-    public function<Key extends FirebaseFunctions.IsRecord<Functions> extends true ? keyof Functions & string : never>(
-        key: Key
-    ): FirebaseFunctionsCaller<Functions extends { [key: string]: FirebaseFunctions } ? Functions[Key] : never> {
-        return new FirebaseFunctionsCaller(this.functionsInstance, this.firebaseFunction[key] as Functions extends { [key: string]: FirebaseFunctions } ? Functions[Key] : never, `${this.name}-${key}`);
-    }
-
-    private createMacTag(parameters: unknown): string {
-        const hmac = new HMAC(macKey);
-        return hmac.sign(JSON.stringify(parameters));
-    }
-
-    public async call(
-        parameters: FirebaseFunctions.FunctionParameters<Functions>
-    ): Promise<FirebaseFunctions.FunctionReturnType<Functions>> {
-        const flattenParameters = Flattable.flatten(parameters);
-        const macTag = this.createMacTag(flattenParameters);
-        const callableFunction = httpsCallable(this.functionsInstance, this.name);
-        const response = await callableFunction({
-            verboseLogger: true,
-            macTag: macTag,
-            parameters: flattenParameters
-        });
-        const result = Result.from<Flatten<FirebaseFunctions.FunctionReturnType<Functions>>>(response.data);
-        const flattenReturnValue = result.get();
-        return (this.firebaseFunction as FirebaseFunction<any, FirebaseFunctions.FunctionReturnType<Functions>>).returnTypeBuilder.build(flattenReturnValue);
+    public constructor() {
+        this.functions = createClientFirebaseFunctions(firebaseFunctionsContext, this.functionsInstance, BytesCoder.fromHex(macKey));
     }
 }

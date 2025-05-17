@@ -1,18 +1,22 @@
 export class LoadingState<E> {
 
-    protected state: 'not-started' |'success' | 'loading' | 'failure' = 'not-started';
+    protected state: States.All<E>['state'] = 'not-started';
 
-    public error: E | null = null;
+    public error: States.All<E>['error'] = null;
 
-    public isSuccess(): this is { state: 'success', error: null } {
+    public isNotStarted(): this is States.NotStarted {
+        return this.state === 'not-started';
+    }
+
+    public isSuccess(): this is States.Success {
         return this.state === 'success';
     }
 
-    public isLoading(): this is { state: 'loading', error: null } {
+    public isLoading(): this is States.Loading {
         return this.state === 'loading';
     }
 
-    public isFailure(): this is { state: 'failure', error: E } {
+    public isFailure(): this is States.Failure<E> {
         return this.state === 'failure';
     }
 
@@ -43,4 +47,29 @@ export class LoadingState<E> {
         this.state = 'failure';
         this.error = error;
     }
+}
+
+namespace States {
+
+    export type NotStarted = {
+        state: 'not-started';
+        error: null;
+    };
+
+    export type Loading = {
+        state: 'loading';
+        error: null;
+    }
+
+    export type Success = {
+        state: 'success';
+        error: null;
+    }
+
+    export type Failure<E> = {
+        state: 'failure';
+        error: E;
+    }
+
+    export type All<E> = NotStarted | Loading | Success | Failure<E>;
 }

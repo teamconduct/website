@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FineTemplate } from '../../types';
 import { Sorting } from '../../types/Sorting';
 import { DropdownModule } from 'primeng/dropdown';
 import { DataViewModule } from 'primeng/dataview';
@@ -11,7 +10,7 @@ import { FineTemplateDetailAddEditComponent } from './fine-template-detail-add-e
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { Observable } from '../../types/Observable';
 import { AsyncPipe } from '@angular/common';
-import { FineAmount } from '../../types/FineAmount';
+import { FineAmount, FineTemplate } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fine-templates-list',

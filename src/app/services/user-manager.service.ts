@@ -1,11 +1,10 @@
-import { Flattable, Flatten } from './../types/Flattable';
 import { inject, Injectable } from '@angular/core';
-import { PersonId, PersonWithFines, User, UserRole } from '../types';
-import { TeamId } from '../types/Team';
+import { Person, Team, User, UserRole } from '@stevenkellner/team-conduct-api';
 import { CookieService } from 'ngx-cookie-service';
-import { ITypeBuilder } from '../typeBuilder';
 import { combine, Observable } from '../types/Observable';
 import { TeamDataManagerService } from './team-data-manager.service';
+import { Flattable, ITypeBuilder } from '@stevenkellner/typescript-common-functionality';
+import { PersonWithFines } from '../types/PersonWithFines';
 
 @Injectable({
     providedIn: 'root'
@@ -18,14 +17,14 @@ export class UserManagerService {
 
     public user$ = new Observable<User>();
 
-    public selectedTeamId$ = new Observable<TeamId>();
+    public selectedTeamId$ = new Observable<Team.Id>();
 
     public setUser(user: User) {
         this.user$.next(user);
         this.setCookie('user', user);
     }
 
-    public setTeamId(teamId: TeamId) {
+    public setTeamId(teamId: Team.Id) {
         this.selectedTeamId$.next(teamId);
         this.setCookie('teamId', teamId);
     }
@@ -34,7 +33,7 @@ export class UserManagerService {
         const user = this.getCookie('user', User.builder);
         if (user !== null)
             this.user$.next(user);
-        const teamId = this.getCookie('teamId', TeamId.builder);
+        const teamId = this.getCookie('teamId', Team.Id.builder);
         if (teamId !== null)
             this.selectedTeamId$.next(teamId);
     }
@@ -44,7 +43,7 @@ export class UserManagerService {
         this.cookieService.set(key, json);
     }
 
-    private getCookie<T>(key: string, builder: ITypeBuilder<Flatten<T>, T>): T | null {
+    private getCookie<T>(key: string, builder: ITypeBuilder<Flattable.Flatten<T>, T>): T | null {
         if (!this.cookieService.check(key))
             return null;
         const json = this.cookieService.get(key);
@@ -69,7 +68,7 @@ export class UserManagerService {
         });
     }
 
-    public get currentPersonId$(): Observable<PersonId | null> {
+    public get currentPersonId$(): Observable<Person.Id | null> {
         return combine(this.user$, this.selectedTeamId$, (user, teamId) => {
             if (!user.teams.has(teamId))
                 return null;

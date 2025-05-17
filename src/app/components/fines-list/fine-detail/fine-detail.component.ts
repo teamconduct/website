@@ -1,6 +1,5 @@
 import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Fine, PersonId } from '../../../types';
 import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { UserManagerService } from '../../../services/user-manager.service';
@@ -11,6 +10,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 import { AsyncPipe } from '@angular/common';
 import { configuration } from '../../../../environments/environment';
+import { Fine, Person } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fine-detail',
@@ -23,7 +23,7 @@ import { configuration } from '../../../../environments/environment';
 })
 export class FineDetailComponent {
 
-    @Input({ required: true }) public personId!: PersonId;
+    @Input({ required: true }) public personId!: Person.Id;
 
     @Input({ required: true }) public fine!: Fine;
 
@@ -66,7 +66,7 @@ export class FineDetailComponent {
             return;
         this.deleteLoading = true;
 
-        await this.firebaseFunctions.function('fine').function('delete').call({
+        await this.firebaseFunctions.functions.fine.delete.execute({
             teamId: selectedTeamId,
             personId: this.personId,
             id: this.fine.id,

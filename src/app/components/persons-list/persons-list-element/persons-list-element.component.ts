@@ -1,6 +1,5 @@
 import { combine, Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { PayedState, Person, PersonId, PersonWithFines } from '../../../types';
 import { FinesListComponent } from '../../fines-list/fines-list.component';
 import { Tag, TagModule } from 'primeng/tag';
 import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
@@ -22,6 +21,8 @@ import { SummedFineValue } from '../../../types/SummedFineValue';
 import { TeamDataManagerService } from '../../../services/team-data-manager.service';
 import { AsyncPipe } from '@angular/common';
 import { appRoutes } from '../../../app.routes';
+import { PersonWithFines } from '../../../types/PersonWithFines';
+import { Invitation, PayedState, Person } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-persons-list-element',
@@ -38,7 +39,7 @@ export class PersonsListElementComponent {
 
     @Input() public expanded: boolean = true;
 
-    @Output() public readonly expandedChange = new EventEmitter<PersonId | null>();
+    @Output() public readonly expandedChange = new EventEmitter<Person.Id | null>();
 
     @Input() preview: boolean = false;
 
@@ -59,7 +60,7 @@ export class PersonsListElementComponent {
     public get personName(): string | null {
         if (this.person === null)
             return null;
-        return Person.name(this.person);
+        return this.person.name;
     }
 
     public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, value: SummedFineValue | null, severity: Tag['severity'], icon: IconDefinition }> {
@@ -149,10 +150,7 @@ export class PersonsListElementComponent {
             closeOnEscape: true,
             reject: () => loadingCanceled = true
         });
-        void this.firebaseFunctions.function('invitation').function('invite').call({
-            teamId: selectedTeamId,
-            personId: this.person.id
-        }).then(invitationId => {
+        void this.firebaseFunctions.functions.invitation.invite.execute(new Invitation(selectedTeamId, this.person.id)).then(invitationId => {
             loadingConfirmationDialog.close();
             if (loadingCanceled)
                 return;
@@ -195,7 +193,7 @@ export class PersonsListElementComponent {
             return;
         this.deleteLoading = true;
 
-        await this.firebaseFunctions.function('person').function('delete').call({
+        await this.firebaseFunctions.functions.person.delete.execute({
             teamId: selectedTeamId,
             id: this.person.id
         });

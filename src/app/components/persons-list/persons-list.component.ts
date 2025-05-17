@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { PersonId, PersonWithFines } from '../../types';
 import { PersonsListElementComponent } from './persons-list-element/persons-list-element.component';
 import { Sorting } from '../../types/Sorting';
 import { DataViewModule } from 'primeng/dataview';
@@ -12,6 +11,8 @@ import { Observable } from '../../types/Observable';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { AsyncPipe } from '@angular/common';
 import { SummedFineValue } from '../../types/SummedFineValue';
+import { Person } from '@stevenkellner/team-conduct-api';
+import { PersonWithFines } from '../../types/PersonWithFines';
 
 @Component({
     selector: 'app-persons-list',
@@ -27,7 +28,7 @@ export class PersonsListComponent {
 
     private teamDataManager = inject(TeamDataManagerService);
 
-    public expandedPersonId: PersonId | null = null;
+    public expandedPersonId: Person.Id | null = null;
 
     public addPersonDialogVisible: boolean = false;
 

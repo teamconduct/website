@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, LOCALE_ID, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
-import { AuthSignInComponent } from '../auth-sign-in/auth-sign-in.component';
 import * as PrimeNGTranslationDE from '../../../locale/primeng.de.json';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +10,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, AuthSignInComponent],
+    imports: [RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

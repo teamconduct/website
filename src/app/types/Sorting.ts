@@ -1,5 +1,5 @@
 import { faArrowDown19, faArrowDown91, faArrowDownAZ, faArrowDownShortWide, faArrowDownWideShort, faArrowDownZA, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { entries } from '../utils';
+import { entries } from '@stevenkellner/typescript-common-functionality';
 
 export class Sorting<Key extends string, T> {
 

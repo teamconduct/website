@@ -70,7 +70,7 @@ export class PaypalMeAddEditComponent extends SubmitableForm<{
         if (selectedTeamId === null)
             return 'no-team-id';
         const paypalMeLink = this.get('link')!.value;
-        await this.firebaseFunctions.function('paypalMe').function('edit').call({
+        await this.firebaseFunctions.functions.paypalMe.edit.execute({
             teamId: selectedTeamId,
             paypalMeLink: paypalMeLink === null || paypalMeLink === '' ? null : (paypalMeLink.startsWith('https://') ? paypalMeLink : `https://${paypalMeLink}`)
         });

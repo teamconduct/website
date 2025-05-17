@@ -5,16 +5,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessageComponent } from '../../components/error-message/error-message.component';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { enterLeaveAnimation } from '../../animations/enterLeaveAnimation';
-import { markAllAsDirty } from '../../../utils/markAllAsDirty';
+import { markAllAsDirty } from '../../utils/markAllAsDirty';
 import { FirebaseFunctionsService } from '../../services/firebase-functions.service';
-import { Tagged } from '../../types/Tagged';
-import { Guid } from '../../types/Guid';
 import { Router } from '@angular/router';
 import { appRoutes } from '../../app.routes';
 import { UserManagerService } from '../../services/user-manager.service';
-import { TeamId } from '../../types/Team';
 import { RandomDataGeneratorService } from '../../services/random-data-generator.service';
 import { isProduction } from '../../../environments/environment';
+import { PersonPrivateProperties, Team } from '@stevenkellner/team-conduct-api';
+import { Tagged } from '@stevenkellner/typescript-common-functionality';
 
 @Component({
     selector: 'app-create-team',
@@ -35,7 +34,7 @@ export class CreateTeamPage {
         personLastName: new FormControl<string | null>(null)
     });
 
-    private firebaseFunctionsService = inject(FirebaseFunctionsService);
+    private firebaseFunctions = inject(FirebaseFunctionsService);
 
     private userManager = inject(UserManagerService);
 
@@ -56,16 +55,13 @@ export class CreateTeamPage {
         this.createTeamState = 'loading';
 
         try {
-            const teamId: TeamId = new Tagged(Guid.generate(), 'team');
-            const user = await this.firebaseFunctionsService.function('team').function('new').call({
+            const teamId: Team.Id = Tagged.generate('team');
+            const user = await this.firebaseFunctions.functions.team.new.execute({
                 id: teamId,
                 name: this.teamForm.get('name')!.value!,
                 paypalMeLink: null,
-                personId: new Tagged(Guid.generate(), 'person'),
-                personProperties: {
-                    firstName: this.teamForm.get('personFirstName')!.value!,
-                    lastName: this.teamForm.get('personLastName')!.value
-                }
+                personId: Tagged.generate('person'),
+                personProperties: new PersonPrivateProperties(this.teamForm.get('personFirstName')!.value!, this.teamForm.get('personLastName')!.value)
             });
             this.userManager.setUser(user);
             this.userManager.setTeamId(teamId);
@@ -73,7 +69,7 @@ export class CreateTeamPage {
             if (!isProduction)
                 await this.randomDataGenerator.createTestData();
 
-        } catch (error) {
+        } catch {
             this.createTeamState = 'team-create-failed';
             this.changeDetectorRef.markForCheck();
             return;

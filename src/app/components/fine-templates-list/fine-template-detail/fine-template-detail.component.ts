@@ -4,10 +4,10 @@ import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-import { FineTemplate, FineTemplateRepetition } from '../../../types';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { AsyncPipe } from '@angular/common';
+import { FineTemplate, FineTemplateRepetition } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fine-template-detail',
@@ -42,8 +42,8 @@ export class FineTemplateDetailComponent {
         return this.userManager.hasRole('fineTemplate-manager');
     }
 
-    public repetitionDescription(multiple: Exclude<FineTemplate['repetition'], null>): string {
-        return FineTemplateRepetition.description(multiple);
+    public repetitionDescription(multiple: FineTemplateRepetition): string {
+        return FineTemplateRepetition.Item.formatted(multiple.item);
     }
 
     public showDeleteConfirmation(event: Event) {
@@ -65,7 +65,7 @@ export class FineTemplateDetailComponent {
             return;
         this.deleteLoading = true;
 
-        await this.firebaseFunctions.function('fineTemplate').function('delete').call({
+        await this.firebaseFunctions.functions.fineTemplate.delete.execute({
             teamId: selectedTeamId,
             id: this.fineTemplate.id
         });

@@ -1,8 +1,7 @@
+import { FineAmount, MoneyAmount } from '@stevenkellner/team-conduct-api';
 import { SummedFineValue } from '../types/SummedFineValue';
 import { inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
-import { MoneyAmount } from '../types';
-import { FineAmount } from '../types/FineAmount';
-import { entries } from '../utils';
+import { entries } from '@stevenkellner/typescript-common-functionality';
 
 @Pipe({
     name: 'fineAmount',

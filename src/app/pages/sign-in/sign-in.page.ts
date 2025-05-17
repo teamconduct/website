@@ -6,8 +6,8 @@ import { FunctionsError, FunctionsErrorCodeCore } from '@angular/fire/functions'
 import { ActivatedRoute, Router } from '@angular/router';
 import { appRoutes } from '../../app.routes';
 import { UserManagerService } from '../../services/user-manager.service';
-import { Tagged } from '../../types/Tagged';
-import { User } from '../../types';
+import { Tagged } from '@stevenkellner/typescript-common-functionality';
+import { User } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-sign-in',
@@ -19,7 +19,7 @@ import { User } from '../../types';
 })
 export class SignInPage {
 
-    private firebaseFunctionsService = inject(FirebaseFunctionsService);
+    private firebaseFunctions = inject(FirebaseFunctionsService);
 
     private userManager = inject(UserManagerService);
 
@@ -48,7 +48,7 @@ export class SignInPage {
         if (invitationId === null)
             return 'no-invitation';
         try {
-            const user = await this.firebaseFunctionsService.function('invitation').function('register').call(new Tagged(invitationId, 'invitation'));
+            const user = await this.firebaseFunctions.functions.invitation.register.execute(new Tagged(invitationId, 'invitation'));
             return await this.setUserAndNavigateToHome(user);
         } catch (error) {
             if ((error as FunctionsError).code as FunctionsErrorCodeCore === 'not-found')
@@ -61,7 +61,7 @@ export class SignInPage {
 
     private async getUserAndNavigateToHome(): Promise<'not-found' | string | null> {
         try {
-            const user = await this.firebaseFunctionsService.function('user').function('login').call(null);
+            const user = await this.firebaseFunctions.functions.user.login.execute(null);
             return await this.setUserAndNavigateToHome(user);
         } catch (error) {
             if ((error as FunctionsError).code as FunctionsErrorCodeCore === 'not-found')
@@ -73,7 +73,7 @@ export class SignInPage {
     private async setUserAndNavigateToHome(user: User): Promise<string | null> {
         this.userManager.setUser(user);
         if (!user.teams.isEmpty)
-            this.userManager.setTeamId(Tagged.guid(user.teams.keys[0], 'team'));
+            this.userManager.setTeamId(user.teams.keys[0]);
         const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]);
         if (!navigationSuccessful)
             return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;

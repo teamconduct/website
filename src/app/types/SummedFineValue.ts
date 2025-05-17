@@ -1,6 +1,5 @@
-import { keys, values } from '../utils';
-import { MoneyAmount } from './MoneyAmount';
-import { FineAmount } from './FineAmount';
+import { FineAmount, MoneyAmount } from '@stevenkellner/team-conduct-api';
+import { values, keys } from '@stevenkellner/typescript-common-functionality';
 
 export class SummedFineValue {
 

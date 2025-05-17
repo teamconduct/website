@@ -2,8 +2,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Tag, TagModule } from 'primeng/tag';
 import { FineDetailComponent } from '../fine-detail/fine-detail.component';
-import { Fine, PayedState, PersonId } from '../../../types';
 import { FineAddEditComponent } from '../fine-add-edit/fine-add-edit.component';
+import { Fine, PayedState, Person } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fine-detail-add-edit',
@@ -19,7 +19,7 @@ export class FineDetailAddEditComponent implements OnChanges {
 
     @Output() public readonly visibleChange = new EventEmitter<boolean>();
 
-    @Input() public personId: PersonId | null = null;
+    @Input() public personId: Person.Id | null = null;
 
     @Input() public fine: Fine | null = null;
 

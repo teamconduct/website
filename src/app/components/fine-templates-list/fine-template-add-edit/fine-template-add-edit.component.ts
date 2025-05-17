@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MoneyAmount, FineTemplate, FineTemplateRepetition } from '../../../types';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
-import { Tagged } from '../../../types/Tagged';
 import { UserManagerService } from '../../../services/user-manager.service';
 import { SubmitableForm } from '../../../types/SubmitableForm';
 import { AddEditFormDialogComponent } from '../../add-edit-form-dialog/add-edit-form-dialog.component';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
-import { FineAmount } from '../../../types/FineAmount';
+import { FineAmount, FineTemplate, FineTemplateRepetition, MoneyAmount } from '@stevenkellner/team-conduct-api';
+import { Tagged } from '@stevenkellner/typescript-common-functionality';
 
 @Component({
     selector: 'app-fine-template-add-edit',
@@ -83,7 +82,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
                 key: 'amount'
             },
             ...FineAmount.Item.Type.all.map(item => ({
-                label: FineAmount.Item.Type.description(item),
+                label: FineAmount.Item.Type.formatted(item),
                 key: item
             }))
         ];
@@ -93,8 +92,8 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
         const fineValueType = this.get('fineValueType')!.value;
         if (fineValueType === null || fineValueType === 'amount')
             return '';
-        const count = this.get('fineValueItemCount')!.value;
-        return FineAmount.Item.Type.description(fineValueType, count !== 1);
+        const count = this.get('fineValueItemCount')!.value ?? 0;
+        return new FineAmount.Item(fineValueType, count).formattedWithoutCount();
     }
 
     public get multipleOptions(): { label: string, key: FineTemplateRepetition.Item | 'none' }[] {
@@ -104,7 +103,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
                 key: 'none'
             },
             ...FineTemplateRepetition.Item.all.map(item => ({
-                label: FineTemplateRepetition.Item.description(item),
+                label: FineTemplateRepetition.Item.formatted(item),
                 key: item
             }))
         ];
@@ -154,7 +153,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
         const fineValueType = this.get('fineValueType')!.value!;
         switch (fineValueType) {
         case 'amount':
-            amount = FineAmount.money(MoneyAmount.from(this.get('amount')!.value!));
+            amount = FineAmount.money(MoneyAmount.builder.build(this.get('amount')!.value!));
             break;
         default:
             amount = FineAmount.item(fineValueType, this.get('fineValueItemCount')!.value!);
@@ -163,20 +162,17 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
 
         let repetition: FineTemplateRepetition | null = null;
         const multipleItem = this.get('multipleItem')!.value;
-        if (multipleItem !== null && multipleItem !== 'none') {
-            repetition = {
-                item: multipleItem,
-                maxCount: this.get('multipleMaxCount')!.value
-            };
-        }
-        await this.firebaseFunctions.function('fineTemplate').function(this.fineTemplate === null ? 'add' : 'update').call({
+        if (multipleItem !== null && multipleItem !== 'none')
+            repetition = new FineTemplateRepetition(multipleItem, this.get('multipleMaxCount')!.value);
+        const addOrUpdateFunction = this.fineTemplate === null ? this.firebaseFunctions.functions.fineTemplate.add : this.firebaseFunctions.functions.fineTemplate.update;
+        await addOrUpdateFunction.execute({
             teamId: selectedTeamId,
-            fineTemplate: {
-                id: this.fineTemplate === null ? Tagged.generate('fineTemplate') : this.fineTemplate.id,
-                reason: this.get('reason')!.value!,
-                amount: amount,
-                repetition: repetition
-            }
+            fineTemplate: new FineTemplate(
+                this.fineTemplate === null ? Tagged.generate('fineTemplate') : this.fineTemplate.id,
+                this.get('reason')!.value!,
+                amount,
+                repetition
+            )
         });
     }
 }

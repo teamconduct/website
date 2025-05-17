@@ -1,12 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { PersonId, MoneyAmount } from '../types';
-import { Tagged } from '../types/Tagged';
-import { TeamId } from '../types/Team';
-import { UtcDate } from '../types/UtcDate';
 import { UserManagerService } from './user-manager.service';
 import { FirebaseFunctionsService } from './firebase-functions.service';
 import { configuration, isProduction } from '../../environments/environment';
-import { FineAmount } from '../types/FineAmount';
+import { FineAmount, Person, MoneyAmount, Team, PersonPrivateProperties, FineTemplateRepetition, FineTemplate, Fine } from '@stevenkellner/team-conduct-api';
+import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
 
 @Injectable({
     providedIn: 'root'
@@ -15,54 +12,48 @@ export class RandomDataGeneratorService {
 
     private userManager = inject(UserManagerService);
 
-    private firebaseFunctionsService = inject(FirebaseFunctionsService);
+    private firebaseFunctions = inject(FirebaseFunctionsService);
 
-    private async createTestPersons(teamId: TeamId, personId: PersonId): Promise<PersonId[]> {
-        const personIds: PersonId[] = [personId];
+    private async createTestPersons(teamId: Team.Id, personId: Person.Id): Promise<Person.Id[]> {
+        const personIds: Person.Id[] = [personId];
         await Promise.all(new Array(10).fill(null).map(async (_, i) => {
-            const personId: PersonId = Tagged.generate('person');
+            const personId: Person.Id = Tagged.generate('person');
             personIds.push(personId);
-            await this.firebaseFunctionsService.function('person').function('add').call({
+            await this.firebaseFunctions.functions.person.add.execute({
                 teamId: teamId,
                 id: personId,
-                properties: {
-                    firstName: `Test${i}`,
-                    lastName: 'Person'
-                }
+                properties: new PersonPrivateProperties(`Test${i}`, 'Person')
             });
         }));
         return personIds;
     }
 
-    private async createTestFineTemplates(teamId: TeamId) {
+    private async createTestFineTemplates(teamId: Team.Id) {
         await Promise.all(new Array(50).fill(null).map(async (_, i) => {
-            await this.firebaseFunctionsService.function('fineTemplate').function('add').call({
+            await this.firebaseFunctions.functions.fineTemplate.add.execute({
                 teamId: teamId,
-                fineTemplate: {
-                    id: Tagged.generate('fineTemplate'),
-                    reason: `Test Fine Template ${i}`,
-                    amount: Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i),
-                    repetition: Math.random() < 0.5 ? null : {
-                        item: 'item',
-                        maxCount: Math.random() < 0.5 ? null : Math.floor(Math.random() * 10)
-                    }
-                }
+                fineTemplate: new FineTemplate(
+                    Tagged.generate('fineTemplate'),
+                    `Test Fine Template ${i}`,
+                    Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i),
+                    Math.random() < 0.5 ? null : new FineTemplateRepetition('item', Math.random() < 0.5 ? null : Math.floor(Math.random() * 10))
+                )
             });
         }));
     }
 
-    private async createTestFines(teamId: TeamId, personIds: PersonId[]) {
+    private async createTestFines(teamId: Team.Id, personIds: Person.Id[]) {
         await Promise.all(new Array(100).fill(null).map(async (_, i) => {
-            await this.firebaseFunctionsService.function('fine').function('add').call({
+            await this.firebaseFunctions.functions.fine.add.execute({
                 teamId: teamId,
                 personId: personIds[Math.floor(Math.random() * personIds.length)],
-                fine: {
-                    id: Tagged.generate('fine'),
-                    reason: `Test Fine ${i}`,
-                    amount: Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i),
-                    date: UtcDate.now,
-                    payedState: Math.random() < 0.5 ? 'payed' : 'notPayed'
-                },
+                fine: new Fine(
+                    Tagged.generate('fine'),
+                    Math.random() < 0.5 ? 'payed' : 'notPayed',
+                    UtcDate.now,
+                    `Test Fine ${i}`,
+                    Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i)
+                ),
                 configuration: configuration
             });
         }));

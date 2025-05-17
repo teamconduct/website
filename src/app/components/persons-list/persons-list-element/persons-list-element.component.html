@@ -96,5 +96,5 @@
 
 @if (person !== null) {
     <app-fine-detail-add-edit [personId]="person.id" [(visible)]="addFineDialogVisible" />
-    <app-person-add-edit [(visible)]="editPersonDialogVisible" [person]="person" />
+    <app-person-add-edit [(visible)]="editPersonDialogVisible" [person]="person.person" />
 }

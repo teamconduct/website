@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
-import { Fine, PersonId } from '../../types';
 import { DataViewModule } from 'primeng/dataview';
 import { FinesListElementComponent } from './fines-list-element/fines-list-element.component';
 import { DropdownModule } from 'primeng/dropdown';
@@ -9,7 +8,7 @@ import { Sorting } from '../../types/Sorting';
 import { Observable } from '../../types/Observable';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { AsyncPipe } from '@angular/common';
-import { FineAmount } from '../../types/FineAmount';
+import { Fine, FineAmount, Person } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fines-list',
@@ -21,7 +20,7 @@ import { FineAmount } from '../../types/FineAmount';
 })
 export class FinesListComponent {
 
-    @Input({ required: true }) public personId!: PersonId | null;
+    @Input({ required: true }) public personId!: Person.Id | null;
 
     @Input() public isPreview: boolean = false;
 

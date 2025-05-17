@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FineAmountPipe } from '../../../pipes/fineAmount.pipe';
 import { FineTemplateDetailAddEditComponent } from '../fine-template-detail-add-edit/fine-template-detail-add-edit.component';
-import { FineTemplate, FineTemplateRepetition } from '../../../types';
 import { SkeletonModule } from 'primeng/skeleton';
+import { FineTemplate, FineTemplateRepetition } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fine-templates-list-element',
@@ -20,7 +20,7 @@ export class FineTemplatesListElementComponent {
 
     public detailsShown: boolean = false;
 
-    public repetitionDescription(multiple: Exclude<FineTemplate['repetition'], null>): string {
-        return FineTemplateRepetition.description(multiple);
+    public repetitionDescription(multiple: FineTemplateRepetition): string {
+        return FineTemplateRepetition.Item.formatted(multiple.item);
     }
 }

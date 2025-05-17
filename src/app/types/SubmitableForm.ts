@@ -1,31 +1,31 @@
 import { AbstractControl, FormGroup, ValidationErrors, ɵFormGroupRawValue } from '@angular/forms';
-import { markAllAsDirty } from '../../utils/markAllAsDirty';
+import { markAllAsDirty } from '../utils/markAllAsDirty';
 import { LoadingState } from './LoadingState';
 import { Observable } from 'rxjs';
 
-type ValidatorFn<TControl extends SubmitableForm.TControlRequirement> = (control: AbstractControl<ɵFormGroupRawValue<TControl>>) => ValidationErrors | null;
-type AsyncValidatorFn<TControl extends SubmitableForm.TControlRequirement> = (control: AbstractControl<ɵFormGroupRawValue<TControl>>) => Promise<ValidationErrors | null> | Observable<ValidationErrors | null>;
+type ValidatorFn<Control extends SubmitableForm.ControlRequirement> = (control: AbstractControl<ɵFormGroupRawValue<Control>>) => ValidationErrors | null;
+type AsyncValidatorFn<Control extends SubmitableForm.ControlRequirement> = (control: AbstractControl<ɵFormGroupRawValue<Control>>) => Promise<ValidationErrors | null> | Observable<ValidationErrors | null>;
 
 export class SubmitableForm<
-    TControl extends SubmitableForm.TControlRequirement = any,
-    TError extends SubmitableForm.TErrorRequirement = never
-> extends FormGroup<TControl> {
+    Control extends SubmitableForm.ControlRequirement = any,
+    Error extends SubmitableForm.ErrorRequirement = never
+> extends FormGroup<Control> {
 
-    public loadingState = new LoadingState<'input' | 'server' | TError>();
+    public loadingState = new LoadingState<'input' | 'server' | Error>();
 
     public successHandlers: (() => void)[] = [];
 
     public errorMessages: {
-        [K in 'input' | 'server' | TError]: string;
+        [K in 'input' | 'server' | Error]: string;
     };
 
     public constructor(
-        controls: TControl,
+        controls: Control,
         errorMessages: {
-            [K in TError]: string;
+            [K in Error]: string;
         },
-        validatorOrOpts?: ValidatorFn<TControl> | ValidatorFn<TControl>[] | null,
-        asyncValidator?: AsyncValidatorFn<TControl> | AsyncValidatorFn<TControl>[] | null
+        validatorOrOpts?: ValidatorFn<Control> | ValidatorFn<Control>[] | null,
+        asyncValidator?: AsyncValidatorFn<Control> | AsyncValidatorFn<Control>[] | null
     ) {
         super(controls, validatorOrOpts, asyncValidator);
         this.errorMessages = {
@@ -35,7 +35,7 @@ export class SubmitableForm<
         };
     }
 
-    protected async submit(): Promise<TError | void> {
+    protected async submit(): Promise<Error | void> {
         throw new Error('Not implemented');
     }
 
@@ -93,9 +93,9 @@ export class SubmitableForm<
 
 export namespace SubmitableForm {
 
-    export type TControlRequirement = {
+    export type ControlRequirement = {
         [K in string]: AbstractControl<any>;
     }
 
-    export type TErrorRequirement = PropertyKey;
+    export type ErrorRequirement = PropertyKey;
 }

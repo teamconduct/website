@@ -1,6 +1,5 @@
 import { Observable } from './../../../types/Observable';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input } from '@angular/core';
-import { Fine, PayedState, PersonId } from '../../../types';
 import { Tag, TagModule } from 'primeng/tag';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions.service';
 import { UserManagerService } from '../../../services/user-manager.service';
@@ -11,6 +10,7 @@ import { FineDetailAddEditComponent } from '../fine-detail-add-edit/fine-detail-
 import { SkeletonModule } from 'primeng/skeleton';
 import { AsyncPipe } from '@angular/common';
 import { configuration } from '../../../../environments/environment';
+import { Fine, PayedState, Person } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-fines-list-element',
@@ -22,7 +22,7 @@ import { configuration } from '../../../../environments/environment';
 })
 export class FinesListElementComponent {
 
-    @Input({ required: true }) public personId!: PersonId | null;
+    @Input({ required: true }) public personId!: Person.Id | null;
 
     @Input({ required: true }) public fine!: Fine | null;
 
@@ -55,13 +55,16 @@ export class FinesListElementComponent {
         if (selectedTeamId === null)
             return;
         this.loading = true;
-        await this.firebaseFunctions.function('fine').function('update').call({
+        await this.firebaseFunctions.functions.fine.update.execute({
             teamId: selectedTeamId,
             personId: this.personId,
-            fine: {
-                ...this.fine,
-                payedState: PayedState.toggled(this.fine.payedState)
-            },
+            fine: new Fine(
+                this.fine.id,
+                PayedState.toggled(this.fine.payedState),
+                this.fine.date,
+                this.fine.reason,
+                this.fine.amount
+            ),
             configuration: configuration
         }).finally(() => {
             this.loading = false;
