@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { UserManagerService } from '../../services/user-manager.service';
-import { appRoutes } from '../../app.routes';
 import { TeamDataManagerService } from '../../services/team-data-manager.service';
 import { AsyncPipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
@@ -13,16 +12,15 @@ import { combine, Observable } from '../../types/Observable';
 import { NotificationService } from '../../services/notification.service';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
-import { FineDetailAddEditComponent } from '../../components/fines-list/fine-detail-add-edit/fine-detail-add-edit.component';
-import { Router } from '@angular/router';
-import { PaypalMeAddEditComponent } from '../../components/paypal-me-add-edit/paypal-me-add-edit.component';
-import { Person, Team, User } from '@stevenkellner/team-conduct-api';
+import { Person, Team } from '@stevenkellner/team-conduct-api';
 import { PersonWithFines } from '../../types/PersonWithFines';
+import { TeamMenuComponent } from '../../components/team-menu/team-menu.component';
+import { PopupDialogHandlerComponent } from '../../components/popup-dialog-handler/popup-dialog-handler.component';
 
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule, FineDetailAddEditComponent, PaypalMeAddEditComponent],
+    imports: [PopupDialogHandlerComponent, MenuModule, AsyncPipe, CardModule, PersonsListElementComponent, PersonsListComponent, FineTemplatesListComponent, ToastModule, ButtonModule, TeamMenuComponent],
     providers: [MessageService],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
@@ -38,69 +36,7 @@ export class HomePage implements OnInit {
 
     private messageService = inject(MessageService);
 
-    private router = inject(Router);
-
     public visibleState: 'persons' | 'fineTemplates' = 'persons';
-
-    public addMultipleFinesDialogVisible = false;
-
-    public editPaypalMeLinkDialogVisible = false;
-
-    public teamMenu(user: User, selectedTeamId: Team.Id | null, canAddFine: boolean, canManageTeam: boolean): MenuItem[] {
-        const teamsItems = user.teams.map<MenuItem>((team, teamId) => ({
-            label: team.name,
-            icon: 'pi pi-fw pi-users',
-            disabled: teamId.guidString === selectedTeamId?.guidString,
-            command: () => {
-                void this.onTeamSelected(teamId);
-            }
-        })).values;
-        return [
-            {
-                label: $localize `:Label for the teams menu item:Your Teams`,
-                items: teamsItems
-            },
-            {
-                label: $localize `:Label for the add team menu item:Manage Your Teams`,
-                items: [
-                    {
-                        label: $localize `:Label for the add team menu item:Add a new team`,
-                        icon: 'pi pi-fw pi-plus',
-                        routerLink: `/${appRoutes.createTeam}`
-                    }
-                ]
-            },
-            ...(canAddFine ? [{
-                label: $localize `:Label for the fines menu item:Manage Fines`,
-                items: [
-                    {
-                        label: 'Add multiple fines',
-                        icon: 'pi pi-fw pi-plus',
-                        command: () => this.addMultipleFinesDialogVisible = true
-                    }
-                ]
-            }] : []),
-            {
-                label: 'Settings',
-                items: [
-                    ...(canManageTeam ? [{
-                        label: $localize `:Label for the edit paypal.me link menu item:Edit paypal.me`,
-                        icon: 'pi pi-fw pi-pencil',
-                        command: () => this.editPaypalMeLinkDialogVisible = true
-                    }] : []),
-                    {
-                        label: $localize `:Label for the sign out menu item:Log Out`,
-                        icon: 'pi pi-fw pi-sign-out',
-                        command: () => {
-                            this.teamDataManager.reset();
-                            this.userManager.reset();
-                            void this.router.navigate([`/${appRoutes.signIn}`]);
-                        }
-                    }
-                ]
-            }
-        ];
-    }
 
     public ngOnInit() {
         this.userManager.getAllCookies();
@@ -109,7 +45,7 @@ export class HomePage implements OnInit {
             void this.onTeamSelected(teamId);
     }
 
-    private async onTeamSelected(teamId: Team.Id) {
+    public async onTeamSelected(teamId: Team.Id) {
         this.userManager.setTeamId(teamId);
         this.teamDataManager.startObserve(teamId);
         this.userManager.currentPersonId$.subscribe(currentPersonId => {

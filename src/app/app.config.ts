@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth, connectAuthEmulator, browserSessionPersistence, browserLocalPersistence } from '@angular/fire/auth';
+import { provideAuth, getAuth, connectAuthEmulator, browserLocalPersistence } from '@angular/fire/auth';
 import { provideFirestore, getFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
 import { provideFunctions, getFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
         provideFirebaseApp(() => initializeApp(firebaseConfig)),
         provideAuth(() => {
             const auth = getAuth();
-            void auth.setPersistence(isProduction ? browserSessionPersistence : browserLocalPersistence);
+            void auth.setPersistence(browserLocalPersistence);
             if (!isProduction)
                 connectAuthEmulator(auth, 'http://localhost:9099');
             return auth;
