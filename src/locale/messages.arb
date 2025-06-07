@@ -1,0 +1,320 @@
+{
+  "@@locale": "en-US",
+  "5544099847888321470": "sign-in",
+  "@5544099847888321470": {
+    "description": "Route name of the sign-in page",
+    "x-locations": [
+      {
+        "file": "src\\app\\app.routes.ts",
+        "start": { "line": "4", "column": "21" },
+        "end": { "line": "4", "column": "62" }
+      }
+    ]
+  },
+  "8776289873539765218": "Create an account / Log in",
+  "@8776289873539765218": {
+    "description": "Title of the sign in form to indicate that this form is used to create a new account or to log in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "1", "column": "142" },
+        "end": { "line": "2", "column": "103" }
+      }
+    ]
+  },
+  "8084561055184170791": "Enter your email to sign up or log in",
+  "@8084561055184170791": {
+    "description": "Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "2", "column": "150" },
+        "end": { "line": "3", "column": "113" }
+      }
+    ]
+  },
+  "4768749765465246664": "Email",
+  "@4768749765465246664": {
+    "description": "Label for the email input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "6", "column": "85" },
+        "end": { "line": "8", "column": "9" }
+      }
+    ]
+  },
+  "1431416938026210429": "Password",
+  "@1431416938026210429": {
+    "description": "Label for the password input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "13", "column": "95" },
+        "end": { "line": "15", "column": "8" }
+      }
+    ]
+  },
+  "3239643240523016729": "Sign in with email",
+  "@3239643240523016729": {
+    "description": "Button label to sign up or log in with email",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "17", "column": "308" },
+        "end": { "line": "18", "column": "11" }
+      }
+    ]
+  },
+  "475077506966252387": "or continue with",
+  "@475077506966252387": {
+    "description": "Label of the divider between sign in with email and the extern auth providers",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "21", "column": "134" },
+        "end": { "line": "23", "column": "62" }
+      }
+    ]
+  },
+  "2658270664535451749": "By clicking sign in, you agree to our {$START_TAG_P_BUTTON}{$CLOSE_TAG_P_BUTTON} and {$START_TAG_P_BUTTON_1}{$CLOSE_TAG_P_BUTTON}",
+  "@2658270664535451749": {
+    "description": "ToS and privacy policy notice",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "29", "column": "104" },
+        "end": { "line": "31", "column": "8" }
+      }
+    ]
+  },
+  "2029980907058777630": "Terms of Service",
+  "@2029980907058777630": {
+    "description": "Label of ToS button",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "29", "column": "227" },
+        "end": { "line": "29", "column": "266" }
+      }
+    ]
+  },
+  "8439955599488894226": "Privacy Policy",
+  "@8439955599488894226": {
+    "description": "Label of privacy policy button",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "29", "column": "365" },
+        "end": { "line": "31", "column": "8" }
+      }
+    ]
+  },
+  "7890467979654511044": "Email is required to sign up / log in",
+  "@7890467979654511044": {
+    "description": "Email is required error message of the email input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "67", "column": "28" },
+        "end": { "line": "67", "column": "125" }
+      }
+    ]
+  },
+  "8876822653942344131": "Please enter a valid email address",
+  "@8876822653942344131": {
+    "description": "Email is invalid error message of the email input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "69", "column": "28" },
+        "end": { "line": "69", "column": "121" }
+      }
+    ]
+  },
+  "3940083321776138863": "Password is required to sign up / log in",
+  "@3940083321776138863": {
+    "description": "Password is required error message of the password input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "77", "column": "28" },
+        "end": { "line": "77", "column": "134" }
+      }
+    ]
+  },
+  "7746429730414842763": "The password must be at least 8 characters long",
+  "@7746429730414842763": {
+    "description": "Password is too short error message of the password input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "79", "column": "28" },
+        "end": { "line": "79", "column": "142" }
+      }
+    ]
+  },
+  "3366629205775458860": "Please fill out all fields correctly",
+  "@3366629205775458860": {
+    "description": "Email error validation failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "90", "column": "28" },
+        "end": { "line": "90", "column": "97" }
+      },
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "105", "column": "28" },
+        "end": { "line": "105", "column": "98" }
+      },
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "124", "column": "28" },
+        "end": { "line": "124", "column": "97" }
+      }
+    ]
+  },
+  "7722857804483642989": "Password is wrong",
+  "@7722857804483642989": {
+    "description": "Email error wrong error",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "92", "column": "28" },
+        "end": { "line": "92", "column": "72" }
+      }
+    ]
+  },
+  "1097389982787111158": "An unknown error occured",
+  "@1097389982787111158": {
+    "description": "Email error unknown",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "94", "column": "28" },
+        "end": { "line": "94", "column": "75" }
+      },
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "111", "column": "28" },
+        "end": { "line": "111", "column": "76" }
+      },
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "130", "column": "28" },
+        "end": { "line": "130", "column": "75" }
+      }
+    ]
+  },
+  "3061048393445832": "Popup to sign in with google was closed by user",
+  "@3061048393445832": {
+    "description": "Google error popup canceled",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "107", "column": "28" },
+        "end": { "line": "107", "column": "106" }
+      }
+    ]
+  },
+  "2421501983410504543": "Popup to sign in with google could not be shown, it was blocked by the browser",
+  "@2421501983410504543": {
+    "description": "Google error popup blocked",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "109", "column": "28" },
+        "end": { "line": "109", "column": "136" }
+      }
+    ]
+  },
+  "6289197923746633087": "Popup to sign in with apple was closed by user",
+  "@6289197923746633087": {
+    "description": "Apple error popup canceled",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "126", "column": "28" },
+        "end": { "line": "126", "column": "104" }
+      }
+    ]
+  },
+  "8637614294145504793": "Popup to sign in with apple could not be shown, it was blocked by the browser",
+  "@8637614294145504793": {
+    "description": "Apple error popup blocked",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.ts",
+        "start": { "line": "128", "column": "28" },
+        "end": { "line": "128", "column": "134" }
+      }
+    ]
+  },
+  "2734138791192936323": "Sign in with Google",
+  "@2734138791192936323": {
+    "description": "Button label to sign up or log in with google",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\third-party-sign-in-button\\third-party-sign-in-button.component.ts",
+        "start": { "line": "31", "column": "28" },
+        "end": { "line": "31", "column": "96" }
+      }
+    ]
+  },
+  "1038185929905161208": "Sign in with Apple",
+  "@1038185929905161208": {
+    "description": "Button label to sign up or log in with apple",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\third-party-sign-in-button\\third-party-sign-in-button.component.ts",
+        "start": { "line": "33", "column": "28" },
+        "end": { "line": "33", "column": "94" }
+      }
+    ]
+  },
+  "5955781189799230147": "Invitation code is invalid.",
+  "@5955781189799230147": {
+    "description": "Error message that sign in has failed with invalid invitation code",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "52", "column": "32" },
+        "end": { "line": "52", "column": "129" }
+      }
+    ]
+  },
+  "5645866542114353661": "Invitation code has already been used.",
+  "@5645866542114353661": {
+    "description": "Error message that sign in has failed with already used invitation code",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "54", "column": "32" },
+        "end": { "line": "54", "column": "145" }
+      }
+    ]
+  },
+  "5841334648912496777": "Failed to sign in with invitation code.",
+  "@5841334648912496777": {
+    "description": "Error message that sign in has failed with invitation code",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "55", "column": "28" },
+        "end": { "line": "55", "column": "129" }
+      }
+    ]
+  },
+  "5653410371593717174": "Failed to sign in.",
+  "@5653410371593717174": {
+    "description": "Error message that sign in has failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "66", "column": "28" },
+        "end": { "line": "66", "column": "87" }
+      }
+    ]
+  }
+}

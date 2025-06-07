@@ -72,6 +72,12 @@
             "type": "shell",
             "command": "ng g s services/${input:serviceName}/${input:serviceName} --type service",
             "problemMatcher": []
+        },
+        {
+            "label": "ng: extract i18n",
+            "type": "shell",
+            "command": "ng extract-i18n --output-path=src/locale --format=arb",
+            "problemMatcher": []
         }
     ]
 }
