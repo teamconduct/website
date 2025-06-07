@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { PersonWithFines } from '../../types/PersonWithFines';
+import { PersonWithFines } from '../../../types/PersonWithFines';
 import { AsyncPipe } from '@angular/common';
-import { Observable, SummedFineValue } from '../../types';
-import { UserManagerService } from '../../services/user-manager/user-manager.service';
-import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
-import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
+import { Observable, SummedFineValue } from '../../../types';
+import { UserManagerService } from '../../../services/user-manager/user-manager.service';
+import { TeamDataManagerService } from '../../../services/team-data-manager/team-data-manager.service';
+import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
 import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { ButtonModule } from 'primeng/button';
-import { routeNames } from '../../app.routes';
+import { routeNames } from '../../../app.routes';
 import { Invitation, PayedState } from '@stevenkellner/team-conduct-api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Tag, TagModule } from 'primeng/tag';
-import { FineAmountPipe } from '../../pipes/fine-amount/fine-amount.pipe';
+import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 

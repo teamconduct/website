@@ -11,7 +11,7 @@ import { MenuComponent } from '../../components/menu/menu.component';
 import { PopupDialogHandlerComponent } from '../../components/popup-dialog-handler/popup-dialog-handler.component';
 import { Observable } from '../../types';
 import { PersonWithFines } from '../../types/PersonWithFines';
-import { PersonDetailComponent } from '../../components/person-detail/person-detail.component';
+import { PersonDetailComponent } from '../../components/person/person-detail/person-detail.component';
 
 @Component({
     selector: 'page-home',
