@@ -16,10 +16,11 @@ import { Tag, TagModule } from 'primeng/tag';
 import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
+import { FineListComponent } from '../../fine/fine-list/fine-list.component';
 
 @Component({
     selector: 'app-person-detail',
-    imports: [AsyncPipe, ButtonModule, ConfirmPopupModule, SkeletonModule, TagModule, FontAwesomeModule, FineAmountPipe],
+    imports: [AsyncPipe, ButtonModule, ConfirmPopupModule, SkeletonModule, TagModule, FontAwesomeModule, FineAmountPipe, FineListComponent],
     providers: [ConfirmationService],
     templateUrl: './person-detail.component.html',
     styleUrl: './person-detail.component.scss',
