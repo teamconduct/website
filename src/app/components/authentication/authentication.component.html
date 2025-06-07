@@ -27,5 +27,5 @@
         <app-third-party-sign-in-button (onClick)="signInWithApple()" type="apple" [loading]="signInService.currentProviderType === 'apple'" [disabled]="signInService.currentProviderType !== null" [invalid]="appleSignInProvider.error !== null" class="w-full pt-3" />
         <app-error-message [message]="signInAppleErrorMessage" class="w-full" />
     </div>
-    <p i18n="ToS and privacy policy notice" class="my-0 pt-4 text-color-secondary text-center">By clicking sign in, you agree to our <p-button [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" /> and <p-button [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" /></p>
+    <p i18n="ToS and privacy policy notice" class="my-0 pt-4 text-color-secondary text-center">By clicking sign in, you agree to our <p-button (onClick)="shownTermsOfService()" [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" /> and <p-button (onClick)="showPrivacyPolicy()" [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" /></p>
 </div>

@@ -7,6 +7,7 @@ import { FunctionsError } from '@stevenkellner/firebase-function';
 import { FunctionsErrorCodeCore } from '@angular/fire/functions';
 import { User } from '@stevenkellner/team-conduct-api';
 import { AuthenticationComponent } from '../../components/authentication/authentication.component';
+import { routeNames } from '../../app.routes';
 
 @Component({
     selector: 'page-sign-in',
@@ -35,9 +36,9 @@ export class SignInPage {
         if (loginResult !== 'not-found')
             return loginResult;
 
-        // const navigationSuccessful = await this.router.navigate([`/${routeNames.createTeam}`]); TODO navigation to create team page
-        // if (!navigationSuccessful)
-        //     return $localize `:Error message that navigation to sign up page has failed:Failed to navigate to the sign up page.`;
+        const navigationSuccessful = await this.router.navigate([`/${routeNames.createTeam}`]);
+        if (!navigationSuccessful)
+            return $localize `:Error message that navigation to sign up page has failed:Failed to navigate to the sign up page.`;
         return null;
     }
 

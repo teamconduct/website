@@ -61,6 +61,14 @@ export class AuthenticationComponent {
         this.changeDetectorRef.markForCheck();
     }
 
+    public shownTermsOfService() {
+        // TODO
+    }
+
+    public showPrivacyPolicy() {
+        // TODO
+    }
+
     public get loginFormEmailErrorMessage(): string | null {
         if (!this.loginForm.get('email')!.invalid || !this.loginForm.get('email')!.dirty)
             return null;

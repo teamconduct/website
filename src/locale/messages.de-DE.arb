@@ -22,7 +22,7 @@
       }
     ]
   },
-  "8084561055184170791": " Geben Sie Ihre E-Mail-Adresse ein, um sich anzumelden oder ein Konto zu erstellen",
+  "8084561055184170791": "Geben Sie Ihre E-Mail-Adresse ein, um sich anzumelden oder ein Konto zu erstellen",
   "@8084561055184170791": {
     "description": "Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in",
     "x-locations": [
@@ -110,7 +110,7 @@
       }
     ]
   },
-  "7890467979654511044": "-Mail ist erforderlich, um sich anzumelden oder ein Konto zu erstellen",
+  "7890467979654511044": "Mail ist erforderlich, um sich anzumelden oder ein Konto zu erstellen",
   "@7890467979654511044": {
     "description": "Email is required error message of the email input field",
     "x-locations": [

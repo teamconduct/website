@@ -54,6 +54,7 @@ export const appConfig: ApplicationConfig = {
         }),
         provideFunctions(() => {
             const functions = getFunctions();
+            functions.region = 'europe-west1';
             if (!isProduction)
                 connectFunctionsEmulator(functions, 'localhost', 5001);
             return functions;

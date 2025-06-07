@@ -22,7 +22,7 @@ export class ThirdPartySignInButtonComponent {
     public readonly onClick = output<void>();
 
     public clicked() {
-        if (!this.loading && !this.disabled)
+        if (!this.loading() && !this.disabled())
             this.onClick.emit();
     }
 
