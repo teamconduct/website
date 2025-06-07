@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { Person, Team } from '@stevenkellner/team-conduct-api';
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
@@ -5,12 +6,16 @@ import { TeamDataManagerService } from '../../services/team-data-manager/team-da
 import { MessageService } from 'primeng/api';
 import { NotificationService } from '../../services/notification/notification.service';
 import { ToastModule } from 'primeng/toast';
+import { CardModule } from 'primeng/card';
 import { MenuComponent } from '../../components/menu/menu.component';
 import { PopupDialogHandlerComponent } from '../../components/popup-dialog-handler/popup-dialog-handler.component';
+import { Observable } from '../../types';
+import { PersonWithFines } from '../../types/PersonWithFines';
+import { PersonDetailComponent } from '../../components/person-detail/person-detail.component';
 
 @Component({
     selector: 'page-home',
-    imports: [ToastModule, PopupDialogHandlerComponent, MenuComponent],
+    imports: [AsyncPipe, ToastModule, PopupDialogHandlerComponent, MenuComponent, CardModule, PersonDetailComponent],
     providers: [MessageService, MenuComponent],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
@@ -58,5 +63,13 @@ export class HomePage implements OnInit {
             });
         }
         await this.notificationService.subscribe(teamId, personId, 'new-fine', 'fine-state-change', 'fine-reminder');
+    }
+
+    public get signedInPerson$(): Observable<PersonWithFines | null> {
+        return Observable.combine(this.userManager.currentPersonId$, this.teamDataManager.persons$, (currentPersonId, persons) => {
+            if (currentPersonId === null || !persons.has(currentPersonId))
+                return null;
+            return persons.get(currentPersonId);
+        });
     }
 }

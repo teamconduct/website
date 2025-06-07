@@ -1,0 +1,85 @@
+<div class="flex flex-column align-items-center justify-content-start w-full my-3">
+    <div class="flex flex-column align-items-center justify-content-start w-full">
+        @let paypalMeLink = paypalMeLink$ | async;
+        @let canInvitePerson = (canInvitePerson$ | async) ?? false;
+        @let canAddFine = (canAddFine$ | async) ?? false;
+        @let canEditPerson = (canEditPerson$ | async) ?? false;
+        @let canDeletePerson = (canDeletePerson$ | async) ?? false;
+        @if (paypalMeLink !== null || canInvitePerson || canAddFine || canEditPerson || canDeletePerson) {
+            <div class="flex flex-row align-items-center justify-content-end w-full mb-2">
+
+                @if (paypalMeLink !== null) {
+                    <a [href]="paypalMeLink" target="_blank" class="p-button flex flex-row align-items-center justify-content-center mr-2 no-underline">
+                        <fa-icon [icon]="['fab', 'paypal']" />
+                        <p class="text-lg my-0 ml-2" i18n="Label of pay with PayPal.me link button">Pay now with PayPal</p>
+                    </a>
+                }
+
+                @if (canInvitePerson) {
+                    <p-button i18n-label="Button label to invite person" label="Invite person" (onClick)="showInvitationDialog($event); $event.stopPropagation()" styleClass="mr-2">
+                        <ng-template pTemplate="icon">
+                            <fa-icon [icon]="['far', 'envelope']" class="mr-2" />
+                        </ng-template>
+                    </p-button>
+                }
+
+                @if (canAddFine || canEditPerson || canDeletePerson) {
+                    <div class="flex flex-row align-items-center justify-content-center">
+                        @if (canDeletePerson) {
+                            <p-confirmPopup styleClass="pt-3" />
+                            <p-button i18n-label="Button label to edit person" label="Delete person" (onClick)="showDeleteConfirmation($event); $event.stopPropagation()" severity="danger" [loading]="deleteLoading" [disabled]="deleteLoading" [styleClass]="canEditPerson || canAddFine ? ' border-noround-right' : ''">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['far', 'trash-can']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                        @if (canEditPerson) {
+                            <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="editPersonDialogVisible = true; $event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['far', 'pen-to-square']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                        @if (canAddFine) {
+                            <p-button i18n-label="Button label to add a new fine to person" label="Add fine" (onClick)="addFineDialogVisible = true; $event.stopPropagation()" [styleClass]="canEditPerson || canDeletePerson ? ' border-noround-left' : ''">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        <div class="flex flex-row align-items-center justify-content-start w-full mb-3">
+            @let _person = person();
+            @if (_person !== null) {
+                <p class="text-color font-bold text-4xl my-0">{{ _person.name }}</p>
+            } @else {
+                <p-skeleton height="2rem" width="45%" />
+            }
+        </div>
+        <div class="flex flex-row align-items-center justify-content-evenly w-full mb-5">
+            @for (payedTag of [payedTags.total, payedTags.notPayed, payedTags.payed]; track payedTag.label) {
+                <p-tag [severity]="payedTag.severity" class="px-2 mx-2" styleClass="py-2 px-3">
+                    <div class="flex flex-column align-items-center justify-content-center">
+                        <div class="flex flex-row align-items-center justify-content-start mb-2 mx-5">
+                            <fa-icon [icon]="payedTag.icon" size="xl" class="mr-2" />
+                            <p class="text-lg font-semibold my-0">{{ payedTag.label }}</p>
+                        </div>
+                        @if (payedTag.value !== null) {
+                            <p class="text-lg text-center font-semibold my-0">{{ payedTag.value | fineAmount }}</p>
+                        } @else {
+                            <p-skeleton height="1.5rem" width="7.5rem" styleClass="mx-auto" />
+                        }
+                    </div>
+                </p-tag>
+            }
+        </div>
+    </div>
+    <!-- app-fines-list [personId]="person !== null ? person.id : null" [isPreview]="preview" class="w-85" /-->
+</div>
+
+<!-- app-fine-detail-add-edit [personId]="person.id" [(visible)]="addFineDialogVisible" /-->
+
+<!-- app-person-add-edit [(visible)]="editPersonDialogVisible" [person]="person.person" /-->

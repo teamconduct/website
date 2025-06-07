@@ -19,6 +19,20 @@ p {
     width: 50vw;
 }
 
+.w-90vw {
+    width: 90vw;
+}
+
+@media screen and (min-width: 768px) {
+    .md\:w-50vw {
+        width: 50vw;
+    }
+
+    .md\:w-90vw {
+        width: 90vw;
+    }
+}
+
 .w-85 {
     width: 85%;
 }
