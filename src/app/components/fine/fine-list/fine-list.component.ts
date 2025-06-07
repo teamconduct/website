@@ -8,10 +8,11 @@ import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DropdownModule } from 'primeng/dropdown';
+import { FineListElementComponent } from '../fine-list-element/fine-list-element.component';
 
 @Component({
     selector: 'app-fine-list',
-    imports: [AsyncPipe, DataViewModule, ButtonModule, FontAwesomeModule, DropdownModule],
+    imports: [AsyncPipe, DataViewModule, ButtonModule, FontAwesomeModule, DropdownModule, FineListElementComponent],
     templateUrl: './fine-list.component.html',
     styleUrl: './fine-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -18,7 +18,7 @@
 
                 @if (canInvitePerson) {
                     <p-button i18n-label="Button label to invite person" label="Invite person" (onClick)="showInvitationDialog($event); $event.stopPropagation()" styleClass="md:mr-2 md:mb-0 mb-2">
-                        <ng-template pTemplate="icon">
+                        <ng-template #icon>
                             <fa-icon [icon]="['far', 'envelope']" class="mr-2" />
                         </ng-template>
                     </p-button>
@@ -29,21 +29,21 @@
                         @if (canDeletePerson) {
                             <p-confirmPopup styleClass="pt-3" />
                             <p-button i18n-label="Button label to edit person" label="Delete person" (onClick)="showDeleteConfirmation($event); $event.stopPropagation()" severity="danger" [loading]="deleteLoading" [disabled]="deleteLoading" [styleClass]="canEditPerson || canAddFine ? ' border-noround-right' : ''">
-                                <ng-template pTemplate="icon">
+                                <ng-template #icon>
                                     <fa-icon [icon]="['far', 'trash-can']" class="mr-2" />
                                 </ng-template>
                             </p-button>
                         }
                         @if (canEditPerson) {
                             <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="editPersonDialogVisible = true; $event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
-                                <ng-template pTemplate="icon">
+                                <ng-template #icon>
                                     <fa-icon [icon]="['far', 'pen-to-square']" class="mr-2" />
                                 </ng-template>
                             </p-button>
                         }
                         @if (canAddFine) {
                             <p-button i18n-label="Button label to add a new fine to person" label="Add fine" (onClick)="addFineDialogVisible = true; $event.stopPropagation()" [styleClass]="canEditPerson || canDeletePerson ? ' border-noround-left' : ''">
-                                <ng-template pTemplate="icon">
+                                <ng-template #icon>
                                     <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
                                 </ng-template>
                             </p-button>
