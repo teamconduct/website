@@ -1,5 +1,0 @@
-@let user = userManager.user$ | async;
-@let selectedTeamId = userManager.selectedTeamId$ | async;
-@let canAddFine = (userManager.hasRole('fine-manager') | async) ?? false;
-@let canManageTeam = (userManager.hasRole('team-manager') | async) ?? false;
-<p-menu [model]="getTeamMenu(user, selectedTeamId, canAddFine, canManageTeam)" class="fixed" />

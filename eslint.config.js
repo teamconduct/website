@@ -5,7 +5,7 @@ const angular = require('angular-eslint');
 
 module.exports = tseslint.config(
     {
-        files: ['**/*.ts', '**/*.js'],
+        files: ['**/*.ts'],
         extends: [
             eslint.configs.recommended,
             ...tseslint.configs.recommended,
@@ -13,36 +13,25 @@ module.exports = tseslint.config(
             ...angular.configs.tsAll
         ],
         processor: angular.processInlineTemplates,
-        languageOptions: {
-            parserOptions: {
-                project: 'tsconfig.(app|spec).json',
-            }
-        },
         rules: {
-            '@angular-eslint/directive-selector': ['error', {
-                type: 'attribute',
-                prefix: 'app',
-                style: 'camelCase'
-            }],
             '@angular-eslint/component-selector': ['error', {
                 type: 'element',
-                prefix: 'app',
+                prefix: ['page', 'app'],
                 style: 'kebab-case'
             }],
-            'quotes': ['error', 'single'],
+            '@angular-eslint/component-class-suffix': ['error', {
+                suffixes: ['Page', 'Component', 'App']
+            }],
+            'quotes': ['error', 'single', { avoidEscape: true }],
             'indent': ['error', 4],
-            'comma-dangle': ['error', 'never'],
-            '@typescript-eslint/no-inferrable-types': 'off',
-            '@angular-eslint/no-output-on-prefix': 'off',
-            'semi': ['error', 'always'],
-            '@typescript-eslint/no-floating-promises': 'error',
-            '@typescript-eslint/no-namespace': 'off',
+            '@angular-eslint/runtime-localize': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/consistent-indexed-object-style': 'off',
-            '@typescript-eslint/no-empty-function': 'off',
+            '@typescript-eslint/no-inferrable-types': 'off',
+            '@typescript-eslint/no-namespace': 'off',
             '@typescript-eslint/consistent-type-definitions': 'off',
-            '@angular-eslint/component-class-suffix': 'off',
-            '@angular-eslint/no-input-rename': 'off'
+            '@typescript-eslint/no-empty-function': 'off',
+            '@angular-eslint/no-output-on-prefix': 'off'
         }
     },
     {
@@ -51,9 +40,6 @@ module.exports = tseslint.config(
             ...angular.configs.templateRecommended,
             ...angular.configs.templateAccessibility
         ],
-        rules: {
-            '@angular-eslint/template/click-events-have-key-events': 'off',
-            '@angular-eslint/template/interactive-supports-focus': 'off'
-        }
+        rules: {}
     }
 );

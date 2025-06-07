@@ -1,3 +1,4 @@
-@if (message !== null) {
-    <p @enterLeaveAnimation class="p-error text-sm w-full text-left my-0 pt-1">{{ message }}</p>
+@if (message() !== null) {
+    <span @enterLeaveAnimation class="block h-025rem"></span>
+    <p @enterLeaveAnimation id="error-message" class="text-sm w-full text-left my-0">{{ message() }}</p>
 }

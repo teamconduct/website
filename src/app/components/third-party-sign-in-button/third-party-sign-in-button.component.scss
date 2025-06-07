@@ -1,0 +1,58 @@
+#button::ng-deep button {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+#button.google::ng-deep {
+    button {
+        background-color: #EEEEEE;
+    }
+
+    #label {
+        font-family: 'Roboto';
+        font-weight: 500;
+    }
+}
+
+#button.apple::ng-deep {
+    button {
+        background-color: #000000;
+    }
+
+    #label {
+        font-family: 'San Francisco';
+        font-weight: 500;
+        color: #FFFFFF;
+    }
+}
+
+.logo {
+    height: 19.5px;
+}
+
+#label {
+    white-space: nowrap;
+    padding-left: 20px;
+    margin: 0;
+}
+
+#button.google:not(.invalid)::ng-deep #label {
+    color: #000000;
+}
+
+#button.apple:not(.invalid)::ng-deep #label {
+    color: #FFFFFF;
+}
+
+#button.google.invalid::ng-deep button {
+    background-color: var(--p-button-danger-background);
+}
+
+#button.apple.invalid::ng-deep #label {
+    color: var(--p-button-danger-background);
+}
+
+#button.loading::ng-deep #label {
+    padding-right: 10px;
+}

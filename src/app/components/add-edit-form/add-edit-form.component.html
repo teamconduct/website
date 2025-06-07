@@ -1,8 +1,0 @@
-<form [formGroup]="form" class="flex flex-column align-items-center justify-content-start">
-
-    <ng-content />
-
-    <p-button (onClick)="form.checkAndSubmit()" [loading]="form.loadingState.isLoading()" [disabled]="form.loadingState.isLoading()" [severity]="form.loadingState.isFailure() ? 'danger' : undefined" [label]="buttonLabel" class="w-full pt-5" styleClass="w-full" />
-    <app-error-message [message]="form.errorMessage" class="w-full" />
-
-</form>

@@ -1,5 +1,5 @@
 import { AbstractControl, FormGroup, ValidationErrors, ɵFormGroupRawValue } from '@angular/forms';
-import { markAllAsDirty } from '../utils/markAllAsDirty';
+// import { markAllAsDirty } from '../utils/markAllAsDirty'; TODO Test if this is still needed and remove if not
 import { LoadingState } from './LoadingState';
 import { Observable } from 'rxjs';
 
@@ -49,14 +49,14 @@ export class SubmitableForm<
         this.successHandlers.push(handler);
     }
 
-    private markAllAsDirty() {
-        Object.keys(this.controls).forEach(key => {
-            const control = super.get(key);
-            if (control instanceof FormGroup)
-                markAllAsDirty(control);
-            control?.markAsDirty();
-        });
-    }
+    // private markAllAsDirty() {
+    //     Object.keys(this.controls).forEach(key => {
+    //         const control = super.get(key);
+    //         if (control instanceof FormGroup)
+    //             markAllAsDirty(control);
+    //         control?.markAsDirty();
+    //     });
+    // }
 
     public override reset() {
         super.reset();

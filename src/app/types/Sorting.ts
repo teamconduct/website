@@ -1,4 +1,4 @@
-import { faArrowDown19, faArrowDown91, faArrowDownAZ, faArrowDownShortWide, faArrowDownWideShort, faArrowDownZA, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+// import { faArrowDown19, faArrowDown91, faArrowDownAZ, faArrowDownShortWide, faArrowDownWideShort, faArrowDownZA, IconDefinition } from '@fortawesome/free-solid-svg-icons'; TODO Add icons
 import { entries } from '@stevenkellner/typescript-common-functionality';
 
 export class Sorting<Key extends string, T> {
@@ -7,20 +7,20 @@ export class Sorting<Key extends string, T> {
 
     public direction: 'ascending' | 'descending' = 'ascending';
 
-    private directionIcons = {
-        letters: {
-            ascending: faArrowDownAZ,
-            descending: faArrowDownZA
-        },
-        numbers: {
-            ascending: faArrowDown19,
-            descending: faArrowDown91
-        },
-        basic: {
-            ascending: faArrowDownWideShort,
-            descending: faArrowDownShortWide
-        }
-    };
+    // private directionIcons = {
+    //     letters: {
+    //         ascending: faArrowDownAZ,
+    //         descending: faArrowDownZA
+    //     },
+    //     numbers: {
+    //         ascending: faArrowDown19,
+    //         descending: faArrowDown91
+    //     },
+    //     basic: {
+    //         ascending: faArrowDownWideShort,
+    //         descending: faArrowDownShortWide
+    //     }
+    // };
 
     public constructor(
         private readonly initialKey: Key,
@@ -39,9 +39,9 @@ export class Sorting<Key extends string, T> {
             .sort((lhs, rhs) => lhs.key === this.initialKey ? -1 : rhs.key === this.initialKey ? 1 : 0);
     }
 
-    public get directionIcon(): IconDefinition {
-        return this.directionIcons[this.labels[this.sortBy].direction][this.direction];
-    }
+    // public get directionIcon(): IconDefinition {
+    //     return this.directionIcons[this.labels[this.sortBy].direction][this.direction];
+    // }
 
     public toggleDirection() {
         this.direction = this.direction === 'ascending' ? 'descending' : 'ascending';

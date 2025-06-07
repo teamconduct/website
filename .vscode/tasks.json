@@ -1,42 +1,77 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "type": "npm",
-      "script": "start",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
+    // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "componentName",
+            "description": "Enter the name of the component to generate:",
+            "type": "promptString"
+        },
+        {
+            "id": "pageName",
+            "description": "Enter the name of the page to generate:",
+            "type": "promptString"
+        },
+        {
+            "id": "serviceName",
+            "description": "Enter the name of the service to generate:",
+            "type": "promptString"
         }
-      }
-    },
-    {
-      "type": "npm",
-      "script": "test",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "(.*?)"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation complete"
-          }
+    ],
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "start",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": "$tsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "(.*?)"
+                    },
+                    "endsPattern": {
+                        "regexp": "bundle generation complete"
+                    }
+                }
+            }
+        },
+        {
+            "type": "npm",
+            "script": "test",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": "$tsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": {
+                        "regexp": "(.*?)"
+                    },
+                    "endsPattern": {
+                        "regexp": "bundle generation complete"
+                    }
+                }
+            }
+        },
+        {
+            "label": "ng: generate component",
+            "type": "shell",
+            "command": "ng g c components/${input:componentName} -c OnPush --style scss --type component",
+            "problemMatcher": []
+        },
+        {
+            "label": "ng: generate page",
+            "type": "shell",
+            "command": "ng g c pages/${input:pageName} -c OnPush --style scss --type page --prefix page",
+            "problemMatcher": []
+        },
+        {
+            "label": "ng: generate service",
+            "type": "shell",
+            "command": "ng g s services/${input:serviceName}/${input:serviceName} --type service",
+            "problemMatcher": []
         }
-      }
-    }
-  ]
+    ]
 }

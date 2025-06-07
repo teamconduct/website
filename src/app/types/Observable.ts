@@ -18,18 +18,21 @@ export class Observable<T> extends BehaviorSubject<T | null> {
     }
 }
 
-export function combine<T1, T2, U>(observable1: Observable<T1>, observable2: Observable<T2>, combineFn: (value1: T1, value2: T2) => U): Observable<U> {
-    const combine = (value1: T1 | null, value2: T2 | null) => (value1 !== null && value2 !== null) ? combineFn(value1, value2) : null;
-    const observable = new Observable<U>(combine(observable1.value, observable2.value));
-    observable1.subscribe({
-        next: value => observable.next(combine(value, observable2.value)),
-        error: error => observable.error(error),
-        complete: () => observable.complete()
-    });
-    observable2.subscribe({
-        next: value => observable.next(combine(observable1.value, value)),
-        error: error => observable.error(error),
-        complete: () => observable.complete()
-    });
-    return observable;
+export namespace Observable {
+
+    export function combine<T1, T2, U>(observable1: Observable<T1>, observable2: Observable<T2>, combineFn: (value1: T1, value2: T2) => U): Observable<U> {
+        const combine = (value1: T1 | null, value2: T2 | null) => (value1 !== null && value2 !== null) ? combineFn(value1, value2) : null;
+        const observable = new Observable<U>(combine(observable1.value, observable2.value));
+        observable1.subscribe({
+            next: value => observable.next(combine(value, observable2.value)),
+            error: error => observable.error(error),
+            complete: () => observable.complete()
+        });
+        observable2.subscribe({
+            next: value => observable.next(combine(observable1.value, value)),
+            error: error => observable.error(error),
+            complete: () => observable.complete()
+        });
+        return observable;
+    }
 }

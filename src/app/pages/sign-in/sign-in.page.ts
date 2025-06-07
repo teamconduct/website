@@ -1,18 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { AuthSignInComponent } from '../../components/auth-sign-in/auth-sign-in.component';
-import { FirebaseFunctionsService } from '../../services/firebase-functions.service';
-import { FunctionsError, FunctionsErrorCodeCore } from '@angular/fire/functions';
+import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
+import { UserManagerService } from '../../services/user-manager/user-manager.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { appRoutes } from '../../app.routes';
-import { UserManagerService } from '../../services/user-manager.service';
 import { Tagged } from '@stevenkellner/typescript-common-functionality';
+import { FunctionsError } from '@stevenkellner/firebase-function';
+import { FunctionsErrorCodeCore } from '@angular/fire/functions';
 import { User } from '@stevenkellner/team-conduct-api';
+import { AuthenticationComponent } from '../../components/authentication/authentication.component';
 
 @Component({
-    selector: 'app-sign-in',
-    standalone: true,
-    imports: [CommonModule, AuthSignInComponent],
+    selector: 'page-sign-in',
+    imports: [AuthenticationComponent],
     templateUrl: './sign-in.page.html',
     styleUrl: './sign-in.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,9 +35,9 @@ export class SignInPage {
         if (loginResult !== 'not-found')
             return loginResult;
 
-        const navigationSuccessful = await this.router.navigate([`/${appRoutes.createTeam}`]);
-        if (!navigationSuccessful)
-            return $localize `:Error message that navigation to sign up page has failed:Failed to navigate to the sign up page.`;
+        // const navigationSuccessful = await this.router.navigate([`/${routeNames.createTeam}`]); TODO navigation to create team page
+        // if (!navigationSuccessful)
+        //     return $localize `:Error message that navigation to sign up page has failed:Failed to navigate to the sign up page.`;
         return null;
     }
 
@@ -74,9 +72,9 @@ export class SignInPage {
         this.userManager.setUser(user);
         if (!user.teams.isEmpty)
             this.userManager.setTeamId(user.teams.keys[0]);
-        const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]);
-        if (!navigationSuccessful)
-            return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;
+        // const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]); TODO navigation to home page
+        // if (!navigationSuccessful)
+        //     return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;
         return null;
     }
 }

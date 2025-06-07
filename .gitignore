@@ -41,9 +41,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Firebase
-/firebase-debug.log
-/.firebase
-
+# Environment
 /src/environments
-/src/assets/firebase-messaging-sw.js
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
