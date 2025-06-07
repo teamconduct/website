@@ -73,9 +73,9 @@ export class SignInPage {
         this.userManager.setUser(user);
         if (!user.teams.isEmpty)
             this.userManager.setTeamId(user.teams.keys[0]);
-        // const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]); TODO navigation to home page
-        // if (!navigationSuccessful)
-        //     return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;
+        const navigationSuccessful = await this.router.navigate([`/${routeNames.home}`]);
+        if (!navigationSuccessful)
+            return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;
         return null;
     }
 }

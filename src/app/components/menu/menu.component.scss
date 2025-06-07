@@ -1,0 +1,32 @@
+#desktop-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+#toolbar-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+
+    p-toolbar {
+        width: 100%;
+    }
+}
+
+#spacer {
+    height: 58px;
+}
+
+#background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 101vh;
+    z-index: 999;
+    backdrop-filter: blur(2px);
+}

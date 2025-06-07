@@ -1,0 +1,31 @@
+@let user = userManager.user$ | async;
+@let selectedTeamId = userManager.selectedTeamId$ | async;
+@let canAddFine = (userManager.hasRole('fine-manager') | async) ?? false;
+@let canManageTeam = (userManager.hasRole('team-manager') | async) ?? false;
+
+<p-menu id="desktop-menu" [model]="getTeamMenu(user, selectedTeamId, canAddFine, canManageTeam)" class="hidden md:block" />
+
+<div class="block md:hidden">
+    <div id="toolbar-container">
+        <p-toolbar #toolbar>
+            <ng-template #start>
+                @let currentTeamName = getCurrentTeamName(user, selectedTeamId);
+                @if (currentTeamName) {
+                    <p>{{ currentTeamName }}</p>
+                }
+            </ng-template>
+            <ng-template #center></ng-template>
+            <ng-template #end>
+                <p-button (onClick)="toggleToolbar()" [icon]="toolbarExpanded ? 'pi pi-chevron-down' : 'pi pi-bars'" severity="secondary" variant="text"></p-button>
+            </ng-template>
+        </p-toolbar>
+        @if (toolbarExpanded) {
+            <p-menu [model]="getTeamMenu(user, selectedTeamId, canAddFine, canManageTeam)" class="mobile-menu" />
+        }
+    </div>
+    <div id="spacer" #spacer></div>
+    @if (toolbarExpanded) {
+        <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+        <span id="background" (click)="toggleToolbar(false)"></span>
+    }
+</div>

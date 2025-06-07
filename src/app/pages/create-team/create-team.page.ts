@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessageComponent } from '../../components/error-message/error-message.component';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { routeNames } from '../../app.routes';
 
 @Component({
     selector: 'page-create-team',
@@ -72,12 +73,12 @@ export class CreateTeamPage {
             return;
         }
 
-        // const navigationSuccessful = await this.router.navigate([`/${appRoutes.home}`]);
-        // if (!navigationSuccessful) {
-        //     this.createTeamState = 'navigation-failed';
-        //     this.changeDetectorRef.markForCheck();
-        //     return;
-        // } TODO: navigation to home page
+        const navigationSuccessful = await this.router.navigate([`/${routeNames.home}`]);
+        if (!navigationSuccessful) {
+            this.createTeamState = 'navigation-failed';
+            this.changeDetectorRef.markForCheck();
+            return;
+        }
 
         this.teamForm.reset();
         this.createTeamState = null;
