@@ -1,7 +1,7 @@
 @let _fine = fine();
 
 <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
-<div class="flex md:flex-row flex-column align-items-center justify-content-between w-full py-5 border-200" [class.border-top-1]="!hideTopBorder()" [class.cursor-pointer]="_fine !== null"  (click)="detailsShown = true">
+<div class="flex md:flex-row flex-column align-items-center justify-content-between w-full py-5 border-200" [class.border-top-1]="!hideTopBorder()" [class.cursor-pointer]="_fine !== null"  (click)="showFineDetails()">
     <div class="flex flex-column align-items-start justify-content-center mr-1 w-full">
         @if (_fine !== null) {
             <p class="text-color font-bold text-2xl my-0">{{ _fine.reason }}</p>
@@ -35,7 +35,3 @@
         }
     </div>
 </div>
-
-@if (personId !== null && fine !== null) {
-    <!-- app-fine-detail-add-edit [(visible)]="detailsShown" [personId]="personId" [fine]="fine" /-->
-}

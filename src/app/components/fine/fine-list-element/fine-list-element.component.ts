@@ -1,3 +1,4 @@
+import { PopupDialogHandlerService } from './../../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
 import { Fine, PayedState, Person } from '@stevenkellner/team-conduct-api';
@@ -32,7 +33,7 @@ export class FineListElementComponent {
 
     private changeDetector = inject(ChangeDetectorRef);
 
-    public detailsShown: boolean = false;
+    private popupDialogHandler = inject(PopupDialogHandlerService);
 
     public loading: boolean = false;
 
@@ -70,6 +71,18 @@ export class FineListElementComponent {
         }).finally(() => {
             this.loading = false;
             this.changeDetector.markForCheck();
+        });
+    }
+
+    public showFineDetails() {
+        const personId = this.personId();
+        const fine = this.fine();
+        if (personId === null || fine === null)
+            return;
+        this.popupDialogHandler.activate({
+            type: 'fineDetail',
+            personId: personId,
+            fine: fine
         });
     }
 }

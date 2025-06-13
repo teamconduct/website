@@ -1,28 +1,52 @@
 import { Injectable } from '@angular/core';
+import { Fine, Person } from '@stevenkellner/team-conduct-api';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-export type DialogType = 'fineDetailAddEdit' | 'paypalMeAddEdit';
+interface IDialogData {
+    type: string;
+}
+
+export interface FineDetailDialogData extends IDialogData {
+    type: 'fineDetail';
+    personId: Person.Id;
+    fine: Fine;
+}
+
+export interface FineAddEditDialogData extends IDialogData {
+    type: 'fineAddEdit';
+    personId: Person.Id | null;
+    fine: Fine | null;
+}
+
+export interface PaypalMeAddEditDialogData extends IDialogData {
+    type: 'paypalMeAddEdit';
+}
+
+export type DialogData =
+    | FineDetailDialogData
+    | FineAddEditDialogData
+    | PaypalMeAddEditDialogData;
 
 @Injectable({
     providedIn: 'root'
 })
 export class PopupDialogHandlerService {
 
-    private currentDialogType = new BehaviorSubject<DialogType | null>(null);
+    private currentDialog = new BehaviorSubject<DialogData | null>(null);
 
-    public setActive(dialogType: DialogType | null, isActive: boolean) {
-        this.currentDialogType.next(isActive ? dialogType : null);
+    public setActive(dialog: DialogData | null, isActive: boolean) {
+        this.currentDialog.next(isActive ? dialog : null);
     }
 
     public closeDialog() {
-        this.currentDialogType.next(null);
+        this.currentDialog.next(null);
     }
 
-    public activate(dialogType: DialogType) {
-        this.currentDialogType.next(dialogType);
+    public activate(dialog: DialogData) {
+        this.currentDialog.next(dialog);
     }
 
-    public get $current(): Observable<DialogType | null> {
-        return this.currentDialogType.asObservable();
+    public get $current(): Observable<DialogData | null> {
+        return this.currentDialog.asObservable();
     }
 }

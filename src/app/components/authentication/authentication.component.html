@@ -1,7 +1,7 @@
 <div class="flex flex-column align-items-center justify-content-start w-85 mx-auto">
     <h2 i18n="Title of the sign in form to indicate that this form is used to create a new account or to log in" class="text-center">Create an account / Log in</h2>
     <p i18n="Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in" class="text-center">Enter your email to sign up or log in</p>
-    <form [formGroup]="loginForm" class="flex flex-column align-items-center justify-content-start md:w-6 w-full">
+    <form [formGroup]="loginForm" class="flex flex-column align-items-center justify-content-start md:w-6 w-full mt-4">
         <p-floatLabel class="flex w-full">
             <input type="email" pInputText formControlName="email" id="email-input" class="w-full" />
             <label for="email-input" i18n="Label for the email input field">Email</label>

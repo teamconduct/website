@@ -59,7 +59,11 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
                     {
                         label: 'Add multiple fines',
                         icon: 'pi pi-fw pi-plus',
-                        command: () => this.popupDialogHandler.activate('fineDetailAddEdit')
+                        command: () => this.popupDialogHandler.activate({
+                            type: 'fineAddEdit',
+                            personId: null,
+                            fine: null
+                        })
                     }
                 ]
             } : null,
@@ -69,7 +73,9 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
                     canManageTeam ? {
                         label: $localize `:Label for the edit paypal.me link menu item:Edit paypal.me`,
                         icon: 'pi pi-fw pi-pencil',
-                        command: () => this.popupDialogHandler.activate('paypalMeAddEdit')
+                        command: () => this.popupDialogHandler.activate({
+                            type: 'paypalMeAddEdit'
+                        })
                     } : null,
                     {
                         label: $localize `:Label for the sign out menu item:Log Out`,
