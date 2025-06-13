@@ -17,6 +17,7 @@ import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 import { FineListComponent } from '../../fine/fine-list/fine-list.component';
+import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 
 @Component({
     selector: 'app-person-detail',
@@ -40,11 +41,9 @@ export class PersonDetailComponent {
 
     private confirmationService = inject(ConfirmationService);
 
+    private popupDialogHandler = inject(PopupDialogHandlerService);
+
     public deleteLoading: boolean = false;
-
-    public editPersonDialogVisible: boolean = false;
-
-    public addFineDialogVisible: boolean = false;
 
     public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, value: SummedFineValue | null, severity: Tag['severity'], icon: IconDefinition }> {
         const person = this.person();
@@ -167,5 +166,20 @@ export class PersonDetailComponent {
         });
 
         this.deleteLoading = false;
+    }
+
+    public showPersonEditDialog() {
+        // TODO
+    }
+
+    public showFineAddDialog() {
+        const person = this.person();
+        if (person === null)
+            return;
+        this.popupDialogHandler.activate({
+            type: 'fineAddEdit',
+            personId: person.id,
+            fine: null
+        });
     }
 }

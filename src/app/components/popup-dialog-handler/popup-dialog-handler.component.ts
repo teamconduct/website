@@ -3,10 +3,11 @@ import { PopupDialogHandlerService } from '../../services/popup-dialog-handler/p
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { FineDetailComponent } from '../fine/fine-detail/fine-detail.component';
+import { FineAddEditComponent } from '../fine/fine-add-edit/fine-add-edit.component';
 
 @Component({
     selector: 'app-popup-dialog-handler',
-    imports: [NgTemplateOutlet, AsyncPipe, DialogModule, FineDetailComponent],
+    imports: [NgTemplateOutlet, AsyncPipe, DialogModule, FineDetailComponent, FineAddEditComponent],
     templateUrl: './popup-dialog-handler.component.html',
     styleUrl: './popup-dialog-handler.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,5 +27,4 @@ export class PopupDialogHandlerComponent {
             }, 100);
         }
     }
-
 }

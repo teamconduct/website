@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { Fine, PayedState, Person } from '@stevenkellner/team-conduct-api';
 import { Tag, TagModule } from 'primeng/tag';
 import { Observable } from '../../../types';
@@ -35,6 +35,8 @@ export class FineDetailComponent {
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
+
+    private changeDetector = inject(ChangeDetectorRef);
 
     public readonly headerElement = viewChild.required<TemplateRef<any>>('header');
 

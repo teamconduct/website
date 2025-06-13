@@ -35,14 +35,14 @@
                             </p-button>
                         }
                         @if (canEditPerson) {
-                            <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="editPersonDialogVisible = true; $event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
+                            <p-button i18n-label="Button label to edit person" label="Edit person" (onClick)="showPersonEditDialog(); $event.stopPropagation()" severity="secondary" [styleClass]="(canAddFine ? ' border-noround-right' : '') + ' ' + (canDeletePerson ? 'border-noround-left' : '')">
                                 <ng-template #icon>
                                     <fa-icon [icon]="['far', 'pen-to-square']" class="mr-2" />
                                 </ng-template>
                             </p-button>
                         }
                         @if (canAddFine) {
-                            <p-button i18n-label="Button label to add a new fine to person" label="Add fine" (onClick)="addFineDialogVisible = true; $event.stopPropagation()" [styleClass]="canEditPerson || canDeletePerson ? ' border-noround-left' : ''">
+                            <p-button i18n-label="Button label to add a new fine to person" label="Add fine" (onClick)="showFineAddDialog(); $event.stopPropagation()" [styleClass]="canEditPerson || canDeletePerson ? ' border-noround-left' : ''">
                                 <ng-template #icon>
                                     <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
                                 </ng-template>
@@ -81,7 +81,3 @@
 
     <app-fine-list [personId]="_person !== null ? _person.id : null" [alwaysShowAllFines]="alwaysShowAllFines()" class="w-85" />
 </div>
-
-<!-- app-fine-detail-add-edit [personId]="person.id" [(visible)]="addFineDialogVisible" /-->
-
-<!-- app-person-add-edit [(visible)]="editPersonDialogVisible" [person]="person.person" /-->

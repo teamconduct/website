@@ -31,7 +31,8 @@ module.exports = tseslint.config(
             '@typescript-eslint/no-namespace': 'off',
             '@typescript-eslint/consistent-type-definitions': 'off',
             '@typescript-eslint/no-empty-function': 'off',
-            '@angular-eslint/no-output-on-prefix': 'off'
+            '@angular-eslint/no-output-on-prefix': 'off',
+            '@angular-eslint/no-input-rename': 'off'
         }
     },
     {

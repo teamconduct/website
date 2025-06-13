@@ -15,6 +15,10 @@ p {
     margin: 0;
 }
 
+.w-45vw {
+    width: 45vw;
+}
+
 .w-50vw {
     width: 50vw;
 }
@@ -24,6 +28,10 @@ p {
 }
 
 @media screen and (min-width: 768px) {
+    .md\:w-45vw {
+        width: 45vw;
+    }
+
     .md\:w-50vw {
         width: 50vw;
     }

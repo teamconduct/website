@@ -1,0 +1,39 @@
+<ng-template #formElement>
+    @switch (type()) {
+        @case ('input') {
+            <input pInputText [formControl]="formControl" [attr.inputId]="inputId.guidString" class="w-full" />
+        }
+        @case ('currency') {
+            <p-inputNumber [formControl]="formControl" [attr.inputId]="inputId.guidString" mode="currency" [currency]="currency()" class="w-full" styleClass="w-full" />
+        }
+        @case ('number') {
+            @let _suffix = suffix();
+            <p-inputNumber [formControl]="formControl" [attr.inputId]="inputId.guidString" [min]="min()" [max]="max()" [showButtons]="showButtons" [suffix]="_suffix === undefined ? undefined : ' ' + _suffix" class="w-full" styleClass="w-full" />
+        }
+        @case ('dropdown') {
+            <p-select #selectRef [formControl]="formControl" [attr.inputId]="inputId.guidString" [options]="options()" optionLabel="label" optionValue="key" [placeholder]="placeholder()" [filter]="filter()" appendTo="body" class="w-full" styleClass="w-full">
+                <ng-template #header>
+                    <ng-content select="header"></ng-content>
+                </ng-template>
+            </p-select>
+        }
+        @case ('multiselect') {
+            <p-multiSelect [formControl]="formControl" [attr.inputId]="inputId.guidString" [options]="options()" optionLabel="label" optionValue="key" [placeholder]="placeholder()" [selectedItemsLabel]="selectedItemsLabel()" [filter]="filter()" appendTo="body" class="w-full" styleClass="w-full" />
+        }
+        @case ('date') {
+            <p-datePicker [formControl]="formControl" [attr.inputId]="inputId.guidString" [inline]="inline" class="w-full" styleClass="w-full" />
+        }
+    }
+</ng-template>
+
+@if (label() !== null) {
+    <span @enterLeaveAnimation class="block h-2rem"></span>
+    <p-floatLabel class="flex w-full">
+        <ng-container *ngTemplateOutlet="formElement" />
+        <label [for]="inputId.guidString">{{ label() }}</label>
+    </p-floatLabel>
+} @else {
+    <div class="flex py-3 w-full">
+        <ng-container *ngTemplateOutlet="formElement" />
+    </div>
+}
