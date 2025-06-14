@@ -1,0 +1,19 @@
+<ng-template #header>
+    @let paypalMeLink = paypalMeLink$ | async;
+    @if (paypalMeLink === null) {
+        <p class="text-color text-xl font-semibold my-0 pl-3" i18n="Header in add and edit paypal.me dialog for loading">Loading Paypal.me Link</p>
+    } @else if (paypalMeLink === 'no-paypal-me-link') {
+        <p class="text-color text-xl font-semibold my-0 pl-3" i18n="Header in add and edit paypal.me dialog for adding a paypal.me link">Add a Paypal.me Link</p>
+    } @else {
+        <p class="text-color text-xl font-semibold my-0 pl-3" i18n="Header in add and edit paypal.me dialog for editing a paypal.me link">Edit Paypal.me Link</p>
+    }
+</ng-template>
+
+@let paypalMeLink = paypalMeLink$ | async;
+<app-add-edit-form [form]="this" [buttonLabel]="buttonLabel(paypalMeLink)" [buttonDisabled]="paypalMeLink === null">
+
+    <app-form-element type="input" [formControl]="get('link')"
+        i18n-label="Label for the PayPal.Me link input field" label="PayPal.Me link (leave empty to remove)"
+    />
+
+</app-add-edit-form>

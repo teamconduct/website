@@ -46,5 +46,10 @@
         <app-fine-template-add-edit [fineTemplate]="currentDialog.fineTemplate" #fineTemplateAddEditElement="appFineTemplateAddEdit" />
     </p-dialog>
 } @else if (currentDialog.type === 'paypalMeAddEdit') {
-    <!-- TODO -->
+    <p-dialog [visible]="currentDialog !== null" (visibleChange)="visibleChanged($event)" (onShow)="paypalMeAddEditElement.reset()" (onHide)="paypalMeAddEditElement.reset()" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" appendTo="body" class="clamp-width" styleClass="md:w-45vw w-90vw">
+        <ng-template #header>
+            <ng-container *ngTemplateOutlet="paypalMeAddEditElement.headerElement()" />
+        </ng-template>
+        <app-paypal-me-add-edit #paypalMeAddEditElement="appPaypalMeAddEdit" />
+    </p-dialog>
 }

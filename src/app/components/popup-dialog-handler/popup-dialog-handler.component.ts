@@ -7,10 +7,11 @@ import { FineAddEditComponent } from '../fine/fine-add-edit/fine-add-edit.compon
 import { FineTemplateDetailComponent } from '../fine-template/fine-template-detail/fine-template-detail.component';
 import { FineTemplateAddEditComponent } from '../fine-template/fine-template-add-edit/fine-template-add-edit.component';
 import { PersonAddEditComponent } from '../person/person-add-edit/person-add-edit.component';
+import { PaypalMeAddEditComponent } from '../paypal-me-add-edit/paypal-me-add-edit.component';
 
 @Component({
     selector: 'app-popup-dialog-handler',
-    imports: [NgTemplateOutlet, AsyncPipe, DialogModule, PersonAddEditComponent, FineDetailComponent, FineAddEditComponent, FineTemplateDetailComponent, FineTemplateAddEditComponent],
+    imports: [NgTemplateOutlet, AsyncPipe, DialogModule, PersonAddEditComponent, FineDetailComponent, FineAddEditComponent, FineTemplateDetailComponent, FineTemplateAddEditComponent, PaypalMeAddEditComponent],
     templateUrl: './popup-dialog-handler.component.html',
     styleUrl: './popup-dialog-handler.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

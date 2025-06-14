@@ -16,4 +16,6 @@ export class AddEditFormComponent<Control extends SubmitableForm.ControlRequirem
     public readonly form = input.required<SubmitableForm<Control, Error>>();
 
     public readonly buttonLabel = input.required<string>();
+
+    public readonly buttonDisabled = input<boolean>(false);
 }
