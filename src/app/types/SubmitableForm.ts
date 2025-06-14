@@ -1,5 +1,4 @@
 import { AbstractControl, FormGroup, ValidationErrors, ɵFormGroupRawValue } from '@angular/forms';
-// import { markAllAsDirty } from '../utils/markAllAsDirty'; TODO Test if this is still needed and remove if not
 import { LoadingState } from './LoadingState';
 import { Observable } from 'rxjs';
 
