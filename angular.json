@@ -14,10 +14,14 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "en-US",
+        "sourceLocale": {
+            "code": "en",
+            "baseHref": ""
+        },
         "locales": {
-            "de-DE": {
-                "translation": "src/locale/messages.de-DE.arb"
+            "de": {
+                "translation": "src/locale/messages.de.arb",
+                "baseHref": ""
             }
         }
       },
@@ -41,6 +45,11 @@
             ],
             "polyfills": [
               "@angular/localize/init"
+            ],
+            "allowedCommonJsDependencies": [
+                "@stevenkellner/typescript-common-functionality",
+                "@stevenkellner/firebase-function",
+                "@stevenkellner/team-conduct-api"
             ]
           },
           "configurations": {
@@ -64,13 +73,13 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "localize": ["de-DE"]
+              "localize": ["de"]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "localize": ["de-DE"]
+              "localize": ["de"]
             }
           },
           "defaultConfiguration": "production"

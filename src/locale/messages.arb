@@ -1,5 +1,5 @@
 {
-  "@@locale": "en-US",
+  "@@locale": "en",
   "5544099847888321470": "sign-in",
   "@5544099847888321470": {
     "description": "Route name of the sign-in page",
