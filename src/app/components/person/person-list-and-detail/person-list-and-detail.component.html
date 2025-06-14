@@ -1,0 +1,8 @@
+@if (currentPersonSelected === null) {
+    <app-person-list (personSelected)="currentPersonSelected = $event" />
+} @else {
+    <div class="flex flex-column">
+        <p-button (onClick)="currentPersonSelected = null" label="Back to person list" i18n-label="Button label to go back to the person list" severity="secondary" outlined icon="pi pi-arrow-left" class="mb-3" />
+        <app-person-detail [person]="currentPersonSelected" />
+    </div>
+}

@@ -13,10 +13,11 @@ import { Observable } from '../../types';
 import { PersonWithFines } from '../../types/PersonWithFines';
 import { PersonDetailComponent } from '../../components/person/person-detail/person-detail.component';
 import { FineTemplateListComponent } from '../../components/fine-template/fine-template-list/fine-template-list.component';
+import { PersonListAndDetailComponent } from '../../components/person/person-list-and-detail/person-list-and-detail.component';
 
 @Component({
     selector: 'page-home',
-    imports: [AsyncPipe, ToastModule, PopupDialogHandlerComponent, MenuComponent, CardModule, PersonDetailComponent, FineTemplateListComponent],
+    imports: [AsyncPipe, ToastModule, PopupDialogHandlerComponent, MenuComponent, CardModule, PersonDetailComponent, PersonListAndDetailComponent, FineTemplateListComponent],
     providers: [MessageService, MenuComponent],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',

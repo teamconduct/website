@@ -8,7 +8,7 @@
             @case ('profile') {
                 <app-person-detail [person]="signedInPerson" />
             } @case ('persons') {
-                Persons
+                <app-person-list-and-detail />
             } @case ('fineTemplates') {
                 <app-fine-template-list />
             }
