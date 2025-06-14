@@ -14,6 +14,7 @@ import { PersonWithFines } from '../../types/PersonWithFines';
 import { PersonDetailComponent } from '../../components/person/person-detail/person-detail.component';
 import { FineTemplateListComponent } from '../../components/fine-template/fine-template-list/fine-template-list.component';
 import { PersonListAndDetailComponent } from '../../components/person/person-list-and-detail/person-list-and-detail.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'page-home',
@@ -35,7 +36,10 @@ export class HomePage implements OnInit {
 
     public currentPage: 'profile' | 'persons' | 'fineTemplates' = 'profile';
 
+    private titleService = inject(Title);
+
     public ngOnInit() {
+        this.titleService.setTitle($localize `:Title for the home page:Home`);
         this.userManager.getAllCookies();
         const teamId = this.userManager.selectedTeamId$.value;
         if (teamId !== null)

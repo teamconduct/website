@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { getEnterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
@@ -13,6 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessageComponent } from '../../components/error-message/error-message.component';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { routeNames } from '../../app.routes';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'page-create-team',
@@ -22,7 +23,7 @@ import { routeNames } from '../../app.routes';
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [getEnterLeaveAnimation()]
 })
-export class CreateTeamPage {
+export class CreateTeamPage implements OnInit {
 
     public createTeamState: 'loading' | 'validation-failed' | 'team-create-failed'| 'navigation-failed' | null = null;
 
@@ -41,6 +42,12 @@ export class CreateTeamPage {
     private changeDetectorRef = inject(ChangeDetectorRef);
 
     private router = inject(Router);
+
+    private titleService = inject(Title);
+
+    public ngOnInit() {
+        this.titleService.setTitle($localize `:Title for the create team page:Create Team`);
+    }
 
     public async createTeam() {
         if (this.createTeamState === 'loading')

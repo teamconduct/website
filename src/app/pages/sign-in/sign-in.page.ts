@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { FunctionsErrorCodeCore } from '@angular/fire/functions';
 import { User } from '@stevenkellner/team-conduct-api';
 import { AuthenticationComponent } from '../../components/authentication/authentication.component';
 import { routeNames } from '../../app.routes';
+import { Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'page-sign-in',
@@ -16,7 +17,7 @@ import { routeNames } from '../../app.routes';
     styleUrl: './sign-in.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignInPage {
+export class SignInPage implements OnInit {
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -25,6 +26,12 @@ export class SignInPage {
     private router = inject(Router);
 
     private route = inject(ActivatedRoute);
+
+    private titleService = inject(Title);
+
+    public ngOnInit() {
+        this.titleService.setTitle($localize `:Title for the sign in page:Sign In`);
+    }
 
     public async handleSuccessfulSignIn(): Promise<string | null> {
 

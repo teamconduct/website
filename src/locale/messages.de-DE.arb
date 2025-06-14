@@ -1,5 +1,5 @@
 {
-  "@@locale": "en-US",
+  "@@locale": "de-DE",
   "5544099847888321470": "anmelden",
   "@5544099847888321470": {
     "description": "Route name of the sign-in page",
@@ -8,6 +8,28 @@
         "file": "src\\app\\app.routes.ts",
         "start": { "line": "4", "column": "21" },
         "end": { "line": "4", "column": "62" }
+      }
+    ]
+  },
+  "6737616516491407053": "team-erstellen",
+  "@6737616516491407053": {
+    "description": "Route name of the create team page",
+    "x-locations": [
+      {
+        "file": "src\\app\\app.routes.ts",
+        "start": { "line": "8", "column": "25" },
+        "end": { "line": "8", "column": "74" }
+      }
+    ]
+  },
+  "4976935068632868195": "home",
+  "@4976935068632868195": {
+    "description": "Route name of the home page",
+    "x-locations": [
+      {
+        "file": "src\\app\\app.routes.ts",
+        "start": { "line": "9", "column": "19" },
+        "end": { "line": "9", "column": "54" }
       }
     ]
   },
@@ -314,6 +336,1199 @@
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
         "start": { "line": "66", "column": "28" },
         "end": { "line": "66", "column": "87" }
+      }
+    ]
+  },
+  "8396096579442800436": "Strafe zum Strafenkatalog hinzufügen",
+  "@8396096579442800436": {
+    "description": "Header in add and edit fine template dialog for adding a fine template",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "3", "column": "149" },
+        "end": { "line": "5", "column": "62" }
+      }
+    ]
+  },
+  "3862497674553063473": "{$INTERPOLATION} bearbeiten",
+  "@3862497674553063473": {
+    "description": "Header in add and edit fine template dialog for editing a fine template",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "5", "column": "150" },
+        "end": { "line": "7", "column": "4" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.html",
+        "start": { "line": "5", "column": "136" },
+        "end": { "line": "7", "column": "4" }
+      }
+    ]
+  },
+  "4775550080689015987": "Grund",
+  "@4775550080689015987": {
+    "description": "Label for the reason input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "13", "column": "0" },
+        "end": { "line": "15", "column": "32" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "48", "column": "0" },
+        "end": { "line": "50", "column": "28" }
+      }
+    ]
+  },
+  "2578732368187466916": "Kosten",
+  "@2578732368187466916": {
+    "description": "Label for the fine value type dropdown",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "17", "column": "2" },
+        "end": { "line": "19", "column": "38" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "52", "column": "2" },
+        "end": { "line": "54", "column": "34" }
+      }
+    ]
+  },
+  "6533918067030990396": "Betrag",
+  "@6533918067030990396": {
+    "description": "Label for the amount input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "23", "column": "0" },
+        "end": { "line": "24", "column": "30" }
+      },
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "91", "column": "32" },
+        "end": { "line": "91", "column": "75" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "58", "column": "0" },
+        "end": { "line": "59", "column": "26" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.ts",
+        "start": { "line": "211", "column": "32" },
+        "end": { "line": "211", "column": "75" }
+      }
+    ]
+  },
+  "8177873832400820695": "Anzahl",
+  "@8177873832400820695": {
+    "description": "Label for the fine value item count input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "27", "column": "1" },
+        "end": { "line": "30", "column": "36" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "62", "column": "1" },
+        "end": { "line": "67", "column": "19" }
+      }
+    ]
+  },
+  "7793187757989803173": "Wiederholen pro",
+  "@7793187757989803173": {
+    "description": "Label for the repetition item dropdown",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "31", "column": "76" },
+        "end": { "line": "34", "column": "38" }
+      }
+    ]
+  },
+  "3815935589694682364": "Maximal wiederholen (leer lassen für kein Maximum)",
+  "@3815935589694682364": {
+    "description": "Label for the repetition max count input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.html",
+        "start": { "line": "37", "column": "88" },
+        "end": { "line": "42", "column": "13" }
+      }
+    ]
+  },
+  "4951578913109812375": "Die Strafen konnte nicht mit einem Team verknüpfen werden",
+  "@4951578913109812375": {
+    "description": "Error message when the team ID is not set in add / edit fine template",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "49", "column": "35" },
+        "end": { "line": "49", "column": "154" }
+      }
+    ]
+  },
+  "1846973425553368828": "Strafe hinzufügen",
+  "@1846973425553368828": {
+    "description": "Button label to add fine template",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "84", "column": "28" },
+        "end": { "line": "84", "column": "82" }
+      },
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-list\\fine-template-list.component.html",
+        "start": { "line": "17", "column": "91" },
+        "end": { "line": "17", "column": "147" }
+      }
+    ]
+  },
+  "3723832357601708020": "Strafe speichern",
+  "@3723832357601708020": {
+    "description": "Button label to save fine template",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "85", "column": "24" },
+        "end": { "line": "85", "column": "80" }
+      }
+    ]
+  },
+  "7751099153501810421": "Nicht wiederholen",
+  "@7751099153501810421": {
+    "description": "Fine template multiple item selection, none selected",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "112", "column": "32" },
+        "end": { "line": "112", "column": "101" }
+      }
+    ]
+  },
+  "3695251475145999588": "mal",
+  "@3695251475145999588": {
+    "description": "Fine template multiple max count input suffix, single",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "125", "column": "28" },
+        "end": { "line": "125", "column": "89" }
+      }
+    ]
+  },
+  "7074388989229825051": "mal",
+  "@7074388989229825051": {
+    "description": "Fine template multiple max count input suffix, plural",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-add-edit\\fine-template-add-edit.component.ts",
+        "start": { "line": "126", "column": "24" },
+        "end": { "line": "126", "column": "86" }
+      }
+    ]
+  },
+  "7585826646011739428": "Bearbeiten",
+  "@7585826646011739428": {
+    "description": "Button label to edit something",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-detail\\fine-template-detail.component.html",
+        "start": { "line": "15", "column": "86" },
+        "end": { "line": "15", "column": "124" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-detail\\fine-detail.component.html",
+        "start": { "line": "15", "column": "86" },
+        "end": { "line": "15", "column": "124" }
+      }
+    ]
+  },
+  "7022070615528435141": "Löschen",
+  "@7022070615528435141": {
+    "description": "Button label to delete something",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-detail\\fine-template-detail.component.html",
+        "start": { "line": "19", "column": "141" },
+        "end": { "line": "19", "column": "183" }
+      },
+      {
+        "file": "src\\app\\components\\fine\\fine-detail\\fine-detail.component.html",
+        "start": { "line": "19", "column": "141" },
+        "end": { "line": "19", "column": "183" }
+      }
+    ]
+  },
+  "2641832013456193658": "Sind Sie sicher, dass Sie diese Strafe löschen möchten?",
+  "@2641832013456193658": {
+    "description": "Message to ask for confirmation before deleting fine template",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-detail\\fine-template-detail.component.ts",
+        "start": { "line": "59", "column": "30" },
+        "end": { "line": "59", "column": "146" }
+      }
+    ]
+  },
+  "4001080830471869494": "Der Strafenkatalog ist leer",
+  "@4001080830471869494": {
+    "description": "Message when there are no fine templates",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-list\\fine-template-list.component.html",
+        "start": { "line": "34", "column": "117" },
+        "end": { "line": "38", "column": "10" }
+      }
+    ]
+  },
+  "3565564894581083236": "Mehrere Strafen hinzufügen",
+  "@3565564894581083236": {
+    "description": "Header in add and edit fine dialog for adding multiple fines",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "4", "column": "139" },
+        "end": { "line": "6", "column": "32" }
+      },
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "86", "column": "40" },
+        "end": { "line": "86", "column": "104" }
+      }
+    ]
+  },
+  "2664252626160446948": "Fügen Sie eine Strafe zu {$INTERPOLATION} hinzu",
+  "@2664252626160446948": {
+    "description": "Header in add and edit fine dialog for adding a fine to a person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "6", "column": "143" },
+        "end": { "line": "7", "column": "11" }
+      }
+    ]
+  },
+  "9021581179824925269": "Bearbeiten Sie {$INTERPOLATION} für {$INTERPOLATION_1}",
+  "@9021581179824925269": {
+    "description": "Header in add and edit fine dialog for editing a fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "8", "column": "132" },
+        "end": { "line": "10", "column": "6" }
+      }
+    ]
+  },
+  "258586247001688466": "Personen",
+  "@258586247001688466": {
+    "description": "Label for select person in fine add and edit",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "17", "column": "86" },
+        "end": { "line": "18", "column": "54" }
+      },
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "69", "column": "40" },
+        "end": { "line": "69", "column": "82" }
+      }
+    ]
+  },
+  "8556691996618308382": "{0} Personen ausgewählt",
+  "@8556691996618308382": {
+    "description": "Label for select persons if more than max persons are selected",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "18", "column": "130" },
+        "end": { "line": "22", "column": "51" }
+      }
+    ]
+  },
+  "2420654783487057176": "Strafenkatalog",
+  "@2420654783487057176": {
+    "description": "Label for select a fine template in fine add and edit",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "27", "column": "99" },
+        "end": { "line": "29", "column": "48" }
+      }
+    ]
+  },
+  "8559755248375801132": "Benutzerdefinierten Strafe erstellen",
+  "@8559755248375801132": {
+    "description": "Button label to add a custom fine reason in fine add and edit",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "30", "column": "89" },
+        "end": { "line": "30", "column": "179" }
+      }
+    ]
+  },
+  "5421076199587087589": "Anzahl",
+  "@5421076199587087589": {
+    "description": "Label for the number of times input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "38", "column": "1" },
+        "end": { "line": "42", "column": "3" }
+      }
+    ]
+  },
+  "1927700758501188846": "Verwenden Sie die Strafe-Vorlage",
+  "@1927700758501188846": {
+    "description": "Button label to use fine template in fine add and edit",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.html",
+        "start": { "line": "44", "column": "78" },
+        "end": { "line": "44", "column": "153" }
+      }
+    ]
+  },
+  "9025175888513444924": "Die Strafe konnte nicht mit einem Team verknüpfen werden",
+  "@9025175888513444924": {
+    "description": "Error message when the team ID is not set in add / edit fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.ts",
+        "start": { "line": "69", "column": "35" },
+        "end": { "line": "69", "column": "136" }
+      }
+    ]
+  },
+  "4376795361296074314": "Strafen hinzufügen",
+  "@4376795361296074314": {
+    "description": "Button label to add fine for multiple people",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.ts",
+        "start": { "line": "146", "column": "28" },
+        "end": { "line": "146", "column": "85" }
+      }
+    ]
+  },
+  "719105543061896965": "Strafe hinzufügen",
+  "@719105543061896965": {
+    "description": "Button label to add fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.ts",
+        "start": { "line": "148", "column": "28" },
+        "end": { "line": "148", "column": "64" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "44", "column": "108" },
+        "end": { "line": "44", "column": "160" }
+      }
+    ]
+  },
+  "3699257002687605134": "Strafe speichern",
+  "@3699257002687605134": {
+    "description": "Button label to save fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-add-edit\\fine-add-edit.component.ts",
+        "start": { "line": "149", "column": "24" },
+        "end": { "line": "149", "column": "62" }
+      }
+    ]
+  },
+  "917081865623078580": "Sind Sie sicher, dass Sie diese Strafe löschen möchten?",
+  "@917081865623078580": {
+    "description": "Message to ask for confirmation before deleting fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-detail\\fine-detail.component.ts",
+        "start": { "line": "65", "column": "30" },
+        "end": { "line": "65", "column": "128" }
+      }
+    ]
+  },
+  "4505691209362838578": "Diese Person hat keine Strafen",
+  "@4505691209362838578": {
+    "description": "Message when there are no fines",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine\\fine-list\\fine-list.component.html",
+        "start": { "line": "21", "column": "108" },
+        "end": { "line": "25", "column": "1" }
+      }
+    ]
+  },
+  "1743088859194300989": "Ihre Teams",
+  "@1743088859194300989": {
+    "description": "Label for the teams menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "46", "column": "32" },
+        "end": { "line": "46", "column": "75" }
+      }
+    ]
+  },
+  "3817498941817715969": "Seiten",
+  "@3817498941817715969": {
+    "description": "Label for the pages menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "60", "column": "32" },
+        "end": { "line": "60", "column": "70" }
+      }
+    ]
+  },
+  "4915431133669985304": "Profil",
+  "@4915431133669985304": {
+    "description": "Label for the profile menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "63", "column": "40" },
+        "end": { "line": "63", "column": "82" }
+      }
+    ]
+  },
+  "911089117658970752": "Strafenkatalog",
+  "@911089117658970752": {
+    "description": "Label for the fine templates menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "75", "column": "40" },
+        "end": { "line": "75", "column": "96" }
+      }
+    ]
+  },
+  "3943678493724531582": "Strafen verwalten",
+  "@3943678493724531582": {
+    "description": "Label for the fines menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "83", "column": "32" },
+        "end": { "line": "83", "column": "77" }
+      }
+    ]
+  },
+  "1898423040463515695": "Paypal.me bearbeiten",
+  "@1898423040463515695": {
+    "description": "Label for the edit paypal.me link menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "100", "column": "40" },
+        "end": { "line": "100", "column": "101" }
+      }
+    ]
+  },
+  "5113165610004622651": "Ausloggen",
+  "@5113165610004622651": {
+    "description": "Label for the sign out menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "107", "column": "40" },
+        "end": { "line": "107", "column": "83" }
+      }
+    ]
+  },
+  "6884779028889103417": "Paypal.me Link wird geladen",
+  "@6884779028889103417": {
+    "description": "Header in add and edit paypal.me dialog for loading",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.html",
+        "start": { "line": "3", "column": "130" },
+        "end": { "line": "5", "column": "1" }
+      }
+    ]
+  },
+  "2447291426905805602": "Paypal.me Link hinzufügen",
+  "@2447291426905805602": {
+    "description": "Header in add and edit paypal.me dialog for adding a paypal.me link",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.html",
+        "start": { "line": "5", "column": "146" },
+        "end": { "line": "7", "column": "59" }
+      }
+    ]
+  },
+  "8234782112213616336": "Paypal.me Link bearbeiten",
+  "@8234782112213616336": {
+    "description": "Header in add and edit paypal.me dialog for editing a paypal.me link",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.html",
+        "start": { "line": "7", "column": "147" },
+        "end": { "line": "12", "column": "6" }
+      }
+    ]
+  },
+  "1345125622793539472": "PayPal.Me Link (leer lassen um den Link zu entfernen)",
+  "@1345125622793539472": {
+    "description": "Label for the PayPal.Me link input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.html",
+        "start": { "line": "15", "column": "78" },
+        "end": { "line": "19", "column": "18" }
+      }
+    ]
+  },
+  "1915897504753001427": "Kann den paypal.me Link nicht mit einem Team verknüpfen",
+  "@1915897504753001427": {
+    "description": "Error message when the team ID is not set in add / edit paypal.me link",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.ts",
+        "start": { "line": "40", "column": "35" },
+        "end": { "line": "40", "column": "156" }
+      }
+    ]
+  },
+  "3827833849035040338": "Paypal.me Link hinzufügen",
+  "@3827833849035040338": {
+    "description": "Button label to add fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.ts",
+        "start": { "line": "61", "column": "28" },
+        "end": { "line": "61", "column": "74" }
+      }
+    ]
+  },
+  "6167823500350156809": "Paypal.me Link speichern",
+  "@6167823500350156809": {
+    "description": "Button label to edit fine",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\paypal-me-add-edit\\paypal-me-add-edit.component.ts",
+        "start": { "line": "62", "column": "24" },
+        "end": { "line": "62", "column": "72" }
+      }
+    ]
+  },
+  "2252708863083547958": "Person hinzufügen",
+  "@2252708863083547958": {
+    "description": "Header in add and edit person dialog for adding a person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.html",
+        "start": { "line": "3", "column": "135" },
+        "end": { "line": "5", "column": "48" }
+      }
+    ]
+  },
+  "5342432350421167093": "Vorname",
+  "@5342432350421167093": {
+    "description": "Label for the first name input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.html",
+        "start": { "line": "12", "column": "74" },
+        "end": { "line": "15", "column": "36" }
+      },
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.html",
+        "start": { "line": "13", "column": "99" },
+        "end": { "line": "15", "column": "10" }
+      }
+    ]
+  },
+  "6277528532563335824": "Nachname (optional)",
+  "@6277528532563335824": {
+    "description": "Label for the optional last name input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.html",
+        "start": { "line": "16", "column": "82" },
+        "end": { "line": "20", "column": "14" }
+      },
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.html",
+        "start": { "line": "19", "column": "106" },
+        "end": { "line": "21", "column": "18" }
+      }
+    ]
+  },
+  "7615128341629197401": "Kann die Person nicht mit einem Team verknüpfen",
+  "@7615128341629197401": {
+    "description": "Error message that no team ID is set in add / edit person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.ts",
+        "start": { "line": "48", "column": "35" },
+        "end": { "line": "48", "column": "135" }
+      }
+    ]
+  },
+  "4457577964848061688": "Person hinzufügen",
+  "@4457577964848061688": {
+    "description": "Button label to add person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.ts",
+        "start": { "line": "54", "column": "28" },
+        "end": { "line": "54", "column": "68" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.html",
+        "start": { "line": "17", "column": "84" },
+        "end": { "line": "17", "column": "126" }
+      }
+    ]
+  },
+  "8828288070132460310": "Person speichern",
+  "@8828288070132460310": {
+    "description": "Button label to save person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.ts",
+        "start": { "line": "55", "column": "24" },
+        "end": { "line": "55", "column": "66" }
+      }
+    ]
+  },
+  "4321433393895844264": "Benutzerrollen ausblenden",
+  "@4321433393895844264": {
+    "description": "Button label to hide user role changer",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.ts",
+        "start": { "line": "95", "column": "28" },
+        "end": { "line": "95", "column": "85" }
+      }
+    ]
+  },
+  "1408799019608449608": "Benutzerrollen bearbeiten (einige wurden geändert)",
+  "@1408799019608449608": {
+    "description": "Button label to show user role changer with changes",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.ts",
+        "start": { "line": "97", "column": "28" },
+        "end": { "line": "97", "column": "117" }
+      }
+    ]
+  },
+  "3464777896105184166": "Benutzerrollen bearbeiten",
+  "@3464777896105184166": {
+    "description": "Button label to show user role changer without changes",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-add-edit\\person-add-edit.component.ts",
+        "start": { "line": "98", "column": "24" },
+        "end": { "line": "98", "column": "97" }
+      }
+    ]
+  },
+  "5449780233392151793": "Jetzt mit PayPal zahlen",
+  "@5449780233392151793": {
+    "description": "Label of pay with PayPal.me link button",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "14", "column": "109" },
+        "end": { "line": "17", "column": "1" }
+      }
+    ]
+  },
+  "1329390920665999933": "Person einladen",
+  "@1329390920665999933": {
+    "description": "Button label to invite person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "19", "column": "89" },
+        "end": { "line": "19", "column": "135" }
+      }
+    ]
+  },
+  "7660846224795606746": "Person löschen",
+  "@7660846224795606746": {
+    "description": "Button label to edit person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "30", "column": "95" },
+        "end": { "line": "30", "column": "139" }
+      }
+    ]
+  },
+  "8715975175070187805": "Person bearbeiten",
+  "@8715975175070187805": {
+    "description": "Button label to edit person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "37", "column": "95" },
+        "end": { "line": "37", "column": "137" }
+      }
+    ]
+  },
+  "3448462145758383019": "Gesamt",
+  "@3448462145758383019": {
+    "description": "Label of total amount",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "49", "column": "32" },
+        "end": { "line": "49", "column": "62" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
+        "start": { "line": "29", "column": "32" },
+        "end": { "line": "29", "column": "62" }
+      }
+    ]
+  },
+  "7593555694782789615": "Offen",
+  "@7593555694782789615": {
+    "description": "Label of not payed amount",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "55", "column": "32" },
+        "end": { "line": "55", "column": "65" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
+        "start": { "line": "35", "column": "32" },
+        "end": { "line": "35", "column": "65" }
+      }
+    ]
+  },
+  "8282940047848889809": "Bezahlt",
+  "@8282940047848889809": {
+    "description": "Label of payed amount",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "61", "column": "32" },
+        "end": { "line": "61", "column": "61" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
+        "start": { "line": "41", "column": "32" },
+        "end": { "line": "41", "column": "61" }
+      }
+    ]
+  },
+  "8414719116461217835": "Die Einladung wird geladen, bitte warten...",
+  "@8414719116461217835": {
+    "description": "Message to wait for invitation to be loading",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "110", "column": "30" },
+        "end": { "line": "110", "column": "115" }
+      }
+    ]
+  },
+  "2159130950882492111": "Abbrechen",
+  "@2159130950882492111": {
+    "description": "Label of the button to cancel the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "112", "column": "34" },
+        "end": { "line": "112", "column": "84" }
+      }
+    ]
+  },
+  "7790845502003161026": "Die Einladung war erfolgreich! Gebe diesen Link an die Person weiter: {$PH}",
+  "@7790845502003161026": {
+    "description": "Message to show when invitation was successful",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "127", "column": "34" },
+        "end": { "line": "127", "column": "159" }
+      }
+    ]
+  },
+  "7819314041543176992": "Schließen",
+  "@7819314041543176992": {
+    "description": "Label of the button to close the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "128", "column": "38" },
+        "end": { "line": "128", "column": "86" }
+      }
+    ]
+  },
+  "3899689736802688204": "Link kopieren und schließen",
+  "@3899689736802688204": {
+    "description": "Label of the button to copy invitation link and close the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "129", "column": "38" },
+        "end": { "line": "129", "column": "125" }
+      }
+    ]
+  },
+  "5235193980611559943": "Hallo {$PH}, du wurdest in dein Team {$PH_1} eingeladen um die Teamstrafen einzusehen. Folge dem Link, um dich anzumelden: {$PH_2}",
+  "@5235193980611559943": {
+    "description": "Text to copy invitation link",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "132", "column": "64" },
+        "end": { "line": "132", "column": "239" }
+      }
+    ]
+  },
+  "2647541955689260321": "Sind Sie sicher, dass Sie diese Person löschen möchten?",
+  "@2647541955689260321": {
+    "description": "Message to ask for confirmation before deleting person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "143", "column": "30" },
+        "end": { "line": "143", "column": "132" }
+      }
+    ]
+  },
+  "8465668841331533261": "Zurück zu den Personen",
+  "@8465668841331533261": {
+    "description": "Button label to go back to the person list",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-list-and-detail\\person-list-and-detail.component.html",
+        "start": { "line": "4", "column": "75" },
+        "end": { "line": "4", "column": "140" }
+      }
+    ]
+  },
+  "6121824075663329331": "Keine Personen",
+  "@6121824075663329331": {
+    "description": "Message when there are no persons",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.html",
+        "start": { "line": "34", "column": "110" },
+        "end": { "line": "38", "column": "3" }
+      }
+    ]
+  },
+  "4041169053278665664": "Unerwarteter Fehler!",
+  "@4041169053278665664": {
+    "description": "Popup dialog is visible in an inactive state. Header of the error message",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\popup-dialog-handler\\popup-dialog-handler.component.html",
+        "start": { "line": "7", "column": "130" },
+        "end": { "line": "9", "column": "52" }
+      }
+    ]
+  },
+  "669241476887423426": "Ein Fehler ist aufgetreten! Das Dialogfenster konnte nicht geöffnet werden, bitte erneut versuchen.",
+  "@669241476887423426": {
+    "description": "Popup dialog is visible in an inactive state. Show an error message",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\popup-dialog-handler\\popup-dialog-handler.component.html",
+        "start": { "line": "9", "column": "118" },
+        "end": { "line": "12", "column": "46" }
+      }
+    ]
+  },
+  "499768144921349408": "Erstelle dein Team",
+  "@499768144921349408": {
+    "description": "Title of create your team",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.html",
+        "start": { "line": "1", "column": "70" },
+        "end": { "line": "2", "column": "31" }
+      }
+    ]
+  },
+  "749182926967212889": "Du bist mit keinem Team verknüpft. Erstelle dein Team.",
+  "@749182926967212889": {
+    "description": "Subtitle of create your team",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.html",
+        "start": { "line": "2", "column": "72" },
+        "end": { "line": "3", "column": "35" }
+      }
+    ]
+  },
+  "550195626538405809": "Teamname",
+  "@550195626538405809": {
+    "description": "Label for the name input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.html",
+        "start": { "line": "6", "column": "83" },
+        "end": { "line": "8", "column": "8" }
+      }
+    ]
+  },
+  "3854363836178152005": "Team erstellen",
+  "@3854363836178152005": {
+    "description": "Button label to create team",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.html",
+        "start": { "line": "23", "column": "280" },
+        "end": { "line": "23", "column": "322" }
+      }
+    ]
+  },
+  "7721672023070326305": "Der Teamname ist erforderlich um das Team zu erstellen",
+  "@7721672023070326305": {
+    "description": "Name is required error message of the name input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.ts",
+        "start": { "line": "91", "column": "28" },
+        "end": { "line": "91", "column": "119" }
+      }
+    ]
+  },
+  "5122036632046574283": "Dein Vorname ist erforderlich um das Team zu erstellen",
+  "@5122036632046574283": {
+    "description": "First name is required error message of the first name input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.ts",
+        "start": { "line": "99", "column": "28" },
+        "end": { "line": "99", "column": "137" }
+      }
+    ]
+  },
+  "3129604876054849035": "Bitte fülle alle erforderlichen Felder aus",
+  "@3129604876054849035": {
+    "description": "Validation failed error message of the create team button",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.ts",
+        "start": { "line": "114", "column": "28" },
+        "end": { "line": "114", "column": "123" }
+      },
+      {
+        "file": "src\\app\\types\\SubmitableForm.ts",
+        "start": { "line": "30", "column": "28" },
+        "end": { "line": "30", "column": "118" }
+      }
+    ]
+  },
+  "44662825652265455": "Team konnte nicht erstellt werden",
+  "@44662825652265455": {
+    "description": "Team create failed error message of the create team button",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.ts",
+        "start": { "line": "116", "column": "28" },
+        "end": { "line": "116", "column": "111" }
+      }
+    ]
+  },
+  "4237154153632436423": "Navigation zur Homepage fehlgeschlagen",
+  "@4237154153632436423": {
+    "description": "Navigation failed error message of the create team button",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.ts",
+        "start": { "line": "118", "column": "28" },
+        "end": { "line": "118", "column": "124" }
+      }
+    ]
+  },
+  "3613251477616121904": "Navigation zur Anmelde-Seite fehlgeschlagen.",
+  "@3613251477616121904": {
+    "description": "Error message that navigation to sign up page has failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "40", "column": "28" },
+        "end": { "line": "40", "column": "127" }
+      }
+    ]
+  },
+  "957380748887148252": "Navigation zur Homepage fehlgeschlagen.",
+  "@957380748887148252": {
+    "description": "Error message that navigation to home page has failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "77", "column": "29" },
+        "end": { "line": "77", "column": "122" }
+      }
+    ]
+  },
+  "7383828016699485141": "Ein Kasten Bier",
+  "@7383828016699485141": {
+    "description": "Amount description of create of beer, singluar",
+    "x-locations": [
+      {
+        "file": "src\\app\\pipes\\fine-amount\\fine-amount.pipe.ts",
+        "start": { "line": "28", "column": "36" },
+        "end": { "line": "28", "column": "104" }
+      }
+    ]
+  },
+  "6183816443607507189": "{$PH} Kästen Bier",
+  "@6183816443607507189": {
+    "description": "Amount description of create of beer, plural",
+    "x-locations": [
+      {
+        "file": "src\\app\\pipes\\fine-amount\\fine-amount.pipe.ts",
+        "start": { "line": "29", "column": "32" },
+        "end": { "line": "29", "column": "121" }
+      }
+    ]
+  },
+  "8209617297756538312": "Ein Fehler ist aufgetretten, bitte versuche es später erneut",
+  "@8209617297756538312": {
+    "description": "Error message that an internal server error has occured",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\SubmitableForm.ts",
+        "start": { "line": "31", "column": "29" },
+        "end": { "line": "31", "column": "129" }
+      }
+    ]
+  },
+  "2298497486218904416": "Nach Grund sortieren",
+  "@2298497486218904416": {
+    "description": "Dropdown label to sort fine by reason",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
+        "start": { "line": "5", "column": "24" },
+        "end": { "line": "5", "column": "79" }
+      },
+      {
+        "file": "src\\app\\types\\sorting\\fine-template-list-sorting.ts",
+        "start": { "line": "5", "column": "24" },
+        "end": { "line": "5", "column": "88" }
+      }
+    ]
+  },
+  "559899046072217367": "Nach Bezahlstatus sortieren",
+  "@559899046072217367": {
+    "description": "Dropdown label to sort fine by payed state",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
+        "start": { "line": "9", "column": "24" },
+        "end": { "line": "9", "column": "88" }
+      },
+      {
+        "file": "src\\app\\types\\sorting\\person-sorting.ts",
+        "start": { "line": "10", "column": "24" },
+        "end": { "line": "10", "column": "91" }
+      }
+    ]
+  },
+  "6184052428561298675": "Nach Datum sortieren",
+  "@6184052428561298675": {
+    "description": "Dropdown label to sort fine by date",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
+        "start": { "line": "13", "column": "24" },
+        "end": { "line": "13", "column": "75" }
+      }
+    ]
+  },
+  "3405097354041052483": "Nach Betrag sortieren",
+  "@3405097354041052483": {
+    "description": "Dropdown label to sort fine by amount",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
+        "start": { "line": "17", "column": "24" },
+        "end": { "line": "17", "column": "79" }
+      },
+      {
+        "file": "src\\app\\types\\sorting\\fine-template-list-sorting.ts",
+        "start": { "line": "9", "column": "24" },
+        "end": { "line": "9", "column": "88" }
+      }
+    ]
+  },
+  "6152209346905800211": "Nach Name sortieren",
+  "@6152209346905800211": {
+    "description": "Dropdown label to sort persons by name",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\person-sorting.ts",
+        "start": { "line": "6", "column": "24" },
+        "end": { "line": "6", "column": "78" }
+      }
+    ]
+  },
+  "2735006681865917910": "Nach gesamten Betrag sortieren",
+  "@2735006681865917910": {
+    "description": "Dropdown label to sort persons by total amount",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\person-sorting.ts",
+        "start": { "line": "15", "column": "24" },
+        "end": { "line": "15", "column": "94" }
+      }
+    ]
+  },
+  "5316318590788904679": "Nach offenen Betrag sortieren",
+  "@5316318590788904679": {
+    "description": "Dropdown label to sort persons by not payed amount",
+    "x-locations": [
+      {
+        "file": "src\\app\\types\\sorting\\person-sorting.ts",
+        "start": { "line": "19", "column": "24" },
+        "end": { "line": "19", "column": "97" }
+      }
+    ]
+  },
+  "1678548018195726594": "Team erstellen",
+  "@1678548018195726594": {
+    "description": "Title for the create team page",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\create-team\\create-team.page.ts",
+        "start": { "line": "48", "column": "44" },
+        "end": { "line": "48", "column": "90" }
+      }
+    ]
+  },
+  "2821179408673282599": "Startseite",
+  "@2821179408673282599": {
+    "description": "Title for the home page",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\home\\home.page.ts",
+        "start": { "line": "41", "column": "44" },
+        "end": { "line": "41", "column": "76" }
+      }
+    ]
+  },
+  "840692109692540367": "Anmelden",
+  "@840692109692540367": {
+    "description": "Title for the sign in page",
+    "x-locations": [
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "32", "column": "44" },
+        "end": { "line": "32", "column": "82" }
       }
     ]
   }
