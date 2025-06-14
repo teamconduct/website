@@ -6,6 +6,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { Localization } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-root',
@@ -26,8 +27,10 @@ export class App implements OnInit {
         this.faIconLibrary.addIconPacks(far);
         this.faIconLibrary.addIconPacks(fab);
         switch (this.localeId) {
-        case 'de-DE':
-            return this.primeNGConfig.setTranslation(primeNGTranslationDE);
+        case 'de': {
+            Localization.locale = 'de';
+            this.primeNGConfig.setTranslation(primeNGTranslationDE);
+        }
         }
     }
 }
