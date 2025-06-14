@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Fine, Person } from '@stevenkellner/team-conduct-api';
+import { Fine, Person, FineTemplate } from '@stevenkellner/team-conduct-api';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 interface IDialogData {
@@ -18,6 +18,16 @@ export interface FineAddEditDialogData extends IDialogData {
     fine: Fine | null;
 }
 
+export interface FineTemplateDetailDialogData extends IDialogData {
+    type: 'fineTemplateDetail';
+    fineTemplate: FineTemplate;
+}
+
+export interface FineTemplateAddEditDialogData extends IDialogData {
+    type: 'fineTemplateAddEdit';
+    fineTemplate: FineTemplate | null;
+}
+
 export interface PaypalMeAddEditDialogData extends IDialogData {
     type: 'paypalMeAddEdit';
 }
@@ -25,6 +35,8 @@ export interface PaypalMeAddEditDialogData extends IDialogData {
 export type DialogData =
     | FineDetailDialogData
     | FineAddEditDialogData
+    | FineTemplateDetailDialogData
+    | FineTemplateAddEditDialogData
     | PaypalMeAddEditDialogData;
 
 @Injectable({

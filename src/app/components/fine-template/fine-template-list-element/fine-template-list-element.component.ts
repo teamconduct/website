@@ -1,7 +1,8 @@
 import { SkeletonModule } from 'primeng/skeleton';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { FineTemplate, FineTemplateRepetition } from '@stevenkellner/team-conduct-api';
 import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
+import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 
 @Component({
     selector: 'app-fine-template-list-element',
@@ -16,11 +17,19 @@ export class FineTemplateListElementComponent {
 
     public readonly hideTopBorder = input<boolean>(false);
 
+    private popupDialogHandler = inject(PopupDialogHandlerService);
+
     public repetitionDescription(multiple: FineTemplateRepetition): string {
         return FineTemplateRepetition.Item.formatted(multiple.item);
     }
 
     public showFineTemplateDetails() {
-        // TODO
+        const fineTemplate = this.fineTemplate();
+        if (fineTemplate === null)
+            return;
+        this.popupDialogHandler.activate({
+            type: 'fineTemplateDetail',
+            fineTemplate: fineTemplate
+        });
     }
 }

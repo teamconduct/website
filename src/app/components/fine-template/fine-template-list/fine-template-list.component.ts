@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FineTemplateListElementComponent } from '../fine-template-list-element/fine-template-list-element.component';
 import { SelectModule } from 'primeng/select';
+import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 
 @Component({
     selector: 'app-fine-template-list',
@@ -23,6 +24,8 @@ export class FineTemplateListComponent {
     public userManager = inject(UserManagerService);
 
     public teamDataManager = inject(TeamDataManagerService);
+
+    private popupDialogHandler = inject(PopupDialogHandlerService);
 
     public sorting = fineTemplateListSorting;
 
@@ -47,6 +50,9 @@ export class FineTemplateListComponent {
     }
 
     public addFineTemplateClicked() {
-        // TODO
+        this.popupDialogHandler.activate({
+            type: 'fineTemplateAddEdit',
+            fineTemplate: null
+        });
     }
 }

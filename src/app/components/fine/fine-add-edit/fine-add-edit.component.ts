@@ -14,14 +14,12 @@ import { UserManagerService } from '../../../services/user-manager/user-manager.
 import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
 import { configuration } from '../../../../environments/environment';
 import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
-import { SelectModule } from 'primeng/select';
-import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 
 @Component({
     selector: 'app-fine-add-edit',
-    imports: [AsyncPipe, SelectModule, FloatLabelModule, ButtonModule, AddEditFormComponent, FormElementComponent],
+    imports: [AsyncPipe, ButtonModule, AddEditFormComponent, FormElementComponent],
     providers: [FineAmountPipe],
     templateUrl: './fine-add-edit.component.html',
     styleUrl: './fine-add-edit.component.scss',
@@ -34,9 +32,9 @@ export class FineAddEditComponent extends SubmitableForm<{
     fineTemplate: FormControl<FineTemplate | 'custom' | null>
     fineTemplateRepetition: FormControl<number | null>
     reason: FormControl<string | null>
-    fineValueType: FormControl<'amount' | FineAmount.Item.Type | null>
+    fineAmountItem: FormControl<'amount' | FineAmount.Item.Type | null>
     amount: FormControl<number | null>
-    fineValueItemCount: FormControl<number | null>
+    fineAmountItemCount: FormControl<number | null>
     date: FormControl<Date | null>
 }, 'no-team-id'> {
 
@@ -64,14 +62,15 @@ export class FineAddEditComponent extends SubmitableForm<{
             fineTemplate: new FormControl<FineTemplate | 'custom' | null>(null, [Validators.required]),
             fineTemplateRepetition: new FormControl<number | null>(null, []),
             reason: new FormControl<string | null>(null, []),
-            fineValueType: new FormControl<'amount' | FineAmount.Item.Type | null>(null, []),
+            fineAmountItem: new FormControl<'amount' | FineAmount.Item.Type | null>(null, []),
             amount: new FormControl<number | null>(null, []),
-            fineValueItemCount: new FormControl<number | null>(null, []),
+            fineAmountItemCount: new FormControl<number | null>(null, []),
             date: new FormControl<Date | null>(null, [Validators.required])
         }, {
-            'no-team-id': $localize `:Error message when the team ID is not set:Cannot assiciate the fine with a team`
+            'no-team-id': $localize `:Error message when the team ID is not set in add / edit fine:Cannot assiciate the fine with a team`
         }, [
             control => {
+                control.get('fineTemplateRepetition')!.setErrors(null);
                 const fineTemplate = control.get('fineTemplate')!.value;
                 if (fineTemplate === null || fineTemplate === 'custom')
                     return null;
@@ -86,6 +85,10 @@ export class FineAddEditComponent extends SubmitableForm<{
                 };
             },
             control => {
+                control.get('reason')!.setErrors(null);
+                control.get('fineAmountItem')!.setErrors(null);
+                control.get('amount')!.setErrors(null);
+                control.get('fineAmountItemCount')!.setErrors(null);
                 const fineTemplate = control.get('fineTemplate')!.value;
                 if (fineTemplate !== 'custom')
                     return null;
@@ -93,15 +96,15 @@ export class FineAddEditComponent extends SubmitableForm<{
                 const reasonValid = reason !== null && reason !== '';
                 if (!reasonValid)
                     control.get('reason')!.setErrors({ required: true });
-                const fineValueType = control.get('fineValueType')!.value;
-                if (fineValueType === null) {
-                    control.get('fineValueType')!.setErrors({ required: true });
+                const fineAmountItem = control.get('fineAmountItem')!.value;
+                if (fineAmountItem === null) {
+                    control.get('fineAmountItem')!.setErrors({ required: true });
                     return {
                         reasonRequired: !reasonValid,
-                        fineValueTypeRequired: true
+                        fineAmountItemRequired: true
                     };
                 }
-                switch (fineValueType) {
+                switch (fineAmountItem) {
                 case 'amount': {
                     const amount = control.get('amount')!.value;
                     const amountValid = amount !== null && amount > 0;
@@ -115,15 +118,15 @@ export class FineAddEditComponent extends SubmitableForm<{
                     };
                 }
                 default: {
-                    const fineValueItemCount = control.get('fineValueItemCount')!.value;
-                    const fineValueItemCountValid = fineValueItemCount !== null && fineValueItemCount > 0;
-                    if (!fineValueItemCountValid)
-                        control.get('fineValueItemCount')!.setErrors({ required: true });
-                    if (reasonValid && fineValueItemCountValid)
+                    const fineAmountItemCount = control.get('fineAmountItemCount')!.value;
+                    const fineAmountItemCountValid = fineAmountItemCount !== null && fineAmountItemCount > 0;
+                    if (!fineAmountItemCountValid)
+                        control.get('fineAmountItemCount')!.setErrors({ required: true });
+                    if (reasonValid && fineAmountItemCountValid)
                         return null;
                     return {
                         reasonRequired: !reasonValid,
-                        fineValueItemCountRequired: !fineValueItemCountValid
+                        fineAmountItemCountRequired: !fineAmountItemCountValid
                     };
                 }
                 }
@@ -203,7 +206,7 @@ export class FineAddEditComponent extends SubmitableForm<{
         return new FineTemplateRepetition(fineTemplateValue.repetition.item, null).formattedWithoutCount(count);
     }
 
-    public get fineValueTypeOptions(): { label: string, key: 'amount' | FineAmount.Item.Type }[] {
+    public get fineAmountItemOptions(): { label: string, key: 'amount' | FineAmount.Item.Type }[] {
         return [
             {
                 label: $localize `:Fine value type selection, amount:Amount`,
@@ -216,12 +219,12 @@ export class FineAddEditComponent extends SubmitableForm<{
         ];
     }
 
-    public get fineValueItemCountSuffix(): string {
-        const fineValueType = this.get('fineValueType')!.value;
-        if (fineValueType === null || fineValueType === 'amount')
+    public get fineAmountItemCountSuffix(): string {
+        const fineAmountItem = this.get('fineAmountItem')!.value;
+        if (fineAmountItem === null || fineAmountItem === 'amount')
             return '';
-        const count = this.get('fineValueItemCount')!.value ?? 0;
-        return new FineAmount.Item(fineValueType, count).formattedWithoutCount();
+        const count = this.get('fineAmountItemCount')!.value ?? 0;
+        return new FineAmount.Item(fineAmountItem, count).formattedWithoutCount();
     }
 
     public override reset() {
@@ -230,8 +233,8 @@ export class FineAddEditComponent extends SubmitableForm<{
         this.get('personIds')!.setValue(personId !== null ? [personId] : []);
         this.get('fineTemplateRepetition')!.setValue(1);
         this.get('date')!.setValue(new Date());
-        this.get('fineValueType')!.setValue('amount');
-        this.get('fineValueItemCount')!.setValue(1);
+        this.get('fineAmountItem')!.setValue('amount');
+        this.get('fineAmountItemCount')!.setValue(1);
         const fine = this.fine();
         if (fine === null)
             return;
@@ -240,9 +243,9 @@ export class FineAddEditComponent extends SubmitableForm<{
             fineTemplate: 'custom',
             fineTemplateRepetition: 1,
             reason: fine.reason,
-            fineValueType: fine.amount instanceof FineAmount.Money ? 'amount' : fine.amount.item,
+            fineAmountItem: fine.amount instanceof FineAmount.Money ? 'amount' : fine.amount.item,
             amount: fine.amount instanceof FineAmount.Money ? fine.amount.amount.completeValue : null,
-            fineValueItemCount: fine.amount instanceof FineAmount.Item ? fine.amount.count : 1,
+            fineAmountItemCount: fine.amount instanceof FineAmount.Item ? fine.amount.count : 1,
             date: fine.date.toDate
         });
     }
@@ -256,13 +259,13 @@ export class FineAddEditComponent extends SubmitableForm<{
             };
         }
         let value: FineAmount;
-        const fineValueType = this.get('fineValueType')!.value!;
-        switch (fineValueType) {
+        const fineAmountItem = this.get('fineAmountItem')!.value!;
+        switch (fineAmountItem) {
         case 'amount':
             value = FineAmount.money(MoneyAmount.builder.build(this.get('amount')!.value!));
             break;
         default:
-            value = FineAmount.item(fineValueType, this.get('fineValueItemCount')!.value!);
+            value = FineAmount.item(fineAmountItem, this.get('fineAmountItemCount')!.value!);
             break;
         }
         return {

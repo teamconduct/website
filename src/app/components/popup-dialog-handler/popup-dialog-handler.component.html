@@ -24,4 +24,18 @@
         </ng-template>
         <app-fine-add-edit [fine]="currentDialog.fine" [personId]="currentDialog.personId" #fineAddEditElement="appFineAddEdit" />
     </p-dialog>
+} @else if (currentDialog.type === 'fineTemplateDetail') {
+    <p-dialog [visible]="currentDialog !== null" (visibleChange)="visibleChanged($event)" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" appendTo="body" class="clamp-width" styleClass="md:w-45vw w-90vw">
+        <ng-template #header>
+            <ng-container *ngTemplateOutlet="fineTemplateDetailElement.headerElement()" />
+        </ng-template>
+        <app-fine-template-detail [fineTemplate]="currentDialog.fineTemplate" #fineTemplateDetailElement="appFineTemplateDetail" />
+    </p-dialog>
+} @else if (currentDialog.type === 'fineTemplateAddEdit') {
+    <p-dialog [visible]="currentDialog !== null" (visibleChange)="visibleChanged($event)" (onShow)="fineTemplateAddEditElement.reset()" (onHide)="fineTemplateAddEditElement.reset()" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" appendTo="body" class="clamp-width" styleClass="md:w-45vw w-90vw">
+        <ng-template #header>
+            <ng-container *ngTemplateOutlet="fineTemplateAddEditElement.headerElement()" />
+        </ng-template>
+        <app-fine-template-add-edit [fineTemplate]="currentDialog.fineTemplate" #fineTemplateAddEditElement="appFineTemplateAddEdit" />
+    </p-dialog>
 }

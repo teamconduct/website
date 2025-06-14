@@ -48,17 +48,17 @@
             i18n-label="Label for the reason input field" label="Reason"
         />
 
-        <app-form-element type="dropdown" [formControl]="get('fineValueType')" [options]="fineValueTypeOptions"
+        <app-form-element type="dropdown" [formControl]="get('fineAmountItem')" [options]="fineAmountItemOptions"
             i18n-label="Label for the fine value type dropdown" label="Cost"
         />
 
-        @let selectedFineValueType = get('fineValueType')!.value;
-        @if (selectedFineValueType === 'amount') {
+        @let selectedfineAmountItem = get('fineAmountItem')!.value;
+        @if (selectedfineAmountItem === 'amount') {
             <app-form-element type="currency" [formControl]="get('amount')" currency="EUR"
                 i18n-label="Label for the amount input field" label="Amount"
             />
-        } @else if (selectedFineValueType !== null) {
-            <app-form-element type="number" [formControl]="get('fineValueItemCount')" [min]="1" [showButtons]="true" [suffix]="fineValueItemCountSuffix"
+        } @else if (selectedfineAmountItem !== null) {
+            <app-form-element type="number" [formControl]="get('fineAmountItemCount')" [min]="1" [showButtons]="true" [suffix]="fineAmountItemCountSuffix"
                 i18n-label="Label for the fine value item count input field" label="Count"
             />
         }

@@ -1,0 +1,42 @@
+<ng-template #header>
+    @let _fineTemplate = fineTemplate();
+    @if (_fineTemplate === null) {
+        <p class="text-color text-xl font-semibold my-0 pl-3" i18n="Header in add and edit fine template dialog for adding a fine template">Add a fine template</p>
+    } @else {
+        <p class="text-color text-xl font-semibold my-0 pl-3" i18n="Header in add and edit fine template dialog for editing a fine template">Edit {{ _fineTemplate.reason }}</p>
+    }
+</ng-template>
+
+<app-add-edit-form [form]="this" [buttonLabel]="buttonLabel">
+
+    <app-form-element type="input" [formControl]="get('reason')"
+        i18n-label="Label for the reason input field" label="Reason"
+    />
+
+    <app-form-element type="dropdown" [formControl]="get('fineAmountItem')" [options]="fineAmountItemOptions"
+        i18n-label="Label for the fine value type dropdown" label="Cost"
+    />
+
+    @let selectedfineAmountItem = get('fineAmountItem')!.value;
+    @if (selectedfineAmountItem === 'amount') {
+        <app-form-element type="currency" [formControl]="get('amount')" currency="EUR"
+            i18n-label="Label for the amount input field" label="Amount"
+        />
+    } @else if (selectedfineAmountItem !== null) {
+        <app-form-element type="number" [formControl]="get('fineAmountItemCount')" [min]="1" [showButtons]="true" [suffix]="fineAmountItemCountSuffix"
+            i18n-label="Label for the fine value item count input field" label="Count"
+        />
+    }
+
+    <app-form-element type="dropdown" [formControl]="get('repetitionItem')" [options]="repetitionOptions"
+        i18n-label="Label for the repetition item dropdown" label="Reapeat per"
+    />
+
+    @let selectedRepetitionItem = get('repetitionItem')!.value;
+    @if (selectedRepetitionItem !== null && selectedRepetitionItem !== 'none') {
+        <app-form-element type="number" [formControl]="get('repetitionMaxCount')" [min]="1" [showButtons]="true" [suffix]="repetitionMaxCountSuffix"
+            i18n-label="Label for the repetition max count input field" label="Repeat maximal (leave empty for no maximum)"
+        />
+    }
+
+</app-add-edit-form>
