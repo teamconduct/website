@@ -6,10 +6,11 @@ import { FineDetailComponent } from '../fine/fine-detail/fine-detail.component';
 import { FineAddEditComponent } from '../fine/fine-add-edit/fine-add-edit.component';
 import { FineTemplateDetailComponent } from '../fine-template/fine-template-detail/fine-template-detail.component';
 import { FineTemplateAddEditComponent } from '../fine-template/fine-template-add-edit/fine-template-add-edit.component';
+import { PersonAddEditComponent } from '../person/person-add-edit/person-add-edit.component';
 
 @Component({
     selector: 'app-popup-dialog-handler',
-    imports: [NgTemplateOutlet, AsyncPipe, DialogModule, FineDetailComponent, FineAddEditComponent, FineTemplateDetailComponent, FineTemplateAddEditComponent],
+    imports: [NgTemplateOutlet, AsyncPipe, DialogModule, PersonAddEditComponent, FineDetailComponent, FineAddEditComponent, FineTemplateDetailComponent, FineTemplateAddEditComponent],
     templateUrl: './popup-dialog-handler.component.html',
     styleUrl: './popup-dialog-handler.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

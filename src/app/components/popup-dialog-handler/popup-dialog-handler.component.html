@@ -10,6 +10,13 @@
             <p id="error-message" i18n="Popup dialog is visible in an inactive state. Show an error message">An error occured while opening this dialog, please try again!</p>
         </p-dialog>
     }
+} @else if (currentDialog.type === 'personAddEdit') {
+    <p-dialog [visible]="currentDialog !== null" (visibleChange)="visibleChanged($event)" (onShow)="personAddEditElement.reset()" (onHide)="personAddEditElement.reset()" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" appendTo="body" class="clamp-width" styleClass="md:w-45vw w-90vw">
+        <ng-template #header>
+            <ng-container *ngTemplateOutlet="personAddEditElement.headerElement()" />
+        </ng-template>
+        <app-person-add-edit [person]="currentDialog.person" #personAddEditElement="appPersonAddEdit" />
+    </p-dialog>
 } @else if (currentDialog.type === 'fineDetail') {
     <p-dialog [visible]="currentDialog !== null" (visibleChange)="visibleChanged($event)" [modal]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false" appendTo="body" class="clamp-width" styleClass="md:w-45vw w-90vw">
         <ng-template #header>
@@ -38,4 +45,6 @@
         </ng-template>
         <app-fine-template-add-edit [fineTemplate]="currentDialog.fineTemplate" #fineTemplateAddEditElement="appFineTemplateAddEdit" />
     </p-dialog>
+} @else if (currentDialog.type === 'paypalMeAddEdit') {
+    <!-- TODO -->
 }

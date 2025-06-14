@@ -167,7 +167,13 @@ export class PersonDetailComponent {
     }
 
     public showPersonEditDialog() {
-        // TODO
+        const person = this.person();
+        if (person === null)
+            return;
+        this.popupDialogHandler.activate({
+            type: 'personAddEdit',
+            person: person.person
+        });
     }
 
     public showFineAddDialog() {

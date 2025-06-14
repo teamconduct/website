@@ -32,7 +32,7 @@ export class HomePage implements OnInit {
 
     private messageService = inject(MessageService);
 
-    public currentPage: 'profile' | 'persons' | 'fineTemplates' = 'fineTemplates';
+    public currentPage: 'profile' | 'persons' | 'fineTemplates' = 'profile';
 
     public ngOnInit() {
         this.userManager.getAllCookies();

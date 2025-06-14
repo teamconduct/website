@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { FineAmount, FineTemplate, FineTemplateRepetition, MoneyAmount } from '@stevenkellner/team-conduct-api';
-import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { getEnterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { SubmitableForm } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
@@ -14,7 +13,6 @@ import { FormElementComponent } from '../../add-edit-form/form-element/form-elem
 @Component({
     selector: 'app-fine-template-add-edit',
     imports: [AddEditFormComponent, FormElementComponent],
-    providers: [FineAmountPipe],
     templateUrl: './fine-template-add-edit.component.html',
     styleUrl: './fine-template-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,7 +81,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
     }
 
     public get buttonLabel(): string {
-        if (this.fineTemplate === null)
+        if (this.fineTemplate() === null)
             return $localize `:Button label to add fine template:Add fine template`;
         return $localize `:Button label to save fine template:Save fine template`;
     }

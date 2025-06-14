@@ -6,6 +6,11 @@ interface IDialogData {
     type: string;
 }
 
+export interface PersonAddEditDialogData extends IDialogData {
+    type: 'personAddEdit';
+    person: Person | null;
+}
+
 export interface FineDetailDialogData extends IDialogData {
     type: 'fineDetail';
     personId: Person.Id;
@@ -33,6 +38,7 @@ export interface PaypalMeAddEditDialogData extends IDialogData {
 }
 
 export type DialogData =
+    | PersonAddEditDialogData
     | FineDetailDialogData
     | FineAddEditDialogData
     | FineTemplateDetailDialogData
