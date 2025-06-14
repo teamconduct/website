@@ -12,10 +12,11 @@ import { PopupDialogHandlerComponent } from '../../components/popup-dialog-handl
 import { Observable } from '../../types';
 import { PersonWithFines } from '../../types/PersonWithFines';
 import { PersonDetailComponent } from '../../components/person/person-detail/person-detail.component';
+import { FineTemplateListComponent } from '../../components/fine-template/fine-template-list/fine-template-list.component';
 
 @Component({
     selector: 'page-home',
-    imports: [AsyncPipe, ToastModule, PopupDialogHandlerComponent, MenuComponent, CardModule, PersonDetailComponent],
+    imports: [AsyncPipe, ToastModule, PopupDialogHandlerComponent, MenuComponent, CardModule, PersonDetailComponent, FineTemplateListComponent],
     providers: [MessageService, MenuComponent],
     templateUrl: './home.page.html',
     styleUrl: './home.page.scss',
@@ -31,7 +32,7 @@ export class HomePage implements OnInit {
 
     private messageService = inject(MessageService);
 
-    public visibleState: 'persons' | 'fineTemplates' = 'persons';
+    public currentPage: 'profile' | 'persons' | 'fineTemplates' = 'fineTemplates';
 
     public ngOnInit() {
         this.userManager.getAllCookies();

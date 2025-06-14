@@ -31,8 +31,6 @@ export class PersonDetailComponent {
 
     public readonly person = input.required<PersonWithFines | null>();
 
-    public readonly alwaysShowAllFines = input<boolean>(false);
-
     private userManager = inject(UserManagerService);
 
     private teamDataManager = inject(TeamDataManagerService);

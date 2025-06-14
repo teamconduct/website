@@ -1,10 +1,18 @@
-<app-menu [onTeamSelected]="onTeamSelected.bind(this)" />
+<app-menu [onTeamSelected]="onTeamSelected.bind(this)" [(currentPage)]="currentPage" />
 
 <div class="flex flex-column align-items-center justify-content-start md:w-50vw w-90vw mx-auto my-4">
 
     @let signedInPerson = signedInPerson$ | async;
     <p-card class="flex w-full" styleClass="w-full mb-8">
-        <app-person-detail [person]="signedInPerson" [alwaysShowAllFines]="true" />
+        @switch (currentPage) {
+            @case ('profile') {
+                <app-person-detail [person]="signedInPerson" />
+            } @case ('persons') {
+                Persons
+            } @case ('fineTemplates') {
+                <app-fine-template-list />
+            }
+        }
     </p-card>
 
 </div>

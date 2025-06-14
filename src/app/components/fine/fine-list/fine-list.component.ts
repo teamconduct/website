@@ -21,25 +21,18 @@ export class FineListComponent  {
 
     public readonly personId = input.required<Person.Id | null>();
 
-    public readonly alwaysShowAllFines = input<boolean>(false);
-
     public teamDataManager = inject(TeamDataManagerService);
-
-    public allFinesShown: boolean = false;
 
     public sorting = fineListSorting;
 
-    public get fines$(): Observable<{ list: Fine[], hasMore: boolean } | null> {
+    public get fines$(): Observable<Fine[] | null> {
         return this.teamDataManager.persons$.map(persons => {
             const personId = this.personId();
             if (personId === null || !persons.has(personId))
                 return null;
             const fines = persons.get(personId).fines;
             this.sorting.sort(fines);
-            return {
-                list: fines.slice(0, !this.alwaysShowAllFines() && !this.allFinesShown ? 3 : undefined),
-                hasMore: !this.alwaysShowAllFines() && fines.length > 3
-            };
+            return fines;
         });
     }
 

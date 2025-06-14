@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, OnDestroy, viewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, OnDestroy, output, viewChild } from '@angular/core';
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
 import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
 import { Router } from '@angular/router';
@@ -21,6 +21,12 @@ import { ButtonModule } from 'primeng/button';
 })
 export class MenuComponent implements AfterViewInit, OnDestroy {
 
+    public readonly onTeamSelected = input.required<(teamId: Team.Id) => Promise<void>>();
+
+    public readonly currentPage = input.required<'profile' | 'persons' | 'fineTemplates'>();
+
+    public readonly currentPageChange = output<'profile' | 'persons' | 'fineTemplates'>();
+
     public userManager = inject(UserManagerService);
 
     private teamDataManager = inject(TeamDataManagerService);
@@ -28,8 +34,6 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
     private router = inject(Router);
-
-    public readonly onTeamSelected = input.required<(teamId: Team.Id) => Promise<void>>();
 
     public readonly toolbar = viewChild.required<Toolbar>('toolbar');
 
@@ -53,11 +57,34 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
             //         }
             //     ]
             // },
+            {
+                label: $localize `:Label for the pages menu item:Pages`,
+                items: [
+                    {
+                        label: $localize `:Label for the profile menu item:Profile`,
+                        icon: 'pi pi-fw pi-user',
+                        disabled: this.currentPage() === 'profile',
+                        command: () => this.currentPageChange.emit('profile')
+                    },
+                    {
+                        label: $localize `:Label for the persons menu item:Persons`,
+                        icon: 'pi pi-fw pi-users',
+                        disabled: this.currentPage() === 'persons',
+                        command: () => this.currentPageChange.emit('persons')
+                    },
+                    {
+                        label: $localize `:Label for the fine templates menu item:Fine Templates`,
+                        icon: 'pi pi-fw pi-file',
+                        disabled: this.currentPage() === 'fineTemplates',
+                        command: () => this.currentPageChange.emit('fineTemplates')
+                    }
+                ]
+            },
             canAddFine ? {
                 label: $localize `:Label for the fines menu item:Manage Fines`,
                 items: [
                     {
-                        label: 'Add multiple fines',
+                        label: $localize `:Label for the add multiple fines menu item:Add multiple fines`,
                         icon: 'pi pi-fw pi-plus',
                         command: () => this.popupDialogHandler.activate({
                             type: 'fineAddEdit',
