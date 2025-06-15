@@ -4,18 +4,18 @@
     <ng-template #header>
         <div class="flex md:flex-row flex-column justify-content-between">
 
-            <div class="flex flex-row">
-                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()" styleClass="border-noround-right">
+            <p-inputgroup>
+                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()">
                     <ng-template #icon>
                         <fa-icon [icon]="sorting.directionIcon" />
                     </ng-template>
                 </p-button>
-                <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" appendTo="body" styleClass="border-noround-left border-left-none"/>
-            </div>
+                <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" appendTo="body"/>
+            </p-inputgroup>
 
             @let canAddFineTemplate = (canAddFineTemplate$ | async) ?? false;
             @if (canAddFineTemplate) {
-                <p-button i18n-label="Button label to add a fine template" label="Add fine template" (onClick)="addFineTemplateClicked()" class="md:mt-auto mt-3">
+                <p-button i18n-label="Button label to add a fine template" label="Add fine template" (onClick)="addFineTemplateClicked()" class="md:mt-auto mt-3 md:ml-3 ml-auto">
                     <ng-template pTemplate="icon">
                         <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
                     </ng-template>

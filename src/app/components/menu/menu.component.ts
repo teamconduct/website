@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, OnDestroy, output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
 import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { routeNames } from '../../app.routes';
 import { MenuItem } from 'primeng/api';
 import { PopupDialogHandlerService } from '../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { MenuModule } from 'primeng/menu';
-import { Toolbar, ToolbarModule } from 'primeng/toolbar';
+import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Title } from '@angular/platform-browser';
 
@@ -20,7 +20,7 @@ import { Title } from '@angular/platform-browser';
     styleUrl: './menu.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MenuComponent implements AfterViewInit, OnDestroy {
+export class MenuComponent {
 
     public readonly onTeamSelected = input.required<(teamId: Team.Id) => Promise<void>>();
 
@@ -37,10 +37,6 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
     private router = inject(Router);
 
     private titleService = inject(Title);
-
-    public readonly toolbar = viewChild.required<Toolbar>('toolbar');
-
-    public readonly spacer = viewChild.required<ElementRef>('spacer');
 
     public toolbarExpanded: boolean = false;
 
@@ -70,6 +66,7 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
                         command: () => {
                             this.currentPageChange.emit('profile');
                             this.titleService.setTitle($localize `:Title for the profile page:Profile`);
+                            this.toolbarExpanded = false;
                         }
                     },
                     {
@@ -79,6 +76,7 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
                         command: () => {
                             this.currentPageChange.emit('persons');
                             this.titleService.setTitle($localize `:Title for the persons page:Persons`);
+                            this.toolbarExpanded = false;
                         }
                     },
                     {
@@ -88,6 +86,7 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
                         command: () => {
                             this.currentPageChange.emit('fineTemplates');
                             this.titleService.setTitle($localize `:Title for the fine templates page:Fine Templates`);
+                            this.toolbarExpanded = false;
                         }
                     }
                 ]
@@ -137,20 +136,6 @@ export class MenuComponent implements AfterViewInit, OnDestroy {
             disabled: teamId.guidString === selectedTeamId?.guidString,
             command: () => void this.onTeamSelected()(teamId)
         })).values;
-    }
-
-    public ngAfterViewInit() {
-        setTimeout(() => this.adjustSpacerHeight());
-        window.addEventListener('resize', () => this.adjustSpacerHeight());
-    }
-
-    private adjustSpacerHeight() {
-        const toolbarHeight = this.toolbar().el.nativeElement.offsetHeight;
-        this.spacer().nativeElement.style.height = `${toolbarHeight}px`;
-    }
-
-    public ngOnDestroy() {
-        window.removeEventListener('resize', () => this.adjustSpacerHeight());
     }
 
     public toggleToolbar(value: boolean | null = null) {

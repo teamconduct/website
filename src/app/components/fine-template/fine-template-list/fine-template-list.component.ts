@@ -11,10 +11,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FineTemplateListElementComponent } from '../fine-template-list-element/fine-template-list-element.component';
 import { SelectModule } from 'primeng/select';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 @Component({
     selector: 'app-fine-template-list',
-    imports: [AsyncPipe, DataViewModule, SelectModule, ButtonModule, FontAwesomeModule, FineTemplateListElementComponent],
+    imports: [AsyncPipe, DataViewModule, SelectModule, ButtonModule, InputGroupModule, FontAwesomeModule, FineTemplateListElementComponent],
     templateUrl: './fine-template-list.component.html',
     styleUrl: './fine-template-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

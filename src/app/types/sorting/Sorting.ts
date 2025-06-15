@@ -1,4 +1,4 @@
-import { faArrowDown19, faArrowDown91, faArrowDownAZ, faArrowDownShortWide, faArrowDownWideShort, faArrowDownZA } from '@fortawesome/free-solid-svg-icons';
+import { faArrowDown19, faArrowUp91, faArrowDownAZ, faArrowUpShortWide, faArrowDownWideShort, faArrowUpZA } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/angular-fontawesome';
 import { entries } from '@stevenkellner/typescript-common-functionality';
 
@@ -11,15 +11,15 @@ export class Sorting<Key extends string, T> {
     private directionIcons = {
         letters: {
             ascending: faArrowDownAZ,
-            descending: faArrowDownZA
+            descending: faArrowUpZA
         },
         numbers: {
             ascending: faArrowDown19,
-            descending: faArrowDown91
+            descending: faArrowUp91
         },
         basic: {
             ascending: faArrowDownWideShort,
-            descending: faArrowDownShortWide
+            descending: faArrowUpShortWide
         }
     };
 

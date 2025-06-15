@@ -11,15 +11,15 @@
     @let canDeleteFine = (canDeleteFine$ | async) ?? false;
     @let canEditFine = (canEditFine$ | async) ?? false;
     @if (canDeleteFine || canEditFine) {
-        <div class="flex flex-row w-full mt-5">
+        <p-buttongroup class="w-full mt-5">
             @if (canEditFine) {
-                <p-button i18n-label="Button label to edit something" label="Edit" class="flex-1" (onClick)="showFineEditDialog()" [styleClass]="'w-full' + (canDeleteFine ? ' border-noround-right' : '')" />
+                <p-button i18n-label="Button label to edit something" label="Edit" class="flex-1" (onClick)="showFineEditDialog()" styleClass="w-full" />
             }
             @if (canDeleteFine) {
                 <p-confirmPopup styleClass="pt-3" />
-                <p-button [loading]="deleteLoading" [disabled]="deleteLoading" i18n-label="Button label to delete something" label="Delete" class="flex-1" severity="danger" (onClick)="showDeleteConfirmation($event)" [styleClass]="'w-full' + (canEditFine ? ' border-noround-left' : '')" />
+                <p-button [loading]="deleteLoading" [disabled]="deleteLoading" i18n-label="Button label to delete something" label="Delete" class="flex-1" severity="danger" (onClick)="showDeleteConfirmation($event)" styleClass="w-full" />
             }
-        </div>
+        </p-buttongroup>
     }
 </div>
 

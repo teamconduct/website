@@ -12,10 +12,11 @@ import { FirebaseFunctionsService } from '../../../services/firebase-functions/f
 import { configuration } from '../../../../environments/environment';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
+import { ButtonGroupModule } from 'primeng/buttongroup';
 
 @Component({
     selector: 'app-fine-detail',
-    imports: [AsyncPipe, TagModule, ButtonModule, ConfirmPopupModule, DatePipe, FineAmountPipe],
+    imports: [AsyncPipe, TagModule, ButtonModule, ButtonGroupModule, ConfirmPopupModule, DatePipe, FineAmountPipe],
     providers: [ConfirmationService],
     templateUrl: './fine-detail.component.html',
     styleUrl: './fine-detail.component.scss',

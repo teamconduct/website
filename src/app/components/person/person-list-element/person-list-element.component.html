@@ -2,7 +2,7 @@
 
 <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
 <div class="flex md:flex-row flex-column align-items-center justify-content-between w-full py-5 border-200" [class.border-top-1]="!hideTopBorder()" [class.cursor-pointer]="_person !== null"  (click)="showPersonDetails()">
-    <div class="flex flex-column align-items-start justify-content-center mr-1 w-full">
+    <div class="flex flex-column align-items-start justify-content-center mx-1 w-full">
         @if (_person !== null) {
             <p class="text-color font-bold text-2xl my-0">{{ _person.name }}</p>
         } @else {

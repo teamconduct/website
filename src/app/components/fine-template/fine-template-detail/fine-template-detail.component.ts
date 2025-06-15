@@ -9,10 +9,11 @@ import { Observable } from '../../../types';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ButtonGroupModule } from 'primeng/buttongroup';
 
 @Component({
     selector: 'app-fine-template-detail',
-    imports: [AsyncPipe, ButtonModule, ConfirmPopupModule, FineAmountPipe],
+    imports: [AsyncPipe, ButtonModule, ButtonGroupModule, ConfirmPopupModule, FineAmountPipe],
     providers: [ConfirmationService],
     templateUrl: './fine-template-detail.component.html',
     styleUrl: './fine-template-detail.component.scss',

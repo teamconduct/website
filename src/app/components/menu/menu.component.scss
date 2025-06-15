@@ -6,19 +6,19 @@
 }
 
 #toolbar-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 
     p-toolbar {
         width: 100%;
     }
 }
 
-#spacer {
-    height: 58px;
+#spacer-toolbar {
+    visibility: hidden;
 }
 
 #background {

@@ -15,7 +15,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { browserLocalPersistence, connectAuthEmulator, getAuth, provideAuth } from '@angular/fire/auth';
 import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
-import { getMessaging, provideMessaging } from '@angular/fire/messaging';
+// import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -43,22 +43,22 @@ export const appConfig: ApplicationConfig = {
             const auth = getAuth();
             auth.setPersistence(browserLocalPersistence);
             if (!isProduction)
-                connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+                connectAuthEmulator(auth, 'http://192.168.178.47:9099', { disableWarnings: true });
             return auth;
         }),
         provideFirestore(() => {
             const firestore = getFirestore();
             if (!isProduction)
-                connectFirestoreEmulator(firestore, 'localhost', 8080);
+                connectFirestoreEmulator(firestore, '192.168.178.47', 8080);
             return firestore;
         }),
         provideFunctions(() => {
             const functions = getFunctions();
             functions.region = 'europe-west1';
             if (!isProduction)
-                connectFunctionsEmulator(functions, 'localhost', 5001);
+                connectFunctionsEmulator(functions, '192.168.178.47', 5001);
             return functions;
-        }),
-        provideMessaging(() => getMessaging())
+        })
+        // provideMessaging(() => getMessaging())
     ]
 };

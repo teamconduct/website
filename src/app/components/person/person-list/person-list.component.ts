@@ -11,10 +11,11 @@ import { PersonListElementComponent } from '../person-list-element/person-list-e
 import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SelectModule } from 'primeng/select';
+import { InputGroupModule } from 'primeng/inputgroup';
 
 @Component({
     selector: 'app-person-list',
-    imports: [AsyncPipe, DataViewModule, ButtonModule, SelectModule, FontAwesomeModule, PersonListElementComponent],
+    imports: [AsyncPipe, DataViewModule, ButtonModule, SelectModule, InputGroupModule, FontAwesomeModule, PersonListElementComponent],
     templateUrl: './person-list.component.html',
     styleUrl: './person-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush

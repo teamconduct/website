@@ -8,6 +8,7 @@ import { TeamDataManagerService } from '../../../services/team-data-manager/team
 import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
 import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { ButtonModule } from 'primeng/button';
+import { ButtonGroupModule } from 'primeng/buttongroup';
 import { routeNames } from '../../../app.routes';
 import { Invitation, PayedState } from '@stevenkellner/team-conduct-api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -21,7 +22,7 @@ import { PopupDialogHandlerService } from '../../../services/popup-dialog-handle
 
 @Component({
     selector: 'app-person-detail',
-    imports: [AsyncPipe, ButtonModule, ConfirmPopupModule, SkeletonModule, TagModule, FontAwesomeModule, FineAmountPipe, FineListComponent],
+    imports: [AsyncPipe, ButtonModule, ButtonGroupModule, ConfirmPopupModule, SkeletonModule, TagModule, FontAwesomeModule, FineAmountPipe, FineListComponent],
     providers: [ConfirmationService],
     templateUrl: './person-detail.component.html',
     styleUrl: './person-detail.component.scss',
