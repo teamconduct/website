@@ -12,10 +12,13 @@ import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonGroupModule } from 'primeng/buttongroup';
+import { fineListSorting } from '../../../types/sorting/fine-line-sorting';
+import { configuration } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-person-list',
-    imports: [AsyncPipe, DataViewModule, ButtonModule, SelectModule, InputGroupModule, FontAwesomeModule, PersonListElementComponent],
+    imports: [AsyncPipe, DataViewModule, ButtonModule, SelectModule, InputGroupModule, ButtonGroupModule, FontAwesomeModule, PersonListElementComponent],
     templateUrl: './person-list.component.html',
     styleUrl: './person-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -48,8 +51,59 @@ export class PersonListComponent {
         return value;
     }
 
+    public get canSharePersonsText$(): Observable<boolean> {
+        return this.userManager.hasRole('person-manager');
+    }
+
     public get canAddPerson$(): Observable<boolean> {
         return this.userManager.hasRole('person-manager');
+    }
+
+    public async sharePersonsText() {
+
+        // Get persons with unpayed fines
+        const personsWithUnpayedFines = this.teamDataManager.persons$.map(personsDict => personsDict.values.filter(person => person.fines.some(fine => fine.payedState === 'notPayed'))).value;
+        if (personsWithUnpayedFines === null || personsWithUnpayedFines.length === 0)
+            return;
+
+        // Sort persons by name
+        const sorting = personListSorting;
+        sorting.sortBy = 'name';
+        sorting.direction = 'ascending';
+        sorting.sort(personsWithUnpayedFines);
+
+        // Create share text
+        const shareText = personsWithUnpayedFines.map(person => {
+
+            // Get total amount text
+            const totalAmountText = person.fineValues.notPayed.formatted(configuration);
+
+            // Sort the fines by date
+            const unpayedFines = person.fines.filter(fine => fine.payedState === 'notPayed');
+            const sorting = fineListSorting;
+            sorting.sortBy = 'date';
+            sorting.direction = 'ascending';
+            sorting.sort(unpayedFines);
+
+            // Get fines text
+            const finesText = unpayedFines.map(fine => {
+                const date = fine.date.toDate.toLocaleDateString(configuration.locale, { year: 'numeric', month: '2-digit', day: '2-digit' });
+                return `\t- ${fine.reason}, ${date}: ${fine.amount.formatted(configuration)}`;
+            }).join('\n');
+
+            return `${person.name}: ${totalAmountText}\n${finesText}`;
+        }).join('\n\n');
+
+        console.log('Share text:', shareText);
+
+        try {
+            await navigator.share({
+                title: 'Share Persons',
+                text: shareText
+            });
+        } catch {
+            void navigator.clipboard.writeText(shareText);
+        }
     }
 
     public addPersonClicked() {
