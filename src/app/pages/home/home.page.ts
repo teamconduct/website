@@ -64,9 +64,6 @@ export class HomePage implements OnInit {
                     this.onTeamSelected(teamId);
             }
         });
-        const teamId = this.userManager.selectedTeamId$.value;
-        if (teamId !== null)
-            void this.onTeamSelected(teamId);
     }
 
     public async onTeamSelected(teamId: Team.Id) {

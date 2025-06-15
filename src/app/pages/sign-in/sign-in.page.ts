@@ -9,6 +9,7 @@ import { User } from '@stevenkellner/team-conduct-api';
 import { AuthenticationComponent } from '../../components/authentication/authentication.component';
 import { routeNames } from '../../app.routes';
 import { Title } from '@angular/platform-browser';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
     selector: 'page-sign-in',
@@ -18,6 +19,8 @@ import { Title } from '@angular/platform-browser';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInPage implements OnInit {
+
+    private firebaseAuth = inject(Auth);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -31,6 +34,12 @@ export class SignInPage implements OnInit {
 
     public ngOnInit() {
         this.titleService.setTitle($localize `:Title for the sign in page:Sign In`);
+        this.firebaseAuth.onAuthStateChanged(async _user => {
+            if (_user !== null) {
+                const user = await this.firebaseFunctions.functions.user.login.execute(null);
+                this.userManager.setUser(user);
+            }
+        });
     }
 
     public async handleSuccessfulSignIn(): Promise<string | null> {
