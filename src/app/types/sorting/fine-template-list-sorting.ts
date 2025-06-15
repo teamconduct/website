@@ -4,11 +4,13 @@ import { Sorting } from './Sorting';
 export const fineTemplateListSorting = new Sorting<'reason' | 'amount', FineTemplate>('reason', {
     reason: {
         label: $localize `:Dropdown label to sort fine template by reason:Sort by reason`,
-        direction: 'letters'
+        icon: 'letters',
+        defaultDirection: 'ascending'
     },
     amount: {
         label: $localize `:Dropdown label to sort fine template by amount:Sort by amount`,
-        direction: 'numbers'
+        icon: 'numbers',
+        defaultDirection: 'ascending'
     }
 }, {
     reason: {

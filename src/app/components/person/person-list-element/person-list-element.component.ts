@@ -19,6 +19,8 @@ export class PersonListElementComponent {
 
     public readonly person = input.required<PersonWithFines | null>();
 
+    public readonly payedTagDisplay = input<'default' | 'notPayed' | 'payed' | 'total'>('default');
+
     public readonly hideTopBorder = input<boolean>(false);
 
     public readonly personSelected = output<PersonWithFines>();
@@ -47,10 +49,17 @@ export class PersonListElementComponent {
         };
     };
 
-    public get displayValue(): { type: 'notPayed' | 'total', value: SummedFineValue } | null {
+    public get displayValue(): { type: 'notPayed' | 'payed' | 'total', value: SummedFineValue } | null {
         const person = this.person();
         if (person === null)
             return null;
+        const payedTagDisplay = this.payedTagDisplay();
+        if (payedTagDisplay !== 'default')
+            return {
+                type: payedTagDisplay,
+                value: this.payedTags[payedTagDisplay].value!
+            };
+
         if (person.fineValues.notPayed.isZero)
             return {
                 type: 'total',

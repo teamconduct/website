@@ -5,20 +5,23 @@ import { SummedFineValue } from '../SummedFineValue';
 export const personListSorting = new Sorting<'name' | 'payedState' | 'total' | 'notPayed', PersonWithFines>('name', {
     name: {
         label: $localize `:Dropdown label to sort persons by name:Sort by name`,
-        direction: 'letters'
+        icon: 'letters',
+        defaultDirection: 'ascending'
     },
     payedState: {
         label: $localize `:Dropdown label to sort persons by payed state:Sort by paid state`,
-        direction: 'basic'
-
+        icon: 'basic',
+        defaultDirection: 'descending'
     },
     total: {
         label: $localize `:Dropdown label to sort persons by total amount:Sort by total amount`,
-        direction: 'numbers'
+        icon: 'numbers',
+        defaultDirection: 'descending'
     },
     notPayed: {
         label: $localize `:Dropdown label to sort persons by not payed amount:Sort by open amount`,
-        direction: 'numbers'
+        icon: 'numbers',
+        defaultDirection: 'descending'
     }
 }, {
     name: {
@@ -41,7 +44,7 @@ export const personListSorting = new Sorting<'name' | 'payedState' | 'total' | '
                 return 'greater';
             return 'less';
         },
-        fallbacks: ['name']
+        fallbacks: ['notPayed', 'total', 'name']
     },
     total: {
         compareFn: (lhs, rhs) => SummedFineValue.compare(lhs.fineValues.total, rhs.fineValues.total),

@@ -10,7 +10,7 @@
                         <fa-icon [icon]="sorting.directionIcon" />
                     </ng-template>
                 </p-button>
-                <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key"/>
+                <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortByKey= $event.value.key"/>
             </p-inputgroup>
 
             @let canSharePersonsText = (canSharePersonsText$ | async) ?? false;
@@ -39,7 +39,7 @@
 
     <ng-template #list let-persons>
         @for (person of personsType(persons); track person !== null ? person.id.guidString : null; let isFirst = $first) {
-            <app-person-list-element [person]="person" [hideTopBorder]="isFirst" (personSelected)="personSelected.emit($event)" />
+            <app-person-list-element [person]="person" [payedTagDisplay]="payedTagDisplay" [hideTopBorder]="isFirst" (personSelected)="personSelected.emit($event)" />
         }
     </ng-template>
 

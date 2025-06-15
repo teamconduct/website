@@ -4,7 +4,7 @@ import { entries } from '@stevenkellner/typescript-common-functionality';
 
 export class Sorting<Key extends string, T> {
 
-    public sortBy: Key;
+    private sortBy: Key;
 
     public direction: 'ascending' | 'descending' = 'ascending';
 
@@ -25,13 +25,23 @@ export class Sorting<Key extends string, T> {
 
     public constructor(
         private readonly initialKey: Key,
-        private readonly labels: Record<Key, { label: string, direction: 'letters' | 'numbers' | 'basic' }>,
+        private readonly labels: Record<Key, { label: string, icon: 'letters' | 'numbers' | 'basic', defaultDirection: 'ascending' | 'descending' }>,
         private readonly sorting: Record<Key, {
             compareFn: (lhs: T, rhs: T) => 'less' | 'equal' | 'greater',
             fallbacks: Key[]
         }>
     ) {
-        this.sortBy = this.initialKey;
+        this.sortBy = initialKey;
+        this.direction = this.labels[initialKey].defaultDirection;
+    }
+
+    public set sortByKey(key: Key) {
+        this.sortBy = key;
+        this.direction = this.labels[key].defaultDirection;
+    }
+
+    public get sortByKey(): Key {
+        return this.sortBy;
     }
 
     public get options(): { key: Key, label: string }[] {
@@ -41,7 +51,7 @@ export class Sorting<Key extends string, T> {
     }
 
     public get directionIcon(): IconDefinition {
-        return this.directionIcons[this.labels[this.sortBy].direction][this.direction];
+        return this.directionIcons[this.labels[this.sortBy].icon][this.direction];
     }
 
     public toggleDirection() {

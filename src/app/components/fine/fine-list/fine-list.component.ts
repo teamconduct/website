@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core
 import { Fine, Person } from '@stevenkellner/team-conduct-api';
 import { TeamDataManagerService } from '../../../services/team-data-manager/team-data-manager.service';
 import { Observable } from '../../../types';
-import { fineListSorting } from '../../../types/sorting/fine-line-sorting';
+import { fineListSorting } from '../../../types/sorting/fine-list-sorting';
 import { AsyncPipe } from '@angular/common';
 import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';

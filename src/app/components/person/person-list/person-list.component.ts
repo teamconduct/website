@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, output } from '@angular/cor
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { TeamDataManagerService } from '../../../services/team-data-manager/team-data-manager.service';
-import { personListSorting } from '../../../types/sorting/person-sorting';
+import { personListSorting } from '../../../types/sorting/person-list-sorting';
 import { PersonWithFines } from '../../../types/PersonWithFines';
 import { Observable } from '../../../types';
 import { AsyncPipe } from '@angular/common';
@@ -13,7 +13,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { ButtonGroupModule } from 'primeng/buttongroup';
-import { fineListSorting } from '../../../types/sorting/fine-line-sorting';
+import { fineListSorting } from '../../../types/sorting/fine-list-sorting';
 import { configuration } from '../../../../environments/environment';
 
 @Component({
@@ -68,7 +68,7 @@ export class PersonListComponent {
 
         // Sort persons by name
         const sorting = personListSorting;
-        sorting.sortBy = 'name';
+        sorting.sortByKey = 'name';
         sorting.direction = 'ascending';
         sorting.sort(personsWithUnpayedFines);
 
@@ -81,7 +81,7 @@ export class PersonListComponent {
             // Sort the fines by date
             const unpayedFines = person.fines.filter(fine => fine.payedState === 'notPayed');
             const sorting = fineListSorting;
-            sorting.sortBy = 'date';
+            sorting.sortByKey = 'date';
             sorting.direction = 'ascending';
             sorting.sort(unpayedFines);
 
@@ -111,5 +111,11 @@ export class PersonListComponent {
             type: 'personAddEdit',
             person: null
         });
+    }
+
+    public get payedTagDisplay(): 'default' | 'notPayed' | 'payed' | 'total' {
+        if (this.sorting.sortByKey === 'total')
+            return 'total';
+        return 'default';
     }
 }

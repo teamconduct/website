@@ -4,19 +4,23 @@ import { Sorting } from './Sorting';
 export const fineListSorting = new Sorting<'reason' | 'payed' | 'date' | 'amount', Fine>('payed', {
     reason: {
         label: $localize `:Dropdown label to sort fine by reason:Sort by reason`,
-        direction: 'letters'
+        icon: 'letters',
+        defaultDirection: 'ascending'
     },
     payed: {
         label: $localize `:Dropdown label to sort fine by payed state:Sort by paid state`,
-        direction: 'basic'
+        icon: 'basic',
+        defaultDirection: 'ascending'
     },
     date: {
         label: $localize `:Dropdown label to sort fine by date:Sort by date`,
-        direction: 'basic'
+        icon: 'basic',
+        defaultDirection: 'ascending'
     },
     amount: {
         label: $localize `:Dropdown label to sort fine by amount:Sort by amount`,
-        direction: 'numbers'
+        icon: 'numbers',
+        defaultDirection: 'descending'
     }
 }, {
     reason: {

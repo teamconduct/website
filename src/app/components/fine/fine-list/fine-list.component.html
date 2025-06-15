@@ -8,7 +8,7 @@
                     <fa-icon [icon]="sorting.directionIcon" />
                 </ng-template>
             </p-button>
-            <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortBy= $event.value.key" appendTo="body"/>
+            <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortByKey= $event.value.key" appendTo="body"/>
         </p-inputgroup>
     </ng-template>
 
