@@ -12,6 +12,7 @@ import { MenuModule } from 'primeng/menu';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Title } from '@angular/platform-browser';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
     selector: 'app-menu',
@@ -27,6 +28,8 @@ export class MenuComponent {
     public readonly currentPage = input.required<'profile' | 'persons' | 'fineTemplates'>();
 
     public readonly currentPageChange = output<'profile' | 'persons' | 'fineTemplates'>();
+
+    private authenticationService = inject(AuthenticationService);
 
     public userManager = inject(UserManagerService);
 
@@ -120,7 +123,8 @@ export class MenuComponent {
                         icon: 'pi pi-fw pi-sign-out',
                         command: () => {
                             this.teamDataManager.reset();
-                            this.userManager.reset();
+                            this.userManager.setUser(null);
+                            void this.authenticationService.signOut();
                             void this.router.navigate([`/${routeNames.signIn}`]);
                         }
                     }

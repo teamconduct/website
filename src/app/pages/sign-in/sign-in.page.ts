@@ -78,8 +78,6 @@ export class SignInPage implements OnInit {
 
     private async setUserAndNavigateToHome(user: User): Promise<string | null> {
         this.userManager.setUser(user);
-        if (!user.teams.isEmpty)
-            this.userManager.setTeamId(user.teams.keys[0]);
         const navigationSuccessful = await this.router.navigate([`/${routeNames.home}`]);
         if (!navigationSuccessful)
             return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;

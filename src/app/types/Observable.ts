@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable as RxjsObservable, map } from 'rxjs';
 
 export class Observable<T> extends BehaviorSubject<T | null> {
 
@@ -15,6 +15,12 @@ export class Observable<T> extends BehaviorSubject<T | null> {
             complete: () => observable.complete()
         });
         return observable;
+    }
+
+    public rxjs(defaultValue: T): RxjsObservable<T> {
+        return super.asObservable().pipe(
+            map(value => value !== null ? value : defaultValue)
+        );
     }
 }
 

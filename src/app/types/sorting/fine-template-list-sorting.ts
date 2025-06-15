@@ -10,7 +10,7 @@ export const fineTemplateListSorting = new Sorting<'reason' | 'amount', FineTemp
     amount: {
         label: $localize `:Dropdown label to sort fine template by amount:Sort by amount`,
         icon: 'numbers',
-        defaultDirection: 'ascending'
+        defaultDirection: 'descending'
     }
 }, {
     reason: {

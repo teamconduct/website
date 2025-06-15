@@ -15,6 +15,10 @@ import { PersonDetailComponent } from '../../components/person/person-detail/per
 import { FineTemplateListComponent } from '../../components/fine-template/fine-template-list/fine-template-list.component';
 import { PersonListAndDetailComponent } from '../../components/person/person-list-and-detail/person-list-and-detail.component';
 import { Title } from '@angular/platform-browser';
+import { Auth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { routeNames } from '../../app.routes';
+import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
 
 @Component({
     selector: 'page-home',
@@ -26,6 +30,8 @@ import { Title } from '@angular/platform-browser';
 })
 export class HomePage implements OnInit {
 
+    private firebaseAuth = inject(Auth);
+
     public userManager = inject(UserManagerService);
 
     private teamDataManager = inject(TeamDataManagerService);
@@ -34,13 +40,30 @@ export class HomePage implements OnInit {
 
     private messageService = inject(MessageService);
 
+    private firebaseFunctions = inject(FirebaseFunctionsService);
+
+    private router = inject(Router);
+
     public currentPage: 'profile' | 'persons' | 'fineTemplates' = 'profile';
 
     private titleService = inject(Title);
 
     public ngOnInit() {
         this.titleService.setTitle($localize `:Title for the home page:Home`);
-        this.userManager.getAllCookies();
+        this.firebaseAuth.onAuthStateChanged(async user => {
+            if (user === null) {
+                this.userManager.setUser(null);
+                this.teamDataManager.reset();
+                this.userManager.setUser(null);
+                void this.router.navigate([`/${routeNames.signIn}`]);
+            } else {
+                const user = await this.firebaseFunctions.functions.user.login.execute(null);
+                this.userManager.setUser(user);
+                const teamId = this.userManager.selectedTeamId$.value;
+                if (teamId !== null)
+                    this.onTeamSelected(teamId);
+            }
+        });
         const teamId = this.userManager.selectedTeamId$.value;
         if (teamId !== null)
             void this.onTeamSelected(teamId);

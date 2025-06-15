@@ -36,13 +36,13 @@ export const personListSorting = new Sorting<'name' | 'payedState' | 'total' | '
     },
     payedState: {
         compareFn: (lhs, rhs) => {
-            if (lhs.fineValues.payed.isZero && rhs.fineValues.payed.isZero)
+            if (lhs.fineValues.notPayed.isZero && rhs.fineValues.notPayed.isZero)
                 return 'equal';
-            if (!lhs.fineValues.payed.isZero && !rhs.fineValues.payed.isZero)
+            if (!lhs.fineValues.notPayed.isZero && !rhs.fineValues.notPayed.isZero)
                 return 'equal';
-            if (lhs.fineValues.payed.isZero)
-                return 'greater';
-            return 'less';
+            if (lhs.fineValues.notPayed.isZero)
+                return 'less';
+            return 'greater';
         },
         fallbacks: ['notPayed', 'total', 'name']
     },
