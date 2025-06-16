@@ -20,6 +20,7 @@ export class PersonListAndDetailComponent {
 
     public selectPerson(person: PersonWithFines | null) {
         this.currentPersonSelected = person;
+        window.scrollTo(0, 0);
         if (person === null)
             this.titleService.setTitle($localize `:Title for the persons page:Persons`);
         else
