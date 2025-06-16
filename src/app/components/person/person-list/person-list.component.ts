@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { TeamDataManagerService } from '../../../services/team-data-manager/team-data-manager.service';
@@ -45,14 +45,14 @@ export class PersonListComponent {
 
     public readonly personSelected = output<PersonWithFines>();
 
-    public sorting = personListSorting;
+    public readonly sorting = input.required<typeof personListSorting>();
 
     public searchTerm: string = '';
 
     public get persons$(): Observable<PersonWithFines[]> {
         return this.teamDataManager.persons$.map(personsDict => {
             const persons = personsDict.values;
-            this.sorting.sort(persons);
+            this.sorting().sort(persons);
             return persons.filter(person => person.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
         });
     }
@@ -174,7 +174,7 @@ export class PersonListComponent {
     }
 
     public get payedTagDisplay(): 'default' | 'notPayed' | 'payed' | 'total' {
-        if (this.sorting.sortByKey === 'total')
+        if (this.sorting().sortByKey === 'total')
             return 'total';
         return 'default';
     }

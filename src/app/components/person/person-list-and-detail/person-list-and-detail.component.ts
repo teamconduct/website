@@ -4,6 +4,7 @@ import { PersonWithFines } from '../../../types/PersonWithFines';
 import { PersonListComponent } from '../person-list/person-list.component';
 import { PersonDetailComponent } from '../person-detail/person-detail.component';
 import { Title } from '@angular/platform-browser';
+import { personListSorting } from '../../../types/sorting/person-list-sorting';
 
 @Component({
     selector: 'app-person-list-and-detail',
@@ -17,6 +18,8 @@ export class PersonListAndDetailComponent {
     private titleService = inject(Title);
 
     public currentPersonSelected: PersonWithFines | null = null;
+
+    public sorting = personListSorting;
 
     public selectPerson(person: PersonWithFines | null) {
         this.currentPersonSelected = person;

@@ -26,7 +26,7 @@
 
             <div class="flex md:flex-row flex-column justify-content-between">
 
-                <app-list-sorting [sorting]="sorting" class="md:my-auto my-2 md:mx-2 mx-auto"  />
+                <app-list-sorting [sorting]="sorting()" class="md:my-auto my-2 md:mx-2 mx-auto"  />
 
                 <app-list-search [(searchTerm)]="searchTerm" placeholder="Search Persons" i18n-placeholder="Search field in person list" class="md:my-auto my-2 md:mx-2 mx-auto" />
 
