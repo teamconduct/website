@@ -12,10 +12,12 @@ import { FineTemplateListElementComponent } from '../fine-template-list-element/
 import { SelectModule } from 'primeng/select';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { InputGroupModule } from 'primeng/inputgroup';
+import { ListSortingComponent } from '../../list-sorting/list-sorting.component';
+import { ListSearchComponent } from '../../list-search/list-search.component';
 
 @Component({
     selector: 'app-fine-template-list',
-    imports: [AsyncPipe, DataViewModule, SelectModule, ButtonModule, InputGroupModule, FontAwesomeModule, FineTemplateListElementComponent],
+    imports: [AsyncPipe, DataViewModule, SelectModule, ButtonModule, InputGroupModule, FontAwesomeModule, FineTemplateListElementComponent, ListSortingComponent, ListSearchComponent],
     templateUrl: './fine-template-list.component.html',
     styleUrl: './fine-template-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -30,11 +32,13 @@ export class FineTemplateListComponent {
 
     public sorting = fineTemplateListSorting;
 
+    public searchTerm: string = '';
+
     public get fineTemplates$(): Observable<FineTemplate[]> {
         return this.teamDataManager.fineTemplates$.map(fineTemplatesDict => {
             const fineTemplates = fineTemplatesDict.values;
             this.sorting.sort(fineTemplates);
-            return fineTemplates;
+            return fineTemplates.filter(template => template.reason.toLowerCase().includes(this.searchTerm.toLowerCase()));
         });
     }
 

@@ -2,14 +2,7 @@
 <p-dataView [value]="fines !== null ? fines : skeletonFines" class="w-full" styleClass="w-full">
 
     <ng-template #header>
-        <p-inputgroup>
-            <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()">
-                <ng-template #icon>
-                    <fa-icon [icon]="sorting.directionIcon" />
-                </ng-template>
-            </p-button>
-            <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortByKey= $event.value.key" appendTo="body"/>
-        </p-inputgroup>
+        <app-list-sorting [sorting]="sorting" />
     </ng-template>
 
     <ng-template #list let-fines>

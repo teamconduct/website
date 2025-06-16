@@ -1,0 +1,15 @@
+<p-inputgroup>
+    <p-inputgroup-addon>
+        <i class="pi pi-search"></i>
+    </p-inputgroup-addon>
+    <input pInputText type="text" [placeholder]="placeholder()" [(ngModel)]="searchTermValue" />
+    @if (searchTermValue !== '') {
+        <p-inputGroupAddon>
+            <p-button severity="secondary" (onClick)="searchTermValue = ''" >
+                <ng-template #icon>
+                    <fa-icon [icon]="['fas', 'times']" />
+                </ng-template>
+            </p-button>
+        </p-inputGroupAddon>
+    }
+</p-inputgroup>

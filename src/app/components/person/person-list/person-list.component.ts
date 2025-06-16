@@ -15,10 +15,16 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { fineListSorting } from '../../../types/sorting/fine-list-sorting';
 import { configuration } from '../../../../environments/environment';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { FormsModule } from '@angular/forms';
+import { ListSortingComponent } from '../../list-sorting/list-sorting.component';
+import { ListSearchComponent } from '../../list-search/list-search.component';
 
 @Component({
     selector: 'app-person-list',
-    imports: [AsyncPipe, DataViewModule, ButtonModule, SelectModule, InputGroupModule, ButtonGroupModule, FontAwesomeModule, PersonListElementComponent],
+    imports: [AsyncPipe, FormsModule, DataViewModule, ButtonModule, SelectModule, InputGroupModule, InputTextModule, IconFieldModule, InputIconModule, ButtonGroupModule, FontAwesomeModule, PersonListElementComponent, ListSortingComponent, ListSearchComponent],
     templateUrl: './person-list.component.html',
     styleUrl: './person-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -35,11 +41,13 @@ export class PersonListComponent {
 
     public sorting = personListSorting;
 
+    public searchTerm: string = '';
+
     public get persons$(): Observable<PersonWithFines[]> {
         return this.teamDataManager.persons$.map(personsDict => {
             const persons = personsDict.values;
             this.sorting.sort(persons);
-            return persons;
+            return persons.filter(person => person.name.toLowerCase().includes(this.searchTerm.toLowerCase()));
         });
     }
 

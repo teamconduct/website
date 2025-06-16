@@ -70,3 +70,7 @@ p-floatlabel.w-full .p-float-label {
 p-skeleton {
     width: 100%;
 }
+
+p-button .p-button.nowrap .p-button-label {
+    white-space: nowrap;
+}

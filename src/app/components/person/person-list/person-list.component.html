@@ -4,19 +4,14 @@
     <ng-template #header>
         <div class="flex md:flex-row flex-column justify-content-between">
 
-            <p-inputgroup>
-                <p-button severity="secondary" [outlined]="true" (onClick)="sorting.toggleDirection()">
-                    <ng-template #icon>
-                        <fa-icon [icon]="sorting.directionIcon" />
-                    </ng-template>
-                </p-button>
-                <p-select [options]="sorting.options" optionLabel="label" (onChange)="sorting.sortByKey= $event.value.key"/>
-            </p-inputgroup>
+            <app-list-sorting [sorting]="sorting" class="md:my-auto my-2 md:mx-2 mx-auto"  />
+
+            <app-list-search [(searchTerm)]="searchTerm" placeholder="Search Persons" i18n-placeholder="Search field in person list" class="md:my-auto my-2 md:mx-2 mx-auto" />
 
             @let canSharePersonsText = (canSharePersonsText$ | async) ?? false;
             @let canAddPerson = (canAddPerson$ | async) ?? false;
             @if (canSharePersonsText || canAddPerson) {
-                <p-buttongroup  class="md:mt-auto mt-3 md:ml-3 ml-auto">
+                <p-buttongroup  class="md:my-auto my-2 md:mx-2 mx-auto">
                     @if (canSharePersonsText) {
                         <p-button (onClick)="sharePersonsText()" severity="secondary" [outlined]="true">
                             <ng-template pTemplate="icon">
@@ -25,7 +20,7 @@
                         </p-button>
                     }
                     @if (canAddPerson) {
-                        <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonClicked()">
+                        <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonClicked()" styleClass="nowrap" >
                             <ng-template pTemplate="icon">
                                 <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
                             </ng-template>
