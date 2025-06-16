@@ -97,6 +97,8 @@ export class PersonDetailComponent {
                 return null;
             if (team.paypalMeLink === null)
                 return null;
+            if (person.fineValues.notPayed.amount.completeValue === 0)
+                return null;
             return `${team.paypalMeLink}/${person.fineValues.notPayed.amount.completeValue}EUR`;
         });
     }
