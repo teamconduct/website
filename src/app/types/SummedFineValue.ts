@@ -3,17 +3,37 @@ import { values, keys } from '@stevenkellner/typescript-common-functionality';
 
 export class SummedFineValue {
 
-    public items: Record<FineAmount.Item.Type, number> = {
-        'crateOfBeer': 0
-    };
+    public constructor(
+        public items: Record<FineAmount.Item.Type, number> = {
+            'crateOfBeer': 0
+        },
+        public amount = MoneyAmount.zero
+    ) {}
 
-    public amount = MoneyAmount.zero;
-
-    public add(fineAmount: FineAmount) {
+    private addFineAmount(fineAmount: FineAmount) {
         if (fineAmount instanceof FineAmount.Money)
             this.amount = this.amount.added(fineAmount.amount);
         else if (fineAmount instanceof FineAmount.Item)
             this.items[fineAmount.item] += fineAmount.count;
+    }
+
+    private addSummedFineValue(summedFineValue: SummedFineValue) {
+        this.amount = this.amount.added(summedFineValue.amount);
+        for (const item of keys(summedFineValue.items))
+            this.items[item] += summedFineValue.items[item];
+    }
+
+    public add(fineAmount: FineAmount | SummedFineValue) {
+        if (fineAmount instanceof SummedFineValue)
+            this.addSummedFineValue(fineAmount);
+        else
+            this.addFineAmount(fineAmount);
+    }
+
+    public added(fineAmount: FineAmount | SummedFineValue): SummedFineValue {
+        const newValue = new SummedFineValue(this.items, this.amount);
+        newValue.add(fineAmount);
+        return newValue;
     }
 
     public get isZero(): boolean {

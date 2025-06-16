@@ -2,32 +2,56 @@
 <p-dataView [value]="persons !== null ? persons : skeletonPersons" class="w-full" styleClass="w-full">
 
     <ng-template #header>
-        <div class="flex md:flex-row flex-column justify-content-between">
+        <div class="flex flex-column justify-content-between align-items-center w-full">
 
-            <app-list-sorting [sorting]="sorting" class="md:my-auto my-2 md:mx-2 mx-auto"  />
+            @let summedAmounts = (summedAmounts$ | async) ?? skeletonSummedAmounts;
+            <div class="flex md:flex-row flex-column align-items-center md:justify-content-evenly justify-content-start w-full mb-5">
+                @for (payedTagType of allPayedTagTypes; track payedTagType) {
+                    @let payedTag = payedTags(summedAmounts)[payedTagType];
+                    <p-tag [severity]="payedTag.severity" class="px-2 mx-2 w-full md:w-auto md:my-0 my-1" styleClass="py-2 px-3 w-full md:w-auto">
+                        <div class="flex flex-column align-items-center justify-content-center">
+                            <div class="flex flex-row align-items-center justify-content-start mb-2 mx-5">
+                                <fa-icon [icon]="payedTag.icon" size="xl" class="mr-2" />
+                                <p class="text-lg font-semibold my-0">{{ payedTag.label }}</p>
+                            </div>
+                            @if (payedTag.value !== null) {
+                                <p class="text-lg text-center font-semibold my-0">{{ payedTag.value | fineAmount }}</p>
+                            } @else {
+                                <p-skeleton height="1.5rem" width="7.5rem" styleClass="mx-auto" />
+                            }
+                        </div>
+                    </p-tag>
+                }
+            </div>
 
-            <app-list-search [(searchTerm)]="searchTerm" placeholder="Search Persons" i18n-placeholder="Search field in person list" class="md:my-auto my-2 md:mx-2 mx-auto" />
+            <div class="flex md:flex-row flex-column justify-content-between">
 
-            @let canSharePersonsText = (canSharePersonsText$ | async) ?? false;
-            @let canAddPerson = (canAddPerson$ | async) ?? false;
-            @if (canSharePersonsText || canAddPerson) {
-                <p-buttongroup  class="md:my-auto my-2 md:mx-2 mx-auto">
-                    @if (canSharePersonsText) {
-                        <p-button (onClick)="sharePersonsText()" severity="secondary" [outlined]="true">
-                            <ng-template pTemplate="icon">
-                                <fa-icon [icon]="['fas', 'arrow-up-from-bracket']" />
-                            </ng-template>
-                        </p-button>
-                    }
-                    @if (canAddPerson) {
-                        <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonClicked()" styleClass="nowrap" >
-                            <ng-template pTemplate="icon">
-                                <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
-                            </ng-template>
-                        </p-button>
-                    }
-                </p-buttongroup>
-            }
+                <app-list-sorting [sorting]="sorting" class="md:my-auto my-2 md:mx-2 mx-auto"  />
+
+                <app-list-search [(searchTerm)]="searchTerm" placeholder="Search Persons" i18n-placeholder="Search field in person list" class="md:my-auto my-2 md:mx-2 mx-auto" />
+
+                @let canSharePersonsText = (canSharePersonsText$ | async) ?? false;
+                @let canAddPerson = (canAddPerson$ | async) ?? false;
+                @if (canSharePersonsText || canAddPerson) {
+                    <p-buttongroup  class="md:my-auto my-2 md:mx-2 mx-auto">
+                        @if (canSharePersonsText) {
+                            <p-button (onClick)="sharePersonsText()" severity="secondary" [outlined]="true">
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['fas', 'arrow-up-from-bracket']" />
+                                </ng-template>
+                            </p-button>
+                        }
+                        @if (canAddPerson) {
+                            <p-button i18n-label="Button label to add a person" label="Add person" (onClick)="addPersonClicked()" styleClass="nowrap" >
+                                <ng-template pTemplate="icon">
+                                    <fa-icon [icon]="['fas', 'plus']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+                        }
+                    </p-buttongroup>
+                }
+
+            </div>
 
         </div>
     </ng-template>

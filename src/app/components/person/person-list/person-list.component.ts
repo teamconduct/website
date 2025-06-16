@@ -4,12 +4,12 @@ import { PopupDialogHandlerService } from '../../../services/popup-dialog-handle
 import { TeamDataManagerService } from '../../../services/team-data-manager/team-data-manager.service';
 import { personListSorting } from '../../../types/sorting/person-list-sorting';
 import { PersonWithFines } from '../../../types/PersonWithFines';
-import { Observable } from '../../../types';
+import { Observable, SummedFineValue } from '../../../types';
 import { AsyncPipe } from '@angular/common';
 import { DataViewModule } from 'primeng/dataview';
 import { PersonListElementComponent } from '../person-list-element/person-list-element.component';
 import { ButtonModule } from 'primeng/button';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { ButtonGroupModule } from 'primeng/buttongroup';
@@ -21,10 +21,16 @@ import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule } from '@angular/forms';
 import { ListSortingComponent } from '../../list-sorting/list-sorting.component';
 import { ListSearchComponent } from '../../list-search/list-search.component';
+import { SkeletonModule } from 'primeng/skeleton';
+import { Tag, TagModule } from 'primeng/tag';
+import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
+import { faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
+import { PayedState } from '@stevenkellner/team-conduct-api';
 
 @Component({
     selector: 'app-person-list',
-    imports: [AsyncPipe, FormsModule, DataViewModule, ButtonModule, SelectModule, InputGroupModule, InputTextModule, IconFieldModule, InputIconModule, ButtonGroupModule, FontAwesomeModule, PersonListElementComponent, ListSortingComponent, ListSearchComponent],
+    imports: [AsyncPipe, FormsModule, DataViewModule, ButtonModule, SelectModule, InputGroupModule, InputTextModule, IconFieldModule, InputIconModule, ButtonGroupModule, SkeletonModule, TagModule, FontAwesomeModule, PersonListElementComponent, ListSortingComponent, ListSearchComponent, FineAmountPipe],
     templateUrl: './person-list.component.html',
     styleUrl: './person-list.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -58,6 +64,52 @@ export class PersonListComponent {
     public personsType(value: any): (PersonWithFines | null)[] {
         return value;
     }
+
+    public get allPayedTagTypes(): ('total' | 'notPayed' | 'payed')[] {
+        return ['total', 'notPayed', 'payed'];
+    }
+
+    public get summedAmounts$(): Observable<Record<'total' | 'notPayed' | 'payed', SummedFineValue>> {
+        return this.teamDataManager.persons$.map(personsDict => {
+            const persons = personsDict.values;
+            return {
+                total: persons.reduce((sum, person) => sum.added(person.fineValues.total), new SummedFineValue()),
+                notPayed: persons.reduce((sum, person) => sum.added(person.fineValues.notPayed), new SummedFineValue()),
+                payed: persons.reduce((sum, person) => sum.added(person.fineValues.payed), new SummedFineValue())
+            };
+        });
+    }
+
+    public get skeletonSummedAmounts(): Record<'total' | 'notPayed' | 'payed', null> {
+        return {
+            total: null,
+            notPayed: null,
+            payed: null
+        };
+    }
+
+    public payedTags(summedAmounts: Record<'total' | 'notPayed' | 'payed', SummedFineValue | null>): Record<'total' | 'notPayed' | 'payed', { label: string, value: SummedFineValue | null, severity: Tag['severity'], icon: IconDefinition }> {
+        return {
+            total: {
+                label: $localize `:Label of total amount:Total`,
+                value: summedAmounts.total,
+                severity: 'info',
+                icon: faWallet
+            },
+            notPayed:{
+                label: $localize `:Label of not payed amount:Open`,
+                value:  summedAmounts.notPayed,
+                severity: PayedState.payedTag('notPayed').severity,
+                icon: faEnvelopeOpen
+            },
+            payed: {
+                label: $localize `:Label of payed amount:Paid`,
+                value: summedAmounts.payed,
+                severity: PayedState.payedTag('payed').severity,
+                icon: faEnvelope
+            }
+        };
+    };
 
     public get canSharePersonsText$(): Observable<boolean> {
         return this.userManager.hasRole('person-manager');
