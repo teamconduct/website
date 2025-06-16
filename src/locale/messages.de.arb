@@ -1531,5 +1531,27 @@
         "end": { "line": "32", "column": "82" }
       }
     ]
+  },
+  "8730703817168426560": "Strafe suchen",
+  "@8730703817168426560": {
+    "description": "Search field in fine template list",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-list\\fine-template-list.component.html",
+        "start": { "line": "8", "column": "79" },
+        "end": { "line": "8", "column": "138" }
+      }
+    ]
+  },
+  "5117686433544112861": "Person suchen",
+  "@5117686433544112861": {
+    "description": "Search field in person list",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.html",
+        "start": { "line": "30", "column": "83" },
+        "end": { "line": "30", "column": "128" }
+      }
+    ]
   }
 }

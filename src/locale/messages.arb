@@ -6,8 +6,8 @@
     "x-locations": [
       {
         "file": "src\\app\\app.routes.ts",
-        "start": { "line": "7", "column": "21" },
-        "end": { "line": "7", "column": "62" }
+        "start": { "line": "6", "column": "21" },
+        "end": { "line": "6", "column": "62" }
       }
     ]
   },
@@ -17,8 +17,8 @@
     "x-locations": [
       {
         "file": "src\\app\\app.routes.ts",
-        "start": { "line": "8", "column": "25" },
-        "end": { "line": "8", "column": "74" }
+        "start": { "line": "7", "column": "25" },
+        "end": { "line": "7", "column": "74" }
       }
     ]
   },
@@ -28,8 +28,8 @@
     "x-locations": [
       {
         "file": "src\\app\\app.routes.ts",
-        "start": { "line": "9", "column": "19" },
-        "end": { "line": "9", "column": "54" }
+        "start": { "line": "8", "column": "19" },
+        "end": { "line": "8", "column": "54" }
       }
     ]
   },
@@ -418,8 +418,8 @@
       },
       {
         "file": "src\\app\\components\\fine-template\\fine-template-list\\fine-template-list.component.html",
-        "start": { "line": "17", "column": "91" },
-        "end": { "line": "17", "column": "147" }
+        "start": { "line": "13", "column": "91" },
+        "end": { "line": "13", "column": "147" }
       }
     ]
   },
@@ -505,8 +505,19 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\fine-template\\fine-template-detail\\fine-template-detail.component.ts",
-        "start": { "line": "59", "column": "30" },
-        "end": { "line": "59", "column": "146" }
+        "start": { "line": "60", "column": "30" },
+        "end": { "line": "60", "column": "146" }
+      }
+    ]
+  },
+  "8730703817168426560": "Search Fine Templates",
+  "@8730703817168426560": {
+    "description": "Search field in fine template list",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\fine-template\\fine-template-list\\fine-template-list.component.html",
+        "start": { "line": "8", "column": "79" },
+        "end": { "line": "8", "column": "138" }
       }
     ]
   },
@@ -516,8 +527,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\fine-template\\fine-template-list\\fine-template-list.component.html",
-        "start": { "line": "34", "column": "117" },
-        "end": { "line": "38", "column": "10" }
+        "start": { "line": "30", "column": "117" },
+        "end": { "line": "34", "column": "10" }
       }
     ]
   },
@@ -532,8 +543,8 @@
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "98", "column": "40" },
-        "end": { "line": "98", "column": "104" }
+        "start": { "line": "100", "column": "40" },
+        "end": { "line": "100", "column": "104" }
       }
     ]
   },
@@ -580,8 +591,8 @@
       },
       {
         "file": "src\\app\\components\\person\\person-list-and-detail\\person-list-and-detail.component.ts",
-        "start": { "line": "23", "column": "48" },
-        "end": { "line": "23", "column": "86" }
+        "start": { "line": "24", "column": "48" },
+        "end": { "line": "24", "column": "86" }
       }
     ]
   },
@@ -675,6 +686,11 @@
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
         "start": { "line": "44", "column": "108" },
         "end": { "line": "44", "column": "160" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "68", "column": "108" },
+        "end": { "line": "68", "column": "160" }
       }
     ]
   },
@@ -695,8 +711,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\fine\\fine-detail\\fine-detail.component.ts",
-        "start": { "line": "65", "column": "30" },
-        "end": { "line": "65", "column": "128" }
+        "start": { "line": "66", "column": "30" },
+        "end": { "line": "66", "column": "128" }
       }
     ]
   },
@@ -706,8 +722,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\fine\\fine-list\\fine-list.component.html",
-        "start": { "line": "21", "column": "108" },
-        "end": { "line": "25", "column": "1" }
+        "start": { "line": "14", "column": "108" },
+        "end": { "line": "18", "column": "1" }
       }
     ]
   },
@@ -717,8 +733,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "49", "column": "32" },
-        "end": { "line": "49", "column": "75" }
+        "start": { "line": "48", "column": "32" },
+        "end": { "line": "48", "column": "75" }
       }
     ]
   },
@@ -728,8 +744,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "63", "column": "32" },
-        "end": { "line": "63", "column": "70" }
+        "start": { "line": "62", "column": "32" },
+        "end": { "line": "62", "column": "70" }
       }
     ]
   },
@@ -739,13 +755,13 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "66", "column": "40" },
-        "end": { "line": "66", "column": "82" }
+        "start": { "line": "65", "column": "40" },
+        "end": { "line": "65", "column": "82" }
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "71", "column": "64" },
-        "end": { "line": "71", "column": "102" }
+        "start": { "line": "70", "column": "64" },
+        "end": { "line": "70", "column": "102" }
       }
     ]
   },
@@ -755,13 +771,13 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "84", "column": "40" },
-        "end": { "line": "84", "column": "96" }
+        "start": { "line": "85", "column": "40" },
+        "end": { "line": "85", "column": "96" }
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "89", "column": "64" },
-        "end": { "line": "89", "column": "116" }
+        "start": { "line": "90", "column": "64" },
+        "end": { "line": "90", "column": "116" }
       }
     ]
   },
@@ -771,8 +787,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "95", "column": "32" },
-        "end": { "line": "95", "column": "77" }
+        "start": { "line": "97", "column": "32" },
+        "end": { "line": "97", "column": "77" }
       }
     ]
   },
@@ -782,8 +798,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "112", "column": "40" },
-        "end": { "line": "112", "column": "101" }
+        "start": { "line": "114", "column": "40" },
+        "end": { "line": "114", "column": "101" }
       }
     ]
   },
@@ -793,8 +809,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "119", "column": "40" },
-        "end": { "line": "119", "column": "83" }
+        "start": { "line": "121", "column": "40" },
+        "end": { "line": "121", "column": "83" }
       }
     ]
   },
@@ -940,8 +956,8 @@
       },
       {
         "file": "src\\app\\components\\person\\person-list\\person-list.component.html",
-        "start": { "line": "17", "column": "84" },
-        "end": { "line": "17", "column": "126" }
+        "start": { "line": "44", "column": "96" },
+        "end": { "line": "44", "column": "138" }
       }
     ]
   },
@@ -1019,6 +1035,11 @@
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
         "start": { "line": "30", "column": "95" },
         "end": { "line": "30", "column": "139" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "54", "column": "95" },
+        "end": { "line": "54", "column": "139" }
       }
     ]
   },
@@ -1030,6 +1051,11 @@
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
         "start": { "line": "37", "column": "95" },
         "end": { "line": "37", "column": "137" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "61", "column": "95" },
+        "end": { "line": "61", "column": "137" }
       }
     ]
   },
@@ -1039,13 +1065,18 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "49", "column": "32" },
-        "end": { "line": "49", "column": "62" }
+        "start": { "line": "50", "column": "32" },
+        "end": { "line": "50", "column": "62" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
-        "start": { "line": "29", "column": "32" },
-        "end": { "line": "29", "column": "62" }
+        "start": { "line": "31", "column": "32" },
+        "end": { "line": "31", "column": "62" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.ts",
+        "start": { "line": "93", "column": "32" },
+        "end": { "line": "93", "column": "62" }
       }
     ]
   },
@@ -1055,13 +1086,18 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "55", "column": "32" },
-        "end": { "line": "55", "column": "65" }
+        "start": { "line": "56", "column": "32" },
+        "end": { "line": "56", "column": "65" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
-        "start": { "line": "35", "column": "32" },
-        "end": { "line": "35", "column": "65" }
+        "start": { "line": "37", "column": "32" },
+        "end": { "line": "37", "column": "65" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.ts",
+        "start": { "line": "99", "column": "32" },
+        "end": { "line": "99", "column": "65" }
       }
     ]
   },
@@ -1071,13 +1107,18 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "61", "column": "32" },
-        "end": { "line": "61", "column": "61" }
+        "start": { "line": "62", "column": "32" },
+        "end": { "line": "62", "column": "61" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
-        "start": { "line": "41", "column": "32" },
-        "end": { "line": "41", "column": "61" }
+        "start": { "line": "43", "column": "32" },
+        "end": { "line": "43", "column": "61" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.ts",
+        "start": { "line": "105", "column": "32" },
+        "end": { "line": "105", "column": "61" }
       }
     ]
   },
@@ -1087,8 +1128,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "110", "column": "30" },
-        "end": { "line": "110", "column": "115" }
+        "start": { "line": "113", "column": "30" },
+        "end": { "line": "113", "column": "115" }
       }
     ]
   },
@@ -1098,8 +1139,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "112", "column": "34" },
-        "end": { "line": "112", "column": "84" }
+        "start": { "line": "115", "column": "34" },
+        "end": { "line": "115", "column": "84" }
       }
     ]
   },
@@ -1109,8 +1150,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "127", "column": "34" },
-        "end": { "line": "127", "column": "159" }
+        "start": { "line": "130", "column": "34" },
+        "end": { "line": "130", "column": "159" }
       }
     ]
   },
@@ -1120,8 +1161,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "128", "column": "38" },
-        "end": { "line": "128", "column": "86" }
+        "start": { "line": "131", "column": "38" },
+        "end": { "line": "131", "column": "86" }
       }
     ]
   },
@@ -1131,8 +1172,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "129", "column": "38" },
-        "end": { "line": "129", "column": "125" }
+        "start": { "line": "132", "column": "38" },
+        "end": { "line": "132", "column": "125" }
       }
     ]
   },
@@ -1142,8 +1183,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "132", "column": "64" },
-        "end": { "line": "132", "column": "239" }
+        "start": { "line": "135", "column": "64" },
+        "end": { "line": "135", "column": "239" }
       }
     ]
   },
@@ -1153,8 +1194,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "143", "column": "30" },
-        "end": { "line": "143", "column": "132" }
+        "start": { "line": "146", "column": "30" },
+        "end": { "line": "146", "column": "132" }
       }
     ]
   },
@@ -1169,14 +1210,25 @@
       }
     ]
   },
+  "5117686433544112861": "Search Persons",
+  "@5117686433544112861": {
+    "description": "Search field in person list",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-list\\person-list.component.html",
+        "start": { "line": "30", "column": "83" },
+        "end": { "line": "30", "column": "128" }
+      }
+    ]
+  },
   "6121824075663329331": "No persons",
   "@6121824075663329331": {
     "description": "Message when there are no persons",
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-list\\person-list.component.html",
-        "start": { "line": "34", "column": "110" },
-        "end": { "line": "38", "column": "3" }
+        "start": { "line": "65", "column": "110" },
+        "end": { "line": "69", "column": "3" }
       }
     ]
   },
@@ -1345,8 +1397,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\home\\home.page.ts",
-        "start": { "line": "41", "column": "44" },
-        "end": { "line": "41", "column": "76" }
+        "start": { "line": "51", "column": "44" },
+        "end": { "line": "51", "column": "76" }
       }
     ]
   },
@@ -1356,8 +1408,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "32", "column": "44" },
-        "end": { "line": "32", "column": "82" }
+        "start": { "line": "35", "column": "44" },
+        "end": { "line": "35", "column": "82" }
       }
     ]
   },
@@ -1367,8 +1419,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "47", "column": "28" },
-        "end": { "line": "47", "column": "127" }
+        "start": { "line": "56", "column": "28" },
+        "end": { "line": "56", "column": "127" }
       }
     ]
   },
@@ -1378,8 +1430,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "60", "column": "32" },
-        "end": { "line": "60", "column": "129" }
+        "start": { "line": "69", "column": "32" },
+        "end": { "line": "69", "column": "129" }
       }
     ]
   },
@@ -1389,8 +1441,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "62", "column": "32" },
-        "end": { "line": "62", "column": "145" }
+        "start": { "line": "71", "column": "32" },
+        "end": { "line": "71", "column": "145" }
       }
     ]
   },
@@ -1400,8 +1452,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "63", "column": "28" },
-        "end": { "line": "63", "column": "129" }
+        "start": { "line": "72", "column": "28" },
+        "end": { "line": "72", "column": "129" }
       }
     ]
   },
@@ -1411,8 +1463,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "74", "column": "28" },
-        "end": { "line": "74", "column": "87" }
+        "start": { "line": "83", "column": "28" },
+        "end": { "line": "83", "column": "87" }
       }
     ]
   },
@@ -1422,8 +1474,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "84", "column": "29" },
-        "end": { "line": "84", "column": "122" }
+        "start": { "line": "91", "column": "29" },
+        "end": { "line": "91", "column": "122" }
       }
     ]
   },
@@ -1465,7 +1517,7 @@
     "description": "Dropdown label to sort fine by reason",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
+        "file": "src\\app\\types\\sorting\\fine-list-sorting.ts",
         "start": { "line": "5", "column": "24" },
         "end": { "line": "5", "column": "79" }
       },
@@ -1481,14 +1533,14 @@
     "description": "Dropdown label to sort fine by payed state",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
-        "start": { "line": "9", "column": "24" },
-        "end": { "line": "9", "column": "88" }
+        "file": "src\\app\\types\\sorting\\fine-list-sorting.ts",
+        "start": { "line": "10", "column": "24" },
+        "end": { "line": "10", "column": "88" }
       },
       {
-        "file": "src\\app\\types\\sorting\\person-sorting.ts",
-        "start": { "line": "10", "column": "24" },
-        "end": { "line": "10", "column": "91" }
+        "file": "src\\app\\types\\sorting\\person-list-sorting.ts",
+        "start": { "line": "11", "column": "24" },
+        "end": { "line": "11", "column": "91" }
       }
     ]
   },
@@ -1497,9 +1549,9 @@
     "description": "Dropdown label to sort fine by date",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
-        "start": { "line": "13", "column": "24" },
-        "end": { "line": "13", "column": "75" }
+        "file": "src\\app\\types\\sorting\\fine-list-sorting.ts",
+        "start": { "line": "15", "column": "24" },
+        "end": { "line": "15", "column": "75" }
       }
     ]
   },
@@ -1508,14 +1560,14 @@
     "description": "Dropdown label to sort fine by amount",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\fine-line-sorting.ts",
-        "start": { "line": "17", "column": "24" },
-        "end": { "line": "17", "column": "79" }
+        "file": "src\\app\\types\\sorting\\fine-list-sorting.ts",
+        "start": { "line": "20", "column": "24" },
+        "end": { "line": "20", "column": "79" }
       },
       {
         "file": "src\\app\\types\\sorting\\fine-template-list-sorting.ts",
-        "start": { "line": "9", "column": "24" },
-        "end": { "line": "9", "column": "88" }
+        "start": { "line": "10", "column": "24" },
+        "end": { "line": "10", "column": "88" }
       }
     ]
   },
@@ -1524,7 +1576,7 @@
     "description": "Dropdown label to sort persons by name",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\person-sorting.ts",
+        "file": "src\\app\\types\\sorting\\person-list-sorting.ts",
         "start": { "line": "6", "column": "24" },
         "end": { "line": "6", "column": "78" }
       }
@@ -1535,9 +1587,9 @@
     "description": "Dropdown label to sort persons by total amount",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\person-sorting.ts",
-        "start": { "line": "15", "column": "24" },
-        "end": { "line": "15", "column": "94" }
+        "file": "src\\app\\types\\sorting\\person-list-sorting.ts",
+        "start": { "line": "16", "column": "24" },
+        "end": { "line": "16", "column": "94" }
       }
     ]
   },
@@ -1546,9 +1598,9 @@
     "description": "Dropdown label to sort persons by not payed amount",
     "x-locations": [
       {
-        "file": "src\\app\\types\\sorting\\person-sorting.ts",
-        "start": { "line": "19", "column": "24" },
-        "end": { "line": "19", "column": "97" }
+        "file": "src\\app\\types\\sorting\\person-list-sorting.ts",
+        "start": { "line": "21", "column": "24" },
+        "end": { "line": "21", "column": "97" }
       }
     ]
   }
