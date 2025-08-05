@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, output } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppleSignInProvider, EmailSignInProvider, GoogleSignInProvider } from '../../services/sign-in/providers';
 import { SignInService } from '../../services/sign-in/sign-in.service';
 import { ISignInProvider } from '../../services/sign-in/providers/ISignInProvider';
@@ -11,10 +12,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { getEnterLeaveAnimation } from '../../animations/enterLeaveAnimation';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
     selector: 'app-authentication',
-    imports: [ReactiveFormsModule, ButtonModule, FloatLabelModule, DividerModule, InputTextModule, PasswordModule, ThirdPartySignInButtonComponent, ErrorMessageComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, FloatLabelModule, DividerModule, InputTextModule, PasswordModule, ThirdPartySignInButtonComponent, ErrorMessageComponent, InputGroupModule, InputGroupAddonModule],
     templateUrl: './authentication.component.html',
     styleUrl: './authentication.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +26,12 @@ import { getEnterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 export class AuthenticationComponent {
 
     public readonly onSuccessfulSignIn = input<() => Promise<string | null> | string | null>();
+
+    public invitationId = input<string>('');
+
+    public invitationIdChange = output<string>();
+
+    public invitationIdInputVisible = false;
 
     public loginForm = new FormGroup({
         email: new FormControl<string | null>(null, [Validators.required, Validators.email]),
@@ -38,6 +47,19 @@ export class AuthenticationComponent {
     public signInService = inject(SignInService);
 
     private changeDetectorRef = inject(ChangeDetectorRef);
+
+    public get _invitationId(): string {
+        return this.invitationId();
+    }
+
+    public set _invitationId(value: string) {
+        this.invitationIdChange.emit(value);
+    }
+
+    public clearInvitationId() {
+        this._invitationId = '';
+        this.invitationIdInputVisible = false;
+    }
 
     public async signInWithEmail() {
         await this.signIn(this.emailSignInProvider);

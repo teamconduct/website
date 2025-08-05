@@ -1,5 +1,5 @@
 @if (teamInvitationProperties === null) {
-    <app-authentication [onSuccessfulSignIn]="handleSuccessfulSignIn.bind(this)" />
+    <app-authentication [onSuccessfulSignIn]="handleSuccessfulSignIn.bind(this)" [(invitationId)]="invitationId" />
 } @else {
     <app-invitation-person-selection [teamInvitationProperties]="teamInvitationProperties" (onCancel)="cancelInvitationPersonSelection()" />
 }

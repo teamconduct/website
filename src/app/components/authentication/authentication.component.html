@@ -1,6 +1,33 @@
 <div class="flex flex-column align-items-center justify-content-start w-85 mx-auto">
-    <h2 i18n="Title of the sign in form to indicate that this form is used to create a new account or to log in" class="text-center">Create an account / Log in</h2>
-    <p i18n="Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in" class="text-center">Enter your email to sign up or log in</p>
+    <h2 i18n="Title of the sign in form to indicate that this form is used to create a new account or to log in" class="text-center mb-5">Create an account / Log in</h2>
+
+    @if (invitationIdInputVisible || _invitationId !== '') {
+        <div class="flex flex-column align-items-start justify-content-start md:w-6 w-full mb-4">
+            <p-floatLabel class="flex w-full">
+                <p-inputgroup>
+                    <input type="text" pInputText [(ngModel)]="_invitationId" id="invitation-code-input" class="w-full" />
+                    <p-inputgroup-addon>
+                        <p-button icon="pi pi-times" variant="text" severity="secondary" (onClick)="clearInvitationId()" />
+                    </p-inputgroup-addon>
+                </p-inputgroup>
+                <label for="invitation-code-input" i18n="Label for the invitation code input field">Invitation Code</label>
+            </p-floatLabel>
+            <small class="text-color-secondary mt-1" i18n="Helper text for invitation code">
+                If you have an invitation code from your team administrator, enter it here
+            </small>
+        </div>
+    } @else {
+        <div class="flex flex-column align-items-start justify-content-start md:w-6 w-full mb-4">
+            <p-button (onClick)="invitationIdInputVisible = true" icon="pi pi-plus" label="Enter invitation code" severity="secondary" styleClass="w-full" i18n-label="Button to show the invitation code input" />
+            <small class="text-color-secondary mt-1" i18n="Hint for showing invitation code input">
+                If you have an invitation code from your team administrator, you can enter it by clicking above
+            </small>
+        </div>
+    }
+
+    <p-divider align="center" class="md:w-6 w-full" styleClass="my-2" />
+
+    <p i18n="Subtitle of the sign in form to indicate that the next field is used for the email to sign up of to log in" class="text-center mt-3">Enter your email to sign up or log in</p>
     <form [formGroup]="loginForm" class="flex flex-column align-items-center justify-content-start md:w-6 w-full mt-4">
         <p-floatLabel class="flex w-full">
             <input type="email" pInputText formControlName="email" id="email-input" class="w-full" />

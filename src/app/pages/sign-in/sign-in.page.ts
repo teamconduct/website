@@ -30,6 +30,8 @@ export class SignInPage implements OnInit {
 
     private titleService = inject(Title);
 
+    public invitationId = '';
+
     public teamInvitationProperties: {
         teamId: Team.Id,
         teamName: string,
@@ -47,17 +49,18 @@ export class SignInPage implements OnInit {
         //         this.userManager.setUser(user);
         //     }
         // });
+        this.invitationId = this.route.snapshot.queryParamMap.get('code') ?? '';
     }
 
     public async handleSuccessfulSignIn(): Promise<string | null> {
 
-        const invitationResult = await this.getInvitationAndNavigateToHome();
-        if (invitationResult !== 'no-invitation')
-            return invitationResult;
-
         const loginResult = await this.getUserAndNavigateToHome();
         if (loginResult !== 'not-found')
             return loginResult;
+
+        const invitationResult = await this.getInvitationAndNavigateToHome();
+        if (invitationResult !== 'no-invitation')
+            return invitationResult;
 
         const navigationSuccessful = await this.router.navigate([`/${routeNames.createTeam}`]);
         if (!navigationSuccessful)
@@ -66,11 +69,10 @@ export class SignInPage implements OnInit {
     }
 
     private async getInvitationAndNavigateToHome(): Promise<'no-invitation' | string | null> {
-        const invitationId = this.route.snapshot.queryParamMap.get('code');
-        if (invitationId === null)
+        if (this.invitationId === '')
             return 'no-invitation';
         try {
-            const invitation = await this.firebaseFunctions.functions.invitation.getInvitation.execute(new Tagged(invitationId, 'invitation'));
+            const invitation = await this.firebaseFunctions.functions.invitation.getInvitation.execute(new Tagged(this.invitationId, 'invitation'));
             if (invitation.personId !== null) {
                 const user = await this.firebaseFunctions.functions.invitation.register.execute({
                     teamId: invitation.teamId,
@@ -83,6 +85,13 @@ export class SignInPage implements OnInit {
                     teamName: invitation.teamName,
                     persons: invitation.persons
                 };
+                this.teamInvitationProperties.persons.sort((lhs, rhs) => {
+                    const lhsName = (lhs.properties.lastName === null ? lhs.properties.firstName : `${lhs.properties.firstName} ${lhs.properties.lastName}`).toUpperCase();
+                    const rhsName = (rhs.properties.lastName === null ? rhs.properties.firstName : `${rhs.properties.firstName} ${rhs.properties.lastName}`).toUpperCase();
+                    if (lhsName === rhsName)
+                        return 0;
+                    return lhsName < rhsName ? -1 : 1;
+                });
                 return null;
             }
             return 'no-invitation';
