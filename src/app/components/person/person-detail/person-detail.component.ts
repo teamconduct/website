@@ -148,7 +148,6 @@ export class PersonDetailComponent {
                 acceptLabel: $localize `:Label of the button to copy invitation link for person and close the dialog:Copy invitation and Close`,
                 closeOnEscape: true,
                 accept: () => {
-                    const baseUrl = `${location.hostname}${location.port !== '' ? (':' + location.port) : ''}`;
                     const invitationText = $localize `:Text to copy to clipboard for team invitation:Hello ${person.name},\n\nWe are now using ${baseUrl} to organize fines for ${team.name}. Here is your invitation code:\n\n${invitationId.value}\n\nPlease use this code on the above website to register with your team once, or use the direct link: ${invitationLink}`;
                     void navigator.clipboard.writeText(invitationText);
                 }
