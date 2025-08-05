@@ -1553,5 +1553,219 @@
         "end": { "line": "30", "column": "128" }
       }
     ]
+  },
+  "5592083557831215796": "Willkommen bei {$INTERPOLATION}",
+  "@5592083557831215796": {
+    "description": "Title of the team invitation page",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "1", "column": "78" },
+        "end": { "line": "2", "column": "10" }
+      }
+    ]
+  },
+  "4828649534975785034": "Du wurdest eingeladen, diesem Team beizutreten. Bitte wähle deinen Namen aus der Liste unten aus.",
+  "@4828649534975785034": {
+    "description": "Subtitle of the team invitation page",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "2", "column": "80" },
+        "end": { "line": "4", "column": "41" }
+      }
+    ]
+  },
+  "4877493890037819759": "Wähle deinen Namen aus",
+  "@4877493890037819759": {
+    "description": "Label for the player selection",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "7", "column": "102" },
+        "end": { "line": "9", "column": "34" }
+      }
+    ]
+  },
+  "7498061982160767189": "Nicht in der Liste oder Hilfe benötigt? Bitte kontaktiere deinen Teamadministrator.",
+  "@7498061982160767189": {
+    "description": "Information about incorrect name selection",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "31", "column": "7" },
+        "end": { "line": "33", "column": "11" }
+      }
+    ]
+  },
+  "3697023714793897031": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
+  "@3697023714793897031": {
+    "description": "Error message that registration has failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.ts",
+        "start": { "line": "60", "column": "46" },
+        "end": { "line": "60", "column": "130" }
+      }
+    ]
+  },
+  "1578153922328941097": "Einladungscode",
+  "@1578153922328941097": {
+    "description": "Label for the invitation code input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "12", "column": "109" },
+        "end": { "line": "14", "column": "15" }
+      }
+    ]
+  },
+  "210118094635015120": "Wenn du einen Einladungscode von deinem Teamadministrator hast, gib ihn hier ein",
+  "@210118094635015120": {
+    "description": "Helper text for invitation code",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "15", "column": "7" },
+        "end": { "line": "17", "column": "4" }
+      }
+    ]
+  },
+  "4443647840789891392": "Gib den Einladungscode ein",
+  "@4443647840789891392": {
+    "description": "Button to show the invitation code input",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "20", "column": "100" },
+        "end": { "line": "20", "column": "165" }
+      }
+    ]
+  },
+  "2358259866843585915": "Wenn du einen Einladungscode von deinem Teamadministrator hast, kannst du ihn oben eingeben, indem du darauf klickst.",
+  "@2358259866843585915": {
+    "description": "Hint for showing invitation code input",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "22", "column": "7" },
+        "end": { "line": "24", "column": "11" }
+      }
+    ]
+  },
+  "778359129704777261": "Benutzer aus dem Team entfernen",
+  "@778359129704777261": {
+    "description": "Button label to kickout person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "38", "column": "98" },
+        "end": { "line": "38", "column": "146" }
+      }
+    ]
+  },
+  "7249967404652585753": "Bist du sicher, dass du diese Person entfernen möchtest?",
+  "@7249967404652585753": {
+    "description": "Message to ask for confirmation before kickout person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "194", "column": "30" },
+        "end": { "line": "194", "column": "133" }
+      }
+    ]
+  },
+  "215384093318319936": "Hallo {$PH},\n\nWir verwenden jetzt {$PH_1}, um Strafen für {$PH_2} zu organisieren. Hier ist dein Einladungscode:\n\n{$PH_3}\n\nBitte benutze diesen Code auf der oben genannten Website, um dich einmalig mit deinem Team zu registrieren, oder benutze den direkten Link: {$PH_4}",
+  "@215384093318319936": {
+    "description": "Text to copy to clipboard for team invitation",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "151", "column": "52" },
+        "end": { "line": "151", "column": "365" }
+      }
+    ]
+  },
+  "5114570310249742733": "Hallo zusammen,\n\nWir verwenden jetzt {$PH}, um Strafen für {$PH_1} zu organisieren. Hier ist dein Einladungscode:\n\n{$PH_2}\n\nBitte benutze diesen Code auf der oben genannten Website, um dich einmalig mit deinem Team zu registrieren, oder benutze den direkten Link: {$PH_3}",
+  "@5114570310249742733": {
+    "description": "Text to copy to clipboard for team invitation",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "187", "column": "52" },
+        "end": { "line": "187", "column": "359" }
+      }
+    ]
+  },
+  "6116372200226628440": "Gib diesen Link der Person: {$PH}",
+  "@6116372200226628440": {
+    "description": "Message to show in person invitation to give the link to the person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "145", "column": "34" },
+        "end": { "line": "145", "column": "153" }
+      }
+    ]
+  },
+  "4930709259521499259": "Einladung kopieren und Schließen",
+  "@4930709259521499259": {
+    "description": "Label of the button to copy invitation and close the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "183", "column": "38" },
+        "end": { "line": "183", "column": "126" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "147", "column": "38" },
+        "end": { "line": "147", "column": "142" }
+      }
+    ]
+  },
+  "722806110058596797": "Gib diesen Link deinem Team: {$PH}",
+  "@722806110058596797": {
+    "description": "Message to show when team invitation was successful",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "180", "column": "34" },
+        "end": { "line": "180", "column": "136" }
+      }
+    ]
+  },
+  "2498923855806594390": "Team Einladung",
+  "@2498923855806594390": {
+    "description": "Header of the dialog of the team invitation",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "179", "column": "33" },
+        "end": { "line": "179", "column": "95" }
+      }
+    ]
+  },
+  "7832336759026439491": "Einladung wird geladen",
+  "@7832336759026439491": {
+    "description": "Header of the dialog to wait for invitation to be loading",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "162", "column": "29" },
+        "end": { "line": "162", "column": "111" }
+      }
+    ]
+  },
+  "6704332287371843544": "Neue Mitglieder einladen",
+  "@6704332287371843544": {
+    "description": "Label for the invite new members menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "137", "column": "40" },
+        "end": { "line": "137", "column": "104" }
+      }
+    ]
   }
 }

@@ -177,14 +177,16 @@ export class MenuComponent {
             const baseUrl = `${location.protocol}//${location.hostname}${location.port !== '' ? (':' + location.port) : ''}`;
             const invitationLink = `${baseUrl}/${routeNames.signIn}?code=${invitationId.value}`;
             this.confirmationService.confirm({
-                header: $localize `:Header of the dialog to show when team invitation was successful:Invitation Successful`,
+                header: $localize `:Header of the dialog of the team invitation:Team Invitation`,
                 message: $localize `:Message to show when team invitation was successful:Give this link to your team: ${invitationLink}`,
                 acceptVisible: true,
                 rejectLabel: $localize `:Label of the button to close the dialog:Close`,
-                acceptLabel: $localize `:Label of the button to copy invitation link and close the dialog:Copy link and Close`,
+                acceptLabel: $localize `:Label of the button to copy invitation and close the dialog:Copy invitation and Close`,
                 closeOnEscape: true,
                 accept: () => {
-                    void navigator.clipboard.writeText(invitationLink);
+                    const baseUrl = `${location.hostname}${location.port !== '' ? (':' + location.port) : ''}`;
+                    const invitationText = $localize `:Text to copy to clipboard for team invitation:Hello everyone,\n\nWe are now using ${baseUrl} to organize fines for ${team.name}. Here is your invitation code:\n\n${invitationId.value}\n\nPlease use this code on the above website to register with your team once, or use the direct link: ${invitationLink}`;
+                    void navigator.clipboard.writeText(invitationText);
                 }
             });
         });

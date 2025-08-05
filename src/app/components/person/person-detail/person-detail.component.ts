@@ -143,12 +143,14 @@ export class PersonDetailComponent {
             const invitationLink = `${baseUrl}/${routeNames.signIn}?code=${invitationId.value}`;
             this.confirmationService.confirm({
                 target: event.target as EventTarget,
-                message: $localize `:Message to show when invitation was successful:Invitation was successful! Give this link to the person: ${invitationLink}`,
+                message: $localize `:Message to show in person invitation to give the link to the person:Give this link to the person: ${invitationLink}`,
                 rejectLabel: $localize `:Label of the button to close the dialog:Close`,
-                acceptLabel: $localize `:Label of the button to copy invitation link and close the dialog:Copy link and Close`,
+                acceptLabel: $localize `:Label of the button to copy invitation link for person and close the dialog:Copy invitation and Close`,
                 closeOnEscape: true,
                 accept: () => {
-                    void navigator.clipboard.writeText(invitationLink);
+                    const baseUrl = `${location.hostname}${location.port !== '' ? (':' + location.port) : ''}`;
+                    const invitationText = $localize `:Text to copy to clipboard for team invitation:Hello ${person.name},\n\nWe are now using ${baseUrl} to organize fines for ${team.name}. Here is your invitation code:\n\n${invitationId.value}\n\nPlease use this code on the above website to register with your team once, or use the direct link: ${invitationLink}`;
+                    void navigator.clipboard.writeText(invitationText);
                 }
             });
         });

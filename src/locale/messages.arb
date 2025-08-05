@@ -39,8 +39,52 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "1", "column": "142" },
-        "end": { "line": "2", "column": "103" }
+        "start": { "line": "1", "column": "147" },
+        "end": { "line": "4", "column": "39" }
+      }
+    ]
+  },
+  "1578153922328941097": "Invitation Code",
+  "@1578153922328941097": {
+    "description": "Label for the invitation code input field",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "12", "column": "109" },
+        "end": { "line": "14", "column": "15" }
+      }
+    ]
+  },
+  "210118094635015120": " If you have an invitation code from your team administrator, enter it here ",
+  "@210118094635015120": {
+    "description": "Helper text for invitation code",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "15", "column": "7" },
+        "end": { "line": "17", "column": "4" }
+      }
+    ]
+  },
+  "4443647840789891392": "Enter invitation code",
+  "@4443647840789891392": {
+    "description": "Button to show the invitation code input",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "20", "column": "100" },
+        "end": { "line": "20", "column": "165" }
+      }
+    ]
+  },
+  "2358259866843585915": " If you have an invitation code from your team administrator, you can enter it by clicking above ",
+  "@2358259866843585915": {
+    "description": "Hint for showing invitation code input",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\authentication\\authentication.component.html",
+        "start": { "line": "22", "column": "7" },
+        "end": { "line": "24", "column": "11" }
       }
     ]
   },
@@ -50,8 +94,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "2", "column": "150" },
-        "end": { "line": "3", "column": "113" }
+        "start": { "line": "29", "column": "155" },
+        "end": { "line": "30", "column": "113" }
       }
     ]
   },
@@ -61,8 +105,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "6", "column": "85" },
-        "end": { "line": "8", "column": "9" }
+        "start": { "line": "33", "column": "85" },
+        "end": { "line": "35", "column": "9" }
       }
     ]
   },
@@ -72,8 +116,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "13", "column": "95" },
-        "end": { "line": "15", "column": "8" }
+        "start": { "line": "40", "column": "95" },
+        "end": { "line": "42", "column": "8" }
       }
     ]
   },
@@ -83,8 +127,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "17", "column": "308" },
-        "end": { "line": "18", "column": "11" }
+        "start": { "line": "44", "column": "308" },
+        "end": { "line": "45", "column": "11" }
       }
     ]
   },
@@ -94,8 +138,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "21", "column": "134" },
-        "end": { "line": "23", "column": "62" }
+        "start": { "line": "48", "column": "134" },
+        "end": { "line": "50", "column": "62" }
       }
     ]
   },
@@ -105,8 +149,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "29", "column": "104" },
-        "end": { "line": "31", "column": "8" }
+        "start": { "line": "56", "column": "104" },
+        "end": { "line": "58", "column": "8" }
       }
     ]
   },
@@ -116,8 +160,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "29", "column": "261" },
-        "end": { "line": "29", "column": "300" }
+        "start": { "line": "56", "column": "261" },
+        "end": { "line": "56", "column": "300" }
       }
     ]
   },
@@ -127,8 +171,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.html",
-        "start": { "line": "29", "column": "431" },
-        "end": { "line": "31", "column": "8" }
+        "start": { "line": "56", "column": "431" },
+        "end": { "line": "58", "column": "8" }
       }
     ]
   },
@@ -138,8 +182,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "75", "column": "28" },
-        "end": { "line": "75", "column": "125" }
+        "start": { "line": "97", "column": "28" },
+        "end": { "line": "97", "column": "125" }
       }
     ]
   },
@@ -149,8 +193,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "77", "column": "28" },
-        "end": { "line": "77", "column": "121" }
+        "start": { "line": "99", "column": "28" },
+        "end": { "line": "99", "column": "121" }
       }
     ]
   },
@@ -160,8 +204,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "85", "column": "28" },
-        "end": { "line": "85", "column": "134" }
+        "start": { "line": "107", "column": "28" },
+        "end": { "line": "107", "column": "134" }
       }
     ]
   },
@@ -171,8 +215,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "87", "column": "28" },
-        "end": { "line": "87", "column": "142" }
+        "start": { "line": "109", "column": "28" },
+        "end": { "line": "109", "column": "142" }
       }
     ]
   },
@@ -182,18 +226,18 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "98", "column": "28" },
-        "end": { "line": "98", "column": "97" }
+        "start": { "line": "120", "column": "28" },
+        "end": { "line": "120", "column": "97" }
       },
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "113", "column": "28" },
-        "end": { "line": "113", "column": "98" }
+        "start": { "line": "135", "column": "28" },
+        "end": { "line": "135", "column": "98" }
       },
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "132", "column": "28" },
-        "end": { "line": "132", "column": "97" }
+        "start": { "line": "154", "column": "28" },
+        "end": { "line": "154", "column": "97" }
       }
     ]
   },
@@ -203,8 +247,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "100", "column": "28" },
-        "end": { "line": "100", "column": "72" }
+        "start": { "line": "122", "column": "28" },
+        "end": { "line": "122", "column": "72" }
       }
     ]
   },
@@ -214,18 +258,18 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "102", "column": "28" },
-        "end": { "line": "102", "column": "75" }
+        "start": { "line": "124", "column": "28" },
+        "end": { "line": "124", "column": "75" }
       },
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "119", "column": "28" },
-        "end": { "line": "119", "column": "76" }
+        "start": { "line": "141", "column": "28" },
+        "end": { "line": "141", "column": "76" }
       },
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "138", "column": "28" },
-        "end": { "line": "138", "column": "75" }
+        "start": { "line": "160", "column": "28" },
+        "end": { "line": "160", "column": "75" }
       }
     ]
   },
@@ -235,8 +279,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "115", "column": "28" },
-        "end": { "line": "115", "column": "106" }
+        "start": { "line": "137", "column": "28" },
+        "end": { "line": "137", "column": "106" }
       }
     ]
   },
@@ -246,8 +290,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "117", "column": "28" },
-        "end": { "line": "117", "column": "136" }
+        "start": { "line": "139", "column": "28" },
+        "end": { "line": "139", "column": "136" }
       }
     ]
   },
@@ -257,8 +301,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "134", "column": "28" },
-        "end": { "line": "134", "column": "104" }
+        "start": { "line": "156", "column": "28" },
+        "end": { "line": "156", "column": "104" }
       }
     ]
   },
@@ -268,8 +312,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\authentication\\authentication.component.ts",
-        "start": { "line": "136", "column": "28" },
-        "end": { "line": "136", "column": "134" }
+        "start": { "line": "158", "column": "28" },
+        "end": { "line": "158", "column": "134" }
       }
     ]
   },
@@ -543,8 +587,8 @@
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "100", "column": "40" },
-        "end": { "line": "100", "column": "104" }
+        "start": { "line": "116", "column": "40" },
+        "end": { "line": "116", "column": "104" }
       }
     ]
   },
@@ -581,18 +625,18 @@
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "75", "column": "40" },
-        "end": { "line": "75", "column": "82" }
+        "start": { "line": "91", "column": "40" },
+        "end": { "line": "91", "column": "82" }
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "80", "column": "64" },
-        "end": { "line": "80", "column": "102" }
+        "start": { "line": "96", "column": "64" },
+        "end": { "line": "96", "column": "102" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-and-detail\\person-list-and-detail.component.ts",
-        "start": { "line": "24", "column": "48" },
-        "end": { "line": "24", "column": "86" }
+        "start": { "line": "27", "column": "48" },
+        "end": { "line": "27", "column": "86" }
       }
     ]
   },
@@ -684,13 +728,13 @@
       },
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "44", "column": "108" },
-        "end": { "line": "44", "column": "160" }
+        "start": { "line": "52", "column": "108" },
+        "end": { "line": "52", "column": "160" }
       },
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "68", "column": "108" },
-        "end": { "line": "68", "column": "160" }
+        "start": { "line": "76", "column": "108" },
+        "end": { "line": "76", "column": "160" }
       }
     ]
   },
@@ -727,14 +771,85 @@
       }
     ]
   },
+  "5592083557831215796": "Welcome to {$INTERPOLATION}",
+  "@5592083557831215796": {
+    "description": "Title of the team invitation page",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "1", "column": "78" },
+        "end": { "line": "2", "column": "10" }
+      }
+    ]
+  },
+  "4828649534975785034": "You've been invited to join this team. Please select your name from the list below.",
+  "@4828649534975785034": {
+    "description": "Subtitle of the team invitation page",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "2", "column": "80" },
+        "end": { "line": "4", "column": "41" }
+      }
+    ]
+  },
+  "4877493890037819759": "Select your name",
+  "@4877493890037819759": {
+    "description": "Label for the player selection",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "7", "column": "102" },
+        "end": { "line": "9", "column": "34" }
+      }
+    ]
+  },
+  "7498061982160767189": " Not on the list or need help? Please contact your team administrator. ",
+  "@7498061982160767189": {
+    "description": "Information about incorrect name selection",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.html",
+        "start": { "line": "31", "column": "7" },
+        "end": { "line": "33", "column": "11" }
+      }
+    ]
+  },
+  "957380748887148252": "Failed to navigate to the home page.",
+  "@957380748887148252": {
+    "description": "Error message that navigation to home page has failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.ts",
+        "start": { "line": "58", "column": "50" },
+        "end": { "line": "58", "column": "143" }
+      },
+      {
+        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
+        "start": { "line": "121", "column": "29" },
+        "end": { "line": "121", "column": "122" }
+      }
+    ]
+  },
+  "3697023714793897031": "Registration failed. Please try again.",
+  "@3697023714793897031": {
+    "description": "Error message that registration has failed",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\invitation-person-selection\\invitation-person-selection.component.ts",
+        "start": { "line": "60", "column": "46" },
+        "end": { "line": "60", "column": "130" }
+      }
+    ]
+  },
   "1743088859194300989": "Your Teams",
   "@1743088859194300989": {
     "description": "Label for the teams menu item",
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "48", "column": "32" },
-        "end": { "line": "48", "column": "75" }
+        "start": { "line": "64", "column": "32" },
+        "end": { "line": "64", "column": "75" }
       }
     ]
   },
@@ -744,8 +859,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "62", "column": "32" },
-        "end": { "line": "62", "column": "70" }
+        "start": { "line": "78", "column": "32" },
+        "end": { "line": "78", "column": "70" }
       }
     ]
   },
@@ -755,13 +870,13 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "65", "column": "40" },
-        "end": { "line": "65", "column": "82" }
+        "start": { "line": "81", "column": "40" },
+        "end": { "line": "81", "column": "82" }
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "70", "column": "64" },
-        "end": { "line": "70", "column": "102" }
+        "start": { "line": "86", "column": "64" },
+        "end": { "line": "86", "column": "102" }
       }
     ]
   },
@@ -771,13 +886,13 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "85", "column": "40" },
-        "end": { "line": "85", "column": "96" }
+        "start": { "line": "101", "column": "40" },
+        "end": { "line": "101", "column": "96" }
       },
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "90", "column": "64" },
-        "end": { "line": "90", "column": "116" }
+        "start": { "line": "106", "column": "64" },
+        "end": { "line": "106", "column": "116" }
       }
     ]
   },
@@ -787,8 +902,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "97", "column": "32" },
-        "end": { "line": "97", "column": "77" }
+        "start": { "line": "113", "column": "32" },
+        "end": { "line": "113", "column": "77" }
       }
     ]
   },
@@ -798,8 +913,19 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "114", "column": "40" },
-        "end": { "line": "114", "column": "101" }
+        "start": { "line": "130", "column": "40" },
+        "end": { "line": "130", "column": "101" }
+      }
+    ]
+  },
+  "6704332287371843544": "Invite new members",
+  "@6704332287371843544": {
+    "description": "Label for the invite new members menu item",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "137", "column": "40" },
+        "end": { "line": "137", "column": "104" }
       }
     ]
   },
@@ -809,8 +935,116 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\menu\\menu.component.ts",
-        "start": { "line": "121", "column": "40" },
-        "end": { "line": "121", "column": "83" }
+        "start": { "line": "142", "column": "40" },
+        "end": { "line": "142", "column": "83" }
+      }
+    ]
+  },
+  "7832336759026439491": "Invitation is loading",
+  "@7832336759026439491": {
+    "description": "Header of the dialog to wait for invitation to be loading",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "162", "column": "29" },
+        "end": { "line": "162", "column": "111" }
+      }
+    ]
+  },
+  "8414719116461217835": "Invitation is loading, please wait...",
+  "@8414719116461217835": {
+    "description": "Message to wait for invitation to be loading",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "163", "column": "30" },
+        "end": { "line": "163", "column": "115" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "128", "column": "30" },
+        "end": { "line": "128", "column": "115" }
+      }
+    ]
+  },
+  "2159130950882492111": "Cancel",
+  "@2159130950882492111": {
+    "description": "Label of the button to cancel the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "165", "column": "34" },
+        "end": { "line": "165", "column": "84" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "130", "column": "34" },
+        "end": { "line": "130", "column": "84" }
+      }
+    ]
+  },
+  "2498923855806594390": "Team Invitation",
+  "@2498923855806594390": {
+    "description": "Header of the dialog of the team invitation",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "179", "column": "33" },
+        "end": { "line": "179", "column": "95" }
+      }
+    ]
+  },
+  "722806110058596797": "Give this link to your team: {$PH}",
+  "@722806110058596797": {
+    "description": "Message to show when team invitation was successful",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "180", "column": "34" },
+        "end": { "line": "180", "column": "136" }
+      }
+    ]
+  },
+  "7819314041543176992": "Close",
+  "@7819314041543176992": {
+    "description": "Label of the button to close the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "182", "column": "38" },
+        "end": { "line": "182", "column": "86" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "146", "column": "38" },
+        "end": { "line": "146", "column": "86" }
+      }
+    ]
+  },
+  "4930709259521499259": "Copy invitation and Close",
+  "@4930709259521499259": {
+    "description": "Label of the button to copy invitation and close the dialog",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "183", "column": "38" },
+        "end": { "line": "183", "column": "126" }
+      },
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "147", "column": "38" },
+        "end": { "line": "147", "column": "142" }
+      }
+    ]
+  },
+  "5114570310249742733": "Hello everyone,\n\nWe are now using {$PH} to organize fines for {$PH_1}. Here is your invitation code:\n\n{$PH_2}\n\nPlease use this code on the above website to register with your team once, or use the direct link: {$PH_3}",
+  "@5114570310249742733": {
+    "description": "Text to copy to clipboard for team invitation",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\menu\\menu.component.ts",
+        "start": { "line": "187", "column": "52" },
+        "end": { "line": "187", "column": "359" }
       }
     ]
   },
@@ -1011,8 +1245,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "14", "column": "109" },
-        "end": { "line": "17", "column": "1" }
+        "start": { "line": "15", "column": "109" },
+        "end": { "line": "18", "column": "1" }
       }
     ]
   },
@@ -1022,24 +1256,35 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "19", "column": "89" },
-        "end": { "line": "19", "column": "135" }
+        "start": { "line": "20", "column": "89" },
+        "end": { "line": "20", "column": "135" }
       }
     ]
   },
   "7660846224795606746": "Delete person",
   "@7660846224795606746": {
-    "description": "Button label to edit person",
+    "description": "Button label to delete person",
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "30", "column": "95" },
-        "end": { "line": "30", "column": "139" }
+        "start": { "line": "31", "column": "97" },
+        "end": { "line": "31", "column": "143" }
       },
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "54", "column": "95" },
-        "end": { "line": "54", "column": "139" }
+        "start": { "line": "62", "column": "95" },
+        "end": { "line": "62", "column": "139" }
+      }
+    ]
+  },
+  "778359129704777261": "Kickout person",
+  "@778359129704777261": {
+    "description": "Button label to kickout person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
+        "start": { "line": "38", "column": "98" },
+        "end": { "line": "38", "column": "146" }
       }
     ]
   },
@@ -1049,13 +1294,13 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "37", "column": "95" },
-        "end": { "line": "37", "column": "137" }
+        "start": { "line": "45", "column": "95" },
+        "end": { "line": "45", "column": "137" }
       },
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.html",
-        "start": { "line": "61", "column": "95" },
-        "end": { "line": "61", "column": "137" }
+        "start": { "line": "69", "column": "95" },
+        "end": { "line": "69", "column": "137" }
       }
     ]
   },
@@ -1065,8 +1310,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "50", "column": "32" },
-        "end": { "line": "50", "column": "62" }
+        "start": { "line": "54", "column": "32" },
+        "end": { "line": "54", "column": "62" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
@@ -1086,8 +1331,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "56", "column": "32" },
-        "end": { "line": "56", "column": "65" }
+        "start": { "line": "60", "column": "32" },
+        "end": { "line": "60", "column": "65" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
@@ -1107,8 +1352,8 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "62", "column": "32" },
-        "end": { "line": "62", "column": "61" }
+        "start": { "line": "66", "column": "32" },
+        "end": { "line": "66", "column": "61" }
       },
       {
         "file": "src\\app\\components\\person\\person-list-element\\person-list-element.component.ts",
@@ -1122,69 +1367,25 @@
       }
     ]
   },
-  "8414719116461217835": "Invitation is loading, please wait...",
-  "@8414719116461217835": {
-    "description": "Message to wait for invitation to be loading",
+  "6116372200226628440": "Give this link to the person: {$PH}",
+  "@6116372200226628440": {
+    "description": "Message to show in person invitation to give the link to the person",
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "113", "column": "30" },
-        "end": { "line": "113", "column": "115" }
+        "start": { "line": "145", "column": "34" },
+        "end": { "line": "145", "column": "153" }
       }
     ]
   },
-  "2159130950882492111": "Cancel",
-  "@2159130950882492111": {
-    "description": "Label of the button to cancel the dialog",
+  "215384093318319936": "Hello {$PH},\n\nWe are now using {$PH_1} to organize fines for {$PH_2}. Here is your invitation code:\n\n{$PH_3}\n\nPlease use this code on the above website to register with your team once, or use the direct link: {$PH_4}",
+  "@215384093318319936": {
+    "description": "Text to copy to clipboard for team invitation",
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "115", "column": "34" },
-        "end": { "line": "115", "column": "84" }
-      }
-    ]
-  },
-  "7790845502003161026": "Invitation was successful! Give this link to the person: {$PH}",
-  "@7790845502003161026": {
-    "description": "Message to show when invitation was successful",
-    "x-locations": [
-      {
-        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "130", "column": "34" },
-        "end": { "line": "130", "column": "159" }
-      }
-    ]
-  },
-  "7819314041543176992": "Close",
-  "@7819314041543176992": {
-    "description": "Label of the button to close the dialog",
-    "x-locations": [
-      {
-        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "131", "column": "38" },
-        "end": { "line": "131", "column": "86" }
-      }
-    ]
-  },
-  "3899689736802688204": "Copy link and Close",
-  "@3899689736802688204": {
-    "description": "Label of the button to copy invitation link and close the dialog",
-    "x-locations": [
-      {
-        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "132", "column": "38" },
-        "end": { "line": "132", "column": "125" }
-      }
-    ]
-  },
-  "5235193980611559943": "Hello {$PH}, you have been invited to your team {$PH_1} to manage the team fines. Click on the link to log in: {$PH_2}",
-  "@5235193980611559943": {
-    "description": "Text to copy invitation link",
-    "x-locations": [
-      {
-        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "135", "column": "64" },
-        "end": { "line": "135", "column": "239" }
+        "start": { "line": "151", "column": "52" },
+        "end": { "line": "151", "column": "365" }
       }
     ]
   },
@@ -1194,8 +1395,19 @@
     "x-locations": [
       {
         "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
-        "start": { "line": "146", "column": "30" },
-        "end": { "line": "146", "column": "132" }
+        "start": { "line": "163", "column": "30" },
+        "end": { "line": "163", "column": "132" }
+      }
+    ]
+  },
+  "7249967404652585753": "Are you sure you want to kick out this person?",
+  "@7249967404652585753": {
+    "description": "Message to ask for confirmation before kickout person",
+    "x-locations": [
+      {
+        "file": "src\\app\\components\\person\\person-detail\\person-detail.component.ts",
+        "start": { "line": "194", "column": "30" },
+        "end": { "line": "194", "column": "133" }
       }
     ]
   },
@@ -1397,8 +1609,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\home\\home.page.ts",
-        "start": { "line": "51", "column": "44" },
-        "end": { "line": "51", "column": "76" }
+        "start": { "line": "53", "column": "44" },
+        "end": { "line": "53", "column": "76" }
       }
     ]
   },
@@ -1408,8 +1620,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "35", "column": "44" },
-        "end": { "line": "35", "column": "82" }
+        "start": { "line": "44", "column": "44" },
+        "end": { "line": "44", "column": "82" }
       }
     ]
   },
@@ -1419,8 +1631,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "56", "column": "28" },
-        "end": { "line": "56", "column": "127" }
+        "start": { "line": "66", "column": "28" },
+        "end": { "line": "66", "column": "127" }
       }
     ]
   },
@@ -1430,8 +1642,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "69", "column": "32" },
-        "end": { "line": "69", "column": "129" }
+        "start": { "line": "99", "column": "32" },
+        "end": { "line": "99", "column": "129" }
       }
     ]
   },
@@ -1441,8 +1653,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "71", "column": "32" },
-        "end": { "line": "71", "column": "145" }
+        "start": { "line": "101", "column": "32" },
+        "end": { "line": "101", "column": "145" }
       }
     ]
   },
@@ -1452,8 +1664,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "72", "column": "28" },
-        "end": { "line": "72", "column": "129" }
+        "start": { "line": "102", "column": "28" },
+        "end": { "line": "102", "column": "129" }
       }
     ]
   },
@@ -1463,19 +1675,8 @@
     "x-locations": [
       {
         "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "83", "column": "28" },
-        "end": { "line": "83", "column": "87" }
-      }
-    ]
-  },
-  "957380748887148252": "Failed to navigate to the home page.",
-  "@957380748887148252": {
-    "description": "Error message that navigation to home page has failed",
-    "x-locations": [
-      {
-        "file": "src\\app\\pages\\sign-in\\sign-in.page.ts",
-        "start": { "line": "91", "column": "29" },
-        "end": { "line": "91", "column": "122" }
+        "start": { "line": "113", "column": "28" },
+        "end": { "line": "113", "column": "87" }
       }
     ]
   },
