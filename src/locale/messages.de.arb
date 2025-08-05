@@ -1675,7 +1675,7 @@
       }
     ]
   },
-  "215384093318319936": "Hallo {$PH},\n\nWir verwenden jetzt {$PH_1}, um Strafen für {$PH_2} zu organisieren. Hier ist dein Einladungscode:\n\n{$PH_3}\n\nBitte benutze diesen Code auf der oben genannten Website, um dich einmalig mit deinem Team zu registrieren, oder benutze den direkten Link: {$PH_4}",
+  "215384093318319936": "Hallo {$PH},\n\nWir verwenden jetzt {$PH_1}, um die Strafen für {$PH_2} zu organisieren. Hier ist dein Einladungscode:\n\n{$PH_3}\n\nBitte benutze diesen Code auf der oben genannten Website, um dich einmalig mit deinem Team zu registrieren, oder benutze den direkten Link: {$PH_4}",
   "@215384093318319936": {
     "description": "Text to copy to clipboard for team invitation",
     "x-locations": [
@@ -1686,7 +1686,7 @@
       }
     ]
   },
-  "5114570310249742733": "Hallo zusammen,\n\nWir verwenden jetzt {$PH}, um Strafen für {$PH_1} zu organisieren. Hier ist dein Einladungscode:\n\n{$PH_2}\n\nBitte benutze diesen Code auf der oben genannten Website, um dich einmalig mit deinem Team zu registrieren, oder benutze den direkten Link: {$PH_3}",
+  "5114570310249742733": "Hallo zusammen,\n\nWir verwenden jetzt {$PH}, um die Strafen für {$PH_1} zu organisieren. Hier ist euer Einladungscode:\n\n{$PH_2}\n\nBitte benutzt diesen Code auf der oben genannten Website, um euch einmalig mit eurem Team zu registrieren, oder benutzt den direkten Link: {$PH_3}",
   "@5114570310249742733": {
     "description": "Text to copy to clipboard for team invitation",
     "x-locations": [
