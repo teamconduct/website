@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { PersonWithFines } from '../../../types/PersonWithFines';
 import { AsyncPipe } from '@angular/common';
@@ -42,7 +42,11 @@ export class PersonDetailComponent {
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
+    private changeDetector = inject(ChangeDetectorRef);
+
     public deleteLoading: boolean = false;
+
+    public kickoutLoading: boolean = false;
 
     public get payedTags(): Record<'total' | 'notPayed' | 'payed', { label: string, value: SummedFineValue | null, severity: Tag['severity'], icon: IconDefinition }> {
         const person = this.person();
@@ -69,7 +73,7 @@ export class PersonDetailComponent {
     };
 
     public get canAddFine$(): Observable<boolean> {
-        return this.userManager.hasRole('fine-manager');
+        return Observable.combine(this.userManager.hasRole('fine-manager'), this.userManager.hasRole('fine-can-add'), (hasFineManagerRole, hasFineCanAddRole) => hasFineManagerRole || hasFineCanAddRole);
     }
 
     public get canEditPerson$(): Observable<boolean> {
@@ -79,15 +83,26 @@ export class PersonDetailComponent {
     public get canDeletePerson$(): Observable<boolean> {
         return Observable.combine(this.userManager.hasRole('person-manager'), this.userManager.currentPersonId$, (canDeletePerson, currentPersonId) => {
             const person = this.person();
-            if (currentPersonId === null || person === null ||  person.id.guidString === currentPersonId.guidString)
+            if (currentPersonId === null || person === null ||  person.id.guidString === currentPersonId.guidString || person.signInProperties !== null)
                 return false;
             return canDeletePerson;
         });
     }
 
+    public get canKickoutPerson$(): Observable<boolean> {
+        return Observable.combine(this.userManager.hasRole('team-manager'), this.userManager.currentPersonId$, (canKickoutPerson, currentPersonId) => {
+            const person = this.person();
+            if (currentPersonId === null || person === null || person.id.guidString === currentPersonId.guidString || person.signInProperties === null)
+                return false;
+            return canKickoutPerson;
+        });
+    }
+
     public get canInvitePerson$(): Observable<boolean> {
-        const person = this.person();
-        return this.userManager.hasRole('team-manager').map(isTeamManager => isTeamManager && person !== null && person.signInProperties === null);
+        return this.userManager.hasRole('team-manager').map(isTeamManager => {
+            const person = this.person();
+            return isTeamManager && person !== null && person.signInProperties === null;
+        });
     }
 
     public get paypalMeLink$(): Observable<string | null> {
@@ -133,7 +148,7 @@ export class PersonDetailComponent {
                 acceptLabel: $localize `:Label of the button to copy invitation link and close the dialog:Copy link and Close`,
                 closeOnEscape: true,
                 accept: () => {
-                    void navigator.clipboard.writeText($localize `:Text to copy invitation link:Hello ${person.name}, you have been invited to your team ${team.name} to manage the team fines. Click on the link to log in: ${invitationLink}`);
+                    void navigator.clipboard.writeText(invitationLink);
                 }
             });
         });
@@ -167,6 +182,38 @@ export class PersonDetailComponent {
         });
 
         this.deleteLoading = false;
+        this.changeDetector.markForCheck();
+    }
+
+    public showKickoutConfirmation(event: Event) {
+        if (this.person() === null)
+            return;
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: $localize `:Message to ask for confirmation before kickout person:Are you sure you want to kick out this person?`,
+            closeOnEscape: true,
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: () => this.kickoutPerson()
+        });
+    }
+
+    public async kickoutPerson() {
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        const person = this.person();
+        if (selectedTeamId === null || person === null || person.signInProperties === null)
+            return;
+
+        if (this.kickoutLoading)
+            return;
+        this.kickoutLoading = true;
+
+        await this.firebaseFunctions.functions.user.kickout.execute({
+            teamId: selectedTeamId,
+            userId: person.signInProperties.userId
+        });
+
+        this.kickoutLoading = false;
+        this.changeDetector.markForCheck();
     }
 
     public showPersonEditDialog() {

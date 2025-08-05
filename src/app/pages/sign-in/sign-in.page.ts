@@ -5,22 +5,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Tagged } from '@stevenkellner/typescript-common-functionality';
 import { FunctionsError } from '@stevenkellner/firebase-function';
 import { FunctionsErrorCodeCore } from '@angular/fire/functions';
-import { User } from '@stevenkellner/team-conduct-api';
+import { Person, PersonPrivateProperties, Team, User } from '@stevenkellner/team-conduct-api';
 import { AuthenticationComponent } from '../../components/authentication/authentication.component';
 import { routeNames } from '../../app.routes';
 import { Title } from '@angular/platform-browser';
-import { Auth } from '@angular/fire/auth';
+import { InvitationPersonSelectionComponent } from '../../components/invitation-person-selection/invitation-person-selection.component';
 
 @Component({
     selector: 'page-sign-in',
-    imports: [AuthenticationComponent],
+    imports: [AuthenticationComponent, InvitationPersonSelectionComponent],
     templateUrl: './sign-in.page.html',
     styleUrl: './sign-in.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInPage implements OnInit {
-
-    private firebaseAuth = inject(Auth);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -32,14 +30,23 @@ export class SignInPage implements OnInit {
 
     private titleService = inject(Title);
 
+    public teamInvitationProperties: {
+        teamId: Team.Id,
+        teamName: string,
+        persons: {
+            id: Person.Id,
+            properties: PersonPrivateProperties
+        }[]
+    } | null = null;
+
     public ngOnInit() {
         this.titleService.setTitle($localize `:Title for the sign in page:Sign In`);
-        this.firebaseAuth.onAuthStateChanged(async _user => {
-            if (_user !== null) {
-                const user = await this.firebaseFunctions.functions.user.login.execute(null);
-                this.userManager.setUser(user);
-            }
-        });
+        // this.firebaseAuth.onAuthStateChanged(async _user => {
+        //     if (_user !== null) {
+        //         const user = await this.firebaseFunctions.functions.user.login.execute(null);
+        //         this.userManager.setUser(user);
+        //     }
+        // });
     }
 
     public async handleSuccessfulSignIn(): Promise<string | null> {
@@ -63,8 +70,22 @@ export class SignInPage implements OnInit {
         if (invitationId === null)
             return 'no-invitation';
         try {
-            const user = await this.firebaseFunctions.functions.invitation.register.execute(new Tagged(invitationId, 'invitation'));
-            return await this.setUserAndNavigateToHome(user);
+            const invitation = await this.firebaseFunctions.functions.invitation.getInvitation.execute(new Tagged(invitationId, 'invitation'));
+            if (invitation.personId !== null) {
+                const user = await this.firebaseFunctions.functions.invitation.register.execute({
+                    teamId: invitation.teamId,
+                    personId: invitation.personId,
+                });
+                return await this.setUserAndNavigateToHome(user);
+            } else if (invitation.persons !== null && invitation.persons.length > 0) {
+                this.teamInvitationProperties = {
+                    teamId: invitation.teamId,
+                    teamName: invitation.teamName,
+                    persons: invitation.persons
+                };
+                return null;
+            }
+            return 'no-invitation';
         } catch (error) {
             if ((error as FunctionsError).code as FunctionsErrorCodeCore === 'not-found')
                 return $localize `:Error message that sign in has failed with invalid invitation code:Invitation code is invalid.`;
@@ -91,5 +112,9 @@ export class SignInPage implements OnInit {
         if (!navigationSuccessful)
             return  $localize `:Error message that navigation to home page has failed:Failed to navigate to the home page.`;
         return null;
+    }
+
+    public cancelInvitationPersonSelection() {
+        this.teamInvitationProperties = null;
     }
 }

@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Person, Team } from '@stevenkellner/team-conduct-api';
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
 import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
@@ -42,6 +42,8 @@ export class HomePage implements OnInit {
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
+    private changeDetector = inject(ChangeDetectorRef);
+
     private router = inject(Router);
 
     public currentPage: 'profile' | 'persons' | 'fineTemplates' = 'profile';
@@ -68,7 +70,7 @@ export class HomePage implements OnInit {
 
     public async onTeamSelected(teamId: Team.Id) {
         this.userManager.setTeamId(teamId);
-        this.teamDataManager.startObserve(teamId);
+        this.teamDataManager.startObserve(teamId, this.changeDetector);
         this.userManager.currentPersonId$.subscribe(currentPersonId => {
             if (currentPersonId === null)
                 return;

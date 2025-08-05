@@ -1,7 +1,7 @@
 @let user = userManager.user$ | async;
 @let selectedTeamId = userManager.selectedTeamId$ | async;
-@let canAddFine = (userManager.hasRole('fine-manager') | async) ?? false;
-@let canManageTeam = (userManager.hasRole('team-manager') | async) ?? false;
+@let canAddFine = (canAddFine$ | async) ?? false;
+@let canManageTeam = (canManageTeam$ | async) ?? false;
 
 <p-menu id="desktop-menu" [model]="getTeamMenu(user, selectedTeamId, canAddFine, canManageTeam)" class="hidden md:block" />
 
@@ -40,3 +40,5 @@
         <span id="background" (click)="toggleToolbar(false)"></span>
     }
 </div>
+
+<p-confirmDialog />

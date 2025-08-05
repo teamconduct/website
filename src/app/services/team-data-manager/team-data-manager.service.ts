@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { ChangeDetectorRef, inject, Injectable } from '@angular/core';
 import { Observable, Observer, SummedFineValue } from '../../types';
 import { Fine, FineTemplate, Person, Team } from '@stevenkellner/team-conduct-api';
 import { compactMap, Dictionary, Flattable, values } from '@stevenkellner/typescript-common-functionality';
@@ -27,7 +27,7 @@ export class TeamDataManagerService {
 
     private firestore = inject(Firestore);
 
-    public startObserve(teamId: Team.Id) {
+    public startObserve(teamId: Team.Id, changeDetector: ChangeDetectorRef) {
         const teamDocument = doc(this.firestore, 'teams', teamId.guidString) as DocumentReference<Flattable.Flatten<Team>>;
         const personsCollection = collection(this.firestore, 'teams', teamId.guidString, 'persons') as CollectionReference<Flattable.Flatten<Person>>;
         const fineTemplatesCollection = collection(this.firestore, 'teams', teamId.guidString, 'fineTemplates') as CollectionReference<Flattable.Flatten<FineTemplate>>;
@@ -37,6 +37,11 @@ export class TeamDataManagerService {
         const persons$ = this.observers.persons.start(personsCollection);
         this.fineTemplates$ = this.observers.fineTemplates.start(fineTemplatesCollection);
         this.fines$ = this.observers.fines.start(finesCollection);
+
+        this.team$.subscribe(() => changeDetector.markForCheck());
+        persons$.subscribe(() => changeDetector.markForCheck());
+        this.fineTemplates$.subscribe(() => changeDetector.markForCheck());
+        this.fines$.subscribe(() => changeDetector.markForCheck());
 
         this.persons$ = Observable.combine(persons$, this.fines$, (persons, fines) => {
             return persons.map<PersonWithFines>(person => {

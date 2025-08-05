@@ -3,20 +3,24 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
 import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
 import { Router } from '@angular/router';
-import { Team, User } from '@stevenkellner/team-conduct-api';
+import { Invitation, Team, User } from '@stevenkellner/team-conduct-api';
 import { removeNullValues } from '../../utils/removeNullValues';
 import { routeNames } from '../../app.routes';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MenuItemCommandEvent, MessageService } from 'primeng/api';
 import { PopupDialogHandlerService } from '../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { MenuModule } from 'primeng/menu';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { Title } from '@angular/platform-browser';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { Observable } from '../../types';
+import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
     selector: 'app-menu',
-    imports: [AsyncPipe, MenuModule, ToolbarModule, ButtonModule],
+    imports: [AsyncPipe, MenuModule, ToolbarModule, ButtonModule, ConfirmDialogModule],
+    providers: [ConfirmationService, MessageService],
     templateUrl: './menu.component.html',
     styleUrl: './menu.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,11 +41,23 @@ export class MenuComponent {
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
+    private firebaseFunctions = inject(FirebaseFunctionsService);
+
+    private confirmationService = inject(ConfirmationService);
+
     private router = inject(Router);
 
     private titleService = inject(Title);
 
     public toolbarExpanded: boolean = false;
+
+    public get canAddFine$(): Observable<boolean> {
+        return Observable.combine(this.userManager.hasRole('fine-manager'), this.userManager.hasRole('fine-can-add'), (hasFineManagerRole, hasFineCanAddRole) => hasFineManagerRole || hasFineCanAddRole);
+    }
+
+    public get canManageTeam$(): Observable<boolean> {
+        return this.userManager.hasRole('team-manager');
+    }
 
     public getTeamMenu(user: User | null, selectedTeamId: Team.Id | null, canAddFine: boolean, canManageTeam: boolean): MenuItem[] {
         return removeNullValues([
@@ -118,6 +134,11 @@ export class MenuComponent {
                             type: 'paypalMeAddEdit'
                         })
                     } : null,
+                    canManageTeam ?{
+                        label: $localize `:Label for the invite new members menu item:Invite new members`,
+                        icon: 'pi pi-fw pi-user-plus',
+                        command: () => this.showInvitationDialog()
+                    } : null,
                     {
                         label: $localize `:Label for the sign out menu item:Log Out`,
                         icon: 'pi pi-fw pi-sign-out',
@@ -131,6 +152,42 @@ export class MenuComponent {
                 ])
             }
         ]);
+    }
+
+    public showInvitationDialog() {
+        const selectedTeamId = this.userManager.selectedTeamId$.value;
+        if (selectedTeamId === null)
+            return;
+        let loadingCanceled = false;
+        const loadingConfirmationDialog = this.confirmationService.confirm({
+            header: $localize `:Header of the dialog to wait for invitation to be loading:Invitation is loading`,
+            message: $localize `:Message to wait for invitation to be loading:Invitation is loading, please wait...`,
+            acceptVisible: false,
+            rejectLabel: $localize `:Label of the button to cancel the dialog:Cancel`,
+            closeOnEscape: true,
+            reject: () => loadingCanceled = true
+        });
+        void this.firebaseFunctions.functions.invitation.invite.execute(new Invitation(selectedTeamId, null)).then(invitationId => {
+            loadingConfirmationDialog.close();
+            if (loadingCanceled)
+                return;
+            const team = this.teamDataManager.team$.value;
+            if (team === null)
+                return;
+            const baseUrl = `${location.protocol}//${location.hostname}${location.port !== '' ? (':' + location.port) : ''}`;
+            const invitationLink = `${baseUrl}/${routeNames.signIn}?code=${invitationId.value}`;
+            this.confirmationService.confirm({
+                header: $localize `:Header of the dialog to show when team invitation was successful:Invitation Successful`,
+                message: $localize `:Message to show when team invitation was successful:Give this link to your team: ${invitationLink}`,
+                acceptVisible: true,
+                rejectLabel: $localize `:Label of the button to close the dialog:Close`,
+                acceptLabel: $localize `:Label of the button to copy invitation link and close the dialog:Copy link and Close`,
+                closeOnEscape: true,
+                accept: () => {
+                    void navigator.clipboard.writeText(invitationLink);
+                }
+            });
+        });
     }
 
     private getUserTeamsMenuItems(user: User, selectedTeamId: Team.Id | null): MenuItem[] {

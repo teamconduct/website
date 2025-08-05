@@ -1,0 +1,47 @@
+<div class="flex flex-column align-items-center justify-content-start w-85 mx-auto">
+    <h2 class="text-center" i18n="Title of the team invitation page">Welcome to {{ teamInvitationProperties().teamName }}</h2>
+    <p class="text-center" i18n="Subtitle of the team invitation page">You've been invited to join this team. Please select your name from the list below.</p>
+
+    <div class="flex flex-column align-items-center justify-content-start md:w-6 w-full mt-4">
+        <p-card styleClass="w-full mb-4">
+            <div class="flex flex-column">
+                <h3 class="text-lg font-semibold my-2" i18n="Label for the player selection">Select your name</h3>
+
+                <div class="flex flex-column w-full">
+                    @for (person of teamInvitationProperties().persons; track person.id.guidString) {
+                        <div class="flex flex-column w-full mb-2">
+                            <p-button
+                                [label]="person.properties.firstName + (person.properties.lastName ? ' ' + person.properties.lastName : '')"
+                                (onClick)="selectPerson(person)"
+                                [loading]="selectedPersonId === person.id && registrationLoading"
+                                [disabled]="registrationLoading"
+                                styleClass="text-left p-3 w-full">
+                                <ng-template #icon>
+                                    <fa-icon [icon]="['fas', 'user']" class="mr-2" />
+                                </ng-template>
+                            </p-button>
+
+                            @if (registrationError !== null && selectedPersonId === person.id) {
+                                <app-error-message [message]="registrationError" class="w-full" />
+                            }
+                        </div>
+                    }
+                </div>
+
+                <p class="text-sm text-center mt-4" i18n="Information about incorrect name selection">
+                    Not on the list or need help? Please contact your team administrator.
+                </p>
+            </div>
+        </p-card>
+
+        <p-button
+            label="Back to sign in"
+            (onClick)="cancelInvitationPersonSelection()"
+            [text]="true"
+            styleClass="mt-2">
+            <ng-template #icon>
+                <fa-icon [icon]="['fas', 'arrow-left']" class="mr-2" />
+            </ng-template>
+        </p-button>
+    </div>
+</div>
