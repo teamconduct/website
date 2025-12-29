@@ -1,0 +1,16 @@
+<div class="relative h-full w-full overflow-hidden" [style.background]="`linear-gradient(135deg, ${colors['background-gradient-left']} 0%, ${colors['background-gradient-right']} 100%)`">
+    <div class="flex flex-column justify-content-center align-items-center z-1 h-full p-6">
+        <img class="w-8rem h-8rem border-round-2xl object-fit-cover mx-auto mb-5 shadow-8" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a2ab73ca96-df9ca7dce01e060cbfb7.png" />
+        <app-infinite-slides
+            [slides]="textSlides"
+            [colors]="colors"
+            [intervalMs]="5000"
+            class="w-full">
+            <ng-template #slideTemplate let-slide>
+                <h2 class="text-4xl font-bold mb-4 line-height-3" [style.color]="colors.text">{{ slide.title }}</h2>
+                <p class="text-xl line-height-3" [style.color]="colors.text">{{ slide.description }}</p>
+            </ng-template>
+        </app-infinite-slides>
+    </div>
+    <div class="absolute bottom-0 left-0 w-full h-8rem" [style.background]="`linear-gradient(to top, ${colors['bottom-gradient']}, transparent)`"></div>
+</div>

@@ -1,0 +1,19 @@
+<div class="flex flex-row justify-content-center align-items-start relative overflow-hidden w-full">
+    @for (slide of extendedSlides; let index = $index; track index) {
+        <div class="flex flex-column justify-content-center align-items-center text-center w-full px-6"
+             [class.absolute]="index !== currentSlideIndex"
+             [class.left-0]="index !== currentSlideIndex"
+             [class.top-0]="index !== currentSlideIndex"
+             [class.transition-all]="isTransitioning"
+             [style.transition-duration]="isTransitioning ? transitionDurationMs() + 'ms' : '0ms'"
+             [style.transition-timing-function]="index > currentSlideIndex ? 'ease-in' : 'ease-out'"
+             [style.transform]="'translateX(' + (100 * (index - currentSlideIndex)) + '%)'">
+            <ng-container *ngTemplateOutlet="slideTemplate(); context: { $implicit: slide }" />
+        </div>
+    }
+</div>
+<div class="flex flex-row justify-content-center gap-2 mt-6">
+    @for (_ of slides(); let index = $index; track index) {
+        <div class="w-1rem h-1rem border-circle" [style.background]="index === actualSlideIndex ? colors()['dots-selected'] : colors()['dots-unselected']"></div>
+    }
+</div>
