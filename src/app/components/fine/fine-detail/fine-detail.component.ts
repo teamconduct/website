@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild } from '@angular/core';
-import { Fine, PayedState, Person } from '@stevenkellner/team-conduct-api';
-import { Tag, TagModule } from 'primeng/tag';
+import { Fine, Person } from '@stevenkellner/team-conduct-api';
+import { TagModule } from 'primeng/tag';
 import { Observable } from '../../../types';
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
 import { DatePipe } from '../../../pipes/date/date.pipe';
@@ -9,10 +9,11 @@ import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
-import { configuration } from '../../../../environments/environment';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
 import { ButtonGroupModule } from 'primeng/buttongroup';
+import { PayedTag } from '../../../types/PayedTag';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-fine-detail',
@@ -37,12 +38,14 @@ export class FineDetailComponent {
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
+    private configurationService = inject(ConfigurationService);
+
     public readonly headerElement = viewChild.required<TemplateRef<any>>('header');
 
     public deleteLoading: boolean = false;
 
-    public get payedTag(): { value: string, severity: Tag['severity'] } {
-        return PayedState.payedTag(this.fine().payedState);
+    public get payedTag(): PayedTag.Formatted {
+        return new PayedTag(this.fine().payedState).toFormatted(this.configurationService.locale);
     }
 
     public get canEditFine$(): Observable<boolean> {
@@ -84,7 +87,7 @@ export class FineDetailComponent {
             teamId: selectedTeamId,
             personId: this.personId(),
             id: this.fine().id,
-            configuration: configuration
+            configuration: this.configurationService.configuration
         });
 
         this.deleteLoading = false;

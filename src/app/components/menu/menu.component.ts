@@ -193,7 +193,7 @@ export class MenuComponent {
 
     private getUserTeamsMenuItems(user: User, selectedTeamId: Team.Id | null): MenuItem[] {
         return user.teams.map<MenuItem>((team, teamId) => ({
-            label: team.name,
+            label: team.teamName,
             icon: 'pi pi-fw pi-users',
             disabled: teamId.guidString === selectedTeamId?.guidString,
             command: () => void this.onTeamSelected()(teamId)
@@ -210,6 +210,6 @@ export class MenuComponent {
         const team = user.teams.getOptional(selectedTeamId);
         if (team == null)
             return null;
-        return team.name;
+        return team.teamName;
     }
 }

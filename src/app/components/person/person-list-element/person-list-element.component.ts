@@ -7,6 +7,7 @@ import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons'
 import { SkeletonModule } from 'primeng/skeleton';
 import { Tag, TagModule } from 'primeng/tag';
 import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
+import { PayedTag } from '../../../types/PayedTag';
 
 @Component({
     selector: 'app-person-list-element',
@@ -37,13 +38,13 @@ export class PersonListElementComponent {
             notPayed:{
                 label: $localize `:Label of not payed amount:Open`,
                 value: person === null ? null : person.fineValues.notPayed,
-                severity: PayedState.payedTag('notPayed').severity,
+                severity: new PayedTag('notPayed').severity,
                 icon: faEnvelopeOpen
             },
             payed: {
                 label: $localize `:Label of payed amount:Paid`,
                 value: person === null ? null : person.fineValues.payed,
-                severity: PayedState.payedTag('payed').severity,
+                severity: new PayedTag('payed').severity,
                 icon: faEnvelope
             }
         };

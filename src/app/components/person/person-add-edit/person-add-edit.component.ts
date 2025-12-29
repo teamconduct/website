@@ -11,6 +11,7 @@ import { Observable, SubmitableForm } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
 import { Tagged } from '@stevenkellner/typescript-common-functionality';
 import { AsyncPipe } from '@angular/common';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-person-add-edit',
@@ -32,6 +33,8 @@ export class PersonAddEditComponent extends SubmitableForm<{
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
+
+    private configurationService = inject(ConfigurationService);
 
     public readonly headerElement = viewChild.required<TemplateRef<any>>('header');
 
@@ -62,7 +65,7 @@ export class PersonAddEditComponent extends SubmitableForm<{
                 return null;
             return UserRole.all.map(role => ({
                 role: role,
-                label: UserRole.formatted(role),
+                label: UserRole.formatted(role, this.configurationService.locale),
                 selected: selectedUserRoles.includes(role),
                 disabled: role === 'team-manager' && person.id.guidString === currentPersonId.guidString
             }));

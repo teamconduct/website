@@ -8,6 +8,7 @@ import { PopupDialogHandlerService } from '../../../services/popup-dialog-handle
 import { Tagged } from '@stevenkellner/typescript-common-functionality';
 import { AddEditFormComponent } from '../../add-edit-form/add-edit-form.component';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-fine-template-add-edit',
@@ -33,6 +34,8 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
+
+    private configurationService = inject(ConfigurationService);
 
     public readonly headerElement = viewChild.required<TemplateRef<any>>('header');
 
@@ -91,7 +94,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
                 key: 'amount'
             },
             ...FineAmount.Item.Type.all.map(item => ({
-                label: FineAmount.Item.Type.formatted(item),
+                label: FineAmount.Item.Type.formatted(item, this.configurationService.locale),
                 key: item
             }))
         ];
@@ -102,7 +105,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
         if (fineAmountItem === null || fineAmountItem === 'amount')
             return '';
         const count = this.get('fineAmountItemCount')!.value ?? 0;
-        return new FineAmount.Item(fineAmountItem, count).formattedWithoutCount();
+        return new FineAmount.Item(fineAmountItem, count).formattedWithoutCount(this.configurationService.locale);
     }
 
     public get repetitionOptions(): { label: string, key: FineTemplateRepetition.Item | 'none' }[] {
@@ -112,7 +115,7 @@ export class FineTemplateAddEditComponent extends SubmitableForm<{
                 key: 'none'
             },
             ...FineTemplateRepetition.Item.all.map(item => ({
-                label: FineTemplateRepetition.Item.formatted(item),
+                label: FineTemplateRepetition.Item.formatted(item, this.configurationService.locale),
                 key: item
             }))
         ];

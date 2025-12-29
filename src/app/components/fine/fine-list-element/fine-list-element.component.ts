@@ -10,7 +10,8 @@ import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { Observable } from '../../../types';
 import { Tag, TagModule } from 'primeng/tag';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { configuration } from '../../../../environments/environment';
+import { PayedTag } from '../../../types/PayedTag';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-fine-list-element',
@@ -35,17 +36,19 @@ export class FineListElementComponent {
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
+    private configurationService = inject(ConfigurationService);
+
     public loading: boolean = false;
 
     public get canChangeFine$(): Observable<boolean> {
         return this.userManager.hasRole('fine-manager');
     }
 
-    public get payedTag(): { value: string, severity: Tag['severity'] } | null {
+    public get payedTag(): PayedTag.Formatted | null {
         const fine = this.fine();
         if (fine === null)
             return null;
-        return PayedState.payedTag(fine.payedState);
+        return new PayedTag(fine.payedState).toFormatted(this.configurationService.locale);
     }
 
     public async toggleFineState() {
@@ -67,7 +70,7 @@ export class FineListElementComponent {
                 fine.reason,
                 fine.amount
             ),
-            configuration: configuration
+            configuration: this.configurationService.configuration
         }).finally(() => {
             this.loading = false;
             this.changeDetector.markForCheck();

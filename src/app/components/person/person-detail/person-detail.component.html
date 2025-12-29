@@ -28,14 +28,14 @@
                 @if (canAddFine || canEditPerson || canDeletePerson || canKickoutPerson) {
                     <p-buttongroup class="md:block hidden">
                         @if (canDeletePerson) {
-                            <p-confirmPopup styleClass="pt-3" />
+                            <p-confirmpopup styleClass="pt-3" />
                             <p-button i18n-label="Button label to delete person" label="Delete person" (onClick)="showDeleteConfirmation($event); $event.stopPropagation()" severity="danger" [loading]="deleteLoading" [disabled]="deleteLoading">
                                 <ng-template #icon>
                                     <fa-icon [icon]="['far', 'trash-can']" class="mr-2" />
                                 </ng-template>
                             </p-button>
                         } @else if (canKickoutPerson) {
-                            <p-confirmPopup styleClass="pt-3" />
+                            <p-confirmpopup styleClass="pt-3" />
                             <p-button i18n-label="Button label to kickout person" label="Kickout person" (onClick)="showKickoutConfirmation($event); $event.stopPropagation()" severity="danger" [loading]="kickoutLoading" [disabled]="kickoutLoading">
                                 <ng-template #icon>
                                     <fa-icon [icon]="['fas', 'arrow-right-from-bracket']" class="mr-2" />
@@ -59,7 +59,7 @@
                     </p-buttongroup>
                     <div class="md:hidden flex flex-column align-items-end justify-content-center">
                         @if (canDeletePerson) {
-                            <p-confirmPopup styleClass="pt-3" />
+                            <p-confirmpopup styleClass="pt-3" />
                             <p-button i18n-label="Button label to edit person" label="Delete person" (onClick)="showDeleteConfirmation($event); $event.stopPropagation()" severity="danger" [loading]="deleteLoading" [disabled]="deleteLoading" class="mb-2" >
                                 <ng-template #icon>
                                     <fa-icon [icon]="['far', 'trash-can']" class="mr-2" />

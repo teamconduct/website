@@ -10,7 +10,7 @@ import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawes
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { routeNames } from '../../../app.routes';
-import { Invitation, PayedState } from '@stevenkellner/team-conduct-api';
+import { Invitation } from '@stevenkellner/team-conduct-api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Tag, TagModule } from 'primeng/tag';
@@ -19,6 +19,7 @@ import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 import { FineListComponent } from '../../fine/fine-list/fine-list.component';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
+import { PayedTag } from '../../../types/PayedTag';
 
 @Component({
     selector: 'app-person-detail',
@@ -60,13 +61,13 @@ export class PersonDetailComponent {
             notPayed:{
                 label: $localize `:Label of not payed amount:Open`,
                 value: person === null ? null : person.fineValues.notPayed,
-                severity: PayedState.payedTag('notPayed').severity,
+                severity: new PayedTag('notPayed').severity,
                 icon: faEnvelopeOpen
             },
             payed: {
                 label: $localize `:Label of payed amount:Paid`,
                 value: person === null ? null : person.fineValues.payed,
-                severity: PayedState.payedTag('payed').severity,
+                severity: new PayedTag('payed').severity,
                 icon: faEnvelope
             }
         };

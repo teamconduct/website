@@ -14,7 +14,6 @@ import { SelectModule } from 'primeng/select';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { fineListSorting } from '../../../types/sorting/fine-list-sorting';
-import { configuration } from '../../../../environments/environment';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -27,6 +26,8 @@ import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-regular-svg-icons';
 import { PayedState } from '@stevenkellner/team-conduct-api';
+import { PayedTag } from '../../../types/PayedTag';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-person-list',
@@ -42,6 +43,8 @@ export class PersonListComponent {
     public teamDataManager = inject(TeamDataManagerService);
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
+
+    private configurationService = inject(ConfigurationService);
 
     public readonly personSelected = output<PersonWithFines>();
 
@@ -99,13 +102,13 @@ export class PersonListComponent {
             notPayed:{
                 label: $localize `:Label of not payed amount:Open`,
                 value:  summedAmounts.notPayed,
-                severity: PayedState.payedTag('notPayed').severity,
+                severity: new PayedTag('notPayed').severity,
                 icon: faEnvelopeOpen
             },
             payed: {
                 label: $localize `:Label of payed amount:Paid`,
                 value: summedAmounts.payed,
-                severity: PayedState.payedTag('payed').severity,
+                severity: new PayedTag('payed').severity,
                 icon: faEnvelope
             }
         };
@@ -136,7 +139,7 @@ export class PersonListComponent {
         const shareText = personsWithUnpayedFines.map(person => {
 
             // Get total amount text
-            const totalAmountText = person.fineValues.notPayed.formatted(configuration);
+            const totalAmountText = person.fineValues.notPayed.formatted(this.configurationService.configuration);
 
             // Sort the fines by date
             const unpayedFines = person.fines.filter(fine => fine.payedState === 'notPayed');
@@ -147,8 +150,8 @@ export class PersonListComponent {
 
             // Get fines text
             const finesText = unpayedFines.map(fine => {
-                const date = fine.date.toDate.toLocaleDateString(configuration.locale, { year: 'numeric', month: '2-digit', day: '2-digit' });
-                return `\t- ${fine.reason}, ${date}: ${fine.amount.formatted(configuration)}`;
+                const date = fine.date.toDate.toLocaleDateString(this.configurationService.configuration.locale, { year: 'numeric', month: '2-digit', day: '2-digit' });
+                return `\t- ${fine.reason}, ${date}: ${fine.amount.formatted(this.configurationService.configuration)}`;
             }).join('\n');
 
             return `${person.name}: ${totalAmountText}\n${finesText}`;

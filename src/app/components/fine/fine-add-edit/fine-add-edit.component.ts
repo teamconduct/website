@@ -11,10 +11,10 @@ import { FormElementComponent } from '../../add-edit-form/form-element/form-elem
 import { FineAmountPipe } from '../../../pipes/fine-amount/fine-amount.pipe';
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
-import { configuration } from '../../../../environments/environment';
 import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
 import { ButtonModule } from 'primeng/button';
 import { PopupDialogHandlerService } from '../../../services/popup-dialog-handler/popup-dialog-handler.service';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-fine-add-edit',
@@ -49,6 +49,8 @@ export class FineAddEditComponent extends SubmitableForm<{
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
     private fineAmountPipe = inject(FineAmountPipe);
+
+    private configurationService = inject(ConfigurationService);
 
     public readonly headerElement = viewChild.required<TemplateRef<any>>('header');
 
@@ -201,7 +203,7 @@ export class FineAddEditComponent extends SubmitableForm<{
         if (fineTemplateValue === null || fineTemplateValue === 'custom' || fineTemplateValue.repetition === null)
             return '';
         const count = this.get('fineTemplateRepetition')!.value ?? 0;
-        return new FineTemplateRepetition(fineTemplateValue.repetition.item, null).formattedWithoutCount(count);
+        return new FineTemplateRepetition(fineTemplateValue.repetition.item, null).formattedWithoutCount(count, this.configurationService.locale);
     }
 
     public get fineAmountItemOptions(): { label: string, key: 'amount' | FineAmount.Item.Type }[] {
@@ -211,7 +213,7 @@ export class FineAddEditComponent extends SubmitableForm<{
                 key: 'amount'
             },
             ...FineAmount.Item.Type.all.map(item => ({
-                label: FineAmount.Item.Type.formatted(item),
+                label: FineAmount.Item.Type.formatted(item, this.configurationService.locale),
                 key: item
             }))
         ];
@@ -222,7 +224,7 @@ export class FineAddEditComponent extends SubmitableForm<{
         if (fineAmountItem === null || fineAmountItem === 'amount')
             return '';
         const count = this.get('fineAmountItemCount')!.value ?? 0;
-        return new FineAmount.Item(fineAmountItem, count).formattedWithoutCount();
+        return new FineAmount.Item(fineAmountItem, count).formattedWithoutCount(this.configurationService.locale);
     }
 
     public override reset() {
@@ -292,7 +294,7 @@ export class FineAddEditComponent extends SubmitableForm<{
                     fineTemplate.reason,
                     fineTemplate.value
                 ),
-                configuration: configuration
+                configuration: this.configurationService.configuration
             });
         }));
         this.popupDialogHandler.closeDialog();

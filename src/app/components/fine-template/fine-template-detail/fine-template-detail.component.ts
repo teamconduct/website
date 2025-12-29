@@ -10,6 +10,7 @@ import { PopupDialogHandlerService } from '../../../services/popup-dialog-handle
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ButtonGroupModule } from 'primeng/buttongroup';
+import { ConfigurationService } from '../../../services/configuration/configuration.service';
 
 @Component({
     selector: 'app-fine-template-detail',
@@ -32,6 +33,8 @@ export class FineTemplateDetailComponent {
 
     private popupDialogHandler = inject(PopupDialogHandlerService);
 
+    private configurationService = inject(ConfigurationService);
+
     public readonly headerElement = viewChild.required<TemplateRef<any>>('header');
 
     public deleteLoading: boolean = false;
@@ -45,7 +48,7 @@ export class FineTemplateDetailComponent {
     }
 
     public repetitionDescription(multiple: FineTemplateRepetition): string {
-        return FineTemplateRepetition.Item.formatted(multiple.item);
+        return FineTemplateRepetition.Item.formatted(multiple.item, this.configurationService.locale);
     }
 
     public showFineTemplateEditDialog() {
