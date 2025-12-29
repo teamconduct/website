@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
 import { ChangeDetectionStrategy, Component, inject, TemplateRef, viewChild } from '@angular/core';
-import { getEnterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
 import { AsyncPipe } from '@angular/common';
 import { AddEditFormComponent } from '../add-edit-form/add-edit-form.component';
@@ -17,7 +16,6 @@ import { FirebaseFunctionsService } from '../../services/firebase-functions/fire
     templateUrl: './paypal-me-add-edit.component.html',
     styleUrl: './paypal-me-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()],
     exportAs: 'appPaypalMeAddEdit'
 })
 export class PaypalMeAddEditComponent extends SubmitableForm<{

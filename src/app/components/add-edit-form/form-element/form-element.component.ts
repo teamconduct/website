@@ -8,15 +8,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { NgTemplateOutlet } from '@angular/common';
-import { getEnterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 
 @Component({
     selector: 'app-form-element',
     imports: [NgTemplateOutlet, ReactiveFormsModule, FloatLabelModule, InputTextModule, SelectModule, MultiSelectModule, InputNumberModule, DatePickerModule],
     templateUrl: './form-element.component.html',
     styleUrl: './form-element.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormElementComponent {
 

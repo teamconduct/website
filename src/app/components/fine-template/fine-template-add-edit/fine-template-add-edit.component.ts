@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { FineAmount, FineTemplate, FineTemplateRepetition, MoneyAmount } from '@stevenkellner/team-conduct-api';
-import { getEnterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { SubmitableForm } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
@@ -16,7 +15,6 @@ import { FormElementComponent } from '../../add-edit-form/form-element/form-elem
     templateUrl: './fine-template-add-edit.component.html',
     styleUrl: './fine-template-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()],
     exportAs: 'appFineTemplateAddEdit'
 })
 export class FineTemplateAddEditComponent extends SubmitableForm<{

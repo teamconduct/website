@@ -27,7 +27,7 @@
 </ng-template>
 
 @if (label() !== null) {
-    <span @enterLeaveAnimation class="block h-2rem"></span>
+    <span animate.enter="enter-animation" animate.leave="leave-animation" class="block h-2rem"></span>
     <p-floatLabel class="flex w-full">
         <ng-container *ngTemplateOutlet="formElement" />
         <label [for]="inputId.guidString">{{ label() }}</label>

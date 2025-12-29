@@ -4,7 +4,6 @@ import { Fine, FineAmount, FineTemplate, FineTemplateRepetition, MoneyAmount, Pe
 import { TeamDataManagerService } from '../../../services/team-data-manager/team-data-manager.service';
 import { PersonWithFines } from '../../../types/PersonWithFines';
 import { AsyncPipe } from '@angular/common';
-import { getEnterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { SubmitableForm } from '../../../types';
 import { FormControl, Validators } from '@angular/forms';
 import { AddEditFormComponent } from '../../add-edit-form/add-edit-form.component';
@@ -24,7 +23,6 @@ import { PopupDialogHandlerService } from '../../../services/popup-dialog-handle
     templateUrl: './fine-add-edit.component.html',
     styleUrl: './fine-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()],
     exportAs: 'appFineAddEdit'
 })
 export class FineAddEditComponent extends SubmitableForm<{

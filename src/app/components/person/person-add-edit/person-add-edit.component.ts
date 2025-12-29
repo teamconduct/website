@@ -1,7 +1,6 @@
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ButtonModule } from 'primeng/button';
 import { ChangeDetectionStrategy, Component, inject, input, TemplateRef, viewChild } from '@angular/core';
-import { getEnterLeaveAnimation } from '../../../animations/enterLeaveAnimation';
 import { AddEditFormComponent } from '../../add-edit-form/add-edit-form.component';
 import { FormElementComponent } from '../../add-edit-form/form-element/form-element.component';
 import { Person, PersonPrivateProperties, UserRole } from '@stevenkellner/team-conduct-api';
@@ -19,7 +18,6 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './person-add-edit.component.html',
     styleUrl: './person-add-edit.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()],
     exportAs: 'appPersonAddEdit'
 })
 export class PersonAddEditComponent extends SubmitableForm<{

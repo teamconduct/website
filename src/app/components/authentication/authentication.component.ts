@@ -11,7 +11,6 @@ import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
-import { getEnterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
@@ -20,8 +19,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, FloatLabelModule, DividerModule, InputTextModule, PasswordModule, ThirdPartySignInButtonComponent, ErrorMessageComponent, InputGroupModule, InputGroupAddonModule],
     templateUrl: './authentication.component.html',
     styleUrl: './authentication.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthenticationComponent {
 

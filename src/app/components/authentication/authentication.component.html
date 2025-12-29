@@ -35,8 +35,8 @@
         </p-floatLabel>
         <app-error-message [message]="loginFormEmailErrorMessage" class="w-full" />
         @if (loginForm.get('email')!.valid && loginForm.get('email')!.dirty) {
-            <span @enterLeaveAnimation class="block h-2rem"></span>
-            <p-floatLabel @enterLeaveAnimation class="flex w-full">
+            <span animate.enter="enter-animation" animate.leave="leave-animation" class="block h-2rem"></span>
+            <p-floatLabel animate.enter="enter-animation" animate.leave="leave-animation" class="flex w-full">
                 <p-password formControlName="password" id="password-input" class="w-full" styleClass="w-full" inputStyleClass="w-full" />
                 <label for="password-input" i18n="Label for the password input field">Password</label>
             </p-floatLabel>

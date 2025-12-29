@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { getEnterLeaveAnimation } from '../../animations/enterLeaveAnimation';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
 import { UserManagerService } from '../../services/user-manager/user-manager.service';
@@ -20,8 +19,7 @@ import { Title } from '@angular/platform-browser';
     imports: [ReactiveFormsModule, ButtonModule, InputTextModule, ErrorMessageComponent, FloatLabelModule],
     templateUrl: './create-team.page.html',
     styleUrl: './create-team.page.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [getEnterLeaveAnimation()]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateTeamPage implements OnInit {
 

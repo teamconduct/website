@@ -8,14 +8,14 @@
         </p-floatLabel>
         <app-error-message [message]="teamFormNameErrorMessage" class="w-full" />
         @if (teamForm.get('name')!.valid && teamForm.get('name')!.dirty) {
-            <span @enterLeaveAnimation class="block h-2rem"></span>
-            <p-floatLabel @enterLeaveAnimation class="flex w-full" >
+            <span animate.enter="enter-animation" animate.leave="leave-animation" class="block h-2rem"></span>
+            <p-floatLabel animate.enter="enter-animation" animate.leave="leave-animation" class="flex w-full" >
                 <input type="text" pInputText formControlName="personFirstName" id="first-name-input" class="w-full" />
                 <label for="first-name-input" i18n="Label for the first name input field">First name</label>
             </p-floatLabel>
             <app-error-message [message]="teamFormLastNameErrorMessage" class="w-full" />
-            <span @enterLeaveAnimation class="block h-2rem"></span>
-            <p-floatLabel @enterLeaveAnimation class="flex w-full" >
+            <span animate.enter="enter-animation" animate.leave="leave-animation" class="block h-2rem"></span>
+            <p-floatLabel animate.enter="enter-animation" animate.leave="leave-animation" class="flex w-full" >
                 <input type="text" pInputText formControlName="personLastName" id="last-name-input" class="w-full" />
                 <label for="last-name-input" i18n="Label for the optional last name input field">Last name (optional)</label>
             </p-floatLabel>
