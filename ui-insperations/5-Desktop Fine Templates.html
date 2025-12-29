@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#2d5a87',
+                        accent: '#3182ce',
+                        success: '#38a169',
+                        warning: '#d69e2e',
+                        danger: '#e53e3e'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header id="header" class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-primary text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-futbol text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-primary">Team Conduct 2.0</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <i class="fa-solid fa-bell text-gray-600 text-lg cursor-pointer hover:text-primary"></i>
+                    <span class="absolute -top-2 -right-2 bg-danger text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="User" class="w-8 h-8 rounded-full object-cover">
+                    <span class="text-gray-700 font-medium">Coach Martinez</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-200 h-[calc(100vh-73px)]">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span class="font-medium">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="font-medium">Players</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span class="font-medium">Penalties</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                            <span class="font-medium">Fines</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 bg-accent text-white px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                            <span class="font-medium">Templates</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-cog"></i>
+                            <span class="font-medium">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-6">
+            <!-- Templates Header -->
+            <div id="templates-header" class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Penalty Templates</h2>
+                        <p class="text-gray-600">Create and manage standard penalty templates for consistent enforcement</p>
+                    </div>
+                    <button id="create-template-btn" class="bg-accent text-white px-6 py-3 rounded-lg hover:bg-secondary transition-colors flex items-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Create Template</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div id="template-stats" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Total Templates</p>
+                            <p class="text-3xl font-bold text-gray-900">12</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-clipboard-list text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Active Templates</p>
+                            <p class="text-3xl font-bold text-success">9</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Most Used</p>
+                            <p class="text-2xl font-bold text-accent">Late Arrival</p>
+                        </div>
+                        <div class="bg-purple-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-star text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Avg Fine Amount</p>
+                            <p class="text-3xl font-bold text-warning">$75</p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-dollar-sign text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Template Categories -->
+                <div id="template-categories" class="lg:col-span-2">
+                    <!-- Search and Filter -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 relative">
+                                <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" placeholder="Search templates..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                            </div>
+                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                <option>All Categories</option>
+                                <option>Behavioral</option>
+                                <option>Attendance</option>
+                                <option>Equipment</option>
+                                <option>Performance</option>
+                            </select>
+                            <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                <option>All Status</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Templates Grid -->
+                    <div id="templates-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Template Card 1 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-red-100 p-2 rounded-lg">
+                                        <i class="fa-solid fa-clock text-red-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Late Arrival</h3>
+                                        <p class="text-sm text-gray-600">Attendance</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-4">Applied when a player arrives late to practice or team events without prior notice.</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-danger">$50</span>
+                                <span class="text-sm text-gray-600">Used 23 times</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm">
+                                    <i class="fa-solid fa-edit mr-2"></i>Edit
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template Card 2 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-orange-100 p-2 rounded-lg">
+                                        <i class="fa-solid fa-exclamation-triangle text-orange-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Unsporting Behavior</h3>
+                                        <p class="text-sm text-gray-600">Behavioral</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-4">For inappropriate conduct, arguing with officials, or disrespectful behavior towards teammates.</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-danger">$100</span>
+                                <span class="text-sm text-gray-600">Used 8 times</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm">
+                                    <i class="fa-solid fa-edit mr-2"></i>Edit
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template Card 3 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-blue-100 p-2 rounded-lg">
+                                        <i class="fa-solid fa-shirt text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Equipment Violation</h3>
+                                        <p class="text-sm text-gray-600">Equipment</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-4">Missing or improper equipment, incorrect uniform, or failure to bring required gear.</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-danger">$25</span>
+                                <span class="text-sm text-gray-600">Used 15 times</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm">
+                                    <i class="fa-solid fa-edit mr-2"></i>Edit
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template Card 4 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-purple-100 p-2 rounded-lg">
+                                        <i class="fa-solid fa-calendar-xmark text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Missed Practice</h3>
+                                        <p class="text-sm text-gray-600">Attendance</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-4">Unexcused absence from scheduled practice sessions or team meetings.</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-danger">$75</span>
+                                <span class="text-sm text-gray-600">Used 12 times</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm">
+                                    <i class="fa-solid fa-edit mr-2"></i>Edit
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template Card 5 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-yellow-100 p-2 rounded-lg">
+                                        <i class="fa-solid fa-mobile-phone text-yellow-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Phone Distraction</h3>
+                                        <p class="text-sm text-gray-600">Behavioral</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-4">Using mobile phone during practice, meetings, or team activities when not permitted.</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-danger">$30</span>
+                                <span class="text-sm text-gray-600">Used 5 times</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm">
+                                    <i class="fa-solid fa-edit mr-2"></i>Edit
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Template Card 6 -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="bg-green-100 p-2 rounded-lg">
+                                        <i class="fa-solid fa-running text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">Fitness Standards</h3>
+                                        <p class="text-sm text-gray-600">Performance</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-4">Failure to meet established fitness benchmarks or conditioning requirements.</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-2xl font-bold text-danger">$40</span>
+                                <span class="text-sm text-gray-600">Used 7 times</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="flex-1 bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors text-sm">
+                                    <i class="fa-solid fa-edit mr-2"></i>Edit
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <button class="px-4 py-2 text-gray-600 hover:text-danger transition-colors">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template Management Panel -->
+                <div id="template-management" class="space-y-6">
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button class="w-full flex items-center space-x-3 bg-accent text-white px-4 py-3 rounded-lg hover:bg-secondary transition-colors">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>New Template</span>
+                            </button>
+                            <button class="w-full flex items-center space-x-3 bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>Duplicate Template</span>
+                            </button>
+                            <button class="w-full flex items-center space-x-3 bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class="fa-solid fa-file-import"></i>
+                                <span>Import Templates</span>
+                            </button>
+                            <button class="w-full flex items-center space-x-3 bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class="fa-solid fa-file-export"></i>
+                                <span>Export Templates</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Template Categories -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Categories</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <span class="font-medium text-gray-900">Behavioral</span>
+                                </div>
+                                <span class="text-sm text-gray-600">4 templates</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                    <span class="font-medium text-gray-900">Attendance</span>
+                                </div>
+                                <span class="text-sm text-gray-600">3 templates</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <span class="font-medium text-gray-900">Equipment</span>
+                                </div>
+                                <span class="text-sm text-gray-600">2 templates</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span class="font-medium text-gray-900">Performance</span>
+                                </div>
+                                <span class="text-sm text-gray-600">3 templates</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                                <i class="fa-solid fa-edit text-blue-600 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Template Updated</p>
+                                    <p class="text-xs text-gray-600">Late Arrival fine amount changed to $50</p>
+                                    <p class="text-xs text-gray-500">2 hours ago</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
+                                <i class="fa-solid fa-plus text-green-600 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">New Template</p>
+                                    <p class="text-xs text-gray-600">Fitness Standards template created</p>
+                                    <p class="text-xs text-gray-500">1 day ago</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <i class="fa-solid fa-toggle-off text-gray-600 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Template Deactivated</p>
+                                    <p class="text-xs text-gray-600">Phone Distraction template disabled</p>
+                                    <p class="text-xs text-gray-500">3 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

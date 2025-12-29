@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#2d5a87',
+                        accent: '#3182ce',
+                        success: '#38a169',
+                        warning: '#d69e2e',
+                        danger: '#e53e3e'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header id="header" class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-primary text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-futbol text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-primary">Team Conduct 2.0</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <i class="fa-solid fa-bell text-gray-600 text-lg cursor-pointer hover:text-primary"></i>
+                    <span class="absolute -top-2 -right-2 bg-danger text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="User" class="w-8 h-8 rounded-full object-cover">
+                    <span class="text-gray-700 font-medium">Coach Martinez</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-200 h-[calc(100vh-73px)]">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span class="font-medium">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="font-medium">Players</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span class="font-medium">Penalties</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                            <span class="font-medium">Fines</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                            <span class="font-medium">Templates</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 bg-accent text-white px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-cog"></i>
+                            <span class="font-medium">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-6">
+            <!-- Settings Header -->
+            <div id="settings-header" class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Application Settings</h2>
+                <p class="text-gray-600">Configure your preferences, notifications, and application settings</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Settings Navigation -->
+                <div id="settings-nav" class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Settings Categories</h3>
+                            <nav class="space-y-2">
+                                <button onclick="showSettings('general')" class="w-full flex items-center space-x-3 text-left bg-accent text-white px-4 py-3 rounded-lg settings-tab" data-tab="general">
+                                    <i class="fa-solid fa-sliders-h"></i>
+                                    <span>General</span>
+                                </button>
+                                <button onclick="showSettings('notifications')" class="w-full flex items-center space-x-3 text-left text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg settings-tab" data-tab="notifications">
+                                    <i class="fa-solid fa-bell"></i>
+                                    <span>Notifications</span>
+                                </button>
+                                <button onclick="showSettings('language')" class="w-full flex items-center space-x-3 text-left text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg settings-tab" data-tab="language">
+                                    <i class="fa-solid fa-globe"></i>
+                                    <span>Language & Region</span>
+                                </button>
+                                <button onclick="showSettings('security')" class="w-full flex items-center space-x-3 text-left text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg settings-tab" data-tab="security">
+                                    <i class="fa-solid fa-shield-alt"></i>
+                                    <span>Security</span>
+                                </button>
+                                <button onclick="showSettings('team')" class="w-full flex items-center space-x-3 text-left text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg settings-tab" data-tab="team">
+                                    <i class="fa-solid fa-users-cog"></i>
+                                    <span>Team Settings</span>
+                                </button>
+                                <button onclick="showSettings('backup')" class="w-full flex items-center space-x-3 text-left text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg settings-tab" data-tab="backup">
+                                    <i class="fa-solid fa-cloud-upload-alt"></i>
+                                    <span>Backup & Export</span>
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Content -->
+                <div id="settings-content" class="lg:col-span-2">
+                    
+                    <!-- General Settings -->
+                    <div id="general-settings" class="settings-panel bg-white rounded-xl shadow-sm border border-gray-100">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-900">General Settings</h3>
+                            <p class="text-gray-600 text-sm mt-1">Configure basic application preferences</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Dark Mode</h4>
+                                    <p class="text-gray-600 text-sm">Switch between light and dark themes</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Auto-save</h4>
+                                    <p class="text-gray-600 text-sm">Automatically save changes</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Default Currency</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="CAD">CAD (C$)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Items per page</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="10">10 items</option>
+                                    <option value="25" selected>25 items</option>
+                                    <option value="50">50 items</option>
+                                    <option value="100">100 items</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div id="notifications-settings" class="settings-panel bg-white rounded-xl shadow-sm border border-gray-100 hidden">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-900">Notification Preferences</h3>
+                            <p class="text-gray-600 text-sm mt-1">Manage how you receive notifications</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Email Notifications</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">New penalty assigned</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">Fine payment overdue</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">Weekly summary report</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Push Notifications</h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">Real-time alerts</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-700">Team announcements</span>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked class="sr-only peer">
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Notification Sound</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="default">Default</option>
+                                    <option value="whistle">Whistle</option>
+                                    <option value="bell">Bell</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language Settings -->
+                    <div id="language-settings" class="settings-panel bg-white rounded-xl shadow-sm border border-gray-100 hidden">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-900">Language & Region</h3>
+                            <p class="text-gray-600 text-sm mt-1">Set your language and regional preferences</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Display Language</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                    <option value="fr">Français</option>
+                                    <option value="de">Deutsch</option>
+                                    <option value="it">Italiano</option>
+                                    <option value="pt">Português</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Time Zone</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="UTC-8">Pacific Time (UTC-8)</option>
+                                    <option value="UTC-7">Mountain Time (UTC-7)</option>
+                                    <option value="UTC-6">Central Time (UTC-6)</option>
+                                    <option value="UTC-5" selected>Eastern Time (UTC-5)</option>
+                                    <option value="UTC+0">Greenwich Mean Time (UTC+0)</option>
+                                    <option value="UTC+1">Central European Time (UTC+1)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Date Format</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Time Format</h4>
+                                <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="12">12-hour (AM/PM)</option>
+                                    <option value="24">24-hour</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div id="security-settings" class="settings-panel bg-white rounded-xl shadow-sm border border-gray-100 hidden">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-900">Security Settings</h3>
+                            <p class="text-gray-600 text-sm mt-1">Manage your account security and privacy</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Password</h4>
+                                <button class="bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
+                                    Change Password
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Two-Factor Authentication</h4>
+                                    <p class="text-gray-600 text-sm">Add an extra layer of security</p>
+                                </div>
+                                <button class="bg-success text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                    Enable 2FA
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Session Timeout</h4>
+                                    <p class="text-gray-600 text-sm">Automatically log out after inactivity</p>
+                                </div>
+                                <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                    <option value="30">30 minutes</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="240">4 hours</option>
+                                    <option value="0">Never</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Login History</h4>
+                                <button class="text-accent hover:text-secondary">
+                                    View Recent Login Activity
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Settings -->
+                    <div id="team-settings" class="settings-panel bg-white rounded-xl shadow-sm border border-gray-100 hidden">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-900">Team Configuration</h3>
+                            <p class="text-gray-600 text-sm mt-1">Manage team-specific settings and rules</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Team Name</h4>
+                                <input type="text" value="Riverside Football Club" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Season</h4>
+                                <input type="text" value="2024 Spring Season" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Default Fine Amount</h4>
+                                <input type="number" value="50" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Allow Player Self-Reporting</h4>
+                                    <p class="text-gray-600 text-sm">Let players report their own violations</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Automatic Fine Calculation</h4>
+                                    <p class="text-gray-600 text-sm">Calculate fines based on violation type</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup Settings -->
+                    <div id="backup-settings" class="settings-panel bg-white rounded-xl shadow-sm border border-gray-100 hidden">
+                        <div class="p-6 border-b border-gray-100">
+                            <h3 class="text-xl font-semibold text-gray-900">Backup & Export</h3>
+                            <p class="text-gray-600 text-sm mt-1">Manage your data backup and export options</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Automatic Backup</h4>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700">Enable automatic backups</span>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                    </label>
+                                </div>
+                                <div class="mt-4">
+                                    <label class="block text-sm text-gray-700 mb-2">Backup Frequency</label>
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent">
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly" selected>Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Manual Backup</h4>
+                                <button class="bg-accent text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
+                                    <i class="fa-solid fa-download mr-2"></i>
+                                    Create Backup Now
+                                </button>
+                                <p class="text-gray-600 text-sm mt-2">Last backup: March 15, 2024 at 10:30 AM</p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-4">Export Data</h4>
+                                <div class="space-y-3">
+                                    <button class="w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors text-left">
+                                        <i class="fa-solid fa-file-csv mr-2"></i>
+                                        Export as CSV
+                                    </button>
+                                    <button

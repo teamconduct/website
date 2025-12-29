@@ -1,5 +1,6 @@
-import { inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { UtcDate } from '@stevenkellner/typescript-common-functionality';
+import { ConfigurationService } from '../../services/configuration/configuration.service';
 
 @Pipe({
     name: 'date',
@@ -7,10 +8,10 @@ import { UtcDate } from '@stevenkellner/typescript-common-functionality';
 })
 export class DatePipe implements PipeTransform {
 
-    private localeId = inject(LOCALE_ID);
+    private configurationService = inject(ConfigurationService);
 
     public transform(date: UtcDate | Date, dateStyle: Intl.DateTimeFormatOptions['dateStyle'] = 'long', timeStyle: Intl.DateTimeFormatOptions['timeStyle'] = undefined): string {
-        const formatter = Intl.DateTimeFormat(this.localeId, {
+        const formatter = Intl.DateTimeFormat(this.configurationService.locale, {
             dateStyle: dateStyle,
             timeStyle: timeStyle
         });

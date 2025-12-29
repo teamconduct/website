@@ -49,7 +49,7 @@ export class SummedFineValue {
         for (const item of keys(this.items)) {
             const count = this.items[item];
             if (count !== 0)
-                parts.push(new FineAmount.Item(item, count).formatted());
+                parts.push(new FineAmount.Item(item, count).formatted(configuration.locale));
         }
         return parts.join(', ');
     }

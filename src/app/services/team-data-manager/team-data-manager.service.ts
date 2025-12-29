@@ -46,20 +46,7 @@ export class TeamDataManagerService {
         this.persons$ = Observable.combine(persons$, this.fines$, (persons, fines) => {
             return persons.map<PersonWithFines>(person => {
                 const personFines = compactMap(person.fineIds, fineId => fines.getOptional(fineId));
-                return new PersonWithFines(
-                    person.id,
-                    person.properties,
-                    person.signInProperties,
-                    personFines,
-                    personFines.reduce((fineValues, fine) => {
-                        fineValues.total.add(fine.amount);
-                        if (fine.payedState === 'payed')
-                            fineValues.payed.add(fine.amount);
-                        if (fine.payedState === 'notPayed')
-                            fineValues.notPayed.add(fine.amount);
-                        return fineValues;
-                    }, { total: new SummedFineValue(), payed: new SummedFineValue(), notPayed: new SummedFineValue() })
-                );
+                return new PersonWithFines(person, personFines);
             });
         });
     }

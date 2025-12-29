@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sport-green': '#22c55e',
+                        'sport-blue': '#3b82f6',
+                        'sport-red': '#ef4444',
+                        'sport-yellow': '#eab308',
+                        'sport-gray': '#6b7280'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+
+<div id="mobile-app" class="max-w-sm mx-auto bg-white min-h-screen">
+
+<header id="header" class="bg-sport-blue text-white p-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+        <button onclick="goBack()" class="text-white">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="text-lg font-semibold">Settings</h1>
+    </div>
+    <div class="flex items-center space-x-3">
+        <div class="relative">
+            <i class="fas fa-bell text-lg"></i>
+            <span class="absolute -top-1 -right-1 bg-sport-red text-xs rounded-full w-4 h-4 flex items-center justify-center text-white">3</span>
+        </div>
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="Profile" class="w-8 h-8 rounded-full">
+    </div>
+</header>
+
+<main id="main-settings" class="p-4 space-y-4">
+
+<section id="profile-section" class="bg-white rounded-xl border border-gray-100 p-4">
+    <div class="flex items-center space-x-4">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="Profile" class="w-16 h-16 rounded-full">
+        <div class="flex-1">
+            <div class="text-lg font-semibold text-gray-800">Coach Martinez</div>
+            <div class="text-sm text-gray-500">Head Coach</div>
+            <div class="text-xs text-sport-blue mt-1">Edit Profile</div>
+        </div>
+        <i class="fas fa-chevron-right text-gray-400"></i>
+    </div>
+</section>
+
+<section id="notifications-settings" class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-bell text-sport-blue mr-3"></i>
+            Notifications
+        </h2>
+    </div>
+    
+    <div class="space-y-0">
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div>
+                <div class="text-sm font-medium text-gray-800">Push Notifications</div>
+                <div class="text-xs text-gray-500">Receive alerts for penalties and matches</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sport-blue"></div>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div>
+                <div class="text-sm font-medium text-gray-800">Penalty Alerts</div>
+                <div class="text-xs text-gray-500">Get notified when players receive cards</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sport-blue"></div>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div>
+                <div class="text-sm font-medium text-gray-800">Match Reminders</div>
+                <div class="text-xs text-gray-500">Upcoming games and events</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sport-blue"></div>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-between p-4">
+            <div>
+                <div class="text-sm font-medium text-gray-800">Email Notifications</div>
+                <div class="text-xs text-gray-500">Weekly reports and summaries</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sport-blue"></div>
+            </label>
+        </div>
+    </div>
+</section>
+
+<section id="app-preferences" class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-cog text-sport-blue mr-3"></i>
+            App Preferences
+        </h2>
+    </div>
+    
+    <div class="space-y-0">
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-globe text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Language</div>
+                    <div class="text-xs text-gray-500">English (US)</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-moon text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Dark Mode</div>
+                    <div class="text-xs text-gray-500">Switch to dark theme</div>
+                </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sport-blue"></div>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-chart-line text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Auto-sync Data</div>
+                    <div class="text-xs text-gray-500">Sync with cloud automatically</div>
+                </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" checked class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sport-blue"></div>
+            </label>
+        </div>
+        
+        <div class="flex items-center justify-between p-4">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-shield-alt text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Privacy Settings</div>
+                    <div class="text-xs text-gray-500">Manage data sharing</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+    </div>
+</section>
+
+<section id="team-settings" class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-users text-sport-blue mr-3"></i>
+            Team Management
+        </h2>
+    </div>
+    
+    <div class="space-y-0">
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-futbol text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Team Information</div>
+                    <div class="text-xs text-gray-500">Update team details</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-user-plus text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Add Players</div>
+                    <div class="text-xs text-gray-500">Manage team roster</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+        
+        <div class="flex items-center justify-between p-4">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-download text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Export Data</div>
+                    <div class="text-xs text-gray-500">Download penalty reports</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+    </div>
+</section>
+
+<section id="support-section" class="bg-white rounded-xl border border-gray-100">
+    <div class="p-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
+            <i class="fas fa-question-circle text-sport-blue mr-3"></i>
+            Support & Info
+        </h2>
+    </div>
+    
+    <div class="space-y-0">
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-book text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Help Center</div>
+                    <div class="text-xs text-gray-500">FAQs and guides</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-envelope text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Contact Support</div>
+                    <div class="text-xs text-gray-500">Get help from our team</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 border-b border-gray-50">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-star text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">Rate App</div>
+                    <div class="text-xs text-gray-500">Share your feedback</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+        
+        <div class="flex items-center justify-between p-4">
+            <div class="flex items-center space-x-3">
+                <i class="fas fa-info text-sport-gray"></i>
+                <div>
+                    <div class="text-sm font-medium text-gray-800">About</div>
+                    <div class="text-xs text-gray-500">Version 2.1.0</div>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400"></i>
+        </div>
+    </div>
+</section>
+
+<section id="logout-section" class="space-y-3">
+    <button class="w-full bg-sport-red text-white rounded-xl p-4 flex items-center justify-center space-x-2 active:bg-red-600 transition-colors">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="font-medium">Sign Out</span>
+    </button>
+</section>
+
+</main>
+
+<nav id="bottom-nav" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-200">
+    <div class="flex items-center justify-around py-2">
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Dashboard</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs mt-1">Players</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-xs mt-1">Stats</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-sport-blue">
+            <i class="fas fa-cog text-lg"></i>
+            <span class="text-xs mt-1 font-medium">Settings</span>
+        </button>
+    </div>
+</nav>
+
+<div class="h-20"></div>
+
+</div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
+
+</body>
+</html>

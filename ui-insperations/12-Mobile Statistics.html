@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penalty Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sport-green': '#22c55e',
+                        'sport-blue': '#3b82f6',
+                        'sport-red': '#ef4444',
+                        'sport-yellow': '#eab308',
+                        'sport-gray': '#6b7280'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+
+<div id="mobile-app" class="max-w-sm mx-auto bg-white min-h-screen">
+
+<header id="header" class="bg-sport-blue text-white p-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+        <button onclick="goBack()" class="text-white">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="text-lg font-semibold">Penalty Management</h1>
+    </div>
+    <div class="flex items-center space-x-3">
+        <button onclick="showAddPenalty()" class="bg-white bg-opacity-20 rounded-full p-2">
+            <i class="fas fa-plus text-sm"></i>
+        </button>
+        <button class="bg-white bg-opacity-20 rounded-full p-2">
+            <i class="fas fa-filter text-sm"></i>
+        </button>
+    </div>
+</header>
+
+<main id="main-penalty-management" class="pb-20">
+
+<section id="penalty-stats" class="p-4 bg-white border-b border-gray-100">
+    <div class="grid grid-cols-4 gap-2">
+        <div class="text-center">
+            <div class="text-xl font-bold text-sport-red">12</div>
+            <div class="text-xs text-gray-500">Total</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl font-bold text-sport-yellow">8</div>
+            <div class="text-xs text-gray-500">Yellow</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl font-bold text-gray-800">2</div>
+            <div class="text-xs text-gray-500">Red</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl font-bold text-sport-blue">2</div>
+            <div class="text-xs text-gray-500">This Week</div>
+        </div>
+    </div>
+</section>
+
+<section id="filter-tabs" class="bg-white px-4 py-2 border-b border-gray-100">
+    <div class="flex space-x-1">
+        <button onclick="filterPenalties('all')" class="filter-tab active px-3 py-2 rounded-lg text-sm font-medium bg-sport-blue text-white">All</button>
+        <button onclick="filterPenalties('yellow')" class="filter-tab px-3 py-2 rounded-lg text-sm font-medium text-gray-600 bg-gray-100">Yellow</button>
+        <button onclick="filterPenalties('red')" class="filter-tab px-3 py-2 rounded-lg text-sm font-medium text-gray-600 bg-gray-100">Red</button>
+        <button onclick="filterPenalties('recent')" class="filter-tab px-3 py-2 rounded-lg text-sm font-medium text-gray-600 bg-gray-100">Recent</button>
+    </div>
+</section>
+
+<section id="penalty-list" class="bg-white">
+    <div class="penalty-item border-b border-gray-50" data-type="yellow">
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="Player" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="text-sm font-semibold text-gray-800">Marcus Johnson</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-sport-yellow rounded"></div>
+                        <span class="text-xs text-gray-500">2h ago</span>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mb-1">#7 • Midfielder</div>
+                <div class="text-xs text-gray-600">Unsporting behavior - Arguing with referee</div>
+                <div class="flex items-center mt-2 space-x-4">
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Match vs Eagles</span>
+                    <span class="text-xs text-sport-red">⚠ 1 more = suspension</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="penalty-item border-b border-gray-50" data-type="red">
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="Player" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="text-sm font-semibold text-gray-800">David Wilson</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-sport-red rounded"></div>
+                        <span class="text-xs text-gray-500">1d ago</span>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mb-1">#23 • Defender</div>
+                <div class="text-xs text-gray-600">Serious foul play - Dangerous tackle</div>
+                <div class="flex items-center mt-2 space-x-4">
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Match vs Lions</span>
+                    <span class="text-xs bg-sport-red text-white px-2 py-1 rounded">2 game suspension</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="penalty-item border-b border-gray-50" data-type="yellow">
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg" alt="Player" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="text-sm font-semibold text-gray-800">Alex Rodriguez</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-sport-yellow rounded"></div>
+                        <span class="text-xs text-gray-500">2d ago</span>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mb-1">#11 • Forward</div>
+                <div class="text-xs text-gray-600">Dissent by word - Verbal abuse</div>
+                <div class="flex items-center mt-2 space-x-4">
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Match vs Tigers</span>
+                    <span class="text-xs text-gray-500">1st warning</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="penalty-item border-b border-gray-50" data-type="yellow">
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="Player" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="text-sm font-semibold text-gray-800">Sarah Thompson</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-sport-yellow rounded"></div>
+                        <span class="text-xs text-gray-500">3d ago</span>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mb-1">#5 • Defender</div>
+                <div class="text-xs text-gray-600">Delaying the game - Time wasting</div>
+                <div class="flex items-center mt-2 space-x-4">
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Match vs Hawks</span>
+                    <span class="text-xs text-gray-500">2nd warning</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="penalty-item border-b border-gray-50" data-type="yellow">
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-9.jpg" alt="Player" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="text-sm font-semibold text-gray-800">Mike Chen</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-sport-yellow rounded"></div>
+                        <span class="text-xs text-gray-500">5d ago</span>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mb-1">#14 • Midfielder</div>
+                <div class="text-xs text-gray-600">Reckless challenge - Sliding tackle</div>
+                <div class="flex items-center mt-2 space-x-4">
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Match vs Wolves</span>
+                    <span class="text-xs text-gray-500">1st warning</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="penalty-item border-b border-gray-50" data-type="red">
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg" alt="Player" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="text-sm font-semibold text-gray-800">Emma Davis</div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-sport-red rounded"></div>
+                        <span class="text-xs text-gray-500">1w ago</span>
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500 mb-1">#18 • Forward</div>
+                <div class="text-xs text-gray-600">Violent conduct - Striking opponent</div>
+                <div class="flex items-center mt-2 space-x-4">
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Match vs Bears</span>
+                    <span class="text-xs bg-sport-red text-white px-2 py-1 rounded">3 game suspension</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="load-more" class="p-4 bg-white">
+    <button class="w-full py-3 text-sport-blue text-sm font-medium border border-sport-blue rounded-lg">
+        Load More Penalties
+    </button>
+</section>
+
+</main>
+
+<div id="add-penalty-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-xl p-4 max-w-sm mx-auto">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold">Add Penalty</h3>
+            <button onclick="hideAddPenalty()" class="text-gray-400">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Player</label>
+                <select class="w-full p-3 border border-gray-200 rounded-lg">
+                    <option>Select a player...</option>
+                    <option>Marcus Johnson (#7)</option>
+                    <option>David Wilson (#23)</option>
+                    <option>Alex Rodriguez (#11)</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Penalty Type</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="penalty-type-btn p-3 border border-gray-200 rounded-lg text-center" data-type="yellow">
+                        <div class="w-6 h-6 bg-sport-yellow rounded mx-auto mb-1"></div>
+                        <div class="text-xs">Yellow Card</div>
+                    </button>
+                    <button class="penalty-type-btn p-3 border border-gray-200 rounded-lg text-center" data-type="red">
+                        <div class="w-6 h-6 bg-sport-red rounded mx-auto mb-1"></div>
+                        <div class="text-xs">Red Card</div>
+                    </button>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Reason</label>
+                <select class="w-full p-3 border border-gray-200 rounded-lg">
+                    <option>Select reason...</option>
+                    <option>Unsporting behavior</option>
+                    <option>Dissent by word</option>
+                    <option>Serious foul play</option>
+                    <option>Violent conduct</option>
+                    <option>Delaying the game</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                <textarea class="w-full p-3 border border-gray-200 rounded-lg h-20 resize-none" placeholder="Additional details..."></textarea>
+            </div>
+            
+            <button class="w-full bg-sport-blue text-white py-3 rounded-lg font-medium">
+                Add Penalty
+            </button>
+        </div>
+    </div>
+</div>
+
+<nav id="bottom-nav" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-200">
+    <div class="flex items-center justify-around py-2">
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Dashboard</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs mt-1">Players</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-sport-blue">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-xs mt-1 font-medium">Stats</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-cog text-lg"></i>
+            <span class="text-xs mt-1">Settings</span>
+        </button>
+    </div>
+</nav>
+
+</div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+
+function showAddPenalty() {
+    document.getElementById('add-penalty-modal').classList.remove('hidden');
+}
+
+function hideAddPenalty() {
+    document.getElementById('add-penalty-modal').classList.add('hidden');
+}
+
+function filterPenalties(type) {
+    const tabs = document.querySelectorAll('.filter-tab');
+    const items = document.querySelectorAll('.penalty-item');
+    
+    tabs.forEach(tab => {
+        tab.classList.remove('active', 'bg-sport-blue', 'text-white');
+        tab.classList.add('text-gray-600', 'bg-gray-100');
+    });
+    
+    event.target.classList.add('active', 'bg-sport-blue', 'text-white');
+    event.target.classList.remove('text-gray-600', 'bg-gray-100');
+    
+    items.forEach(item => {
+        if (type === 'all') {
+            item.style.display = 'block';
+        } else if (type === 'recent') {
+            const timeText = item.querySelector('.text-xs.text-gray-500').textContent;
+            if (timeText.includes('h ago') || timeText.includes('1d ago')) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        } else {
+            if (item.dataset.type === type) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        }
+    });
+}
+
+document.querySelectorAll('.penalty-type-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.penalty-type-btn').forEach(b => {
+            b.classList.remove('border-sport-blue', 'bg-blue-50');
+            b.classList.add('border-gray-200');
+        });
+        this.classList.add('border-sport-blue', 'bg-blue-50');
+        this.classList.remove('border-gray-200');
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#2d5a87',
+                        accent: '#3182ce',
+                        success: '#38a169',
+                        warning: '#d69e2e',
+                        danger: '#e53e3e'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header id="header" class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="bg-primary text-white p-2 rounded-lg">
+                    <i class="fa-solid fa-futbol text-xl"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-primary">Team Conduct 2.0</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <i class="fa-solid fa-bell text-gray-600 text-lg cursor-pointer hover:text-primary"></i>
+                    <span class="absolute -top-2 -right-2 bg-danger text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="User" class="w-8 h-8 rounded-full object-cover">
+                    <span class="text-gray-700 font-medium">Coach Martinez</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-200 h-[calc(100vh-73px)]">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span class="font-medium">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 bg-accent text-white px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="font-medium">Players</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-exclamation-triangle"></i>
+                            <span class="font-medium">Penalties</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                            <span class="font-medium">Fines</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                            <span class="font-medium">Templates</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center space-x-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-lg">
+                            <i class="fa-solid fa-cog"></i>
+                            <span class="font-medium">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-6">
+            <!-- Page Header -->
+            <div id="page-header" class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-2">Players Management</h2>
+                        <p class="text-gray-600">Comprehensive list of players with individual statistics and penalty tracking</p>
+                    </div>
+                    <button class="bg-accent text-white px-6 py-3 rounded-lg hover:bg-secondary transition-colors font-medium">
+                        <i class="fa-solid fa-plus mr-2"></i>
+                        Add Player
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div id="player-stats-overview" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Total Players</p>
+                            <p class="text-3xl font-bold text-gray-900">24</p>
+                            <p class="text-sm text-success mt-1">+2 this month</p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-users text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Active Players</p>
+                            <p class="text-3xl font-bold text-success">22</p>
+                            <p class="text-sm text-gray-500 mt-1">91.7% active</p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">With Penalties</p>
+                            <p class="text-3xl font-bold text-warning">8</p>
+                            <p class="text-sm text-gray-500 mt-1">33.3% of team</p>
+                        </div>
+                        <div class="bg-yellow-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Avg. Fine/Player</p>
+                            <p class="text-3xl font-bold text-danger">$102</p>
+                            <p class="text-sm text-gray-500 mt-1">$2,450 total</p>
+                        </div>
+                        <div class="bg-red-100 p-3 rounded-lg">
+                            <i class="fa-solid fa-dollar-sign text-red-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div id="filters-section" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" placeholder="Search players..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent w-80">
+                        </div>
+                        
+                        <select class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent">
+                            <option value="">All Positions</option>
+                            <option value="goalkeeper">Goalkeeper</option>
+                            <option value="defender">Defender</option>
+                            <option value="midfielder">Midfielder</option>
+                            <option value="forward">Forward</option>
+                        </select>
+                        
+                        <select class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                        
+                        <select class="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent">
+                            <option value="">Penalty Status</option>
+                            <option value="none">No Penalties</option>
+                            <option value="pending">Pending Payment</option>
+                            <option value="overdue">Overdue</option>
+                            <option value="paid">All Paid</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fa-solid fa-filter mr-2"></i>
+                            More Filters
+                        </button>
+                        <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fa-solid fa-download mr-2"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Players Table -->
+            <div id="players-table" class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-900">Player Statistics & Penalties</h3>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">24 players</span>
+                            <div class="flex items-center space-x-1 ml-4">
+                                <button class="p-2 text-gray-400 hover:text-gray-600">
+                                    <i class="fa-solid fa-th-large"></i>
+                                </button>
+                                <button class="p-2 text-accent">
+                                    <i class="fa-solid fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <div class="flex items-center space-x-1">
+                                        <span>Player</span>
+                                        <i class="fa-solid fa-sort text-gray-400"></i>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <div class="flex items-center space-x-1">
+                                        <span>Penalties</span>
+                                        <i class="fa-solid fa-sort text-gray-400"></i>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    <div class="flex items-center space-x-1">
+                                        <span>Total Fines</span>
+                                        <i class="fa-solid fa-sort text-gray-400"></i>
+                                    </div>
+                                </th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Penalty</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="Player" class="w-12 h-12 rounded-full object-cover">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Marcus Johnson</p>
+                                            <p class="text-sm text-gray-500">#23 • Age 24</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">Forward</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-lg font-bold text-danger">3</span>
+                                        <div class="flex space-x-1">
+                                            <div class="w-2 h-2 bg-danger rounded-full"></div>
+                                            <div class="w-2 h-2 bg-danger rounded-full"></div>
+                                            <div class="w-2 h-2 bg-danger rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-lg font-bold text-danger">$200</span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">2 hours ago</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Overdue</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-accent hover:text-secondary p-1" title="View Details">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="text-warning hover:text-orange-600 p-1" title="Add Penalty">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-gray-700 p-1" title="Edit">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="Player" class="w-12 h-12 rounded-full object-cover">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Alex Rodriguez</p>
+                                            <p class="text-sm text-gray-500">#10 • Age 26</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Midfielder</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-lg font-bold text-warning">1</span>
+                                        <div class="flex space-x-1">
+                                            <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-lg font-bold text-warning">$100</span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">5 hours ago</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-accent hover:text-secondary p-1" title="View Details">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="text-warning hover:text-orange-600 p-1" title="Add Penalty">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-gray-700 p-1" title="Edit">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg" alt="Player" class="w-12 h-12 rounded-full object-cover">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">David Wilson</p>
+                                            <p class="text-sm text-gray-500">#5 • Age 22</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">Defender</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-lg font-bold text-success">0</span>
+                                        <span class="text-xs text-gray-400">Clean record</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-lg font-bold text-success">$0</span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-400">Never</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Good Standing</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-accent hover:text-secondary p-1" title="View Details">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="text-warning hover:text-orange-600 p-1" title="Add Penalty">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-gray-700 p-1" title="Edit">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-9.jpg" alt="Player" class="w-12 h-12 rounded-full object-cover">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">James Thompson</p>
+                                            <p class="text-sm text-gray-500">#1 • Age 28</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-800">Goalkeeper</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-lg font-bold text-warning">2</span>
+                                        <div class="flex space-x-1">
+                                            <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                            <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-lg font-bold text-success">$0</span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">3 days ago</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Paid</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-accent hover:text-secondary p-1" title="View Details">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="text-warning hover:text-orange-600 p-1" title="Add Penalty">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-gray-700 p-1" title="Edit">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Player" class="w-12 h-12 rounded-full object-cover">
+                                        <div>
+                                            <p class="font-semibold text-gray-900">Sarah Mitchell</p>
+                                            <p class="text-sm text-gray-500">#7 • Age 23</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Midfielder</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-lg font-bold text-warning">1</span>
+                                        <div class="flex space-x-1">
+                                            <div class="w-2 h-2 bg-warning rounded-full"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-lg font-bold text-warning">$75</span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">1 week ago</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="text-accent hover:text-secondary p-1" title="View Details">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <button class="text-warning hover:text-orange-600 p-1" title="Add Penalty">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                        <button class="text-gray-500 hover:text-gray-700 p-1" title="Edit">
+                                            <i class="fa-solid fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div id="pagination" class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-700">Showing</span>
+                        <select class="border border-gray-200 rounded px-2 py-1 text-sm">
+                            <option>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                        </select>
+                        <span class="text-sm text-gray-700">of 24 players</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <button class="px-3 py-1 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50" disabled>
+                            <i class="fa-solid fa-chevron-left mr-1"></i>
+                            Previous
+                        </button>
+                        <button class="px-3 py-1 text-sm bg-accent text-white rounded">1</button>
+                        <button class="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 rounded">2</button>
+                        <button class="px-3 py-1 text-sm text-gray-700 hover:bg-gray-100

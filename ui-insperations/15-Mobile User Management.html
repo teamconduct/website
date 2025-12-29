@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sport-green': '#22c55e',
+                        'sport-blue': '#3b82f6',
+                        'sport-red': '#ef4444',
+                        'sport-yellow': '#eab308',
+                        'sport-gray': '#6b7280'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+
+<div id="mobile-app" class="max-w-sm mx-auto bg-white min-h-screen">
+
+<header id="header" class="bg-sport-blue text-white p-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+        <button onclick="goBack()" class="text-white">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="text-lg font-semibold">Team Management</h1>
+    </div>
+    <div class="flex items-center space-x-3">
+        <button class="text-white">
+            <i class="fas fa-search text-lg"></i>
+        </button>
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="Profile" class="w-8 h-8 rounded-full">
+    </div>
+</header>
+
+<main id="main-admin" class="p-4 space-y-4">
+
+<section id="admin-tabs" class="flex bg-gray-100 rounded-lg p-1">
+    <button id="tab-members" class="flex-1 py-2 px-3 text-sm font-medium rounded-md bg-white text-sport-blue shadow-sm">
+        Members
+    </button>
+    <button id="tab-roles" class="flex-1 py-2 px-3 text-sm font-medium rounded-md text-gray-600">
+        Roles
+    </button>
+    <button id="tab-permissions" class="flex-1 py-2 px-3 text-sm font-medium rounded-md text-gray-600">
+        Permissions
+    </button>
+</section>
+
+<section id="search-filter" class="bg-white rounded-xl border border-gray-100 p-4">
+    <div class="flex items-center space-x-3 mb-3">
+        <div class="flex-1 relative">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" placeholder="Search members..." class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-sport-blue">
+        </div>
+        <button class="p-2 border border-gray-200 rounded-lg">
+            <i class="fas fa-filter text-gray-400"></i>
+        </button>
+    </div>
+    <div class="flex space-x-2">
+        <button class="px-3 py-1 bg-sport-blue text-white text-xs rounded-full">All</button>
+        <button class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">Coaches</button>
+        <button class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">Staff</button>
+        <button class="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">Admins</button>
+    </div>
+</section>
+
+<section id="team-stats" class="grid grid-cols-3 gap-3">
+    <div class="bg-white rounded-xl border border-gray-100 p-3 text-center">
+        <div class="text-lg font-bold text-sport-blue">24</div>
+        <div class="text-xs text-gray-500">Total Members</div>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-100 p-3 text-center">
+        <div class="text-lg font-bold text-sport-green">18</div>
+        <div class="text-xs text-gray-500">Active</div>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-100 p-3 text-center">
+        <div class="text-lg font-bold text-sport-red">6</div>
+        <div class="text-xs text-gray-500">Pending</div>
+    </div>
+</section>
+
+<section id="member-list" class="bg-white rounded-xl border border-gray-100">
+    <div class="flex items-center justify-between p-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800">Team Members</h2>
+        <button class="text-sport-blue text-sm font-medium">
+            <i class="fas fa-plus mr-1"></i>Add
+        </button>
+    </div>
+    
+    <div class="space-y-0">
+        <div class="flex items-center p-4 border-b border-gray-50">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="Member" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-800">Marcus Johnson</span>
+                    <span class="bg-sport-green text-white text-xs px-2 py-0.5 rounded-full">Admin</span>
+                </div>
+                <div class="text-xs text-gray-500">Head Coach • marcus@team.com</div>
+                <div class="flex items-center space-x-3 mt-1">
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-shield-alt text-sport-green mr-1"></i>Full Access
+                    </span>
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>Online
+                    </span>
+                </div>
+            </div>
+            <button class="text-gray-400">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+        
+        <div class="flex items-center p-4 border-b border-gray-50">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" alt="Member" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-800">Sarah Wilson</span>
+                    <span class="bg-sport-blue text-white text-xs px-2 py-0.5 rounded-full">Coach</span>
+                </div>
+                <div class="text-xs text-gray-500">Assistant Coach • sarah@team.com</div>
+                <div class="flex items-center space-x-3 mt-1">
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-user-check text-sport-blue mr-1"></i>Player Mgmt
+                    </span>
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>2h ago
+                    </span>
+                </div>
+            </div>
+            <button class="text-gray-400">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+        
+        <div class="flex items-center p-4 border-b border-gray-50">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg" alt="Member" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-800">Alex Rodriguez</span>
+                    <span class="bg-sport-yellow text-white text-xs px-2 py-0.5 rounded-full">Staff</span>
+                </div>
+                <div class="text-xs text-gray-500">Equipment Manager • alex@team.com</div>
+                <div class="flex items-center space-x-3 mt-1">
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-tools text-sport-yellow mr-1"></i>Equipment
+                    </span>
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>1d ago
+                    </span>
+                </div>
+            </div>
+            <button class="text-gray-400">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+        
+        <div class="flex items-center p-4 border-b border-gray-50">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg" alt="Member" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-800">Emma Davis</span>
+                    <span class="bg-gray-400 text-white text-xs px-2 py-0.5 rounded-full">Pending</span>
+                </div>
+                <div class="text-xs text-gray-500">Team Doctor • emma@team.com</div>
+                <div class="flex items-center space-x-3 mt-1">
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-user-clock text-gray-400 mr-1"></i>Invitation Sent
+                    </span>
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>3d ago
+                    </span>
+                </div>
+            </div>
+            <button class="text-gray-400">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+        
+        <div class="flex items-center p-4">
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-9.jpg" alt="Member" class="w-12 h-12 rounded-full">
+            <div class="ml-3 flex-1">
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm font-medium text-gray-800">Carlos Martinez</span>
+                    <span class="bg-sport-blue text-white text-xs px-2 py-0.5 rounded-full">Coach</span>
+                </div>
+                <div class="text-xs text-gray-500">Fitness Coach • carlos@team.com</div>
+                <div class="flex items-center space-x-3 mt-1">
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-dumbbell text-sport-blue mr-1"></i>Fitness
+                    </span>
+                    <span class="text-xs text-gray-400">
+                        <i class="fas fa-clock mr-1"></i>Online
+                    </span>
+                </div>
+            </div>
+            <button class="text-gray-400">
+                <i class="fas fa-ellipsis-v"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section id="recent-activity" class="bg-white rounded-xl border border-gray-100">
+    <div class="flex items-center justify-between p-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800">Recent Activity</h2>
+        <button class="text-sport-blue text-sm font-medium">View All</button>
+    </div>
+    <div class="space-y-0">
+        <div class="flex items-start p-4 border-b border-gray-50">
+            <div class="w-8 h-8 bg-sport-green rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-user-plus text-white text-xs"></i>
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-gray-800">New member added</div>
+                <div class="text-xs text-gray-500 mt-1">Carlos Martinez joined as Fitness Coach</div>
+                <div class="text-xs text-gray-400 mt-1">2 hours ago</div>
+            </div>
+        </div>
+        
+        <div class="flex items-start p-4 border-b border-gray-50">
+            <div class="w-8 h-8 bg-sport-blue rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-key text-white text-xs"></i>
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-gray-800">Permission updated</div>
+                <div class="text-xs text-gray-500 mt-1">Sarah Wilson granted penalty management access</div>
+                <div class="text-xs text-gray-400 mt-1">1 day ago</div>
+            </div>
+        </div>
+        
+        <div class="flex items-start p-4">
+            <div class="w-8 h-8 bg-sport-yellow rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-envelope text-white text-xs"></i>
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-gray-800">Invitation sent</div>
+                <div class="text-xs text-gray-500 mt-1">Team Doctor invitation sent to Emma Davis</div>
+                <div class="text-xs text-gray-400 mt-1">3 days ago</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<nav id="bottom-nav" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-200">
+    <div class="flex items-center justify-around py-2">
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Dashboard</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs mt-1">Players</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-xs mt-1">Stats</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-sport-blue">
+            <i class="fas fa-cog text-lg"></i>
+            <span class="text-xs mt-1 font-medium">Settings</span>
+        </button>
+    </div>
+</nav>
+
+<div class="h-20"></div>
+
+</div>
+
+<script>
+function goBack() {
+    window.history.back();
+}
+
+document.getElementById('tab-members').addEventListener('click', function() {
+    setActiveTab('members');
+});
+
+document.getElementById('tab-roles').addEventListener('click', function() {
+    setActiveTab('roles');
+});
+
+document.getElementById('tab-permissions').addEventListener('click', function() {
+    setActiveTab('permissions');
+});
+
+function setActiveTab(tab) {
+    document.querySelectorAll('[id^="tab-"]').forEach(button => {
+        button.classList.remove('bg-white', 'text-sport-blue', 'shadow-sm');
+        button.classList.add('text-gray-600');
+    });
+    
+    document.getElementById('tab-' + tab).classList.add('bg-white', 'text-sport-blue', 'shadow-sm');
+    document.getElementById('tab-' + tab).classList.remove('text-gray-600');
+}
+</script>
+
+</body>
+</html>

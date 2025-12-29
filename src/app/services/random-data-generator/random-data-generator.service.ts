@@ -3,7 +3,8 @@ import { UserManagerService } from '../user-manager/user-manager.service';
 import { FirebaseFunctionsService } from '../firebase-functions/firebase-functions.service';
 import { Fine, FineAmount, FineTemplate, FineTemplateRepetition, MoneyAmount, Person, PersonPrivateProperties, Team } from '@stevenkellner/team-conduct-api';
 import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
-import { configuration, isProduction } from '../../../environments/environment';
+import { isProduction } from '../../../environments/environment';
+import { ConfigurationService } from '../configuration/configuration.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +14,8 @@ export class RandomDataGeneratorService {
     private userManager = inject(UserManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
+
+    private configurationService = inject(ConfigurationService);
 
     private async createTestPersons(teamId: Team.Id, personId: Person.Id): Promise<Person.Id[]> {
         const personIds: Person.Id[] = [personId];
@@ -54,7 +57,7 @@ export class RandomDataGeneratorService {
                     `Test Fine ${i}`,
                     Math.random() < 0.5 ? FineAmount.money(new MoneyAmount(i, 0)) : FineAmount.item('crateOfBeer', i)
                 ),
-                configuration: configuration
+                configuration: this.configurationService.configuration
             });
         }));
     }

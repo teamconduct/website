@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#6366f1',
+                        'primary-dark': '#4f46e5',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-inter">
+    <div id="signin-container" class="min-h-screen flex">
+        <div id="signin-left-panel" class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-primary-dark relative overflow-hidden">
+            <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+            <div class="relative z-10 flex flex-col justify-center items-center p-12 text-white">
+                <div class="max-w-md text-center">
+                    <div class="mb-8">
+                        <img class="w-32 h-32 mx-auto rounded-2xl object-cover shadow-2xl" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a2ab73ca96-df9ca7dce01e060cbfb7.png" alt="modern abstract geometric pattern with flowing lines and gradients in purple and blue tones" />
+                    </div>
+                    <h2 class="text-4xl font-bold mb-6 leading-tight">Welcome back to our platform</h2>
+                    <p class="text-xl text-indigo-100 leading-relaxed">Sign in to access your dashboard and continue your journey with us. We've missed you!</p>
+                    <div class="mt-12 flex justify-center space-x-2">
+                        <div class="w-2 h-2 bg-white rounded-full"></div>
+                        <div class="w-2 h-2 bg-white bg-opacity-50 rounded-full"></div>
+                        <div class="w-2 h-2 bg-white bg-opacity-50 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black bg-opacity-20 to-transparent"></div>
+        </div>
+
+        <div id="signin-right-panel" class="w-full lg:w-1/2 flex flex-col justify-center px-8 lg:px-16">
+            <div class="max-w-md mx-auto w-full">
+                <div id="signin-header" class="text-center mb-12">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-lock text-white text-2xl"></i>
+                        </div>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-3">Sign In</h1>
+                    <p class="text-gray-600 text-lg">Enter your credentials to access your account</p>
+                </div>
+
+                <div id="signin-form-container" class="space-y-6">
+                    <form id="signin-form" class="space-y-6">
+                        <div id="email-field" class="space-y-2">
+                            <label for="email" class="text-sm font-medium text-gray-700 block">Email Address</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-envelope text-gray-400"></i>
+                                </div>
+                                <input type="email" id="email" name="email" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div id="password-field" class="space-y-2">
+                            <label for="password" class="text-sm font-medium text-gray-700 block">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-key text-gray-400"></i>
+                                </div>
+                                <input type="password" id="password" name="password" class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-200 bg-white" placeholder="Enter your password" required>
+                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                    <i class="fa-solid fa-eye text-gray-400 hover:text-gray-600 transition duration-200"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="signin-options" class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                            </div>
+                            <a href="#" class="text-sm text-primary hover:text-primary-dark transition duration-200">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" id="signin-button" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div id="divider" class="relative my-8">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-gray-50 text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div id="social-signin" class="grid grid-cols-2 gap-4">
+                        <button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                            <i class="fa-brands fa-google text-red-500 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-700">Google</span>
+                        </button>
+                        <button class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                            <i class="fa-brands fa-github text-gray-900 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-700">GitHub</span>
+                        </button>
+                    </div>
+
+                    <div id="signup-link" class="text-center mt-8">
+                        <p class="text-gray-600">
+                            Don't have an account? 
+                            <a href="#" class="text-primary hover:text-primary-dark font-semibold transition duration-200">Sign up here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const button = document.getElementById('signin-button');
+            button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Signing In...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = 'Sign In';
+                button.disabled = false;
+            }, 2000);
+        });
+
+        document.querySelector('button[type="button"]').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
+</body>
+</html>

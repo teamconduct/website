@@ -29,7 +29,7 @@ export class UserManagerService {
         return  Observable.combine(this.user$, this.selectedTeamId$, (user, teamId) => {
             if (!user.teams.has(teamId))
                 return null;
-            return user.teams.get(teamId).name;
+            return user.teams.get(teamId).teamName;
         });
     }
 

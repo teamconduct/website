@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, LOCALE_ID, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNG } from 'primeng/config';
 import * as primeNGTranslationDE from '../locale/primeng.de.json';
@@ -6,7 +6,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { Localization } from '@stevenkellner/team-conduct-api';
+import { ConfigurationService } from './services/configuration/configuration.service';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +16,7 @@ import { Localization } from '@stevenkellner/team-conduct-api';
 })
 export class App implements OnInit {
 
-    private readonly localeId = inject(LOCALE_ID);
+    private readonly configurationService = inject(ConfigurationService);
 
     private readonly primeNGConfig = inject(PrimeNG)
 
@@ -26,11 +26,15 @@ export class App implements OnInit {
         this.faIconLibrary.addIconPacks(fas);
         this.faIconLibrary.addIconPacks(far);
         this.faIconLibrary.addIconPacks(fab);
-        switch (this.localeId) {
-        case 'de': {
-            Localization.locale = 'de';
-            this.primeNGConfig.setTranslation(primeNGTranslationDE);
-        }
+        switch (this.configurationService.locale) {
+            case 'en': {
+                // PrimeNG uses English as default language
+                break;
+            }
+            case 'de': {
+                this.primeNGConfig.setTranslation(primeNGTranslationDE);
+                break;
+            }
         }
     }
 }

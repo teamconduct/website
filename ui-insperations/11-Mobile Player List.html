@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sport-green': '#22c55e',
+                        'sport-blue': '#3b82f6',
+                        'sport-red': '#ef4444',
+                        'sport-yellow': '#eab308',
+                        'sport-gray': '#6b7280'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+
+<div id="mobile-app" class="max-w-sm mx-auto bg-white min-h-screen">
+
+<header id="header" class="bg-sport-blue text-white p-4 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+        <button onclick="goBack()" class="text-white">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </button>
+        <h1 class="text-lg font-semibold">Players</h1>
+    </div>
+    <div class="flex items-center space-x-3">
+        <button onclick="toggleSearch()" class="text-white">
+            <i class="fas fa-search text-lg"></i>
+        </button>
+        <button onclick="showFilters()" class="text-white">
+            <i class="fas fa-filter text-lg"></i>
+        </button>
+    </div>
+</header>
+
+<section id="search-bar" class="bg-white border-b border-gray-200 p-4 hidden">
+    <div class="relative">
+        <input type="text" placeholder="Search players..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sport-blue focus:border-transparent">
+        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+    </div>
+</section>
+
+<section id="filter-tabs" class="bg-white border-b border-gray-200 px-4 py-3">
+    <div class="flex space-x-1 overflow-x-auto">
+        <button class="bg-sport-blue text-white px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">All (40)</button>
+        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">Clean (28)</button>
+        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">Yellow (8)</button>
+        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">Red (2)</button>
+        <button class="bg-gray-100 text-gray-600 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">Suspended (2)</button>
+    </div>
+</section>
+
+<section id="quick-stats" class="bg-white p-4 border-b border-gray-200">
+    <div class="grid grid-cols-4 gap-4">
+        <div class="text-center">
+            <div class="text-xl font-bold text-sport-green">28</div>
+            <div class="text-xs text-gray-500">Clean</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl font-bold text-sport-yellow">8</div>
+            <div class="text-xs text-gray-500">Yellow</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl font-bold text-sport-red">2</div>
+            <div class="text-xs text-gray-500">Red</div>
+        </div>
+        <div class="text-center">
+            <div class="text-xl font-bold text-gray-600">2</div>
+            <div class="text-xs text-gray-500">Suspended</div>
+        </div>
+    </div>
+</section>
+
+<main id="players-list" class="pb-20">
+
+<div id="player-card-1" class="bg-white border-b border-gray-100 p-4">
+    <div class="flex items-center space-x-3">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-9.jpg" alt="Player" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <div class="text-base font-semibold text-gray-800">Carlos Martinez</div>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-sport-green rounded-full"></div>
+                    <span class="text-xs text-sport-green font-medium">Clean</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Midfielder • #10</div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-gray-800">15</div>
+                        <div class="text-xs text-gray-500">Games</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-yellow">0</div>
+                        <div class="text-xs text-gray-500">Yellow</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-red">0</div>
+                        <div class="text-xs text-gray-500">Red</div>
+                    </div>
+                </div>
+                <button class="text-sport-blue">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="player-card-2" class="bg-white border-b border-gray-100 p-4">
+    <div class="flex items-center space-x-3">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="Player" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <div class="text-base font-semibold text-gray-800">Marcus Johnson</div>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-sport-yellow rounded-full"></div>
+                    <span class="text-xs text-sport-yellow font-medium">Warning</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Forward • #21</div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-gray-800">14</div>
+                        <div class="text-xs text-gray-500">Games</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-yellow">4</div>
+                        <div class="text-xs text-gray-500">Yellow</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-red">0</div>
+                        <div class="text-xs text-gray-500">Red</div>
+                    </div>
+                </div>
+                <button class="text-sport-blue">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="player-card-3" class="bg-white border-b border-gray-100 p-4">
+    <div class="flex items-center space-x-3">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg" alt="Player" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <div class="text-base font-semibold text-gray-800">David Wilson</div>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-sport-red rounded-full"></div>
+                    <span class="text-xs text-sport-red font-medium">Suspended</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Defender • #5</div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-gray-800">12</div>
+                        <div class="text-xs text-gray-500">Games</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-yellow">2</div>
+                        <div class="text-xs text-gray-500">Yellow</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-red">1</div>
+                        <div class="text-xs text-gray-500">Red</div>
+                    </div>
+                </div>
+                <button class="text-sport-blue">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="player-card-4" class="bg-white border-b border-gray-100 p-4">
+    <div class="flex items-center space-x-3">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg" alt="Player" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <div class="text-base font-semibold text-gray-800">Alex Rodriguez</div>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-sport-yellow rounded-full"></div>
+                    <span class="text-xs text-sport-yellow font-medium">Caution</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Midfielder • #8</div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-gray-800">13</div>
+                        <div class="text-xs text-gray-500">Games</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-yellow">3</div>
+                        <div class="text-xs text-gray-500">Yellow</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-red">0</div>
+                        <div class="text-xs text-gray-500">Red</div>
+                    </div>
+                </div>
+                <button class="text-sport-blue">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="player-card-5" class="bg-white border-b border-gray-100 p-4">
+    <div class="flex items-center space-x-3">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg" alt="Player" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <div class="text-base font-semibold text-gray-800">Sarah Thompson</div>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-sport-green rounded-full"></div>
+                    <span class="text-xs text-sport-green font-medium">Clean</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Goalkeeper • #1</div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-gray-800">15</div>
+                        <div class="text-xs text-gray-500">Games</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-yellow">0</div>
+                        <div class="text-xs text-gray-500">Yellow</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-red">0</div>
+                        <div class="text-xs text-gray-500">Red</div>
+                    </div>
+                </div>
+                <button class="text-sport-blue">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="player-card-6" class="bg-white border-b border-gray-100 p-4">
+    <div class="flex items-center space-x-3">
+        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="Player" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+            <div class="flex items-center justify-between">
+                <div class="text-base font-semibold text-gray-800">Jake Miller</div>
+                <div class="flex items-center space-x-1">
+                    <div class="w-2 h-2 bg-sport-yellow rounded-full"></div>
+                    <span class="text-xs text-sport-yellow font-medium">Caution</span>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mb-2">Defender • #3</div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-gray-800">11</div>
+                        <div class="text-xs text-gray-500">Games</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-yellow">1</div>
+                        <div class="text-xs text-gray-500">Yellow</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-sm font-bold text-sport-red">0</div>
+                        <div class="text-xs text-gray-500">Red</div>
+                    </div>
+                </div>
+                <button class="text-sport-blue">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main>
+
+<nav id="bottom-nav" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-200">
+    <div class="flex items-center justify-around py-2">
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Dashboard</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-sport-blue">
+            <i class="fas fa-users text-lg"></i>
+            <span class="text-xs mt-1 font-medium">Players</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-xs mt-1">Stats</span>
+        </button>
+        
+        <button class="flex flex-col items-center py-2 px-4 text-gray-400">
+            <i class="fas fa-cog text-lg"></i>
+            <span class="text-xs mt-1">Settings</span>
+        </button>
+    </div>
+</nav>
+
+</div>
+
+<script>
+function toggleSearch() {
+    const searchBar = document.getElementById('search-bar');
+    searchBar.classList.toggle('hidden');
+}
+
+function showFilters() {
+    alert('Filter options coming soon!');
+}
+
+function goBack() {
+    window.history.back();
+}
+</script>
+
+</body>
+</html>
