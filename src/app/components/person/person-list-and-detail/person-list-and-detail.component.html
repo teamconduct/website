@@ -1,8 +1,0 @@
-@if (currentPersonSelected === null) {
-    <app-person-list [sorting]="sorting" (personSelected)="selectPerson($event)" />
-} @else {
-    <div class="flex flex-column">
-        <p-button (onClick)="selectPerson(null)" label="Back to person list" i18n-label="Button label to go back to the person list" severity="secondary" outlined icon="pi pi-arrow-left" class="mb-3" />
-        <app-person-detail [person]="currentPersonSelected" />
-    </div>
-}

@@ -21,7 +21,6 @@ export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
-        provideAnimationsAsync(), // TODO: Remove
 
         // Provide the router with the defined routes
         provideRouter(routes),

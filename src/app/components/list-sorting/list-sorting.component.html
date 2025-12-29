@@ -1,8 +1,0 @@
-<p-inputgroup>
-    <p-button severity="secondary" [outlined]="true" (onClick)="sorting().toggleDirection()">
-        <ng-template #icon>
-            <fa-icon [icon]="sorting().directionIcon" />
-        </ng-template>
-    </p-button>
-    <p-select [options]="sorting().options" optionLabel="label" (onChange)="sorting().sortByKey= $event.value.key"/>
-</p-inputgroup>
