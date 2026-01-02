@@ -1,0 +1,43 @@
+<div class="relative h-full overflow-hidden flex flex-column justify-content-center align-items-center py-8">
+    <div class="w-full" style="max-width: 50%;">
+
+        <div class="text-center mb-6">
+            <div class="flex justify-content-center mb-4">
+                <div class="w-4rem h-4rem border-round-xl flex align-items-center justify-content-center shadow-4" [style.background]="colors['highlight-background']">
+                    <fa-icon [icon]="['fas', 'lock']" class="text-2xl" [style.color]="colors['highlight-text']"></fa-icon>
+                </div>
+            </div>
+            <h1 class="text-4xl font-bold mb-3" [style.color]="colors.text" i18n="Page title for the sign in panel">Sign In</h1>
+            <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel">Enter your credentials to access your account. If you don't have one, choose a username.</p>
+        </div>
+
+        <div>
+            <div class="mb-6">
+                <app-sign-in-username-password-form #usernamePasswordForm [errorMessage]="usernamePasswordFormErrorMessage" [loading]="usernamePasswordFormLoading" [disabled]="usernamePasswordFormDisabled" (onLogin)="onUsernamePasswordFormSubmit($event)" />
+            </div>
+
+            <div class="relative my-6">
+                <div class="absolute top-0 bottom-0 left-0 right-0 flex align-items-center">
+                    <div class="w-full border-top-1 surface-border" [style.borderColor]="colors['text']"></div>
+                </div>
+                <div class="relative flex justify-content-center text-sm">
+                    <span class="px-4 text-500" [style.background]="'white'"  [style.color]="colors['text']" i18n="Text displayed between sign-in options">or continue with</span>
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <app-sign-in-third-party-button [type]="'google'" [invalid]="googleSignInErrorMessage !== null" [loading]="googleSignInLoading" [disabled]="googleSignInDisabled" (onClick)="onGoogleSignInClicked()" />
+                <app-error-message [message]="googleSignInErrorMessage" class="w-full" />
+            </div>
+
+            <div class="mb-6">
+                <app-sign-in-third-party-button [type]="'apple'" [invalid]="appleSignInErrorMessage !== null" [loading]="appleSignInLoading" [disabled]="appleSignInDisabled" (onClick)="onAppleSignInClicked()" />
+                <app-error-message [message]="appleSignInErrorMessage" class="w-full" />
+            </div>
+
+            <div class="text-center">
+                <p i18n="ToS and privacy policy notice" class="my-0 text-center" [style.color]="colors['text']">By clicking sign in, you agree to our <p-button (onClick)="shownTermsOfService()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" /> and <p-button (onClick)="showPrivacyPolicy()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" /></p>
+            </div>
+        </div>
+    </div>
+</div>

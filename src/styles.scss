@@ -23,6 +23,10 @@ p {
     width: 50vw;
 }
 
+.w-50 {
+    width: 50%;
+}
+
 .w-90vw {
     width: 90vw;
 }
@@ -34,6 +38,10 @@ p {
 
     .md\:w-50vw {
         width: 50vw;
+    }
+
+    .md\:w50p {
+        width: 50%;
     }
 
     .md\:w-90vw {
