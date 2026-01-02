@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Auth } from '@angular/fire/auth';
 import { Functions } from '@angular/fire/functions';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faLock, faKey, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +13,7 @@ describe('SignInPage', () => {
         await TestBed.configureTestingModule({
             imports: [SignInPage],
             providers: [
+                { provide: Auth, useValue: jasmine.createSpyObj('Auth', ['signInWithEmailAndPassword', 'signOut']) },
                 { provide: Functions, useValue: jasmine.createSpyObj('Functions', ['httpsCallable']) }
             ]
         })

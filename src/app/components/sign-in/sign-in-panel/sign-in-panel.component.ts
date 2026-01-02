@@ -101,6 +101,7 @@ export class SignInPanelComponent {
             if (loginResult.error.code === 'not-found') {
                 this.usernamePasswordFormError = null;
                 this.enterRegisterMode('username-password');
+                return;
             } else {
                 this.usernamePasswordFormError = 'internal-error';
             }
@@ -184,6 +185,7 @@ export class SignInPanelComponent {
             if (loginResult.error.code === 'not-found') {
                 this.googleSignInError = null;
                 this.enterRegisterMode('google');
+                return;
             } else {
                 this.googleSignInError = 'internal-error';
             }
@@ -223,6 +225,7 @@ export class SignInPanelComponent {
             if (loginResult.error.code === 'not-found') {
                 this.appleSignInError = null;
                 this.enterRegisterMode('apple');
+                return;
             } else {
                 this.appleSignInError = 'internal-error';
             }
@@ -293,6 +296,9 @@ export class SignInPanelComponent {
     private enterRegisterMode(source: AuthProvider): void {
         this.registerMode = source;
         this.registerButtonShown = true;
+        this.usernamePasswordFormDisabled = false;
+        this.googleSignInDisabled = true;
+        this.appleSignInDisabled = true;
 
         if (source === 'google' || source === 'apple') {
             // Clear password but keep username, hide password field

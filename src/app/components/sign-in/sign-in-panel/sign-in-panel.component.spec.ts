@@ -3,16 +3,34 @@ import { Functions } from '@angular/fire/functions';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faLock, faKey, faUser } from '@fortawesome/free-solid-svg-icons';
 import { SignInPanelComponent } from './sign-in-panel.component';
+import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
+import { SignInService } from '../../../services/sign-in/sign-in.service';
+import { Result } from '@stevenkellner/typescript-common-functionality';
 
 describe('SignInPanelComponent', () => {
   let component: SignInPanelComponent;
   let fixture: ComponentFixture<SignInPanelComponent>;
 
   beforeEach(async () => {
+    const mockFirebaseFunctions = {
+      functions: {
+        user: {
+          login: { executeWithResult: jasmine.createSpy('login').and.returnValue(Promise.resolve(Result.failure({ code: 'not-found' }))) },
+          register: { executeWithResult: jasmine.createSpy('register').and.returnValue(Promise.resolve(Result.success(null))) }
+        }
+      }
+    };
+
+    const mockSignInService = {
+      auth: jasmine.createSpy('auth').and.returnValue(Promise.resolve(Result.success(null)))
+    };
+
     await TestBed.configureTestingModule({
       imports: [SignInPanelComponent],
       providers: [
-        { provide: Functions, useValue: jasmine.createSpyObj('Functions', ['httpsCallable']) }
+        { provide: Functions, useValue: jasmine.createSpyObj('Functions', ['httpsCallable']) },
+        { provide: FirebaseFunctionsService, useValue: mockFirebaseFunctions },
+        { provide: SignInService, useValue: mockSignInService }
       ]
     })
     .compileComponents();
@@ -51,8 +69,8 @@ describe('SignInPanelComponent', () => {
       expect(component.registerButtonShown).toBeFalse();
     });
 
-    it('should initialize with register mode false', () => {
-      expect(component.registerMode).toBeFalse();
+    it('should initialize with register mode null', () => {
+      expect(component.registerMode).toBeNull();
     });
   });
 
@@ -73,8 +91,8 @@ describe('SignInPanelComponent', () => {
     it('should clear loading states after sign-in completes', async () => {
       await component.onUsernamePasswordFormSubmit({ username: 'test', password: 'password123' });
       expect(component.usernamePasswordFormLoading).toBeFalse();
-      expect(component.googleSignInDisabled).toBeFalse();
-      expect(component.appleSignInDisabled).toBeFalse();
+      expect(component.googleSignInDisabled).toBeTrue();
+      expect(component.appleSignInDisabled).toBeTrue();
     });
 
     it('should not proceed if already loading', async () => {
@@ -104,6 +122,7 @@ describe('SignInPanelComponent', () => {
     });
 
     it('should set loading and disable cancel button when registering', async () => {
+      component.registerMode = 'username-password';
       const promise = component.onUsernamePasswordFormRegister({ username: 'test', password: 'password123' });
       expect(component.usernamePasswordFormLoading).toBeTrue();
       expect(component.cancelButtonDisabled).toBeTrue();
@@ -111,12 +130,14 @@ describe('SignInPanelComponent', () => {
     });
 
     it('should clear loading and enable cancel button after registration', async () => {
+      component.registerMode = 'username-password';
       await component.onUsernamePasswordFormRegister({ username: 'test', password: 'password123' });
       expect(component.usernamePasswordFormLoading).toBeFalse();
       expect(component.cancelButtonDisabled).toBeFalse();
     });
 
     it('should handle registration with null password', async () => {
+      component.registerMode = 'google';
       await component.onUsernamePasswordFormRegister({ username: 'test', password: null });
       expect(component.usernamePasswordFormLoading).toBeFalse();
     });
@@ -124,6 +145,7 @@ describe('SignInPanelComponent', () => {
     it('should not proceed if already loading', async () => {
       component.usernamePasswordFormLoading = true;
       component.cancelButtonDisabled = false;
+      component.registerMode = 'username-password';
       await component.onUsernamePasswordFormRegister({ username: 'test', password: 'password123' });
       expect(component.cancelButtonDisabled).toBeFalse();
     });
@@ -131,15 +153,15 @@ describe('SignInPanelComponent', () => {
 
   describe('Register Mode', () => {
     it('should exit register mode on cancel', () => {
-      component.registerMode = true;
+      component.registerMode = 'username-password';
       component.registerButtonShown = true;
       component.onUsernamePasswordFormRegisterCancel();
-      expect(component.registerMode).toBeFalse();
+      expect(component.registerMode).toBeNull();
       expect(component.registerButtonShown).toBeFalse();
     });
 
     it('should enable all methods when exiting register mode', () => {
-      component.registerMode = true;
+      component.registerMode = 'username-password';
       component.usernamePasswordFormDisabled = true;
       component.googleSignInDisabled = true;
       component.appleSignInDisabled = true;
@@ -150,7 +172,7 @@ describe('SignInPanelComponent', () => {
     });
 
     it('should reset form when exiting third-party register mode', () => {
-      component.registerMode = true;
+      component.registerMode = 'google';
       component.passwordShown = false;
       component['usernamePasswordForm']().loginForm.patchValue({ username: 'test', password: null });
       component.onUsernamePasswordFormRegisterCancel();
@@ -159,7 +181,7 @@ describe('SignInPanelComponent', () => {
     });
 
     it('should not reset form when exiting username/password register mode', () => {
-      component.registerMode = true;
+      component.registerMode = 'username-password';
       component.passwordShown = true;
       component['usernamePasswordForm']().loginForm.patchValue({ username: 'test', password: 'pass' });
       component.onUsernamePasswordFormRegisterCancel();
@@ -186,7 +208,7 @@ describe('SignInPanelComponent', () => {
       await component.onGoogleSignInClicked();
       expect(component.googleSignInLoading).toBeFalse();
       expect(component.usernamePasswordFormDisabled).toBeFalse();
-      expect(component.appleSignInDisabled).toBeFalse();
+      expect(component.appleSignInDisabled).toBeTrue();
     });
 
     it('should not proceed if already loading', async () => {
@@ -228,7 +250,7 @@ describe('SignInPanelComponent', () => {
       await component.onAppleSignInClicked();
       expect(component.appleSignInLoading).toBeFalse();
       expect(component.usernamePasswordFormDisabled).toBeFalse();
-      expect(component.googleSignInDisabled).toBeFalse();
+      expect(component.googleSignInDisabled).toBeTrue();
     });
 
     it('should not proceed if already loading', async () => {
@@ -269,13 +291,13 @@ describe('SignInPanelComponent', () => {
 
     it('should return message for not-registered error', () => {
       component['usernamePasswordFormError'] = 'not-registered';
-      component.registerMode = false;
+      component.registerMode = null;
       expect(component.usernamePasswordFormErrorMessage).toContain('not registered');
     });
 
     it('should return different message for not-registered in register mode', () => {
       component['usernamePasswordFormError'] = 'not-registered';
-      component.registerMode = true;
+      component.registerMode = 'username-password';
       expect(component.usernamePasswordFormErrorMessage).toContain('Click Register');
     });
 
