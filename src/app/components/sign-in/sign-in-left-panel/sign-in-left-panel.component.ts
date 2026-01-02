@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { InfiniteSlidesComponent } from '../../infinite-slides/infinite-slides.component';
-
-/// Interface for text slide content with title and description
-export interface TextSlide {
-    title: string;
-    description: string;
-}
+import { LEFT_PANEL_THEME, LeftPanelColorScheme } from '../sign-in-theme';
+import { TextSlide } from '../types';
 
 /**
  * Left panel component for the sign-in page.
@@ -20,16 +16,8 @@ export interface TextSlide {
 })
 export class SignInLeftPanelComponent {
 
-    /// Color scheme for the panel including gradients, text, and indicator dots
-    public get colors(): Record<'background-gradient-left' | 'background-gradient-right' | 'text' | 'bottom-gradient' | 'dots-selected' | 'dots-unselected', string> {
-        return {
-            'background-gradient-left': '#667eea',
-            'background-gradient-right': '#764ba2',
-            text: '#FFFFFF',
-            'bottom-gradient': '#202020cc',
-            'dots-selected': '#FFFFFF',
-            'dots-unselected': '#FFFFFF88',
-        };
+    public get colors(): LeftPanelColorScheme {
+        return LEFT_PANEL_THEME;
     }
 
     /// Array of welcome message slides displayed in the carousel

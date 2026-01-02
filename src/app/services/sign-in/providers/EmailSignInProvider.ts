@@ -2,36 +2,22 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ISignInProvider, SignInErrorCode } from './ISignInProvider';
 import { EmailAuthenticationProvider } from '../../authentication/providers';
 
-export class EmailSignInProvider implements ISignInProvider<'validation-failed' | 'wrong-password' | 'unknown'> {
-
-    public type = 'email';
-
-    public error: 'validation-failed' | 'wrong-password' | 'unknown' | { message: string } | null = null;
+export class EmailSignInProvider implements ISignInProvider<'wrong-password' | 'unknown'> {
 
     public constructor(
-        private readonly loginForm: FormGroup<{
-            email: FormControl<string | null>;
-            password: FormControl<string |null>;
-        }>
+        private readonly email: string,
+        private readonly password: string
     ) {}
 
-    public checkValidation(): boolean {
-        this.loginForm.markAllAsDirty();
-        return !this.loginForm.invalid;
-    }
-
     public getAuthProvider(): EmailAuthenticationProvider {
-        return new EmailAuthenticationProvider(this.loginForm.value.email!, this.loginForm.value.password!);
+        return new EmailAuthenticationProvider(this.email, this.password);
     }
 
-    public cleanup() {
-        this.loginForm.reset();
-    }
-
-    public handleAuthError(code: SignInErrorCode | null) {
+    public handleAuthError(code: SignInErrorCode | null): 'wrong-password' | 'unknown' | null {
+        if (code === null)
+            return null;
         if (code === 'auth/wrong-password')
-            this.error = 'wrong-password';
-        else
-            this.error = 'unknown';
+            return 'wrong-password';
+        return 'unknown';
     }
 }

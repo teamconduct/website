@@ -1,28 +1,19 @@
 import { AppleAuthenticationProvider } from '../../authentication/providers';
 import { ISignInProvider, SignInErrorCode } from './ISignInProvider';
 
-export class AppleSignInProvider implements ISignInProvider<'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown'> {
-
-    public type = 'apple';
-
-    public error: 'validation-failed' | 'popup-canceled' | 'popup-blocked' | 'unknown' | { message: string } | null = null;
-
-    public checkValidation(): boolean {
-        return true;
-    }
+export class AppleSignInProvider implements ISignInProvider<'popup-cancelled' | 'popup-blocked' | 'unknown'> {
 
     public getAuthProvider(): AppleAuthenticationProvider {
         return new AppleAuthenticationProvider();
     }
 
-    public cleanup() {}
-
-    public handleAuthError(code: SignInErrorCode | null) {
+    public handleAuthError(code: SignInErrorCode | null): 'popup-cancelled' | 'popup-blocked' | 'unknown' | null {
+        if (code === null)
+            return null;
         if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request')
-            this.error = 'popup-canceled';
-        else if (code === 'auth/popup-blocked')
-            this.error = 'popup-blocked';
-        else
-            this.error = 'unknown';
+            return 'popup-cancelled';
+        if (code === 'auth/popup-blocked')
+            return 'popup-blocked';
+        return 'unknown';
     }
 }
