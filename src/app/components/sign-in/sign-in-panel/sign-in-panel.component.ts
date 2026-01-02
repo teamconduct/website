@@ -86,47 +86,30 @@ export class SignInPanelComponent {
 
         const signInProvider = new EmailSignInProvider(`${event.username}@team-conduct.com`, event.password);
         const authResult = await this.signInService.auth(signInProvider);
+
         if (Result.isFailure(authResult)) {
-            switch (authResult.error) {
-            case 'wrong-password':
-                this.usernamePasswordFormError = 'username-password-invalid';
-                break;
-            case 'unknown':
-                this.usernamePasswordFormError = 'internal-error';
-                break;
-            }
-            this.stopLoading('username-password');
-            this.cdr.markForCheck();
+            this.usernamePasswordFormError = authResult.error === 'wrong-password'
+                ? 'username-password-invalid'
+                : 'internal-error';
+            this.handleAuthenticationEnd('username-password');
             return;
         }
 
         const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
+
         if (Result.isFailure(loginResult)) {
-            switch (loginResult.error.code) {
-            case 'unauthenticated':
-                this.usernamePasswordFormError = 'internal-error';
-                this.stopLoading('username-password');
-                this.cdr.markForCheck();
-                return;
-            case 'not-found':
+            if (loginResult.error.code === 'not-found') {
                 this.usernamePasswordFormError = null;
                 this.enterRegisterMode('username-password');
-                this.stopLoading('username-password');
-                this.cdr.markForCheck();
-                return;
-            default:
+            } else {
                 this.usernamePasswordFormError = 'internal-error';
-                this.stopLoading('username-password');
-                this.cdr.markForCheck();
-                return;
             }
+            this.handleAuthenticationEnd('username-password');
+            return;
         }
 
-        this.stopLoading('username-password');
-        this.cdr.markForCheck();
-
-        console.log('Login with username-password successful');
-        // TODO: navigate to home page
+        this.handleAuthenticationEnd('username-password');
+        // TODO: Navigate to home page
     }
 
     /**
@@ -147,43 +130,23 @@ export class SignInPanelComponent {
         this.startLoading('username-password');
         this.cancelButtonDisabled = true;
 
-        let signInType: User.SignInType;
-        if (this.registerMode === 'username-password') {
-            signInType = new User.SignInTypeEmail(`${event.username}@team-conduct.com`);
-        } else if (this.registerMode === 'google') {
-            signInType = new User.SignInTypeOAuth('google');
-        } else /* this.registerMode === 'apple' */ {
-            signInType = new User.SignInTypeOAuth('apple');
-        }
+        const signInType = this.getSignInType(event.username);
         const registerResult = await this.firebaseFunctions.functions.user.register.executeWithResult({
             userId: User.Id.builder.build(event.username),
             signInType: signInType
         });
+
         if (Result.isFailure(registerResult)) {
-            switch (registerResult.error.code) {
-            case 'unauthenticated':
-                this.usernamePasswordFormError = 'internal-error';
-                break;
-            case 'already-exists':
-                this.usernamePasswordFormError = 'username-taken';
-                break;
-            default:
-                this.usernamePasswordFormError = 'internal-error';
-                break;
-            }
-            this.cancelButtonDisabled = false;
-            this.stopLoading('username-password');
-            this.cdr.markForCheck();
+            this.usernamePasswordFormError = registerResult.error.code === 'already-exists'
+                ? 'username-taken'
+                : 'internal-error';
+            this.handleRegistrationEnd();
             return;
         }
 
         this.exitRegisterMode();
-        this.stopLoading('username-password');
-        this.cancelButtonDisabled = false;
-        this.cdr.markForCheck();
-
-        console.log('Registration with username-password successful');
-        // Navigate to home page
+        this.handleRegistrationEnd();
+        // TODO: Navigate to home page
     }
 
     /**
@@ -208,49 +171,28 @@ export class SignInPanelComponent {
 
         const signInProvider = new GoogleSignInProvider();
         const authResult = await this.signInService.auth(signInProvider);
-        console.log('Google auth result:', authResult);
+
         if (Result.isFailure(authResult)) {
-            switch (authResult.error) {
-            case 'popup-cancelled':
-            case 'popup-blocked':
-                this.googleSignInError = 'popup-closed';
-                break;
-            case 'unknown':
-                this.googleSignInError = 'internal-error';
-                break;
-            }
-            this.stopLoading('google');
-            this.cdr.markForCheck();
+            this.googleSignInError = this.mapAuthErrorToThirdPartyError(authResult.error);
+            this.handleAuthenticationEnd('google');
             return;
         }
 
         const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
-        console.log('Login result after Google sign-in:', loginResult);
+
         if (Result.isFailure(loginResult)) {
-            switch (loginResult.error.code) {
-            case 'unauthenticated':
-                this.googleSignInError = 'internal-error';
-                this.stopLoading('google');
-                this.cdr.markForCheck();
-                return;
-            case 'not-found':
+            if (loginResult.error.code === 'not-found') {
                 this.googleSignInError = null;
                 this.enterRegisterMode('google');
-                this.stopLoading('google');
-                this.cdr.markForCheck();
-                return;
-            default:
+            } else {
                 this.googleSignInError = 'internal-error';
-                this.stopLoading('google');
-                this.cdr.markForCheck();
-                return;
             }
+            this.handleAuthenticationEnd('google');
+            return;
         }
-        this.stopLoading('google');
-        this.cdr.markForCheck();
 
-        console.log('Login with Google successful');
-        // TODO: navigate to home page
+        this.handleAuthenticationEnd('google');
+        // TODO: Navigate to home page
     }
 
     /**
@@ -268,47 +210,28 @@ export class SignInPanelComponent {
 
         const signInProvider = new AppleSignInProvider();
         const authResult = await this.signInService.auth(signInProvider);
+
         if (Result.isFailure(authResult)) {
-            switch (authResult.error) {
-            case 'popup-cancelled':
-            case 'popup-blocked':
-                this.appleSignInError = 'popup-closed';
-                break;
-            case 'unknown':
-                this.appleSignInError = 'internal-error';
-                break;
-            }
-            this.stopLoading('apple');
-            this.cdr.markForCheck();
+            this.appleSignInError = this.mapAuthErrorToThirdPartyError(authResult.error);
+            this.handleAuthenticationEnd('apple');
             return;
         }
 
         const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
+
         if (Result.isFailure(loginResult)) {
-            switch (loginResult.error.code) {
-            case 'unauthenticated':
-                this.appleSignInError = 'internal-error';
-                this.stopLoading('apple');
-                this.cdr.markForCheck();
-                return;
-            case 'not-found':
+            if (loginResult.error.code === 'not-found') {
                 this.appleSignInError = null;
                 this.enterRegisterMode('apple');
-                this.stopLoading('apple');
-                this.cdr.markForCheck();
-                return;
-            default:
+            } else {
                 this.appleSignInError = 'internal-error';
-                this.stopLoading('apple');
-                this.cdr.markForCheck();
-                return;
             }
+            this.handleAuthenticationEnd('apple');
+            return;
         }
-        this.stopLoading('apple');
 
-        console.log('Login with Apple successful');
-        this.cdr.markForCheck();
-        // TODO: navigate to home page
+        this.handleAuthenticationEnd('apple');
+        // TODO: Navigate to home page
     }
 
     /**
@@ -318,6 +241,40 @@ export class SignInPanelComponent {
         this.usernamePasswordFormError = null;
         this.googleSignInError = null;
         this.appleSignInError = null;
+    }
+
+    /**
+     * Maps authentication errors to third-party error types
+     */
+    private mapAuthErrorToThirdPartyError(error: 'popup-cancelled' | 'popup-blocked' | 'wrong-password' | 'unknown'): ThirdPartyError {
+        return (error === 'popup-cancelled' || error === 'popup-blocked') ? 'popup-closed' : 'internal-error';
+    }
+
+    /**
+     * Gets the appropriate sign-in type based on register mode
+     */
+    private getSignInType(username: string): User.SignInType {
+        if (this.registerMode === 'username-password') {
+            return new User.SignInTypeEmail(`${username}@team-conduct.com`);
+        }
+        return new User.SignInTypeOAuth(this.registerMode === 'google' ? 'google' : 'apple');
+    }
+
+    /**
+     * Handles common cleanup after authentication attempt
+     */
+    private handleAuthenticationEnd(provider: AuthProvider): void {
+        this.stopLoading(provider);
+        this.cdr.markForCheck();
+    }
+
+    /**
+     * Handles common cleanup after registration attempt
+     */
+    private handleRegistrationEnd(): void {
+        this.cancelButtonDisabled = false;
+        this.stopLoading('username-password');
+        this.cdr.markForCheck();
     }
 
     /**
