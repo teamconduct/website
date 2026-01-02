@@ -13,7 +13,16 @@
 
         <div>
             <div class="mb-6">
-                <app-sign-in-username-password-form #usernamePasswordForm [errorMessage]="usernamePasswordFormErrorMessage" [loading]="usernamePasswordFormLoading" [disabled]="usernamePasswordFormDisabled" (onLogin)="onUsernamePasswordFormSubmit($event)" />
+                <app-sign-in-username-password-form #usernamePasswordForm
+                    [errorMessage]="usernamePasswordFormErrorMessage"
+                    [loading]="usernamePasswordFormLoading"
+                    [disabled]="usernamePasswordFormDisabled"
+                    [passwordShown]="passwordShown"
+                    [registerButtonShown]="registerButtonShown"
+                    [cancelButtonDisabled]="cancelButtonDisabled"
+                    (onLogin)="onUsernamePasswordFormSubmit($event)"
+                    (onRegister)="onUsernamePasswordFormRegister($event)"
+                    (onRegisterCancel)="onUsernamePasswordFormRegisterCancel()" />
             </div>
 
             <div class="relative my-6">

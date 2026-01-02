@@ -23,15 +23,20 @@ export class SignInPanelComponent {
 
     public usernamePasswordFormLoading = false;
     public usernamePasswordFormDisabled = false;
-    private usernamePasswordFormError: 'username-password-invalid' | null = null;
+    private usernamePasswordFormError: 'username-password-invalid' | 'internal-error' | 'not-registered' | null = null;
+    public registerMode = false;
 
     public googleSignInLoading = false;
     public googleSignInDisabled = false;
-    private googleSignInError: null = null;
+    private googleSignInError: 'internal-error' | null = null;
 
     public appleSignInLoading = false;
     public appleSignInDisabled = false;
-    private appleSignInError: null = null;
+    private appleSignInError: 'internal-error' | null = null;
+
+    public passwordShown = true;
+    public registerButtonShown = false;
+    public cancelButtonDisabled = false;
 
     public get colors(): Record<'highlight-background' | 'highlight-text' | 'text', string> {
         return {
@@ -51,12 +56,54 @@ export class SignInPanelComponent {
             return;
         this.startLoading('username-password');
 
+        // TODO: Call actual sign-in service
         await new Promise(resolve => setTimeout(() => {
+            // Simulate: not-registered error for testing
+            // this.usernamePasswordFormError = 'not-registered';
+            // this.enterRegisterMode('username-password');
+
+            // Simulate: internal-error for testing
+            // this.usernamePasswordFormError = 'internal-error';
+
+            // Simulate: success-login
+            // Navigate to home page
             resolve(undefined);
             this.cdr.markForCheck();
         }, 1000));
 
         this.stopLoading('username-password');
+    }
+
+    public async onUsernamePasswordFormRegister(event: 'input-invalid' | { username: string, password: string | null }) {
+        this.resetErrors();
+        if (event === 'input-invalid') {
+            this.usernamePasswordFormError = 'username-password-invalid';
+            return;
+        }
+        if (this.isLoading() || this.usernamePasswordFormDisabled)
+            return;
+        this.startLoading('username-password');
+        this.cancelButtonDisabled = true;
+
+        // TODO: Call actual registration service
+        await new Promise(resolve => setTimeout(() => {
+            // Simulate: internal-error for testing
+            // this.usernamePasswordFormError = 'internal-error';
+            // this.cancelButtonDisabled = false;
+
+            // Simulate: success-registration
+            // this.exitRegisterMode();
+            // Navigate to home page
+            resolve(undefined);
+            this.cdr.markForCheck();
+        }, 1000));
+
+        this.stopLoading('username-password');
+        this.cancelButtonDisabled = false;
+    }
+
+    public onUsernamePasswordFormRegisterCancel() {
+        this.exitRegisterMode();
     }
 
     public async onGoogleSignInClicked() {
@@ -66,7 +113,18 @@ export class SignInPanelComponent {
             return;
         this.startLoading('google');
 
+        // TODO: Call actual Google sign-in service
         await new Promise(resolve => setTimeout(() => {
+            // Simulate: not-registered error for testing
+            // this.googleSignInError = null;
+            // this.enterRegisterMode('google');
+
+            // Simulate: internal-error for testing
+            // this.googleSignInError = 'internal-error';
+
+            // Simulate: success-login
+            // this.usernamePasswordForm().loginForm.reset();
+            // Navigate to home page
             resolve(undefined);
             this.cdr.markForCheck();
         }, 1000));
@@ -81,7 +139,18 @@ export class SignInPanelComponent {
             return;
         this.startLoading('apple');
 
+        // TODO: Call actual Apple sign-in service
         await new Promise(resolve => setTimeout(() => {
+            // Simulate: not-registered error for testing
+            // this.appleSignInError = null;
+            // this.enterRegisterMode('apple');
+
+            // Simulate: internal-error for testing
+            // this.appleSignInError = 'internal-error';
+
+            // Simulate: success-login
+            // this.usernamePasswordForm().loginForm.reset();
+            // Navigate to home page
             resolve(undefined);
             this.cdr.markForCheck();
         }, 1000));
@@ -97,6 +166,46 @@ export class SignInPanelComponent {
 
     private isLoading(): boolean {
         return this.usernamePasswordFormLoading || this.googleSignInLoading || this.appleSignInLoading;
+    }
+
+    private enterRegisterMode(source: 'username-password' | 'google' | 'apple') {
+        this.registerMode = true;
+        this.registerButtonShown = true;
+
+        if (source === 'google' || source === 'apple') {
+            // Clear password but keep username, hide password field
+            this.usernamePasswordForm().loginForm.get('password')?.setValue(null);
+            this.passwordShown = false;
+        }
+
+        // Keep other methods disabled, stop loading
+        if (source === 'username-password') {
+            this.usernamePasswordFormLoading = false;
+        } else if (source === 'google') {
+            this.googleSignInLoading = false;
+        } else if (source === 'apple') {
+            this.appleSignInLoading = false;
+        }
+    }
+
+    private exitRegisterMode() {
+        this.registerMode = false;
+        this.registerButtonShown = false;
+        this.cancelButtonDisabled = false;
+
+        if (!this.passwordShown) {
+            // Was in third-party register mode - clear username, show password
+            this.usernamePasswordForm().loginForm.reset();
+            this.passwordShown = true;
+        }
+
+        // Enable all methods
+        this.usernamePasswordFormDisabled = false;
+        this.googleSignInDisabled = false;
+        this.appleSignInDisabled = false;
+        this.usernamePasswordFormLoading = false;
+        this.googleSignInLoading = false;
+        this.appleSignInLoading = false;
     }
 
     private startLoading(type: 'username-password' | 'google' | 'apple') {
@@ -143,6 +252,12 @@ export class SignInPanelComponent {
         switch (this.usernamePasswordFormError) {
             case 'username-password-invalid':
                 return $localize `:Generic username/password sign-in error message:Invalid username or password. Please try again.`;
+            case 'internal-error':
+                return $localize `:Internal error message:An internal error occurred. Please try again later.`;
+            case 'not-registered':
+                if (this.registerMode)
+                    return $localize `:Not registered message in register mode:Click Register to create your account.`;
+                return $localize `:Not registered message:This account is not registered. Click Sign in again to register.`;
             case null:
                 return null;
         }
@@ -150,6 +265,8 @@ export class SignInPanelComponent {
 
     public get googleSignInErrorMessage(): string | null {
         switch (this.googleSignInError) {
+            case 'internal-error':
+                return $localize `:Google sign-in internal error message:An internal error occurred with Google sign-in. Please try again later.`;
             case null:
                 return null;
         }
@@ -157,6 +274,8 @@ export class SignInPanelComponent {
 
     public get appleSignInErrorMessage(): string | null {
         switch (this.appleSignInError) {
+            case 'internal-error':
+                return $localize `:Apple sign-in internal error message:An internal error occurred with Apple sign-in. Please try again later.`;
             case null:
                 return null;
         }
