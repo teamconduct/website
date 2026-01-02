@@ -37,7 +37,7 @@ export class InfiniteSlidesComponent<T = any> implements OnInit, OnDestroy {
     public slides = input.required<T[]>();
 
     /// Template reference for rendering each slide with custom content
-    public slideTemplate = contentChild.required<TemplateRef<{ $implicit: T }>>('slideTemplate');
+    public slideTemplate = contentChild<TemplateRef<{ $implicit: T }>>('slideTemplate');
 
     /// Colors for the slide indicator dots
     public colors = input.required<Record<'dots-selected' | 'dots-unselected', string>>();

@@ -14,6 +14,8 @@ describe('InfiniteSlidesComponent', () => {
 
     fixture = TestBed.createComponent(InfiniteSlidesComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('slides', [{ text: 'Test slide' }]);
+    fixture.componentRef.setInput('colors', { gradientFrom: '#000', gradientTo: '#fff', text: '#000' });
     await fixture.whenStable();
   });
 

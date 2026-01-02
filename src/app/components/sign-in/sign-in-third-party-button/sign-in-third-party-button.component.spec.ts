@@ -14,6 +14,7 @@ describe('SignInThirdPartyButtonComponent', () => {
 
     fixture = TestBed.createComponent(SignInThirdPartyButtonComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('type', 'google');
     await fixture.whenStable();
   });
 
