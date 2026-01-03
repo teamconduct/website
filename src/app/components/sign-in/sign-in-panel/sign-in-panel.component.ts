@@ -17,6 +17,10 @@ import { SignInService } from '../../../services/sign-in/sign-in.service';
 import { AppleSignInProvider, EmailSignInProvider, GoogleSignInProvider } from '../../../services/sign-in/providers';
 import { Result } from '@stevenkellner/typescript-common-functionality';
 import { User } from '@stevenkellner/team-conduct-api';
+import { isProduction } from '../../../../environments/environment';
+import { RandomDataGeneratorService } from '../../../services/random-data-generator/random-data-generator.service';
+import { Router } from '@angular/router';
+import { routeNames } from '../../../app.routes';
 
 /**
  * Main sign-in panel component
@@ -40,6 +44,8 @@ export class SignInPanelComponent {
     private readonly cdr = inject(ChangeDetectorRef);
     private readonly firebaseFunctions = inject(FirebaseFunctionsService);
     private readonly signInService = inject(SignInService);
+    private readonly routerService = inject(Router);
+    private readonly randomDataGenerator = inject(RandomDataGeneratorService);
     private readonly usernamePasswordForm = viewChild.required<SignInUsernamePasswordFormComponent>('usernamePasswordForm');
 
     // Loading states
@@ -110,7 +116,7 @@ export class SignInPanelComponent {
         }
 
         this.handleAuthenticationEnd('username-password');
-        // TODO: Navigate to home page
+        await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
     /**
@@ -147,7 +153,11 @@ export class SignInPanelComponent {
 
         this.exitRegisterMode();
         this.handleRegistrationEnd();
-        // TODO: Navigate to home page
+
+        if (!isProduction) {
+            await this.randomDataGenerator.createTestData();
+        }
+        await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
     /**
@@ -194,7 +204,7 @@ export class SignInPanelComponent {
         }
 
         this.handleAuthenticationEnd('google');
-        // TODO: Navigate to home page
+        await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
     /**
@@ -234,7 +244,7 @@ export class SignInPanelComponent {
         }
 
         this.handleAuthenticationEnd('apple');
-        // TODO: Navigate to home page
+        await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
     /**
