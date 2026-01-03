@@ -1,13 +1,13 @@
 <div class="relative h-screen w-full overflow-hidden" [style.background]="`linear-gradient(135deg, ${colors['background-gradient-left']} 0%, ${colors['background-gradient-right']} 100%)`">
     <div class="flex flex-column justify-content-center align-items-center z-1 h-full p-6">
-        <img class="w-8rem h-8rem border-round-2xl object-fit-cover mx-auto mb-5 shadow-8" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a2ab73ca96-df9ca7dce01e060cbfb7.png" />
+        <img class="w-8rem h-8rem border-round-2xl object-fit-cover mx-auto mb-3 md:mb-5 shadow-8" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a2ab73ca96-df9ca7dce01e060cbfb7.png" />
         <app-infinite-slides
             [slides]="textSlides"
             [colors]="colors"
             [intervalMs]="5000"
             class="w-full h-65p md:h-auto">
             <ng-template #slideTemplate let-slide>
-                <h2 class="text-4xl font-bold mb-4 line-height-3" [style.color]="colors.text">{{ slide.title }}</h2>
+                <h2 class="text-3xl md:text-4xl font-bold mb-3 md:mb-4 line-height-3" [style.color]="colors.text">{{ slide.title }}</h2>
                 <p class="text-xl line-height-3" [style.color]="colors.text">{{ slide.description }}</p>
             </ng-template>
         </app-infinite-slides>
@@ -15,7 +15,7 @@
             icon="pi pi-arrow-down"
             [rounded]="true"
             [outlined]="true"
-            class="md:hidden mt-5 z-2"
+            class="md:hidden mt-3 md:mt-5 z-2"
             (onClick)="scrollToLogin.emit()"
             [style]="{ color: colors.text, 'border-color': colors.text, background: 'transparent' }"
             i18n-label="Button label for scrolling to login form@@scrollToLoginButton"
