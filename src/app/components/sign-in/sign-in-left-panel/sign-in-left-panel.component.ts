@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 import { InfiniteSlidesComponent } from '../../infinite-slides/infinite-slides.component';
 import { LEFT_PANEL_THEME, LeftPanelColorScheme } from '../sign-in-theme';
 import { TextSlide } from '../types';
+import { ButtonModule } from 'primeng/button';
 
 /**
  * Left panel component for the sign-in page.
@@ -9,12 +10,14 @@ import { TextSlide } from '../types';
  */
 @Component({
     selector: 'app-sign-in-left-panel',
-    imports: [InfiniteSlidesComponent],
+    imports: [InfiniteSlidesComponent, ButtonModule],
     templateUrl: './sign-in-left-panel.component.html',
     styleUrl: './sign-in-left-panel.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInLeftPanelComponent {
+
+    public scrollToLogin = output<void>();
 
     public get colors(): LeftPanelColorScheme {
         return LEFT_PANEL_THEME;

@@ -31,6 +31,18 @@ p {
     width: 90vw;
 }
 
+.h-65p {
+    height: 65%;
+}
+
+.mw-50p {
+    max-width: 50%;
+}
+
+.mw-75p {
+    max-width: 75%;
+}
+
 @media screen and (min-width: 768px) {
     .md\:w-45vw {
         width: 45vw;
@@ -46,6 +58,10 @@ p {
 
     .md\:w-90vw {
         width: 90vw;
+    }
+
+    .md\:mw-50p {
+        max-width: 50%;
     }
 }
 

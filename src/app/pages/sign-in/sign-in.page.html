@@ -1,4 +1,6 @@
-<div class="flex flex-row align-items-center justify-content-center h-screen">
-    <app-sign-in-left-panel class="w-50vw h-full" />
-    <app-sign-in-panel class="w-50vw h-full" />
+<div class="flex flex-column md:flex-row align-items-center justify-content-center md:h-screen w-full">
+    <app-sign-in-left-panel class="w-full md:w-50vw md:h-full" (scrollToLogin)="scrollToLogin()" />
+    <div #signInPanel class="w-full md:w-50vw md:h-full">
+        <app-sign-in-panel class="w-full h-full" />
+    </div>
 </div>
