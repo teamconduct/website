@@ -15,14 +15,14 @@
       "prefix": "app",
       "i18n": {
         "sourceLocale": {
-            "code": "en",
-            "baseHref": ""
+          "code": "en",
+          "baseHref": ""
         },
         "locales": {
-            "de": {
-                "translation": "src/locale/messages.de.arb",
-                "baseHref": ""
-            }
+          "de": {
+            "translation": "src/locale/messages.de.arb",
+            "baseHref": ""
+          }
         }
       },
       "architect": {
@@ -47,9 +47,9 @@
               "@angular/localize/init"
             ],
             "allowedCommonJsDependencies": [
-                "@stevenkellner/typescript-common-functionality",
-                "@stevenkellner/firebase-function",
-                "@stevenkellner/team-conduct-api"
+              "@stevenkellner/typescript-common-functionality",
+              "@stevenkellner/firebase-function",
+              "@stevenkellner/team-conduct-api"
             ]
           },
           "configurations": {
@@ -79,7 +79,9 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "localize": ["de"]
+              "localize": [
+                "de"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -125,6 +127,17 @@
               "src/**/*.ts",
               "src/**/*.html"
             ]
+          }
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "website:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "website:serve:production"
+            }
           }
         }
       }

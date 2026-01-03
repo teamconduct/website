@@ -7,13 +7,17 @@
                     <fa-icon [icon]="['fas', 'lock']" class="text-2xl" [style.color]="colors['highlight-text']"></fa-icon>
                 </div>
             </div>
-            <h1 class="text-4xl font-bold mb-3" [style.color]="colors.text" i18n="Page title for the sign in panel">Sign In</h1>
             @if (registerMode === null) {
-                <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel">Enter your credentials to access your account. If you don't have one, choose a username.</p>
-            } @else if (registerMode === 'username-password') {
-                <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel in register mode">Choose a username and password to create your account.</p>
+                <h1 class="text-4xl font-bold mb-3" [style.color]="colors.text" i18n="Page title for the sign in panel" data-testid="sign-in-title">Sign In</h1>
             } @else {
-                <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel in register mode for third party sign in">Choose a username to create your account.</p>
+                <h1 class="text-4xl font-bold mb-3" [style.color]="colors.text" i18n="Page title for the sign in panel in register mode" data-testid="sign-in-title">Create Account</h1>
+            }
+            @if (registerMode === null) {
+                <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel" data-testid="sign-in-instruction">Enter your credentials to access your account. If you don't have one, choose a username.</p>
+            } @else if (registerMode === 'username-password') {
+                <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel in register mode" data-testid="sign-in-instruction">Choose a username and password to create your account.</p>
+            } @else {
+                <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel in register mode for third party sign in" data-testid="sign-in-instruction">Choose a username to create your account.</p>
             }
         </div>
 
@@ -24,6 +28,7 @@
                     [loading]="usernamePasswordFormLoading"
                     [disabled]="usernamePasswordFormDisabled"
                     [passwordShown]="passwordShown"
+                    [passwordIncorrect]="usernamePasswordFormError === 'wrong-password'"
                     [registerButtonShown]="registerButtonShown"
                     [cancelButtonDisabled]="cancelButtonDisabled"
                     (onLogin)="onUsernamePasswordFormSubmit($event)"
@@ -42,16 +47,16 @@
 
             <div class="mb-5">
                 <app-sign-in-third-party-button [type]="'google'" [invalid]="googleSignInErrorMessage !== null" [loading]="googleSignInLoading" [disabled]="googleSignInDisabled" (onClick)="onGoogleSignInClicked()" />
-                <app-error-message [message]="googleSignInErrorMessage" class="w-full" />
+                <app-error-message [message]="googleSignInErrorMessage" class="w-full" data-testid="google-error-message" />
             </div>
 
             <div class="mb-6">
                 <app-sign-in-third-party-button [type]="'apple'" [invalid]="appleSignInErrorMessage !== null" [loading]="appleSignInLoading" [disabled]="appleSignInDisabled" (onClick)="onAppleSignInClicked()" />
-                <app-error-message [message]="appleSignInErrorMessage" class="w-full" />
+                <app-error-message [message]="appleSignInErrorMessage" class="w-full" data-testid="apple-error-message" />
             </div>
 
             <div class="text-center">
-                <p i18n="ToS and privacy policy notice" class="my-0 text-center" [style.color]="colors['text']">By clicking sign in, you agree to our <p-button (onClick)="shownTermsOfService()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" /> and <p-button (onClick)="showPrivacyPolicy()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" /></p>
+                <p i18n="ToS and privacy policy notice" class="my-0 text-center" [style.color]="colors['text']">By clicking sign in, you agree to our <p-button (onClick)="shownTermsOfService()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" data-testid="tos-button" /> and <p-button (onClick)="showPrivacyPolicy()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" data-testid="privacy-policy-button" /></p>
             </div>
         </div>
     </div>

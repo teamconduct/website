@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -34,6 +34,7 @@ export class SignInUsernamePasswordFormComponent {
     public readonly disabled = input<boolean>(false);
     public readonly cancelButtonDisabled = input<boolean>(false);
     public readonly errorMessage = input<string | null>(null);
+    public readonly passwordIncorrect = input<boolean>(false);
     public readonly passwordShown = input<boolean>(true);
     public readonly registerButtonShown = input<boolean>(false);
 
@@ -48,7 +49,7 @@ export class SignInUsernamePasswordFormComponent {
      * - Can contain letters, numbers, dots, hyphens, underscores
      * - No consecutive special characters
      */
-    private readonly USERNAME_PATTERN = /(?!.*[\.\-\_]{2,})^[a-zA-Z0-9][a-zA-Z0-9\.\-\_]{2,22}[a-zA-Z0-9]$/;
+    private readonly USERNAME_PATTERN = /(?!.*[\.\-\_]{2,})^[a-zöäüßA-ZÄÖÜ0-9][a-zöäüßA-ZÄÖÜ0-9\.\-\_]{2,22}[a-zöäüßA-ZÄÖÜ0-9]$/;
     private readonly MIN_PASSWORD_LENGTH = 8;
 
     public loginForm = new FormGroup({
@@ -61,6 +62,23 @@ export class SignInUsernamePasswordFormComponent {
             Validators.minLength(this.MIN_PASSWORD_LENGTH)
         ])
     });
+
+    constructor() {
+        // Update password validation when passwordIncorrect changes
+        effect(() => {
+            const passwordControl = this.loginForm.get('password');
+            if (this.passwordIncorrect()) {
+                passwordControl?.setErrors({ ...passwordControl.errors, incorrectPassword: true });
+            } else {
+                // Remove only the incorrectPassword error, keep other errors
+                const errors = passwordControl?.errors;
+                if (errors && 'incorrectPassword' in errors) {
+                    delete errors['incorrectPassword'];
+                    passwordControl?.setErrors(Object.keys(errors).length > 0 ? errors : null);
+                }
+            }
+        });
+    }
 
     public get loginFormWithoutPassword(): FormGroup {
         return new FormGroup({
@@ -157,7 +175,11 @@ export class SignInUsernamePasswordFormComponent {
         }
 
         if (usernameControl.hasError('required')) {
-            return $localize`:Username required error@@usernameRequired:Username is required to sign up / log in`;
+            if (this.registerButtonShown()) {
+                return $localize`:Username required error@@usernameRequiredRegister:Username is required to sign up`;
+            } else {
+                return $localize`:Username required error@@usernameRequired:Username is required to log in`;
+            }
         }
 
         if (usernameControl.hasError('pattern')) {
@@ -167,11 +189,11 @@ export class SignInUsernamePasswordFormComponent {
                 return $localize`:Username length error@@usernameLength:The username must be between 4 and 24 characters long`;
             }
 
-            if (!/^[a-zA-Z0-9\.\-\_]+$/.test(username)) {
+            if (!/^[a-zöäüßA-ZÄÖÜ0-9\.\-\_]+$/.test(username)) {
                 return $localize`:Username character error@@usernameCharacters:The username can only contain letters, numbers, dots (.), hyphens (-), and underscores (_)`;
             }
 
-            if (!/^[a-zA-Z0-9]/.test(username) || !/[a-zA-Z0-9]$/.test(username)) {
+            if (!/^[a-zöäüßA-ZÄÖÜ0-9]/.test(username) || !/[a-zöäüßA-ZÄÖÜ0-9]$/.test(username)) {
                 return $localize`:Username start/end error@@usernameStartEnd:The username cannot start and end with a special character (., -, _)`;
             }
 
@@ -198,11 +220,19 @@ export class SignInUsernamePasswordFormComponent {
         }
 
         if (passwordControl.hasError('required')) {
-            return $localize`:Password required error@@passwordRequired:Password is required to sign up / log in`;
+            if (this.registerButtonShown()) {
+                return $localize`:Password required error@@passwordRequiredRegister:Password is required to sign up`;
+            } else {
+                return $localize`:Password required error@@passwordRequired:Password is required to log in`;
+            }
         }
 
         if (passwordControl.hasError('minlength')) {
             return $localize`:Password too short error@@passwordMinLength:The password must be at least 8 characters long`;
+        }
+
+        if (passwordControl.hasError('incorrectPassword')) {
+            return $localize`:Incorrect password error@@incorrectPassword:The password is incorrect`;
         }
 
         return null;

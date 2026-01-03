@@ -53,7 +53,7 @@ export class SignInPanelComponent {
     public appleSignInDisabled = false;
 
     // Error states
-    private usernamePasswordFormError: UsernamePasswordError | null = null;
+    public usernamePasswordFormError: UsernamePasswordError | null = null;
     private googleSignInError: ThirdPartyError | null = null;
     private appleSignInError: ThirdPartyError | null = null;
 
@@ -89,7 +89,7 @@ export class SignInPanelComponent {
 
         if (Result.isFailure(authResult)) {
             this.usernamePasswordFormError = authResult.error === 'wrong-password'
-                ? 'username-password-invalid'
+                ? 'wrong-password'
                 : 'internal-error';
             this.handleAuthenticationEnd('username-password');
             return;
@@ -314,6 +314,8 @@ export class SignInPanelComponent {
         } else if (source === 'apple') {
             this.appleSignInLoading = false;
         }
+
+        this.cdr.markForCheck();
     }
 
     /**
@@ -324,11 +326,7 @@ export class SignInPanelComponent {
         this.registerButtonShown = false;
         this.cancelButtonDisabled = false;
 
-        if (!this.passwordShown) {
-            // Was in third-party register mode - clear username, show password
-            this.usernamePasswordForm().loginForm.reset();
-            this.passwordShown = true;
-        }
+        this.passwordShown = true;
 
         // Enable all methods
         this.usernamePasswordFormDisabled = false;
@@ -337,6 +335,8 @@ export class SignInPanelComponent {
         this.usernamePasswordFormLoading = false;
         this.googleSignInLoading = false;
         this.appleSignInLoading = false;
+
+        this.cdr.markForCheck();
     }
 
     /**
@@ -395,7 +395,11 @@ export class SignInPanelComponent {
     public get usernamePasswordFormErrorMessage(): string | null {
         switch (this.usernamePasswordFormError) {
             case 'username-password-invalid':
-                return $localize`:Generic username/password sign-in error@@usernamePasswordInvalid:Invalid username or password. Please try again.`;
+                if (this.registerMode === null || this.registerMode === 'username-password') {
+                    return $localize`:Generic username/password sign-in error@@usernamePasswordInvalid:Invalid username or password. Please try again.`;
+                } else {
+                    return $localize`:Generic username/password registration error@@usernamePasswordRegisterInvalid:Invalid username. Please try again.`;
+                }
             case 'internal-error':
                 return $localize`:Internal error message@@internalError:An internal error occurred. Please try again later.`;
             case 'not-registered':
@@ -404,7 +408,7 @@ export class SignInPanelComponent {
                 }
                 return $localize`:Not registered message@@notRegistered:This account is not registered. Click Sign in again to register.`;
             case 'wrong-password':
-                return $localize`:Wrong password error@@wrongPassword:Incorrect password. Please try again.`;
+                return $localize`:Wrong password error@@wrongPassword:Incorrect password for the given username. Please input the correct password and try again.`;
             case 'username-taken':
                 return $localize`:Username taken error@@usernameTaken:The username is already taken. Please choose a different one.`;
             case null:
@@ -418,9 +422,9 @@ export class SignInPanelComponent {
     public get googleSignInErrorMessage(): string | null {
         switch (this.googleSignInError) {
             case 'internal-error':
-                return $localize`:Google sign-in internal error@@googleInternalError:An internal error occurred with Google sign-in. Please try again later.`;
+                return $localize`:Google sign-in internal error@@googleInternalError:An internal error occurred with Google sign in. Please try again later.`;
             case 'popup-closed':
-                return $localize`:Google sign-in popup closed error@@googlePopupClosed:Google sign-in was cancelled. Please try again.`;
+                return $localize`:Google sign-in popup closed error@@googlePopupClosed:Google sign in was cancelled. Please try again.`;
             case null:
                 return null;
         }
@@ -432,9 +436,9 @@ export class SignInPanelComponent {
     public get appleSignInErrorMessage(): string | null {
         switch (this.appleSignInError) {
             case 'internal-error':
-                return $localize`:Apple sign-in internal error@@appleInternalError:An internal error occurred with Apple sign-in. Please try again later.`;
+                return $localize`:Apple sign-in internal error@@appleInternalError:An internal error occurred with Apple sign in. Please try again later.`;
             case 'popup-closed':
-                return $localize`:Apple sign-in popup closed error@@applePopupClosed:Apple sign-in was cancelled. Please try again.`;
+                return $localize`:Apple sign-in popup closed error@@applePopupClosed:Apple sign in was cancelled. Please try again.`;
             case null:
                 return null;
         }
