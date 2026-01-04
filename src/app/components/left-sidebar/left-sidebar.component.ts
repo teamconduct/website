@@ -23,7 +23,7 @@ export class LeftSidebarComponent {
     currentRoute = signal<string>('team-dashboard');
 
     // Current team name - this should be updated based on selected team
-    currentTeamName = signal<string>('Thunder FC');
+    currentTeamName = signal<string | null>('Thunder FC');
 
     // Icons
     faFutbol = faFutbol;

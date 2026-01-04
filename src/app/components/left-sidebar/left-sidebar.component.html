@@ -16,60 +16,67 @@
             }
         </ul>
 
-        <!-- Divider -->
-        <div class="my-3"
-            [style.background-color]="colors.dividerColor"
-            style="height: 2px; width: 100%; border-radius: 1px;">
-        </div>
+        @if (currentTeamName() !== null) {
 
-        <!-- Bottom Section: Team Navigation -->
-        <div class="flex flex-column gap-2 border-round">
-            <div class="flex align-items-center gap-3 px-3 py-3 border-round font-bold"
-                 [style.background-color]="colors.teamHeaderBg"
-                 [style.border-left]="'4px solid ' + colors.teamHeaderBorder"
-                 [style.padding-left]="'0.75rem'"
-                 style="font-size: 1.05rem;">
-                <fa-icon [icon]="faFutbol" [style.color]="colors.textPrimary" style="font-size: 1.25rem;" size="lg"></fa-icon>
-                <span class="flex-1 overflow-hidden text-overflow-ellipsis white-space-nowrap font-bold text-xl" [style.color]="colors.textPrimary">{{ currentTeamName() }}</span>
+            <!-- Divider -->
+            <div class="my-3"
+                [style.background-color]="colors.dividerColor"
+                style="height: 2px; width: 100%; border-radius: 1px;">
             </div>
 
+            <!-- Bottom Section: Team Navigation -->
+            <div class="flex flex-column gap-2 border-round">
+                <div class="flex align-items-center gap-3 px-3 py-3 mb-2 border-round font-bold"
+                    [style.background-color]="colors.teamHeaderBg"
+                    [style.border-left]="'4px solid ' + colors.teamHeaderBorder"
+                    [style.padding-left]="'0.75rem'"
+                    style="font-size: 1.05rem;">
+                    <fa-icon [icon]="faFutbol" [style.color]="colors.textPrimary" style="font-size: 1.25rem;" size="lg"></fa-icon>
+                    <span class="flex-1 overflow-hidden text-overflow-ellipsis white-space-nowrap font-bold text-xl" [style.color]="colors.textPrimary">{{ currentTeamName() }}</span>
+                </div>
+
+                <ul class="list-none p-0 m-0 flex flex-column gap-3">
+                    @for (item of teamNavItems; track item.route) {
+                        <li>
+                            <a href="#" class="flex align-items-center gap-2 px-3 py-2 ml-4 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
+                            [class.text-gray-700]="currentRoute() !== item.route"
+                            [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
+                            [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
+                            [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
+                                <fa-icon [icon]="item.icon" style="width: 1.25rem; text-align: center; font-size: 1rem;"></fa-icon>
+                                <span class="flex-1">{{ item.label }}</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        }
+
+        @if (otherTeams.length > 0) {
+
+            <!-- Divider -->
+            <div class="my-3"
+                [style.background-color]="colors.dividerColor"
+                style="height: 2px; width: 100%; border-radius: 1px;">
+            </div>
+
+            <!-- Other Teams Section -->
             <ul class="list-none p-0 m-0 flex flex-column gap-3">
-                @for (item of teamNavItems; track item.route) {
+                @for (item of otherTeams; track item.route) {
                     <li>
-                        <a href="#" class="flex align-items-center gap-2 px-3 py-2 ml-4 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
-                           [class.text-gray-700]="currentRoute() !== item.route"
-                           [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
-                           [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
-                           [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
+                        <a href="#" class="flex align-items-center gap-2 px-3 py-2 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
+                        [class.text-gray-700]="currentRoute() !== item.route"
+                        [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
+                        [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
+                        [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
                             <fa-icon [icon]="item.icon" style="width: 1.25rem; text-align: center; font-size: 1rem;"></fa-icon>
                             <span class="flex-1">{{ item.label }}</span>
                         </a>
                     </li>
                 }
             </ul>
-        </div>
-
-        <!-- Divider -->
-        <div class="my-3"
-            [style.background-color]="colors.dividerColor"
-            style="height: 2px; width: 100%; border-radius: 1px;">
-        </div>
-
-        <!-- Other Teams Section -->
-        <ul class="list-none p-0 m-0 flex flex-column gap-3">
-            @for (item of otherTeams; track item.route) {
-                <li>
-                    <a href="#" class="flex align-items-center gap-3 px-3 py-2 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
-                       [class.text-gray-700]="currentRoute() !== item.route"
-                       [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
-                       [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
-                       [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
-                        <fa-icon [icon]="item.icon" style="width: 1.25rem; text-align: center; font-size: 1rem;" size="lg"></fa-icon>
-                        <span class="flex-1 font-medium text-lg">{{ item.label }}</span>
-                    </a>
-                </li>
-            }
-        </ul>
+        }
 
     </nav>
 </aside>
