@@ -1,0 +1,41 @@
+<header class="fixed top-0 left-0 right-0 bg-white border-bottom-1 surface-border px-4 py-3 z-5" [style]="{ 'box-shadow': '0 1px 2px 0 rgba(0, 0, 0, 0.05)', '--hover-bg-color': colors.hoverBg }">
+    <div class="flex align-items-center justify-content-between w-full">
+        <!-- Logo and Title -->
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center p-2 border-round" [style]="{ 'background-color': colors.primary, color: colors.white }">
+                <fa-icon [icon]="faFutbol" style="font-size: 1.25rem;"></fa-icon>
+            </div>
+            <h1 class="text-2xl font-bold m-0" [style]="{ color: colors.primary }">Team Conduct 2.0</h1>
+        </div>
+
+        <!-- User Actions -->
+        <div class="flex align-items-center gap-4">
+            <!-- Notification Button -->
+            <p-overlaybadge [value]="notificationCount()" severity="danger" styleClass="top-07rem right-08rem" badgeSize="small">
+                <p-button
+                    type="button"
+                variant="text"
+                    styleClass="hover-bg flex align-items-center gap-2 border-none cursor-pointer px-2 py-1 border-round transition-duration-200"
+                    [style]="{ color: colors.textGray, 'font-size': '1.5rem' }"
+                    (onClick)="onNotificationClick()">
+                    <fa-icon [icon]="notificationCount() > 0 ? faSolidBell : faRegularBell"></fa-icon>
+                </p-button>
+            </p-overlaybadge>
+
+            <!-- User Profile -->
+            <p-button
+                type="button"
+                variant="text"
+                styleClass="hover-bg flex align-items-center gap-2 cursor-pointer px-2 py-1 border-round transition-duration-200"
+                [style]="{ background: 'none' }"
+                (onClick)="onProfileClick()">
+                <p-avatar
+                    [image]="userAvatar()"
+                    shape="circle"
+                    size="normal">
+                </p-avatar>
+                <span class="font-medium text-xl" [style]="{ color: colors.textDark, 'font-size': '0.9375rem' }">{{ userName() }}</span>
+            </p-button>
+        </div>
+    </div>
+</header>

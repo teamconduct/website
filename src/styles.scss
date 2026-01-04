@@ -43,6 +43,14 @@ p {
     max-width: 75%;
 }
 
+.top-07rem {
+    top: 0.7rem !important;
+}
+
+.right-08rem {
+    right: 0.8rem !important;
+}
+
 @media screen and (min-width: 768px) {
     .md\:w-45vw {
         width: 45vw;
