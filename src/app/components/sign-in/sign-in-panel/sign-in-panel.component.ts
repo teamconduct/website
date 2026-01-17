@@ -6,20 +6,14 @@ import { SignInUsernamePasswordFormComponent } from '../sign-in-username-passwor
 import { ErrorMessageComponent } from '../../error-message/error-message.component';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
 import { SIGN_IN_THEME, SignInColorScheme } from '../sign-in-theme';
-import {
-    AuthProvider,
-    UsernamePasswordError,
-    ThirdPartyError,
-    FormSubmitResult,
-    FormRegisterResult
-} from '../types';
+import { AuthProvider, FormSubmitResult, FormRegisterResult } from '../types';
 import { SignInService } from '../../../services/sign-in/sign-in.service';
-import { AppleSignInProvider, EmailSignInProvider, GoogleSignInProvider } from '../../../services/sign-in/providers';
 import { Result } from '@stevenkellner/typescript-common-functionality';
 import { User } from '@stevenkellner/team-conduct-api';
 import { Router } from '@angular/router';
 import { routeNames } from '../../../app.routes';
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
+import { AppleAuthProvider, GoogleAuthProvider, UsernamePasswordAuthProvider } from './auth-providers';
 
 /**
  * Main sign-in panel component
@@ -47,20 +41,14 @@ export class SignInPanelComponent {
     private readonly userManager = inject(UserManagerService);
     private readonly usernamePasswordForm = viewChild.required<SignInUsernamePasswordFormComponent>('usernamePasswordForm');
 
-    // Loading states
-    public usernamePasswordFormLoading = false;
-    public googleSignInLoading = false;
-    public appleSignInLoading = false;
-
-    // Disabled states
-    public usernamePasswordFormDisabled = false;
-    public googleSignInDisabled = false;
-    public appleSignInDisabled = false;
-
-    // Error states
-    public usernamePasswordFormError: UsernamePasswordError | null = null;
-    private googleSignInError: ThirdPartyError | null = null;
-    private appleSignInError: ThirdPartyError | null = null;
+    // Authentication providers
+    public readonly usernamePasswordAuth = new UsernamePasswordAuthProvider(
+        this.signInService,
+        this.cdr,
+        () => this.registerMode
+    );
+    public readonly googleAuth = new GoogleAuthProvider(this.signInService, this.cdr);
+    public readonly appleAuth = new AppleAuthProvider(this.signInService, this.cdr);
 
     // UI states
     public registerMode: AuthProvider | null = null;
@@ -76,65 +64,87 @@ export class SignInPanelComponent {
      * Handles username/password form submission
      */
     public async onUsernamePasswordFormSubmit(event: FormSubmitResult): Promise<void> {
-        this.resetErrors();
+        this.clearAllErrors();
 
         if (event === 'input-invalid') {
-            this.usernamePasswordFormError = 'username-password-invalid';
+            this.usernamePasswordAuth.setError('username-password-invalid');
             return;
         }
 
-        if (this.isLoading() || this.usernamePasswordFormDisabled) {
+        if (this.isAnyLoading() || this.usernamePasswordAuth.disabled) {
             return;
         }
 
-        this.startLoading('username-password');
+        this.setLoadingState('username-password', true);
 
-        const signInProvider = new EmailSignInProvider(`${event.username}@team-conduct.com`, event.password);
-        const authResult = await this.signInService.auth(signInProvider);
+        const authResult = await this.usernamePasswordAuth.authenticate(event.username, event.password);
 
         if (Result.isFailure(authResult)) {
-            this.usernamePasswordFormError = authResult.error === 'wrong-password'
+            this.usernamePasswordAuth.setError(authResult.error === 'wrong-password'
                 ? 'wrong-password'
-                : 'internal-error';
-            this.handleAuthenticationEnd('username-password');
+                : 'internal-error');
+            this.finishAuthentication('username-password');
             return;
         }
 
-        const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
-
-        if (Result.isFailure(loginResult)) {
-            if (loginResult.error.code === 'not-found') {
-                this.usernamePasswordFormError = null;
-                this.enterRegisterMode('username-password');
-                return;
-            } else {
-                this.usernamePasswordFormError = 'internal-error';
-            }
-            this.handleAuthenticationEnd('username-password');
-            return;
-        }
-
-        this.handleAuthenticationEnd('username-password');
-        this.userManager.setUser(loginResult.value);
-        await this.routerService.navigate([`/${routeNames.userDashboard}`]);
+        await this.completeLoginFlow('username-password');
     }
 
     /**
-     * Handles username/password registration form submission
+     * Handles Google sign-in button click
      */
-    public async onUsernamePasswordFormRegister(event: FormRegisterResult): Promise<void> {
-        this.resetErrors();
+    public async onGoogleSignInClicked(): Promise<void> {
+        await this.handleThirdPartySignIn(this.googleAuth);
+    }
+
+    /**
+     * Handles Apple sign-in button click
+     */
+    public async onAppleSignInClicked(): Promise<void> {
+        await this.handleThirdPartySignIn(this.appleAuth);
+    }
+
+    /**
+     * Handles third-party authentication flow (Google/Apple)
+     */
+    private async handleThirdPartySignIn(authProvider: GoogleAuthProvider | AppleAuthProvider): Promise<void> {
+        this.usernamePasswordForm().markAsUndirty();
+        this.clearAllErrors();
+
+        if (this.isAnyLoading() || authProvider.disabled) {
+            return;
+        }
+
+        this.setLoadingState(authProvider.providerType, true);
+
+        const authResult = await authProvider.authenticate();
+
+        if (Result.isFailure(authResult)) {
+            authProvider.setError(authProvider.mapAuthError(authResult.error));
+            this.finishAuthentication(authProvider.providerType);
+            return;
+        }
+
+        await this.completeLoginFlow(authProvider.providerType);
+    }
+
+    /**
+     * Handles registration form submission for all authentication providers
+     * (username/password, Google, Apple)
+     */
+    public async onRegisterFormSubmit(event: FormRegisterResult): Promise<void> {
+        this.clearAllErrors();
 
         if (event === 'input-invalid') {
-            this.usernamePasswordFormError = 'username-password-invalid';
+            this.usernamePasswordAuth.setError('username-password-invalid');
             return;
         }
 
-        if (this.isLoading() || this.usernamePasswordFormDisabled || this.registerMode === null) {
+        if (this.isAnyLoading() || this.usernamePasswordAuth.disabled || this.registerMode === null) {
             return;
         }
 
-        this.startLoading('username-password');
+        this.setLoadingState('username-password', true);
         this.cancelButtonDisabled = true;
 
         const signInType = this.getSignInType(event.username);
@@ -143,15 +153,15 @@ export class SignInPanelComponent {
             signInType: signInType
         });
         if (Result.isFailure(registerResult)) {
-            this.usernamePasswordFormError = registerResult.error.code === 'already-exists'
+            this.usernamePasswordAuth.setError(registerResult.error.code === 'already-exists'
                 ? 'username-taken'
-                : 'internal-error';
-            this.handleRegistrationEnd();
+                : 'internal-error');
+            this.finishRegistration();
             return;
         }
 
         this.exitRegisterMode();
-        this.handleRegistrationEnd();
+        this.finishRegistration();
 
         this.userManager.setUser(registerResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
@@ -160,106 +170,53 @@ export class SignInPanelComponent {
     /**
      * Handles registration cancellation
      */
-    public onUsernamePasswordFormRegisterCancel(): void {
+    public onRegisterFormCancel(): void {
         this.exitRegisterMode();
     }
 
     /**
-     * Handles Google sign-in button click
+     * Completes the login flow after successful authentication
+     * Handles user login, registration mode entry on not-found, and navigation on success
      */
-    public async onGoogleSignInClicked(): Promise<void> {
-        this.usernamePasswordForm().markAsUndirty();
-        this.resetErrors();
-
-        if (this.isLoading() || this.googleSignInDisabled) {
-            return;
-        }
-
-        this.startLoading('google');
-
-        const signInProvider = new GoogleSignInProvider();
-        const authResult = await this.signInService.auth(signInProvider);
-
-        if (Result.isFailure(authResult)) {
-            this.googleSignInError = this.mapAuthErrorToThirdPartyError(authResult.error);
-            this.handleAuthenticationEnd('google');
-            return;
-        }
-
+    private async completeLoginFlow(provider: AuthProvider): Promise<void> {
         const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
 
         if (Result.isFailure(loginResult)) {
             if (loginResult.error.code === 'not-found') {
-                this.googleSignInError = null;
-                this.enterRegisterMode('google');
+                if (provider === 'username-password') {
+                    this.usernamePasswordAuth.clearError();
+                } else if (provider === 'google') {
+                    this.googleAuth.clearError();
+                } else {
+                    this.appleAuth.clearError();
+                }
+                this.enterRegisterMode(provider);
                 return;
-            } else {
-                this.googleSignInError = 'internal-error';
             }
-            this.handleAuthenticationEnd('google');
+
+            if (provider === 'username-password') {
+                this.usernamePasswordAuth.setError('internal-error');
+            } else if (provider === 'google') {
+                this.googleAuth.setError('internal-error');
+            } else {
+                this.appleAuth.setError('internal-error');
+            }
+            this.finishAuthentication(provider);
             return;
         }
 
-        this.handleAuthenticationEnd('google');
+        this.finishAuthentication(provider);
         this.userManager.setUser(loginResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
     /**
-     * Handles Apple sign-in button click
+     * Clears all error states across all authentication methods
      */
-    public async onAppleSignInClicked(): Promise<void> {
-        this.usernamePasswordForm().markAsUndirty();
-        this.resetErrors();
-
-        if (this.isLoading() || this.appleSignInDisabled) {
-            return;
-        }
-
-        this.startLoading('apple');
-
-        const signInProvider = new AppleSignInProvider();
-        const authResult = await this.signInService.auth(signInProvider);
-
-        if (Result.isFailure(authResult)) {
-            this.appleSignInError = this.mapAuthErrorToThirdPartyError(authResult.error);
-            this.handleAuthenticationEnd('apple');
-            return;
-        }
-
-        const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
-
-        if (Result.isFailure(loginResult)) {
-            if (loginResult.error.code === 'not-found') {
-                this.appleSignInError = null;
-                this.enterRegisterMode('apple');
-                return;
-            } else {
-                this.appleSignInError = 'internal-error';
-            }
-            this.handleAuthenticationEnd('apple');
-            return;
-        }
-
-        this.handleAuthenticationEnd('apple');
-        this.userManager.setUser(loginResult.value);
-        await this.routerService.navigate([`/${routeNames.userDashboard}`]);
-    }
-
-    /**
-     * Resets all error states
-     */
-    private resetErrors(): void {
-        this.usernamePasswordFormError = null;
-        this.googleSignInError = null;
-        this.appleSignInError = null;
-    }
-
-    /**
-     * Maps authentication errors to third-party error types
-     */
-    private mapAuthErrorToThirdPartyError(error: 'popup-cancelled' | 'popup-blocked' | 'wrong-password' | 'unknown'): ThirdPartyError {
-        return (error === 'popup-cancelled' || error === 'popup-blocked') ? 'popup-closed' : 'internal-error';
+    private clearAllErrors(): void {
+        this.usernamePasswordAuth.clearError();
+        this.googleAuth.clearError();
+        this.appleAuth.clearError();
     }
 
     /**
@@ -273,29 +230,29 @@ export class SignInPanelComponent {
     }
 
     /**
-     * Handles common cleanup after authentication attempt
+     * Finishes authentication attempt and updates UI state
      */
-    private handleAuthenticationEnd(provider: AuthProvider): void {
-        this.stopLoading(provider);
+    private finishAuthentication(provider: AuthProvider): void {
+        this.setLoadingState(provider, false);
         this.cdr.markForCheck();
     }
 
     /**
-     * Handles common cleanup after registration attempt
+     * Finishes registration attempt and updates UI state
      */
-    private handleRegistrationEnd(): void {
+    private finishRegistration(): void {
         this.cancelButtonDisabled = false;
-        this.stopLoading('username-password');
+        this.setLoadingState('username-password', false);
         this.cdr.markForCheck();
     }
 
     /**
-     * Checks if any authentication method is currently loading
+     * Checks if any authentication method is currently in loading state
      */
-    private isLoading(): boolean {
-        return this.usernamePasswordFormLoading
-            || this.googleSignInLoading
-            || this.appleSignInLoading;
+    private isAnyLoading(): boolean {
+        return this.usernamePasswordAuth.loading
+            || this.googleAuth.loading
+            || this.appleAuth.loading;
     }
 
     /**
@@ -305,9 +262,9 @@ export class SignInPanelComponent {
     private enterRegisterMode(source: AuthProvider): void {
         this.registerMode = source;
         this.registerButtonShown = true;
-        this.usernamePasswordFormDisabled = false;
-        this.googleSignInDisabled = true;
-        this.appleSignInDisabled = true;
+        this.usernamePasswordAuth.setDisabled(false);
+        this.googleAuth.setDisabled(true);
+        this.appleAuth.setDisabled(true);
 
         if (source !== 'username-password') {
             // Clear password but keep username, hide password field
@@ -315,14 +272,8 @@ export class SignInPanelComponent {
             this.passwordShown = false;
         }
 
-        // Keep other methods disabled, stop loading
-        if (source === 'username-password') {
-            this.usernamePasswordFormLoading = false;
-        } else if (source === 'google') {
-            this.googleSignInLoading = false;
-        } else if (source === 'apple') {
-            this.appleSignInLoading = false;
-        }
+        // Stop loading for the source provider
+        this.setLoadingState(source, false);
 
         this.cdr.markForCheck();
     }
@@ -337,63 +288,50 @@ export class SignInPanelComponent {
 
         this.passwordShown = true;
 
-        // Enable all methods
-        this.usernamePasswordFormDisabled = false;
-        this.googleSignInDisabled = false;
-        this.appleSignInDisabled = false;
-        this.usernamePasswordFormLoading = false;
-        this.googleSignInLoading = false;
-        this.appleSignInLoading = false;
+        // Enable all methods and stop loading
+        this.usernamePasswordAuth.setDisabled(false);
+        this.usernamePasswordAuth.stopLoading();
+        this.googleAuth.setDisabled(false);
+        this.googleAuth.stopLoading();
+        this.appleAuth.setDisabled(false);
+        this.appleAuth.stopLoading();
 
         this.cdr.markForCheck();
     }
 
     /**
-     * Starts loading state for a specific authentication method
-     * Disables other methods while one is loading
-     * @param type The authentication provider type
+     * Sets loading state for a specific authentication method
+     * @param provider The authentication provider type
+     * @param isLoading Whether to start or stop loading
      */
-    private startLoading(type: AuthProvider): void {
-        switch (type) {
+    private setLoadingState(provider: AuthProvider, isLoading: boolean): void {
+        switch (provider) {
             case 'username-password':
-                this.usernamePasswordFormLoading = true;
-                this.googleSignInDisabled = true;
-                this.appleSignInDisabled = true;
+                if (isLoading) {
+                    this.usernamePasswordAuth.startLoading();
+                } else {
+                    this.usernamePasswordAuth.stopLoading();
+                }
+                this.googleAuth.setDisabled(isLoading);
+                this.appleAuth.setDisabled(isLoading);
                 break;
             case 'google':
-                this.googleSignInLoading = true;
-                this.usernamePasswordFormDisabled = true;
-                this.appleSignInDisabled = true;
+                if (isLoading) {
+                    this.googleAuth.startLoading();
+                } else {
+                    this.googleAuth.stopLoading();
+                }
+                this.usernamePasswordAuth.setDisabled(isLoading);
+                this.appleAuth.setDisabled(isLoading);
                 break;
             case 'apple':
-                this.appleSignInLoading = true;
-                this.usernamePasswordFormDisabled = true;
-                this.googleSignInDisabled = true;
-                break;
-        }
-    }
-
-    /**
-     * Stops loading state for a specific authentication method
-     * Re-enables other methods after loading completes
-     * @param type The authentication provider type
-     */
-    private stopLoading(type: AuthProvider): void {
-        switch (type) {
-            case 'username-password':
-                this.usernamePasswordFormLoading = false;
-                this.googleSignInDisabled = false;
-                this.appleSignInDisabled = false;
-                break;
-            case 'google':
-                this.googleSignInLoading = false;
-                this.usernamePasswordFormDisabled = false;
-                this.appleSignInDisabled = false;
-                break;
-            case 'apple':
-                this.appleSignInLoading = false;
-                this.usernamePasswordFormDisabled = false;
-                this.googleSignInDisabled = false;
+                if (isLoading) {
+                    this.appleAuth.startLoading();
+                } else {
+                    this.appleAuth.stopLoading();
+                }
+                this.usernamePasswordAuth.setDisabled(isLoading);
+                this.googleAuth.setDisabled(isLoading);
                 break;
         }
     }
@@ -402,66 +340,32 @@ export class SignInPanelComponent {
      * Gets the error message for username/password form
      */
     public get usernamePasswordFormErrorMessage(): string | null {
-        switch (this.usernamePasswordFormError) {
-            case 'username-password-invalid':
-                if (this.registerMode === null || this.registerMode === 'username-password') {
-                    return $localize`:Generic username/password sign-in error@@usernamePasswordInvalid:Invalid username or password. Please try again.`;
-                } else {
-                    return $localize`:Generic username/password registration error@@usernamePasswordRegisterInvalid:Invalid username. Please try again.`;
-                }
-            case 'internal-error':
-                return $localize`:Internal error message@@internalError:An internal error occurred. Please try again later.`;
-            case 'not-registered':
-                if (this.registerMode) {
-                    return $localize`:Not registered message in register mode@@notRegisteredRegisterMode:Click Register to create your account.`;
-                }
-                return $localize`:Not registered message@@notRegistered:This account is not registered. Click Sign in again to register.`;
-            case 'wrong-password':
-                return $localize`:Wrong password error@@wrongPassword:Incorrect password for the given username. Please input the correct password and try again.`;
-            case 'username-taken':
-                return $localize`:Username taken error@@usernameTaken:The username is already taken. Please choose a different one.`;
-            case null:
-                return null;
-        }
+        return this.usernamePasswordAuth.errorMessage;
     }
 
     /**
      * Gets the error message for Google sign-in
      */
     public get googleSignInErrorMessage(): string | null {
-        switch (this.googleSignInError) {
-            case 'internal-error':
-                return $localize`:Google sign-in internal error@@googleInternalError:An internal error occurred with Google sign in. Please try again later.`;
-            case 'popup-closed':
-                return $localize`:Google sign-in popup closed error@@googlePopupClosed:Google sign in was cancelled. Please try again.`;
-            case null:
-                return null;
-        }
+        return this.googleAuth.errorMessage;
     }
 
     /**
      * Gets the error message for Apple sign-in
      */
     public get appleSignInErrorMessage(): string | null {
-        switch (this.appleSignInError) {
-            case 'internal-error':
-                return $localize`:Apple sign-in internal error@@appleInternalError:An internal error occurred with Apple sign in. Please try again later.`;
-            case 'popup-closed':
-                return $localize`:Apple sign-in popup closed error@@applePopupClosed:Apple sign in was cancelled. Please try again.`;
-            case null:
-                return null;
-        }
+        return this.appleAuth.errorMessage;
     }
 
     /**
-     * Shows terms of service (to be implemented)
+     * Displays terms of service (to be implemented)
      */
-    public shownTermsOfService(): void {
+    public showTermsOfService(): void {
         // TODO: Implement terms of service display
     }
 
     /**
-     * Shows privacy policy (to be implemented)
+     * Displays privacy policy (to be implemented)
      */
     public showPrivacyPolicy(): void {
         // TODO: Implement privacy policy display

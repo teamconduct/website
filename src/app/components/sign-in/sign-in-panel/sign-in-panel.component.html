@@ -25,15 +25,15 @@
             <div class="mb-6">
                 <app-sign-in-username-password-form #usernamePasswordForm
                     [errorMessage]="usernamePasswordFormErrorMessage"
-                    [loading]="usernamePasswordFormLoading"
-                    [disabled]="usernamePasswordFormDisabled"
+                    [loading]="usernamePasswordAuth.loading"
+                    [disabled]="usernamePasswordAuth.disabled"
                     [passwordShown]="passwordShown"
-                    [passwordIncorrect]="usernamePasswordFormError === 'wrong-password'"
+                    [passwordIncorrect]="usernamePasswordAuth.error === 'wrong-password'"
                     [registerButtonShown]="registerButtonShown"
                     [cancelButtonDisabled]="cancelButtonDisabled"
                     (onLogin)="onUsernamePasswordFormSubmit($event)"
-                    (onRegister)="onUsernamePasswordFormRegister($event)"
-                    (onRegisterCancel)="onUsernamePasswordFormRegisterCancel()" />
+                    (onRegister)="onRegisterFormSubmit($event)"
+                    (onRegisterCancel)="onRegisterFormCancel()" />
             </div>
 
             <div class="relative my-6">
@@ -46,17 +46,17 @@
             </div>
 
             <div class="mb-5">
-                <app-sign-in-third-party-button [type]="'google'" [invalid]="googleSignInErrorMessage !== null" [loading]="googleSignInLoading" [disabled]="googleSignInDisabled" (onClick)="onGoogleSignInClicked()" />
+                <app-sign-in-third-party-button [type]="'google'" [invalid]="googleSignInErrorMessage !== null" [loading]="googleAuth.loading" [disabled]="googleAuth.disabled" (onClick)="onGoogleSignInClicked()" />
                 <app-error-message [message]="googleSignInErrorMessage" class="w-full" data-testid="google-error-message" />
             </div>
 
             <div class="mb-6">
-                <app-sign-in-third-party-button [type]="'apple'" [invalid]="appleSignInErrorMessage !== null" [loading]="appleSignInLoading" [disabled]="appleSignInDisabled" (onClick)="onAppleSignInClicked()" />
+                <app-sign-in-third-party-button [type]="'apple'" [invalid]="appleSignInErrorMessage !== null" [loading]="appleAuth.loading" [disabled]="appleAuth.disabled" (onClick)="onAppleSignInClicked()" />
                 <app-error-message [message]="appleSignInErrorMessage" class="w-full" data-testid="apple-error-message" />
             </div>
 
             <div class="text-center">
-                <p i18n="ToS and privacy policy notice" class="my-0 text-center" [style.color]="colors['text']">By clicking sign in, you agree to our <p-button (onClick)="shownTermsOfService()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" data-testid="tos-button" /> and <p-button (onClick)="showPrivacyPolicy()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" data-testid="privacy-policy-button" /></p>
+                <p i18n="ToS and privacy policy notice" class="my-0 text-center" [style.color]="colors['text']">By clicking sign in, you agree to our <p-button (onClick)="showTermsOfService()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of ToS button" label="Terms of Service" styleClass="p-0" data-testid="tos-button" /> and <p-button (onClick)="showPrivacyPolicy()" [style]="{ color: colors['highlight-background'] }" [text]="true" severity="secondary" i18n-label="Label of privacy policy button" label="Privacy Policy" styleClass="p-0" data-testid="privacy-policy-button" /></p>
             </div>
         </div>
     </div>
