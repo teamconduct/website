@@ -262,9 +262,6 @@ export class SignInPanelComponent {
     private enterRegisterMode(source: AuthProvider): void {
         this.registerMode = source;
         this.registerButtonShown = true;
-        this.usernamePasswordAuth.setDisabled(false);
-        this.googleAuth.setDisabled(true);
-        this.appleAuth.setDisabled(true);
 
         if (source !== 'username-password') {
             // Clear password but keep username, hide password field
@@ -273,7 +270,18 @@ export class SignInPanelComponent {
         }
 
         // Stop loading for the source provider
-        this.setLoadingState(source, false);
+        if (source === 'username-password') {
+            this.usernamePasswordAuth.stopLoading();
+        } else if (source === 'google') {
+            this.googleAuth.stopLoading();
+        } else {
+            this.appleAuth.stopLoading();
+        }
+
+        // Keep form enabled, but disable other methods
+        this.usernamePasswordAuth.setDisabled(false);
+        this.googleAuth.setDisabled(true);
+        this.appleAuth.setDisabled(true);
 
         this.cdr.markForCheck();
     }
