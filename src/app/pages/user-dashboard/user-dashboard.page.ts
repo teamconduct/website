@@ -41,6 +41,12 @@ export class UserDashboardPage implements OnInit {
                 this.userManager.setUser(null);
                 void this.router.navigate([`/${routeNames.signIn}`]);
             } else {
+                // Check if user is already set (e.g., from registration flow)
+                const existingUser = this.userManager.user$.value;
+                if (existingUser !== null) {
+                    // User already set from registration, skip login call
+                    return;
+                }
                 const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
                 if (Result.isFailure(loginResult) && loginResult.error.code === 'not-found') {
                     this.teamDataManager.reset();
