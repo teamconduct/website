@@ -17,10 +17,9 @@ import { SignInService } from '../../../services/sign-in/sign-in.service';
 import { AppleSignInProvider, EmailSignInProvider, GoogleSignInProvider } from '../../../services/sign-in/providers';
 import { Result } from '@stevenkellner/typescript-common-functionality';
 import { User } from '@stevenkellner/team-conduct-api';
-import { isProduction } from '../../../../environments/environment';
-import { RandomDataGeneratorService } from '../../../services/random-data-generator/random-data-generator.service';
 import { Router } from '@angular/router';
 import { routeNames } from '../../../app.routes';
+import { UserManagerService } from '../../../services/user-manager/user-manager.service';
 
 /**
  * Main sign-in panel component
@@ -45,7 +44,7 @@ export class SignInPanelComponent {
     private readonly firebaseFunctions = inject(FirebaseFunctionsService);
     private readonly signInService = inject(SignInService);
     private readonly routerService = inject(Router);
-    private readonly randomDataGenerator = inject(RandomDataGeneratorService);
+    private readonly userManager = inject(UserManagerService);
     private readonly usernamePasswordForm = viewChild.required<SignInUsernamePasswordFormComponent>('usernamePasswordForm');
 
     // Loading states
@@ -116,6 +115,7 @@ export class SignInPanelComponent {
         }
 
         this.handleAuthenticationEnd('username-password');
+        this.userManager.setUser(loginResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
@@ -142,7 +142,6 @@ export class SignInPanelComponent {
             userId: User.Id.builder.build(event.username),
             signInType: signInType
         });
-
         if (Result.isFailure(registerResult)) {
             this.usernamePasswordFormError = registerResult.error.code === 'already-exists'
                 ? 'username-taken'
@@ -154,9 +153,7 @@ export class SignInPanelComponent {
         this.exitRegisterMode();
         this.handleRegistrationEnd();
 
-        if (!isProduction) {
-            await this.randomDataGenerator.createTestData();
-        }
+        this.userManager.setUser(registerResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
@@ -204,6 +201,7 @@ export class SignInPanelComponent {
         }
 
         this.handleAuthenticationEnd('google');
+        this.userManager.setUser(loginResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
@@ -244,6 +242,7 @@ export class SignInPanelComponent {
         }
 
         this.handleAuthenticationEnd('apple');
+        this.userManager.setUser(loginResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
@@ -310,7 +309,7 @@ export class SignInPanelComponent {
         this.googleSignInDisabled = true;
         this.appleSignInDisabled = true;
 
-        if (source === 'google' || source === 'apple') {
+        if (source !== 'username-password') {
             // Clear password but keep username, hide password field
             this.usernamePasswordForm().loginForm.get('password')?.setValue(null);
             this.passwordShown = false;

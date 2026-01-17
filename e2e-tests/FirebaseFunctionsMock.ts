@@ -15,7 +15,7 @@ export class FirebaseFunctionMock<Parameters, ReturnType> extends BaseClientFire
         super(FirebaseFunction, macKey);
     }
 
-    public async executeWithResult(_parameters: Parameters): Promise<Result<ReturnType, FunctionsErrorCode>> {
+    public async executeWithResult(_parameters: Parameters): Promise<Result<ReturnType, FunctionsError>> {
         throw new Error('Method not implemented.');
     }
 
