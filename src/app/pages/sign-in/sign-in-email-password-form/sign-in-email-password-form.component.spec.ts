@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { SignInUsernamePasswordFormComponent } from './sign-in-username-password-form.component';
+import { SignInEmailPasswordFormComponent } from './sign-in-email-password-form.component';
 
-describe('SignInUsernamePasswordFormComponent', () => {
-  let component: SignInUsernamePasswordFormComponent;
-  let fixture: ComponentFixture<SignInUsernamePasswordFormComponent>;
+describe('SignInEmailPasswordFormComponent', () => {
+  let component: SignInEmailPasswordFormComponent;
+  let fixture: ComponentFixture<SignInEmailPasswordFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SignInUsernamePasswordFormComponent]
+      imports: [SignInEmailPasswordFormComponent]
     }).compileComponents();
 
     const iconLibrary = TestBed.inject(FaIconLibrary);
     iconLibrary.addIconPacks(fas);
 
-    fixture = TestBed.createComponent(SignInUsernamePasswordFormComponent);
+    fixture = TestBed.createComponent(SignInEmailPasswordFormComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

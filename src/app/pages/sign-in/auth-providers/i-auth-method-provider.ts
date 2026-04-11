@@ -1,6 +1,6 @@
 import { ChangeDetectorRef } from '@angular/core';
-import { AuthProvider, ThirdPartyError, UsernamePasswordError } from '../../types';
-import { SignInService } from '../../../../services/sign-in/sign-in.service';
+import { AuthProvider, ThirdPartyError, UsernamePasswordError } from '../types';
+import { SignInService } from '../../../services/sign-in/sign-in.service';
 import { Result } from '@stevenkellner/typescript-common-functionality';
 
 /**

@@ -7,14 +7,14 @@
                     <fa-icon [icon]="['fas', 'lock']" class="text-2xl" [style.color]="colors['highlight-text']"></fa-icon>
                 </div>
             </div>
-            @if (registerMode === null) {
+            @if (registerMode() === null) {
                 <h1 class="text-4xl font-bold mb-3" [style.color]="colors.text" i18n="Page title for the sign in panel" data-testid="sign-in-title">Sign In</h1>
             } @else {
                 <h1 class="text-4xl font-bold mb-3" [style.color]="colors.text" i18n="Page title for the sign in panel in register mode" data-testid="sign-in-title">Create Account</h1>
             }
-            @if (registerMode === null) {
+            @if (registerMode() === null) {
                 <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel" data-testid="sign-in-instruction">Enter your email and password to access your account.</p>
-            } @else if (registerMode === 'username-password') {
+            } @else if (registerMode() === 'username-password') {
                 <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel in register mode" data-testid="sign-in-instruction">Enter your first name, last name, email, and password to create your account.</p>
             } @else {
                 <p class="text-600 text-xl" [style.color]="colors.text" i18n="Instructional text for the sign in panel in register mode for third party sign in" data-testid="sign-in-instruction">Enter your first name and last name to create your account.</p>
@@ -23,14 +23,14 @@
 
         <div>
             <div class="mb-6">
-                <app-sign-in-username-password-form #usernamePasswordForm
-                    [errorMessage]="usernamePasswordFormErrorMessage"
-                    [loading]="usernamePasswordAuth.loading"
-                    [disabled]="usernamePasswordAuth.disabled"
-                    [passwordShown]="passwordShown"
-                    [passwordIncorrect]="usernamePasswordAuth.error === 'wrong-password'"
-                    [registerButtonShown]="registerButtonShown"
-                    [cancelButtonDisabled]="cancelButtonDisabled"
+                <app-sign-in-email-password-form #usernamePasswordForm
+                    [errorMessage]="usernamePasswordFormErrorMessage()"
+                    [loading]="usernamePasswordLoading()"
+                    [disabled]="usernamePasswordDisabled()"
+                    [passwordShown]="passwordShown()"
+                    [passwordIncorrect]="passwordIncorrect()"
+                    [registerButtonShown]="registerButtonShown()"
+                    [cancelButtonDisabled]="cancelButtonDisabled()"
                     (onLogin)="onUsernamePasswordFormSubmit($event)"
                     (onRegister)="onRegisterFormSubmit($event)"
                     (onRegisterCancel)="onRegisterFormCancel()" />
@@ -46,13 +46,13 @@
             </div>
 
             <div class="mb-5">
-                <app-sign-in-third-party-button [type]="'google'" [invalid]="googleSignInErrorMessage !== null" [loading]="googleAuth.loading" [disabled]="googleAuth.disabled" (onClick)="onGoogleSignInClicked()" />
-                <app-error-message [message]="googleSignInErrorMessage" class="w-full" data-testid="google-error-message" />
+                <app-sign-in-third-party-button [type]="'google'" [invalid]="googleSignInErrorMessage() !== null" [loading]="googleLoading()" [disabled]="googleDisabled()" (onClick)="onGoogleSignInClicked()" />
+                <app-error-message [message]="googleSignInErrorMessage()" class="w-full" data-testid="google-error-message" />
             </div>
 
             <div class="mb-6">
-                <app-sign-in-third-party-button [type]="'apple'" [invalid]="appleSignInErrorMessage !== null" [loading]="appleAuth.loading" [disabled]="appleAuth.disabled" (onClick)="onAppleSignInClicked()" />
-                <app-error-message [message]="appleSignInErrorMessage" class="w-full" data-testid="apple-error-message" />
+                <app-sign-in-third-party-button [type]="'apple'" [invalid]="appleSignInErrorMessage() !== null" [loading]="appleLoading()" [disabled]="appleDisabled()" (onClick)="onAppleSignInClicked()" />
+                <app-error-message [message]="appleSignInErrorMessage()" class="w-full" data-testid="apple-error-message" />
             </div>
 
             <div class="text-center">

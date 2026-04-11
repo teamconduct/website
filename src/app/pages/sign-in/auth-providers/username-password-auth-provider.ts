@@ -1,7 +1,7 @@
 import { ChangeDetectorRef } from '@angular/core';
-import { AuthProvider, UsernamePasswordError } from '../../types';
-import { SignInService } from '../../../../services/sign-in/sign-in.service';
-import { EmailSignInProvider } from '../../../../services/sign-in/providers';
+import { AuthProvider, UsernamePasswordError } from '../types';
+import { SignInService } from '../../../services/sign-in/sign-in.service';
+import { EmailSignInProvider } from '../../../services/sign-in/providers';
 import { Result } from '@stevenkellner/typescript-common-functionality';
 import { IAuthMethodProvider } from './i-auth-method-provider';
 

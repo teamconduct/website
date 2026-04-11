@@ -1,5 +1,5 @@
-import { AuthProvider, ThirdPartyError } from '../../types';
-import { AppleSignInProvider } from '../../../../services/sign-in/providers';
+import { AuthProvider, ThirdPartyError } from '../types';
+import { AppleSignInProvider } from '../../../services/sign-in/providers';
 import { Result } from '@stevenkellner/typescript-common-functionality';
 import { IAuthMethodProvider } from './i-auth-method-provider';
 

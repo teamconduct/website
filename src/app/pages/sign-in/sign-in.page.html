@@ -1,6 +1,25 @@
 <div class="flex flex-column md:flex-row align-items-center justify-content-center md:h-screen w-full">
     <app-sign-in-left-panel class="w-full md:w-50vw md:h-full" (scrollToLogin)="scrollToLogin()" />
     <div #signInPanel class="w-full md:w-50vw md:h-full">
-        <app-sign-in-panel class="w-full h-full" />
+        <app-sign-in-panel class="w-full h-full"
+            [registerMode]="registerMode"
+            [passwordShown]="passwordShown"
+            [registerButtonShown]="registerButtonShown"
+            [cancelButtonDisabled]="cancelButtonDisabled"
+            [usernamePasswordFormErrorMessage]="usernamePasswordFormErrorMessage"
+            [usernamePasswordLoading]="usernamePasswordAuth.loading"
+            [usernamePasswordDisabled]="usernamePasswordAuth.disabled"
+            [passwordIncorrect]="usernamePasswordAuth.error === 'wrong-password'"
+            [googleSignInErrorMessage]="googleSignInErrorMessage"
+            [googleLoading]="googleAuth.loading"
+            [googleDisabled]="googleAuth.disabled"
+            [appleSignInErrorMessage]="appleSignInErrorMessage"
+            [appleLoading]="appleAuth.loading"
+            [appleDisabled]="appleAuth.disabled"
+            (usernamePasswordFormSubmit)="onUsernamePasswordFormSubmit($event)"
+            (registerFormSubmit)="onRegisterFormSubmit($event)"
+            (registerFormCancel)="onRegisterFormCancel()"
+            (googleSignInClicked)="onGoogleSignInClicked()"
+            (appleSignInClicked)="onAppleSignInClicked()" />
     </div>
 </div>

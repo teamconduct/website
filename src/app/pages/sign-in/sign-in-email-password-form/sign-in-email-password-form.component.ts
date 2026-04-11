@@ -5,7 +5,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ErrorMessageComponent } from '../../../components/error-message/error-message.component';
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormRegisterResult, FormSubmitResult } from '../types';
 import { SIGN_IN_THEME, SignInColorScheme } from '../sign-in-theme';
 
@@ -14,7 +14,7 @@ import { SIGN_IN_THEME, SignInColorScheme } from '../sign-in-theme';
  * Handles both login and registration modes with proper validation
  */
 @Component({
-    selector: 'app-sign-in-username-password-form',
+    selector: 'app-sign-in-email-password-form',
     imports: [
         ButtonModule,
         ErrorMessageComponent,
@@ -24,11 +24,11 @@ import { SIGN_IN_THEME, SignInColorScheme } from '../sign-in-theme';
         FaIconComponent,
         ReactiveFormsModule
     ],
-    templateUrl: './sign-in-username-password-form.component.html',
-    styleUrl: './sign-in-username-password-form.component.scss',
+    templateUrl: './sign-in-email-password-form.component.html',
+    styles: [':host { display: block; }'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignInUsernamePasswordFormComponent {
+export class SignInEmailPasswordFormComponent {
 
     public readonly loading = input<boolean>(false);
     public readonly disabled = input<boolean>(false);
@@ -76,10 +76,6 @@ export class SignInUsernamePasswordFormComponent {
         return SIGN_IN_THEME;
     }
 
-    /**
-     * Submits the login form
-     * Validates form before emitting login event
-     */
     public login(): void {
         if (this.loading() || this.disabled() || this.registerButtonShown()) {
             return;
@@ -98,10 +94,6 @@ export class SignInUsernamePasswordFormComponent {
         });
     }
 
-    /**
-     * Submits the registration form
-     * Validates based on whether password is shown (third-party vs direct registration)
-     */
     public register(): void {
         if (this.loading() || this.disabled() || !this.registerButtonShown()) {
             return;
@@ -134,9 +126,6 @@ export class SignInUsernamePasswordFormComponent {
         }
     }
 
-    /**
-     * Cancels the registration process
-     */
     public cancelRegister(): void {
         if (this.cancelButtonDisabled()) {
             return;
@@ -144,16 +133,10 @@ export class SignInUsernamePasswordFormComponent {
         this.onRegisterCancel.emit();
     }
 
-    /**
-     * Marks the form as pristine (undirty)
-     */
     public markAsUndirty(): void {
         this.loginForm.markAsPristine();
     }
 
-    /**
-     * Gets the first name validation error message
-     */
     public get firstNameErrorMessage(): string | null {
         const firstNameControl = this.loginForm.get('firstName')!;
 
@@ -168,9 +151,6 @@ export class SignInUsernamePasswordFormComponent {
         return null;
     }
 
-    /**
-     * Gets the last name validation error message
-     */
     public get lastNameErrorMessage(): string | null {
         const lastNameControl = this.loginForm.get('lastName')!;
 
@@ -185,9 +165,6 @@ export class SignInUsernamePasswordFormComponent {
         return null;
     }
 
-    /**
-     * Gets the email validation error message
-     */
     public get emailErrorMessage(): string | null {
         const emailControl = this.loginForm.get('email')!;
 
@@ -210,9 +187,6 @@ export class SignInUsernamePasswordFormComponent {
         return null;
     }
 
-    /**
-     * Gets the password validation error message
-     */
     public get passwordErrorMessage(): string | null {
         if (!this.passwordShown()) {
             return null;
