@@ -98,20 +98,12 @@ export class RandomDataGeneratorService {
 
     private readonly developmentTeams: Array<{ name: string; roles: TeamRole[] }> = [
         {
-            name: 'Team Conduct Owners',
+            name: 'Team Conduct Owner',
             roles: [...TeamRole.all]
         },
         {
-            name: 'Fine Committee',
-            roles: ['fine-manager', 'fine-can-add']
-        },
-        {
-            name: 'Roster Managers',
-            roles: ['person-manager']
-        },
-        {
-            name: 'Regular Members',
-            roles: []
+            name: 'Only Team Manager',
+            roles: ['team-manager']
         }
     ];
 

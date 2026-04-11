@@ -172,17 +172,10 @@ export class SignInPanelComponent {
             return;
         }
 
-        const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
-        if (Result.isFailure(loginResult)) {
-            this.usernamePasswordAuth.setError('internal-error');
-            this.finishRegistration();
-            return;
-        }
-
         this.exitRegisterMode();
         this.finishRegistration();
 
-        this.userManager.setUser(loginResult.value);
+        this.userManager.setUser(registerResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
