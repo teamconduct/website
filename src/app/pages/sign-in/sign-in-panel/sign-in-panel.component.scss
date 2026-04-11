@@ -1,0 +1,15 @@
+:host {
+	display: block;
+	min-height: 100%;
+}
+
+.sign-in-panel-shell {
+	min-height: 100%;
+	justify-content: flex-start;
+}
+
+@media (min-width: 768px) {
+	.sign-in-panel-shell {
+		justify-content: center;
+	}
+}

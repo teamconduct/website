@@ -1,7 +1,19 @@
-import { test, expect } from '@playwright/test';
-import { FirebaseFunctionsMock } from './FirebaseFunctionsMock';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import { NotificationProperties, User } from '@stevenkellner/team-conduct-api';
 import { Guid, UtcDate } from '@stevenkellner/typescript-common-functionality';
+import { FirebaseFunctionsMock } from './FirebaseFunctionsMock';
+
+const signInUrl = 'http://localhost:4200/sign-in';
+const dashboardUrl = 'http://localhost:4200/dashboard';
+const defaultEmail = 'valid.user@mail.com';
+const otherEmail = 'other.valid.user@mail.com';
+const defaultPassword = 'ValidPass123!';
+const otherPassword = 'OtherValidPass123!';
+const wrongPassword = 'IncorrectPass123!';
+const defaultFirstName = 'Taylor';
+const defaultLastName = 'Jordan';
+const otherFirstName = 'Morgan';
+const otherLastName = 'Lee';
 
 const defaultUser = new User(
     User.Id.builder.build(Guid.generate().guidString),
@@ -11,885 +23,736 @@ const defaultUser = new User(
     new User.Settings(new NotificationProperties())
 );
 
-test('username-password login | should show error message if username input is invalid', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+function emailInput(page: Page): Locator {
+    return page.getByTestId('email-input');
+}
 
-    // Username too short
-    await page.getByTestId('username-input').fill('ab');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username must be between 4 and 24 characters long');
+function emailError(page: Page): Locator {
+    return page.getByTestId('email-error-message');
+}
 
-    // Username with invalid characters
-    await page.getByTestId('username-input').fill('invalid*user');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username can only contain letters, numbers, dots (.), hyphens (-), and underscores (_)');
+function passwordInput(page: Page): Locator {
+    return page.getByTestId('password-input');
+}
 
-    // Username starting with special character
-    await page.getByTestId('username-input').fill('.invaliduser');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username cannot start and end with a special character (., -, _)');
+function passwordTextbox(page: Page): Locator {
+    return passwordInput(page).getByRole('textbox');
+}
 
-    // Username with consecutive special characters
-    await page.getByTestId('username-input').fill('invalid__user');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username cannot contain consecutive special characters (., -, _)');
+function passwordError(page: Page): Locator {
+    return page.getByTestId('password-error-message');
+}
 
-    // Username empty, input dirty
-    await page.getByTestId('username-input').fill('');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('Username is required to log in');
+function firstNameInput(page: Page): Locator {
+    return page.getByTestId('first-name-input');
+}
 
-    // Username valid
-    await page.getByTestId('username-input').fill('validUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible()
+function firstNameError(page: Page): Locator {
+    return page.getByTestId('first-name-error-message');
+}
+
+function lastNameInput(page: Page): Locator {
+    return page.getByTestId('last-name-input');
+}
+
+function lastNameError(page: Page): Locator {
+    return page.getByTestId('last-name-error-message');
+}
+
+function loginButton(page: Page): Locator {
+    return page.getByTestId('login-button').getByRole('button');
+}
+
+function registerButton(page: Page): Locator {
+    return page.getByTestId('register-button').getByRole('button');
+}
+
+function cancelRegisterButton(page: Page): Locator {
+    return page.getByTestId('cancel-register-button').getByRole('button');
+}
+
+function googleButton(page: Page): Locator {
+    return page.getByTestId('google-sign-in-button').getByRole('button');
+}
+
+function appleButton(page: Page): Locator {
+    return page.getByTestId('apple-sign-in-button').getByRole('button');
+}
+
+async function openSignInPage(page: Page): Promise<void> {
+    await page.goto(signInUrl);
+}
+
+async function waitForUi(page: Page, timeoutMs: number = 500): Promise<void> {
+    await page.waitForTimeout(timeoutMs);
+}
+
+async function enterEmailPasswordRegisterMode(page: Page): Promise<void> {
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
+    await loginButton(page).click();
+    await waitForUi(page);
+}
+
+async function startGooglePopup(page: Page): Promise<Page> {
+    const popupPromise = page.waitForEvent('popup');
+    await googleButton(page).click();
+    const popup = await popupPromise;
+
+    await waitForUi(page);
+    await popup.getByRole('button', { name: 'Add new account' }).click();
+    await popup.getByRole('button', { name: 'Auto-generate user information' }).click();
+
+    return popup;
+}
+
+async function enterThirdPartyRegisterMode(page: Page): Promise<void> {
+    const popup = await startGooglePopup(page);
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
+    await popup.getByRole('button', { name: 'Sign in with Google.com' }).click();
+    await waitForUi(page);
+}
+
+async function fillRegisterIdentity(page: Page, firstName: string = defaultFirstName, lastName: string = defaultLastName): Promise<void> {
+    await firstNameInput(page).fill(firstName);
+    await lastNameInput(page).fill(lastName);
+}
+
+test('email-password login | should show error message if email input is invalid', async ({ page }) => {
+    await openSignInPage(page);
+
+    await emailInput(page).fill('invalid-email');
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Please enter a valid email address');
+
+    await emailInput(page).fill('');
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Email is required to log in');
+
+    await emailInput(page).fill(defaultEmail);
+    await expect(emailInput(page)).not.toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).not.toBeVisible();
 });
 
-test('username-password login | should show error message if password input is invalid', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | should show error message if password input is invalid', async ({ page }) => {
+    await openSignInPage(page);
 
-    // Password too short
-    await page.getByTestId('password-input').getByRole('textbox').fill('asdf');
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('The password must be at least 8 characters long');
+    await passwordTextbox(page).fill('asdf');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('The password must be at least 8 characters long');
 
-    // Password empty, input dirty
-    await page.getByTestId('password-input').getByRole('textbox').fill('');
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('Password is required to log in');
+    await passwordTextbox(page).fill('');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('Password is required to log in');
 
-    // Password valid
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    await expect(page.getByTestId('password-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).not.toBeVisible();
+    await passwordTextbox(page).fill(defaultPassword);
+    await expect(passwordInput(page)).not.toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).not.toBeVisible();
 });
 
-test('username-password login | navigate the login form with tab and enter', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | navigate the login form with tab and enter', async ({ page }) => {
+    await openSignInPage(page);
 
     await expect(page.getByTestId('sign-in-title')).toContainText('Sign In');
-    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your credentials to access your account.');
+    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your email and password to access your account.');
 
-    await page.getByTestId('username-input').click();
-    await expect(page.getByTestId('username-input')).toBeFocused();
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('username-input').press('Tab');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toBeFocused();
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
+    await emailInput(page).click();
+    await expect(emailInput(page)).toBeFocused();
+    await emailInput(page).fill(defaultEmail);
+    await emailInput(page).press('Tab');
+    await expect(passwordTextbox(page)).toBeFocused();
+    await passwordTextbox(page).fill(defaultPassword);
 
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
-    await page.getByTestId('password-input').getByRole('textbox').press('Enter');
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
+    await passwordTextbox(page).press('Enter');
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(loginButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
     await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
 });
 
-test('username-password login | should show error message on required input', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | should show error message on required input', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('login-button').getByRole('button').click();
+    await loginButton(page).click();
 
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible();
-    await expect(page.getByTestId('username-error-message')).toContainText('Username is required to log in');
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Email is required to log in');
 
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('Password is required to log in');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('Password is required to log in');
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(loginButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Invalid username or password. Please try again.');
+    await expect(page.getByTestId('form-error-message')).toContainText('Invalid email or password. Please try again.');
 });
 
-test('username-password login | should show error message on invalid input', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | should show error message on invalid input', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('username-input').fill('ab');
-    await page.getByTestId('password-input').getByRole('textbox').fill('abcd');
-    await page.getByTestId('login-button').getByRole('button').click();
+    await emailInput(page).fill('invalid-email');
+    await passwordTextbox(page).fill('abcd');
+    await loginButton(page).click();
 
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible();
-    await expect(page.getByTestId('username-error-message')).toContainText('he username must be between 4 and 24 characters long');
-    await expect(page.getByTestId('username-input')).toHaveValue('ab');
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Please enter a valid email address');
+    await expect(emailInput(page)).toHaveValue('invalid-email');
 
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('The password must be at least 8 characters long');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('abcd');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('The password must be at least 8 characters long');
+    await expect(passwordTextbox(page)).toHaveValue('abcd');
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(loginButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Invalid username or password. Please try again.');
+    await expect(page.getByTestId('form-error-message')).toContainText('Invalid email or password. Please try again.');
 });
 
-test('username-password login | should show internal error message on login failure', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
+test('email-password login | should show internal error message on login failure', async ({ page }) => {
+    await openSignInPage(page);
 
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
-    await page.getByTestId('login-button').getByRole('button').click();
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
 
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('ValidPass123!');
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
+    await loginButton(page).click();
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(emailInput(page)).toHaveValue(defaultEmail);
+    await expect(passwordTextbox(page)).toHaveValue(defaultPassword);
+
+    await expect(loginButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
     await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
 });
 
-test('username-password login | should show wrong password error message', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | should show wrong password error message', async ({ page }) => {
+    await openSignInPage(page);
 
-    // Make sure the user exists in firebase auth
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser);
-    await page.getByTestId('login-button').getByRole('button').click();
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
+    await FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser);
+    await loginButton(page).click();
 
-    await page.goto('http://localhost:4200/sign-in');
+    await openSignInPage(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('IncorrectPass123!');
-    await page.getByTestId('login-button').getByRole('button').click();
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(wrongPassword);
+    await loginButton(page).click();
 
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('IncorrectPass123!');
+    await expect(emailInput(page)).toHaveValue(defaultEmail);
+    await expect(passwordTextbox(page)).toHaveValue(wrongPassword);
 
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('The password is incorrect');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('The password is incorrect');
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(loginButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Incorrect password for the given username. Please input the correct password and try again.');
+    await expect(page.getByTestId('form-error-message')).toContainText('Incorrect password for the given email address. Please input the correct password and try again.');
 });
 
-test('username-password login | button should be loading, other methods disabled during login', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | button should be loading, other methods disabled during login', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 10_000);
-    await page.getByTestId('login-button').getByRole('button').click();
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
+    await FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 10_000);
+    await loginButton(page).click();
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toHaveClass(/p-button-loading/);
-    await expect(page.getByTestId('login-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).toBeDisabled();
+    await expect(loginButton(page)).toHaveClass(/p-button-loading/);
+    await expect(loginButton(page)).toBeDisabled();
+    await expect(googleButton(page)).toBeDisabled();
+    await expect(appleButton(page)).toBeDisabled();
 });
 
-test('username-password login | should navigate after login', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password login | should navigate after login', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 1_000);
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
+    await FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 1_000);
+    await loginButton(page).click();
+    await waitForUi(page);
 
-    await expect(page).toHaveURL('http://localhost:4200/dashboard');
+    await expect(page).toHaveURL(dashboardUrl);
 });
 
-test('username-password register | should leave username and password in register form, cancel and register button enabled', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
-
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+test('email-password register | should leave email and password in register form, show name inputs, and enable actions', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
     await expect(page.getByTestId('sign-in-title')).toContainText('Create Account');
-    await expect(page.getByTestId('sign-in-instruction')).toContainText('Choose a username and password to create your account.');
+    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your first name, last name, email, and password to create your account.');
 
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible();
+    await expect(firstNameInput(page)).toBeVisible();
+    await expect(firstNameInput(page)).toHaveValue('');
+    await expect(firstNameError(page)).not.toBeVisible();
 
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('ValidPass123!');
-    await expect(page.getByTestId('password-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).not.toBeVisible();
+    await expect(lastNameInput(page)).toBeVisible();
+    await expect(lastNameInput(page)).toHaveValue('');
+    await expect(lastNameError(page)).not.toBeVisible();
+
+    await expect(emailInput(page)).toHaveValue(defaultEmail);
+    await expect(emailInput(page)).not.toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).not.toBeVisible();
+
+    await expect(passwordTextbox(page)).toHaveValue(defaultPassword);
+    await expect(passwordInput(page)).not.toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).not.toBeVisible();
 
     await expect(page.getByTestId('login-button')).not.toBeVisible();
-
-    await expect(page.getByTestId('cancel-register-button').getByRole('button')).toBeVisible();
-    await expect(page.getByTestId('cancel-register-button').getByRole('button')).not.toBeDisabled();
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toBeVisible();
-    await expect(page.getByTestId('register-button').getByRole('button')).not.toBeDisabled();
-    await expect(page.getByTestId('register-button').getByRole('button')).not.toHaveClass(/p-button-danger/);
-
+    await expect(cancelRegisterButton(page)).toBeVisible();
+    await expect(cancelRegisterButton(page)).not.toBeDisabled();
+    await expect(registerButton(page)).toBeVisible();
+    await expect(registerButton(page)).not.toBeDisabled();
+    await expect(registerButton(page)).not.toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).toBeDisabled();
+    await expect(googleButton(page)).toBeDisabled();
+    await expect(appleButton(page)).toBeDisabled();
 });
 
-test('username-password register | should show error message if username input is invalid', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should show error message if email input is invalid', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await emailInput(page).fill('invalid-email');
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Please enter a valid email address');
 
-    // Username too short
-    await page.getByTestId('username-input').fill('ab');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username must be between 4 and 24 characters long');
+    await emailInput(page).fill('');
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Email is required to sign up');
 
-    // Username with invalid characters
-    await page.getByTestId('username-input').fill('invalid*user');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username can only contain letters, numbers, dots (.), hyphens (-), and underscores (_)');
-
-    // Username starting with special character
-    await page.getByTestId('username-input').fill('.invaliduser');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username cannot start and end with a special character (., -, _)');
-
-    // Username with consecutive special characters
-    await page.getByTestId('username-input').fill('invalid__user');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username cannot contain consecutive special characters (., -, _)');
-
-    // Username empty, input dirty
-    await page.getByTestId('username-input').fill('');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('Username is required to sign up');
-
-    // Username valid
-    await page.getByTestId('username-input').fill('validUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible()
+    await emailInput(page).fill(defaultEmail);
+    await expect(emailInput(page)).not.toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).not.toBeVisible();
 });
 
-test('username-password register | should show error message if password input is invalid', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should show error message if password input is invalid', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await passwordTextbox(page).fill('asdf');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('The password must be at least 8 characters long');
 
-    // Password too short
-    await page.getByTestId('password-input').getByRole('textbox').fill('asdf');
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('The password must be at least 8 characters long');
+    await passwordTextbox(page).fill('');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('Password is required to sign up');
 
-    // Password empty, input dirty
-    await page.getByTestId('password-input').getByRole('textbox').fill('');
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('Password is required to sign up');
-
-    // Password valid
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    await expect(page.getByTestId('password-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).not.toBeVisible();
+    await passwordTextbox(page).fill(defaultPassword);
+    await expect(passwordInput(page)).not.toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).not.toBeVisible();
 });
 
-test('username-password register | navigate the register form with tab and enter', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should show required errors for first and last name', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page.getByTestId('username-input').fill('');
-    await page.getByTestId('password-input').getByRole('textbox').fill('');
+    await firstNameInput(page).fill('');
+    await lastNameInput(page).fill('');
+    await registerButton(page).click();
 
-    await page.getByTestId('username-input').click();
-    await expect(page.getByTestId('username-input')).toBeFocused();
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('username-input').press('Tab');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toBeFocused();
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
+    await expect(firstNameInput(page)).toHaveClass(/ng-invalid/);
+    await expect(firstNameError(page)).toBeVisible();
+    await expect(firstNameError(page)).toContainText('Registering requires your first name');
 
-    FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
-    await page.getByTestId('password-input').getByRole('textbox').press('Enter');
+    await expect(lastNameInput(page)).toHaveClass(/ng-invalid/);
+    await expect(lastNameError(page)).toBeVisible();
+    await expect(lastNameError(page)).toContainText('Registering requires your last name');
 
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
+    await expect(page.getByTestId('form-error-message')).toBeVisible();
+    await expect(page.getByTestId('form-error-message')).toContainText('Invalid email or password. Please try again.');
+});
+
+test('email-password register | navigate the register form with tab and enter', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
+
+    await emailInput(page).fill('');
+    await passwordTextbox(page).fill('');
+
+    await firstNameInput(page).click();
+    await expect(firstNameInput(page)).toBeFocused();
+    await firstNameInput(page).fill(defaultFirstName);
+    await firstNameInput(page).press('Tab');
+    await expect(lastNameInput(page)).toBeFocused();
+    await lastNameInput(page).fill(defaultLastName);
+    await lastNameInput(page).press('Tab');
+    await expect(emailInput(page)).toBeFocused();
+    await emailInput(page).fill(defaultEmail);
+    await emailInput(page).press('Tab');
+    await expect(passwordTextbox(page)).toBeFocused();
+    await passwordTextbox(page).fill(defaultPassword);
+
+    await FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
+    await passwordTextbox(page).press('Enter');
+
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
     await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
 });
 
-test('username-password register | should show error message on required input', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should show error message on required input', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await emailInput(page).fill('');
+    await passwordTextbox(page).fill('');
+    await registerButton(page).click();
 
-    await page.getByTestId('username-input').fill('');
-    await page.getByTestId('password-input').getByRole('textbox').fill('');
-    await page.getByTestId('register-button').getByRole('button').click();
-
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible();
-    await expect(page.getByTestId('username-error-message')).toContainText('Username is required to sign up');
-
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('Password is required to sign up');
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(firstNameError(page)).toBeVisible();
+    await expect(firstNameError(page)).toContainText('Registering requires your first name');
+    await expect(lastNameError(page)).toBeVisible();
+    await expect(lastNameError(page)).toContainText('Registering requires your last name');
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Email is required to sign up');
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('Password is required to sign up');
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Invalid username or password. Please try again.');
+    await expect(page.getByTestId('form-error-message')).toContainText('Invalid email or password. Please try again.');
 });
 
-test('username-password register | should show error message on invalid input', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should show error message on invalid input', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await firstNameInput(page).fill(defaultFirstName);
+    await lastNameInput(page).fill(defaultLastName);
+    await emailInput(page).fill('invalid-email');
+    await passwordTextbox(page).fill('abcd');
+    await registerButton(page).click();
 
-    await page.getByTestId('username-input').fill('ab');
-    await page.getByTestId('password-input').getByRole('textbox').fill('abcd');
-    await page.getByTestId('register-button').getByRole('button').click();
+    await expect(emailInput(page)).toHaveClass(/ng-invalid/);
+    await expect(emailError(page)).toBeVisible();
+    await expect(emailError(page)).toContainText('Please enter a valid email address');
+    await expect(emailInput(page)).toHaveValue('invalid-email');
 
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible();
-    await expect(page.getByTestId('username-error-message')).toContainText('he username must be between 4 and 24 characters long');
-    await expect(page.getByTestId('username-input')).toHaveValue('ab');
+    await expect(passwordInput(page)).toHaveClass(/ng-invalid/);
+    await expect(passwordError(page)).toBeVisible();
+    await expect(passwordError(page)).toContainText('The password must be at least 8 characters long');
+    await expect(passwordTextbox(page)).toHaveValue('abcd');
 
-    await expect(page.getByTestId('password-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).toBeVisible();
-    await expect(page.getByTestId('password-error-message')).toContainText('The password must be at least 8 characters long');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('abcd');
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Invalid username or password. Please try again.');
+    await expect(page.getByTestId('form-error-message')).toContainText('Invalid email or password. Please try again.');
 });
 
-test('username-password register | should show internal error message on register failure', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should show internal error message on register failure', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
+    await fillRegisterIdentity(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
+    await registerButton(page).click();
 
-    FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
-    await page.getByTestId('register-button').getByRole('button').click();
+    await expect(firstNameInput(page)).toHaveValue(defaultFirstName);
+    await expect(lastNameInput(page)).toHaveValue(defaultLastName);
+    await expect(emailInput(page)).toHaveValue(defaultEmail);
+    await expect(passwordTextbox(page)).toHaveValue(defaultPassword);
 
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('ValidPass123!');
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
     await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
 });
 
-test('username-password register | should revert back to login, if cancel button is clicked', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should revert back to login if cancel button is clicked', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await page.getByTestId('username-input').fill('otherValidUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('OtherValidPass123!');
-    await page.getByTestId('cancel-register-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await fillRegisterIdentity(page, otherFirstName, otherLastName);
+    await emailInput(page).fill(otherEmail);
+    await passwordTextbox(page).fill(otherPassword);
+    await cancelRegisterButton(page).click();
+    await waitForUi(page);
 
     await expect(page.getByTestId('sign-in-title')).toContainText('Sign In');
-    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your credentials to access your account.');
+    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your email and password to access your account.');
 
-    await expect(page.getByTestId('username-input')).toHaveValue('otherValidUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('OtherValidPass123!');
-    await expect(page.getByTestId('password-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('password-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('login-button')).toBeVisible();
-    await expect(page.getByTestId('login-button').getByRole('button')).not.toBeDisabled();
-    await expect(page.getByTestId('login-button').getByRole('button')).not.toHaveClass(/p-button-danger/);
-
-    await expect(page.getByTestId('cancel-register-button').getByRole('button')).not.toBeVisible();
-    await expect(page.getByTestId('register-button').getByRole('button')).not.toBeVisible();
-
+    await expect(firstNameInput(page)).not.toBeVisible();
+    await expect(lastNameInput(page)).not.toBeVisible();
+    await expect(emailInput(page)).toHaveValue(otherEmail);
+    await expect(emailError(page)).not.toBeVisible();
+    await expect(passwordTextbox(page)).toHaveValue(otherPassword);
+    await expect(passwordError(page)).not.toBeVisible();
+    await expect(loginButton(page)).toBeVisible();
+    await expect(loginButton(page)).not.toBeDisabled();
+    await expect(loginButton(page)).not.toHaveClass(/p-button-danger/);
+    await expect(page.getByTestId('cancel-register-button')).not.toBeVisible();
+    await expect(page.getByTestId('register-button')).not.toBeVisible();
     await expect(page.getByTestId('form-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).not.toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).not.toBeDisabled();
+    await expect(googleButton(page)).not.toBeDisabled();
+    await expect(appleButton(page)).not.toBeDisabled();
 });
 
-test('username-password register | button should be loading, other methods still disabled during register', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | button should be loading, other methods still disabled during register', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
+    await fillRegisterIdentity(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 10_000);
+    await registerButton(page).click();
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 10_000);
-    await page.getByTestId('register-button').getByRole('button').click();
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-loading/);
-    await expect(page.getByTestId('register-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).toBeDisabled();
+    await expect(registerButton(page)).toHaveClass(/p-button-loading/);
+    await expect(registerButton(page)).toBeDisabled();
+    await expect(googleButton(page)).toBeDisabled();
+    await expect(appleButton(page)).toBeDisabled();
 });
 
-test('username-password register | should navigate after register', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('email-password register | should navigate after register', async ({ page }) => {
+    await openSignInPage(page);
+    await enterEmailPasswordRegisterMode(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page.getByTestId('login-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await fillRegisterIdentity(page, otherFirstName, otherLastName);
+    await emailInput(page).fill(otherEmail);
+    await passwordTextbox(page).fill(otherPassword);
+    await FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 1_000);
+    await registerButton(page).click();
+    await waitForUi(page);
 
-    await page.getByTestId('username-input').fill('otherValidUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('OtherValidPass123!');
-    FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 1_000);
-    await page.getByTestId('register-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await expect(page).toHaveURL('http://localhost:4200/dashboard');
+    await expect(page).toHaveURL(dashboardUrl);
 });
 
-test('third-party login | should clear username-password error messages', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party login | should clear email-password error messages', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('login-button').getByRole('button', { name: 'Sign in' }).click();
+    await loginButton(page).click();
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
+    const popup = await startGooglePopup(page);
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
+    await popup.getByRole('button', { name: 'Sign in with Google.com' }).click();
 
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-dirty/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('password-input')).not.toHaveClass(/ng-dirty/);
-    await expect(page.getByTestId('password-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('login-button').getByRole('button')).not.toHaveClass(/p-button-danger/);
+    await expect(emailInput(page)).not.toHaveClass(/ng-dirty/);
+    await expect(emailError(page)).not.toBeVisible();
+    await expect(passwordInput(page)).not.toHaveClass(/ng-dirty/);
+    await expect(passwordError(page)).not.toBeVisible();
+    await expect(loginButton(page)).not.toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).not.toBeVisible();
 });
 
-test('third-party login | username-password form should be leaved as is', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party login | email-password form should be left as is', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
+    const popup = await startGooglePopup(page);
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
+    await popup.getByRole('button', { name: 'Sign in with Google.com' }).click();
 
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('ValidPass123!');
+    await expect(emailInput(page)).toHaveValue(defaultEmail);
+    await expect(passwordTextbox(page)).toHaveValue(defaultPassword);
 });
 
-test('third-party login | should display a error message if popup is closed', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party login | should display an error message if popup is closed', async ({ page }) => {
+    await openSignInPage(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.close();
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    const popupPromise = page.waitForEvent('popup');
+    await googleButton(page).click();
+    const popup = await popupPromise;
+    await waitForUi(page);
+    await popup.close();
+    await waitForUi(page, 10_000);
 
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(googleButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('google-error-message')).toBeVisible();
     await expect(page.getByTestId('google-error-message')).toContainText('Google sign in was cancelled. Please try again.');
 });
 
-test('third-party login | should display a error message if internal error occurred', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party login | should display an error message if internal error occurred', async ({ page }) => {
+    await openSignInPage(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
+    const popup = await startGooglePopup(page);
+    await FirebaseFunctionsMock.create(page).user.login.mockFailure('internal');
+    await popup.getByRole('button', { name: 'Sign in with Google.com' }).click();
 
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(googleButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('google-error-message')).toBeVisible();
     await expect(page.getByTestId('google-error-message')).toContainText('An internal error occurred with Google sign in. Please try again later.');
 });
 
 test('third-party login | button should be loading, other methods disabled during login', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+    await openSignInPage(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 10_000);
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
+    const popup = await startGooglePopup(page);
+    await FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 10_000);
+    await popup.getByRole('button', { name: 'Sign in with Google.com' }).click();
 
-    await expect(page.getByTestId('login-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toHaveClass(/p-button-loading/);
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).toBeDisabled();
-
+    await expect(loginButton(page)).toBeDisabled();
+    await expect(googleButton(page)).toHaveClass(/p-button-loading/);
+    await expect(googleButton(page)).toBeDisabled();
+    await expect(appleButton(page)).toBeDisabled();
 });
 
 test('third-party login | should navigate after login', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+    await openSignInPage(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 1_000);
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const popup = await startGooglePopup(page);
+    await FirebaseFunctionsMock.create(page).user.login.mockSuccess(defaultUser, 1_000);
+    await popup.getByRole('button', { name: 'Sign in with Google.com' }).click();
+    await waitForUi(page);
 
-    await expect(page).toHaveURL('http://localhost:4200/dashboard');
+    await expect(page).toHaveURL(dashboardUrl);
 });
 
-test('third-party register | password input should be cleared and hidden, username input should be leaved as is', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party register | should hide password and email inputs and show first and last name inputs', async ({ page }) => {
+    await openSignInPage(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('abcd');
-
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await expect(page.getByTestId('password-input')).not.toBeVisible();
-    await expect(page.getByTestId('username-input')).toBeVisible();
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-
-    FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
-    await page.getByTestId('register-button').getByRole('button').click();
-
-    expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
-    await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
-});
-
-test('third-party register | should leave username, cancel and register button enabled', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
-
-    await page.getByTestId('username-input').fill('validUser');
-
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill('abcd');
+    await enterThirdPartyRegisterMode(page);
 
     await expect(page.getByTestId('sign-in-title')).toContainText('Create Account');
-    await expect(page.getByTestId('sign-in-instruction')).toContainText('Choose a username to create your account.');
+    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your first name and last name to create your account.');
+    await expect(passwordInput(page)).not.toBeVisible();
+    await expect(emailInput(page)).not.toBeVisible();
+    await expect(firstNameInput(page)).toBeVisible();
+    await expect(lastNameInput(page)).toBeVisible();
+});
 
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible();
+test('third-party register | should leave name inputs empty and keep register actions enabled', async ({ page }) => {
+    await openSignInPage(page);
+    await enterThirdPartyRegisterMode(page);
+
+    await expect(page.getByTestId('sign-in-title')).toContainText('Create Account');
+    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your first name and last name to create your account.');
+
+    await expect(firstNameInput(page)).toHaveValue('');
+    await expect(firstNameError(page)).not.toBeVisible();
+    await expect(lastNameInput(page)).toHaveValue('');
+    await expect(lastNameError(page)).not.toBeVisible();
 
     await expect(page.getByTestId('login-button')).not.toBeVisible();
-
-    await expect(page.getByTestId('cancel-register-button').getByRole('button')).toBeVisible();
-    await expect(page.getByTestId('cancel-register-button').getByRole('button')).not.toBeDisabled();
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toBeVisible();
-    await expect(page.getByTestId('register-button').getByRole('button')).not.toBeDisabled();
-    await expect(page.getByTestId('register-button').getByRole('button')).not.toHaveClass(/p-button-danger/);
-
+    await expect(cancelRegisterButton(page)).toBeVisible();
+    await expect(cancelRegisterButton(page)).not.toBeDisabled();
+    await expect(registerButton(page)).toBeVisible();
+    await expect(registerButton(page)).not.toBeDisabled();
+    await expect(registerButton(page)).not.toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).toBeDisabled();
-});
-
-test('third-party register | should show error message if username input is invalid', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
-
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Username too short
-    await page.getByTestId('username-input').fill('ab');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username must be between 4 and 24 characters long');
-
-    // Username with invalid characters
-    await page.getByTestId('username-input').fill('invalid*user');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username can only contain letters, numbers, dots (.), hyphens (-), and underscores (_)');
-
-    // Username starting with special character
-    await page.getByTestId('username-input').fill('.invaliduser');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username cannot start and end with a special character (., -, _)');
-
-    // Username with consecutive special characters
-    await page.getByTestId('username-input').fill('invalid__user');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('The username cannot contain consecutive special characters (., -, _)');
-
-    // Username empty, input dirty
-    await page.getByTestId('username-input').fill('');
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible()
-    await expect(page.getByTestId('username-error-message')).toContainText('Username is required to sign up');
-
-    // Username valid
-    await page.getByTestId('username-input').fill('validUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible()
-});
-
-test('third-party register | navigate the register form with tab and enter', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
-
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await page.getByTestId('username-input').click();
-    await expect(page.getByTestId('username-input')).toBeFocused();
-    await page.getByTestId('username-input').fill('validUser');
-    FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
-    await page.getByTestId('username-input').press('Enter');
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
-    await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
+    await expect(googleButton(page)).toBeDisabled();
+    await expect(appleButton(page)).toBeDisabled();
 });
 
 test('third-party register | should show error message on required input', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+    await openSignInPage(page);
+    await enterThirdPartyRegisterMode(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await registerButton(page).click();
 
-    await page.getByTestId('username-input').fill('');
-    await page.getByTestId('register-button').getByRole('button').click();
+    await expect(firstNameInput(page)).toHaveClass(/ng-invalid/);
+    await expect(firstNameError(page)).toBeVisible();
+    await expect(firstNameError(page)).toContainText('Registering requires your first name');
 
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible();
-    await expect(page.getByTestId('username-error-message')).toContainText('Username is required to sign up');
+    await expect(lastNameInput(page)).toHaveClass(/ng-invalid/);
+    await expect(lastNameError(page)).toBeVisible();
+    await expect(lastNameError(page)).toContainText('Registering requires your last name');
 
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Invalid username. Please try again.');
+    await expect(page.getByTestId('form-error-message')).toContainText('Please check the highlighted fields and try again.');
 });
 
-test('third-party register | should show error message on invalid input', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party register | navigate the register form with tab and enter', async ({ page }) => {
+    await openSignInPage(page);
+    await enterThirdPartyRegisterMode(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await firstNameInput(page).click();
+    await expect(firstNameInput(page)).toBeFocused();
+    await firstNameInput(page).fill(defaultFirstName);
+    await firstNameInput(page).press('Tab');
+    await expect(lastNameInput(page)).toBeFocused();
+    await lastNameInput(page).fill(defaultLastName);
 
-    await page.getByTestId('username-input').fill('ab');
-    await page.getByTestId('register-button').getByRole('button').click();
+    await FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
+    await lastNameInput(page).press('Enter');
 
-    await expect(page.getByTestId('username-input')).toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).toBeVisible();
-    await expect(page.getByTestId('username-error-message')).toContainText('he username must be between 4 and 24 characters long');
-    await expect(page.getByTestId('username-input')).toHaveValue('ab');
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
-    await expect(page.getByTestId('form-error-message')).toBeVisible();
-    await expect(page.getByTestId('form-error-message')).toContainText('Invalid username. Please try again.');
-});
-
-test('third-party register | should show internal error message on register failure', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
-
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await page.getByTestId('username-input').fill('validUser');
-    FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
-    await page.getByTestId('register-button').getByRole('button').click();
-
-    await expect(page.getByTestId('username-input')).toHaveValue('validUser');
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-danger/);
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
     await expect(page.getByTestId('form-error-message')).toBeVisible();
     await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
 });
 
-test('third-party register | should revert back to login, if cancel button is clicked', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+test('third-party register | should show internal error message on register failure', async ({ page }) => {
+    await openSignInPage(page);
+    await enterThirdPartyRegisterMode(page);
+    await fillRegisterIdentity(page);
 
-    await page.getByTestId('username-input').fill('validUser');
-    await page.getByTestId('password-input').getByRole('textbox').fill('ValidPass123!');
+    await FirebaseFunctionsMock.create(page).user.register.mockFailure('internal');
+    await registerButton(page).click();
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await expect(firstNameInput(page)).toHaveValue(defaultFirstName);
+    await expect(lastNameInput(page)).toHaveValue(defaultLastName);
+    await expect(registerButton(page)).toHaveClass(/p-button-danger/);
+    await expect(page.getByTestId('form-error-message')).toBeVisible();
+    await expect(page.getByTestId('form-error-message')).toContainText('An internal error occurred. Please try again later.');
+});
 
-    await page.getByTestId('username-input').fill('otherValidUser');
-    await page.getByTestId('cancel-register-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+test('third-party register | should revert back to login if cancel button is clicked', async ({ page }) => {
+    await openSignInPage(page);
+
+    await emailInput(page).fill(defaultEmail);
+    await passwordTextbox(page).fill(defaultPassword);
+    await enterThirdPartyRegisterMode(page);
+
+    await fillRegisterIdentity(page, otherFirstName, otherLastName);
+    await cancelRegisterButton(page).click();
+    await waitForUi(page);
 
     await expect(page.getByTestId('sign-in-title')).toContainText('Sign In');
-    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your credentials to access your account.');
+    await expect(page.getByTestId('sign-in-instruction')).toContainText('Enter your email and password to access your account.');
 
-    await expect(page.getByTestId('username-input')).toHaveValue('otherValidUser');
-    await expect(page.getByTestId('username-input')).not.toHaveClass(/ng-invalid/);
-    await expect(page.getByTestId('username-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('password-input').getByRole('textbox')).toHaveValue('');
-    await expect(page.getByTestId('password-input')).not.toHaveClass(/ng-dirty/);
-    await expect(page.getByTestId('password-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('login-button')).toBeVisible();
-    await expect(page.getByTestId('login-button').getByRole('button')).not.toBeDisabled();
-    await expect(page.getByTestId('login-button').getByRole('button')).not.toHaveClass(/p-button-danger/);
-
-    await expect(page.getByTestId('cancel-register-button').getByRole('button')).not.toBeVisible();
-    await expect(page.getByTestId('register-button').getByRole('button')).not.toBeVisible();
-
+    await expect(firstNameInput(page)).not.toBeVisible();
+    await expect(lastNameInput(page)).not.toBeVisible();
+    await expect(emailInput(page)).toHaveValue(defaultEmail);
+    await expect(emailError(page)).not.toBeVisible();
+    await expect(passwordTextbox(page)).toHaveValue('');
+    await expect(passwordInput(page)).not.toHaveClass(/ng-dirty/);
+    await expect(passwordError(page)).not.toBeVisible();
+    await expect(loginButton(page)).toBeVisible();
+    await expect(loginButton(page)).not.toBeDisabled();
+    await expect(loginButton(page)).not.toHaveClass(/p-button-danger/);
+    await expect(page.getByTestId('cancel-register-button')).not.toBeVisible();
+    await expect(page.getByTestId('register-button')).not.toBeVisible();
     await expect(page.getByTestId('form-error-message')).not.toBeVisible();
-
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).not.toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).not.toBeDisabled();
+    await expect(googleButton(page)).not.toBeDisabled();
+    await expect(appleButton(page)).not.toBeDisabled();
 });
 
 test('third-party register | button should be loading, other methods still disabled during register', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+    await openSignInPage(page);
+    await enterThirdPartyRegisterMode(page);
+    await fillRegisterIdentity(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 10_000);
+    await registerButton(page).click();
 
-    await page.getByTestId('username-input').fill('validUser');
-    FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 10_000);
-    await page.getByTestId('register-button').getByRole('button').click();
-
-    await expect(page.getByTestId('register-button').getByRole('button')).toHaveClass(/p-button-loading/);
-    await expect(page.getByTestId('register-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('google-sign-in-button').getByRole('button')).toBeDisabled();
-    await expect(page.getByTestId('apple-sign-in-button').getByRole('button')).toBeDisabled();
+    await expect(registerButton(page)).toHaveClass(/p-button-loading/);
+    await expect(registerButton(page)).toBeDisabled();
+    await expect(googleButton(page)).toBeDisabled();
+    await expect(appleButton(page)).toBeDisabled();
 });
 
 test('third-party register | should navigate after register', async ({ page }) => {
-    await page.goto('http://localhost:4200/sign-in');
+    await openSignInPage(page);
+    await enterThirdPartyRegisterMode(page);
 
-    const page1Promise = page.waitForEvent('popup');
-    await page.getByTestId('google-sign-in-button').getByRole('button').click();
-    const page1 = await page1Promise;
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    await page1.getByRole('button', { name: 'Add new account' }).click();
-    await page1.getByRole('button', { name: 'Auto-generate user information' }).click();
-    FirebaseFunctionsMock.create(page).user.login.mockFailure('not-found');
-    await page1.getByRole('button', { name: 'Sign in with Google.com' }).click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await fillRegisterIdentity(page, otherFirstName, otherLastName);
+    await FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 1_000);
+    await registerButton(page).click();
+    await waitForUi(page);
 
-    await page.getByTestId('username-input').fill('otherValidUser');
-    FirebaseFunctionsMock.create(page).user.register.mockSuccess(defaultUser, 1_000);
-    await page.getByTestId('register-button').getByRole('button').click();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await expect(page).toHaveURL('http://localhost:4200/dashboard');
+    await expect(page).toHaveURL(dashboardUrl);
 });

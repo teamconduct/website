@@ -1,7 +1,7 @@
-<div class="flex flex-column md:flex-row align-items-center justify-content-center md:h-screen w-full">
+<div class="sign-in-page flex flex-column md:flex-row align-items-center justify-content-center md:h-screen w-full">
     <app-sign-in-left-panel class="w-full md:w-50vw md:h-full" (scrollToLogin)="scrollToLogin()" />
-    <div #signInPanel class="w-full md:w-50vw md:h-full">
-        <app-sign-in-panel class="w-full h-full"
+    <div #signInPanel class="sign-in-page__right-panel w-full md:w-50vw md:h-full">
+        <app-sign-in-panel class="sign-in-page__right-panel-content w-full h-full"
             [registerMode]="registerMode"
             [passwordShown]="passwordShown"
             [registerButtonShown]="registerButtonShown"
