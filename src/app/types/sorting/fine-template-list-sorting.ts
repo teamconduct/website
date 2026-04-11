@@ -1,4 +1,4 @@
-import { FineAmount, FineTemplate } from '@stevenkellner/team-conduct-api';
+import { Fine, FineTemplate } from '@stevenkellner/team-conduct-api';
 import { Sorting } from './Sorting';
 
 export const fineTemplateListSorting = new Sorting<'reason' | 'amount', FineTemplate>('reason', {
@@ -24,7 +24,7 @@ export const fineTemplateListSorting = new Sorting<'reason' | 'amount', FineTemp
         fallbacks: []
     },
     amount: {
-        compareFn: (lhs, rhs) => FineAmount.compare(lhs.amount, rhs.amount),
+        compareFn: (lhs, rhs) => Fine.Amount.compare(lhs.amount, rhs.amount),
         fallbacks: ['reason']
     }
 });

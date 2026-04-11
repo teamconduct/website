@@ -1,5 +1,5 @@
 import { inject, Injectable, LOCALE_ID } from '@angular/core';
-import { Configuration, Currency, Locale } from '@stevenkellner/team-conduct-api';
+import { Currency, Locale } from '@stevenkellner/team-conduct-api';
 
 @Injectable({
     providedIn: 'root',
@@ -19,9 +19,5 @@ export class ConfigurationService {
     public get currency(): Currency {
         // Currently, we only support EUR, TODO: Extend this when needed
         return 'EUR';
-    }
-
-    public get configuration(): Configuration {
-        return new Configuration(this.currency, this.locale);
     }
 }

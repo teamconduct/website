@@ -3,16 +3,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ButtonModule } from 'primeng/button';
 import { SignInThirdPartyButtonComponent } from '../sign-in-third-party-button/sign-in-third-party-button.component';
 import { SignInUsernamePasswordFormComponent } from '../sign-in-username-password-form/sign-in-username-password-form.component';
-import { ErrorMessageComponent } from '../../error-message/error-message.component';
+import { ErrorMessageComponent } from '../../../components/error-message/error-message.component';
 import { FirebaseFunctionsService } from '../../../services/firebase-functions/firebase-functions.service';
 import { SIGN_IN_THEME, SignInColorScheme } from '../sign-in-theme';
 import { AuthProvider, FormSubmitResult, FormRegisterResult } from '../types';
 import { SignInService } from '../../../services/sign-in/sign-in.service';
-import { Result } from '@stevenkellner/typescript-common-functionality';
+import { Guid, Result } from '@stevenkellner/typescript-common-functionality';
 import { User } from '@stevenkellner/team-conduct-api';
 import { Router } from '@angular/router';
 import { routeNames } from '../../../app.routes';
 import { UserManagerService } from '../../../services/user-manager/user-manager.service';
+import { RandomDataGeneratorService } from '../../../services/random-data-generator/random-data-generator.service';
 import { AppleAuthProvider, GoogleAuthProvider, UsernamePasswordAuthProvider } from './auth-providers';
 
 /**
@@ -39,6 +40,7 @@ export class SignInPanelComponent {
     private readonly signInService = inject(SignInService);
     private readonly routerService = inject(Router);
     private readonly userManager = inject(UserManagerService);
+    private readonly randomDataGeneratorService = inject(RandomDataGeneratorService);
     private readonly usernamePasswordForm = viewChild.required<SignInUsernamePasswordFormComponent>('usernamePasswordForm');
 
     // Authentication providers
@@ -77,7 +79,7 @@ export class SignInPanelComponent {
 
         this.setLoadingState('username-password', true);
 
-        const authResult = await this.usernamePasswordAuth.authenticate(event.username, event.password);
+        const authResult = await this.usernamePasswordAuth.authenticate(event.email, event.password);
 
         if (Result.isFailure(authResult)) {
             this.usernamePasswordAuth.setError(authResult.error === 'wrong-password'
@@ -147,10 +149,12 @@ export class SignInPanelComponent {
         this.setLoadingState('username-password', true);
         this.cancelButtonDisabled = true;
 
-        const signInType = this.getSignInType(event.username);
+        const signInType = this.getSignInType(event.email);
         const registerResult = await this.firebaseFunctions.functions.user.register.executeWithResult({
-            userId: User.Id.builder.build(event.username),
-            signInType: signInType
+            userId: User.Id.builder.build(Guid.generate().flatten),
+            signInType: signInType,
+            firstName: event.firstName,
+            lastName: event.lastName
         });
         if (Result.isFailure(registerResult)) {
             this.usernamePasswordAuth.setError(registerResult.error.code === 'already-exists'
@@ -160,10 +164,25 @@ export class SignInPanelComponent {
             return;
         }
 
+        try {
+            await this.randomDataGeneratorService.createDevelopmentTeamsForNewUser();
+        } catch {
+            this.usernamePasswordAuth.setError('internal-error');
+            this.finishRegistration();
+            return;
+        }
+
+        const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
+        if (Result.isFailure(loginResult)) {
+            this.usernamePasswordAuth.setError('internal-error');
+            this.finishRegistration();
+            return;
+        }
+
         this.exitRegisterMode();
         this.finishRegistration();
 
-        this.userManager.setUser(registerResult.value);
+        this.userManager.setUser(loginResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
@@ -222,11 +241,15 @@ export class SignInPanelComponent {
     /**
      * Gets the appropriate sign-in type based on register mode
      */
-    private getSignInType(username: string): User.SignInType {
+    private getSignInType(email: string | null): User.SignInType {
         if (this.registerMode === 'username-password') {
-            return new User.SignInTypeEmail(`${username}@team-conduct.com`);
+            if (email === null) {
+                throw new Error('Email must be present for email/password registration.');
+            }
+
+            return new User.SignInType.Email(email);
         }
-        return new User.SignInTypeOAuth(this.registerMode === 'google' ? 'google' : 'apple');
+        return new User.SignInType.OAuth(this.registerMode === 'google' ? 'google' : 'apple');
     }
 
     /**
@@ -264,7 +287,7 @@ export class SignInPanelComponent {
         this.registerButtonShown = true;
 
         if (source !== 'username-password') {
-            // Clear password but keep username, hide password field
+            // Clear password and switch the form into name-only registration
             this.usernamePasswordForm().loginForm.get('password')?.setValue(null);
             this.passwordShown = false;
         }

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
-import { SignInLeftPanelComponent, SignInPanelComponent } from '../../components/sign-in';
+import { SignInLeftPanelComponent, SignInPanelComponent } from './index';
 import { Title } from '@angular/platform-browser';
 
 @Component({

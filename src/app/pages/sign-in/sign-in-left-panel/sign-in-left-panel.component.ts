@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, output } from '@angular/core';
-import { InfiniteSlidesComponent } from '../../infinite-slides/infinite-slides.component';
+import { InfiniteSlidesComponent } from '../../../components/infinite-slides/infinite-slides.component';
 import { LEFT_PANEL_THEME, LeftPanelColorScheme } from '../sign-in-theme';
 import { TextSlide } from '../types';
 import { ButtonModule } from 'primeng/button';

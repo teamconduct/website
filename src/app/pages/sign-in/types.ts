@@ -21,7 +21,7 @@ export type ThirdPartyError = 'popup-closed' | 'internal-error';
  * Form submission result from username/password form
  */
 export type FormSubmitResult = 'input-invalid' | {
-    username: string;
+    email: string;
     password: string;
 };
 
@@ -29,7 +29,9 @@ export type FormSubmitResult = 'input-invalid' | {
  * Registration form submission result (password can be null for third-party registrations)
  */
 export type FormRegisterResult = 'input-invalid' | {
-    username: string;
+    firstName: string;
+    lastName: string;
+    email: string | null;
     password: string | null;
 };
 

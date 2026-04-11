@@ -1,5 +1,5 @@
-import { FineAmount, MoneyAmount } from '@stevenkellner/team-conduct-api';
-import { inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
+import { Fine, Money } from '@stevenkellner/team-conduct-api';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { entries } from '@stevenkellner/typescript-common-functionality';
 import { SummedFineValue } from '../../types';
 import { ConfigurationService } from '../../services/configuration/configuration.service';
@@ -12,18 +12,18 @@ export class FineAmountPipe implements PipeTransform {
 
     private configurationService = inject(ConfigurationService);
 
-    public transform(fineAmount: MoneyAmount | number | FineAmount | SummedFineValue): string {
+    public transform(fineAmount: Money | number | Fine.Amount | SummedFineValue): string {
         const formatter = Intl.NumberFormat(this.configurationService.locale, {
             style: 'currency',
             currency: this.configurationService.currency
         });
         if (typeof fineAmount === 'number')
             return formatter.format(fineAmount);
-        else if (fineAmount instanceof MoneyAmount)
+        else if (fineAmount instanceof Money)
             return this.transform(fineAmount.completeValue);
-        else if (fineAmount instanceof FineAmount.Money)
+        else if (fineAmount instanceof Fine.Amount.Money)
             return this.transform(fineAmount.amount.completeValue);
-        else if (fineAmount instanceof FineAmount.Item) {
+        else if (fineAmount instanceof Fine.Amount.Item) {
             switch (fineAmount.item) {
             case 'crateOfBeer':
                 if (fineAmount.count === 1)
@@ -35,7 +35,7 @@ export class FineAmountPipe implements PipeTransform {
             for (const { key, value } of entries(fineAmount.items)) {
                 if (value === 0)
                     continue;
-                description += `, ${this.transform(FineAmount.item(key, value))}`;
+                description += `, ${this.transform(Fine.Amount.item(key, value))}`;
             }
             return description;
         }

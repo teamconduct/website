@@ -1,4 +1,4 @@
-import { Fine, FineAmount } from '@stevenkellner/team-conduct-api';
+import { Fine } from '@stevenkellner/team-conduct-api';
 import { Sorting } from './Sorting';
 
 export const fineListSorting = new Sorting<'reason' | 'payed' | 'date' | 'amount', Fine>('payed', {
@@ -53,7 +53,7 @@ export const fineListSorting = new Sorting<'reason' | 'payed' | 'date' | 'amount
         fallbacks: ['reason']
     },
     amount: {
-        compareFn: (lhs, rhs) => FineAmount.compare(lhs.amount, rhs.amount),
+        compareFn: (lhs, rhs) => Fine.Amount.compare(lhs.amount, rhs.amount),
         fallbacks: ['reason']
     }
 });

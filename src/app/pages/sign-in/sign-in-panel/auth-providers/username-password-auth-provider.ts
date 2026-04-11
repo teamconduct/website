@@ -25,9 +25,9 @@ export class UsernamePasswordAuthProvider extends IAuthMethodProvider<UsernamePa
         switch (this.error) {
             case 'username-password-invalid':
                 if (this.registerMode() === null || this.registerMode() === 'username-password') {
-                    return $localize`:Generic username/password sign-in error@@usernamePasswordInvalid:Invalid username or password. Please try again.`;
+                    return $localize`:Generic username/password sign-in error@@usernamePasswordInvalid:Invalid email or password. Please try again.`;
                 } else {
-                    return $localize`:Generic username/password registration error@@usernamePasswordRegisterInvalid:Invalid username. Please try again.`;
+                    return $localize`:Generic username/password registration error@@usernamePasswordRegisterInvalid:Please check the highlighted fields and try again.`;
                 }
             case 'internal-error':
                 return $localize`:Internal error message@@internalError:An internal error occurred. Please try again later.`;
@@ -35,18 +35,18 @@ export class UsernamePasswordAuthProvider extends IAuthMethodProvider<UsernamePa
                 if (this.registerMode()) {
                     return $localize`:Not registered message in register mode@@notRegisteredRegisterMode:Click Register to create your account.`;
                 }
-                return $localize`:Not registered message@@notRegistered:This account is not registered. Click Sign in again to register.`;
+                return $localize`:Not registered message@@notRegistered:No account exists for this email address. Click Sign in again to register.`;
             case 'wrong-password':
-                return $localize`:Wrong password error@@wrongPassword:Incorrect password for the given username. Please input the correct password and try again.`;
+                return $localize`:Wrong password error@@wrongPassword:Incorrect password for the given email address. Please input the correct password and try again.`;
             case 'username-taken':
-                return $localize`:Username taken error@@usernameTaken:The username is already taken. Please choose a different one.`;
+                return $localize`:Username taken error@@usernameTaken:An account with this email address already exists. Please choose a different one.`;
             case null:
                 return null;
         }
     }
 
-    async authenticate(username: string, password: string): Promise<Result<void, 'popup-cancelled' | 'popup-blocked' | 'wrong-password' | 'unknown'>> {
-        const signInProvider = new EmailSignInProvider(`${username}@team-conduct.com`, password);
+    async authenticate(email: string, password: string): Promise<Result<void, 'popup-cancelled' | 'popup-blocked' | 'wrong-password' | 'unknown'>> {
+        const signInProvider = new EmailSignInProvider(email, password);
         return await this.signInService.auth(signInProvider);
     }
 }

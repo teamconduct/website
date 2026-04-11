@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { TeamDataManagerService } from '../team-data-manager/team-data-manager.service';
-import { Person, Team, User, UserRole } from '@stevenkellner/team-conduct-api';
+import { Person, Team, User, TeamRole } from '@stevenkellner/team-conduct-api';
 import { Observable } from '../../types';
 import { PersonWithFines } from '../../types/PersonWithFines';
 
@@ -49,7 +49,7 @@ export class UserManagerService {
         });
     }
 
-    public hasRole(...roles: UserRole[]): Observable<boolean> {
+    public hasRole(...roles: TeamRole[]): Observable<boolean> {
         return this.currentPerson$.map(person => {
             if (person === null || person.signInProperties === null)
                 return false;

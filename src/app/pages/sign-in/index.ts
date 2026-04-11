@@ -1,6 +1,6 @@
 /**
  * Barrel export for sign-in components
- * Use this for cleaner imports: import { SignInPanelComponent } from './components/sign-in';
+ * Use this for cleaner imports: import { SignInPanelComponent } from './pages/sign-in';
  */
 
 // Main components

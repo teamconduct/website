@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { ErrorMessageComponent } from '../../error-message/error-message.component';
+import { ErrorMessageComponent } from '../../../components/error-message/error-message.component';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { FormRegisterResult, FormSubmitResult } from '../types';
 import { SIGN_IN_THEME, SignInColorScheme } from '../sign-in-theme';
@@ -42,28 +42,20 @@ export class SignInUsernamePasswordFormComponent {
     public readonly onRegister = output<FormRegisterResult>();
     public readonly onRegisterCancel = output<void>();
 
-    /**
-     * Username validation pattern:
-     * - 4-24 characters total
-     * - Must start and end with alphanumeric
-     * - Can contain letters, numbers, dots, hyphens, underscores
-     * - No consecutive special characters
-     */
-    private readonly USERNAME_PATTERN = /(?!.*[\.\-\_]{2,})^[a-zöäüßA-ZÄÖÜ0-9][a-zöäüßA-ZÄÖÜ0-9\.\-\_]{2,22}[a-zöäüßA-ZÄÖÜ0-9]$/;
     private readonly MIN_PASSWORD_LENGTH = 8;
 
     public loginForm = new FormGroup({
-        username: new FormControl<string | null>(null, [
-            Validators.required,
-            Validators.pattern(this.USERNAME_PATTERN)
-        ]),
-        password: new FormControl<string | null>(null, [
-            Validators.required,
-            Validators.minLength(this.MIN_PASSWORD_LENGTH)
-        ])
+        firstName: new FormControl<string | null>(null),
+        lastName: new FormControl<string | null>(null),
+        email: new FormControl<string | null>(null),
+        password: new FormControl<string | null>(null)
     });
 
     constructor() {
+        effect(() => {
+            this.updateControlValidators();
+        });
+
         // Update password validation when passwordIncorrect changes
         effect(() => {
             const passwordControl = this.loginForm.get('password');
@@ -80,12 +72,6 @@ export class SignInUsernamePasswordFormComponent {
         });
     }
 
-    public get loginFormWithoutPassword(): FormGroup {
-        return new FormGroup({
-            username: this.loginForm.get('username')!,
-        });
-    }
-
     public get colors(): SignInColorScheme {
         return SIGN_IN_THEME;
     }
@@ -99,15 +85,15 @@ export class SignInUsernamePasswordFormComponent {
             return;
         }
 
-        this.loginForm.markAllAsDirty();
+        this.markControlsAsDirty(['email', 'password']);
 
-        if (this.loginForm.invalid) {
+        if (this.areControlsInvalid(['email', 'password'])) {
             this.onLogin.emit('input-invalid');
             return;
         }
 
         this.onLogin.emit({
-            username: this.loginForm.get('username')!.value!,
+            email: this.loginForm.get('email')!.value!,
             password: this.loginForm.get('password')!.value!,
         });
     }
@@ -122,25 +108,27 @@ export class SignInUsernamePasswordFormComponent {
         }
 
         if (this.passwordShown()) {
-            // Direct registration with username and password
-            this.loginForm.markAllAsDirty();
-            if (this.loginForm.invalid) {
+            this.markControlsAsDirty(['firstName', 'lastName', 'email', 'password']);
+            if (this.areControlsInvalid(['firstName', 'lastName', 'email', 'password'])) {
                 this.onRegister.emit('input-invalid');
                 return;
             }
             this.onRegister.emit({
-                username: this.loginForm.get('username')!.value!,
+                firstName: this.loginForm.get('firstName')!.value!,
+                lastName: this.loginForm.get('lastName')!.value!,
+                email: this.loginForm.get('email')!.value!,
                 password: this.loginForm.get('password')!.value!,
             });
         } else {
-            // Third-party registration (only username needed)
-            this.loginFormWithoutPassword.markAllAsDirty();
-            if (this.loginFormWithoutPassword.invalid) {
+            this.markControlsAsDirty(['firstName', 'lastName']);
+            if (this.areControlsInvalid(['firstName', 'lastName'])) {
                 this.onRegister.emit('input-invalid');
                 return;
             }
             this.onRegister.emit({
-                username: this.loginForm.get('username')!.value!,
+                firstName: this.loginForm.get('firstName')!.value!,
+                lastName: this.loginForm.get('lastName')!.value!,
+                email: null,
                 password: null,
             });
         }
@@ -161,45 +149,62 @@ export class SignInUsernamePasswordFormComponent {
      */
     public markAsUndirty(): void {
         this.loginForm.markAsPristine();
-        this.loginFormWithoutPassword.markAsPristine();
     }
 
     /**
-     * Gets the username validation error message
+     * Gets the first name validation error message
      */
-    public get usernameErrorMessage(): string | null {
-        const usernameControl = this.loginForm.get('username')!;
+    public get firstNameErrorMessage(): string | null {
+        const firstNameControl = this.loginForm.get('firstName')!;
 
-        if (!usernameControl.invalid || !usernameControl.dirty) {
+        if (!firstNameControl.invalid || !firstNameControl.dirty) {
             return null;
         }
 
-        if (usernameControl.hasError('required')) {
-            if (this.registerButtonShown()) {
-                return $localize`:Username required error@@usernameRequiredRegister:Username is required to sign up`;
-            } else {
-                return $localize`:Username required error@@usernameRequired:Username is required to log in`;
-            }
+        if (firstNameControl.hasError('required')) {
+            return $localize`:First name required error@@firstNameRequired:Registering requires your first name`;
         }
 
-        if (usernameControl.hasError('pattern')) {
-            const username = usernameControl.value || '';
+        return null;
+    }
 
-            if (username.length < 4 || username.length > 24) {
-                return $localize`:Username length error@@usernameLength:The username must be between 4 and 24 characters long`;
+    /**
+     * Gets the last name validation error message
+     */
+    public get lastNameErrorMessage(): string | null {
+        const lastNameControl = this.loginForm.get('lastName')!;
+
+        if (!lastNameControl.invalid || !lastNameControl.dirty) {
+            return null;
+        }
+
+        if (lastNameControl.hasError('required')) {
+            return $localize`:Last name required error@@lastNameRequired:Registering requires your last name`;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the email validation error message
+     */
+    public get emailErrorMessage(): string | null {
+        const emailControl = this.loginForm.get('email')!;
+
+        if (!emailControl.invalid || !emailControl.dirty) {
+            return null;
+        }
+
+        if (emailControl.hasError('required')) {
+            if (this.registerButtonShown()) {
+                return $localize`:Email required error@@emailRequiredRegister:Email is required to sign up`;
             }
 
-            if (!/^[a-zöäüßA-ZÄÖÜ0-9\.\-\_]+$/.test(username)) {
-                return $localize`:Username character error@@usernameCharacters:The username can only contain letters, numbers, dots (.), hyphens (-), and underscores (_)`;
-            }
+            return $localize`:Email required error@@emailRequired:Email is required to log in`;
+        }
 
-            if (!/^[a-zöäüßA-ZÄÖÜ0-9]/.test(username) || !/[a-zöäüßA-ZÄÖÜ0-9]$/.test(username)) {
-                return $localize`:Username start/end error@@usernameStartEnd:The username cannot start and end with a special character (., -, _)`;
-            }
-
-            if (/[\.\-\_]{2,}/.test(username)) {
-                return $localize`:Username consecutive special chars error@@usernameConsecutive:The username cannot contain consecutive special characters (., -, _)`;
-            }
+        if (emailControl.hasError('email')) {
+            return $localize`:Email invalid error@@emailInvalid:Please enter a valid email address`;
         }
 
         return null;
@@ -236,5 +241,54 @@ export class SignInUsernamePasswordFormComponent {
         }
 
         return null;
+    }
+
+    public get emailShown(): boolean {
+        return !this.registerButtonShown() || this.passwordShown();
+    }
+
+    private updateControlValidators(): void {
+        this.setRequiredValidator('firstName', this.registerButtonShown());
+        this.setRequiredValidator('lastName', this.registerButtonShown());
+
+        const emailControl = this.loginForm.get('email')!;
+        if (this.emailShown) {
+            emailControl.setValidators([Validators.required, Validators.email]);
+        } else {
+            emailControl.clearValidators();
+            emailControl.setErrors(null);
+        }
+        emailControl.updateValueAndValidity({ emitEvent: false });
+
+        const passwordControl = this.loginForm.get('password')!;
+        if (this.passwordShown()) {
+            passwordControl.setValidators([Validators.required, Validators.minLength(this.MIN_PASSWORD_LENGTH)]);
+        } else {
+            passwordControl.clearValidators();
+        }
+        passwordControl.updateValueAndValidity({ emitEvent: false });
+    }
+
+    private setRequiredValidator(controlName: 'firstName' | 'lastName', required: boolean): void {
+        const control = this.loginForm.get(controlName)!;
+
+        if (required) {
+            control.setValidators([Validators.required]);
+        } else {
+            control.clearValidators();
+            control.setErrors(null);
+        }
+
+        control.updateValueAndValidity({ emitEvent: false });
+    }
+
+    private markControlsAsDirty(controlNames: Array<'firstName' | 'lastName' | 'email' | 'password'>): void {
+        for (const controlName of controlNames) {
+            this.loginForm.get(controlName)?.markAsDirty();
+        }
+    }
+
+    private areControlsInvalid(controlNames: Array<'firstName' | 'lastName' | 'email' | 'password'>): boolean {
+        return controlNames.some(controlName => this.loginForm.get(controlName)?.invalid ?? false);
     }
 }
