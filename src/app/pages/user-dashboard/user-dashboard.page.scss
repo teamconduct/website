@@ -1,0 +1,26 @@
+:host {
+	display: block;
+}
+
+.user-dashboard-page {
+	min-height: 100dvh;
+	padding-top: 73px;
+	background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+}
+
+.user-dashboard-page__content {
+	margin-left: 19.5rem;
+	padding: 1.35rem 1.35rem 1.75rem;
+}
+
+@media (max-width: 1024px) {
+	.user-dashboard-page__content {
+		margin-left: 17rem;
+	}
+}
+
+@media (max-width: 900px) {
+	.user-dashboard-page__content {
+		margin-left: 0;
+	}
+}

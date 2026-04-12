@@ -1,0 +1,18 @@
+<article class="metric-card metric-card--orange">
+	<div class="metric-card__icon metric-card__icon--orange">
+		<fa-icon [icon]="faClockRotateLeft"/>
+	</div>
+	<p class="metric-card__label">Open Fines Count</p>
+
+    @let selectedTeam = dataManager.selectedTeam$ | async;
+    @let fines = selectedTeam !== null ? (selectedTeam.fines$ | async) : null;
+	@let openFinesCount = fines !== null ? getOpenFinesCount(fines) : null;
+	@if (openFinesCount !== null) {
+		<h3 class="metric-card__value">{{ openFinesCount }}</h3>
+		<p class="metric-card__subvalue">Number of unpaid fines in this team</p>
+	} @else {
+		<div class="metric-card__skeleton" aria-hidden="true">
+			<div class="metric-card__skeleton-line metric-card__skeleton-line--value"></div>
+		</div>
+	}
+</article>

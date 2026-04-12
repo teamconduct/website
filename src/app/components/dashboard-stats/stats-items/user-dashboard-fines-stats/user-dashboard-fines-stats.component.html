@@ -1,0 +1,27 @@
+<article class="metric-card metric-card--red">
+    <div class="metric-card__header-row">
+        <div class="metric-card__icon">
+            <fa-icon [icon]="faFileInvoice"/>
+        </div>
+        <button type="button" class="metric-card__top-button" (click)="nextFineType()">{{ currentFineTypeButtonName }}</button>
+    </div>
+    <div class="metric-card__top-row">
+        <p class="metric-card__label">{{ currentFineTypeHeaderName }}</p>
+    </div>
+
+    @let user = appStateManager.user$ | async;
+    @let finesStats = user !== null ? (getFinesStats$(user) | async) : null;
+    @if (finesStats !== null) {
+        @let currentFineValue = getCurrentFineValue(finesStats);
+        <h3 class="metric-card__value">{{ currentFineValue | fineAmount }}</h3>
+        <div class="metric-card__bottom-row">
+            <p class="metric-card__bottom-row-caption">Number of fines:</p>
+            <p class="metric-card__bottom-row-badge">{{ currentFineValue.count }}</p>
+        </div>
+    } @else {
+        <div class="metric-card__skeleton" aria-hidden="true">
+            <div class="metric-card__skeleton-line metric-card__skeleton-line--value"></div>
+            <div class="metric-card__skeleton-line metric-card__skeleton-line--meta"></div>
+        </div>
+    }
+</article>

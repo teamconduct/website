@@ -1,0 +1,12 @@
+<section class="metrics-grid" aria-label="Dashboard stats">
+    @if (type() === 'user') {
+        <app-user-dashboard-fines-stats />
+        <app-user-dashboard-open-fines-per-team-stats />
+        <app-user-dashboard-fines-per-interval-stats />
+    } @else if (type() === 'team') {
+        <app-team-dashboard-open-fines-stats />
+        <app-team-dashboard-open-fines-count-stats />
+        <app-team-dashboard-most-fined-person-stats />
+        <app-team-dashboard-payed-fine-stats />
+    }
+</section>

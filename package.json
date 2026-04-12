@@ -28,7 +28,7 @@
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@primeng/themes": "^21.0.2",
     "@stevenkellner/firebase-function": "^1.4.148",
-    "@stevenkellner/team-conduct-api": "^2.0.22",
+    "@stevenkellner/team-conduct-api": "^2.0.23",
     "@stevenkellner/typescript-common-functionality": "^1.0.62",
     "crypto-js": "^4.2.0",
     "ngx-cookie-service": "^21.1.0",

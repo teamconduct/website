@@ -1,0 +1,27 @@
+<article class="metric-card metric-card--dark">
+    <div class="metric-card__header-row">
+        <div class="metric-card__icon metric-card__icon--violet">
+            <fa-icon [icon]="faCalendarWeek"/>
+        </div>
+        <button type="button" class="metric-card__top-button" (click)="nextInterval()">{{ currentIntervalButtonName }}</button>
+    </div>
+    <div class="metric-card__top-row">
+        <p class="metric-card__label">{{ currentIntervalHeader }}</p>
+    </div>
+
+    @let user = appStateManager.user$ | async;
+    @let stats = user !== null ? (getFinesPerInterval$(user) | async) : null;
+    @if (stats !== null) {
+        @let currentIntervalStats = getCurrentIntervalStats(stats);
+        <h3 class="metric-card__value">{{ currentIntervalStats.totalValue | fineAmount }}</h3>
+        <div class="metric-card__bottom-row">
+            <p class="metric-card__bottom-row-badge">{{ currentIntervalStats.payedPercentage === null ? '-' : (currentIntervalStats.payedPercentage | number: '1.0-0') + '%' }}</p>
+            <p class="metric-card__bottom-row-caption">already paid</p>
+        </div>
+    } @else {
+        <div class="metric-card__skeleton" aria-hidden="true">
+            <div class="metric-card__skeleton-line metric-card__skeleton-line--value"></div>
+            <div class="metric-card__skeleton-line metric-card__skeleton-line--meta"></div>
+        </div>
+    }
+</article>

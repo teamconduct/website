@@ -1,0 +1,18 @@
+<article class="metric-card metric-card--dark">
+	<div class="metric-card__icon metric-card__icon--green">
+		<fa-icon [icon]="faPiggyBank"/>
+	</div>
+	<p class="metric-card__label">Team Collected Fines</p>
+
+    @let selectedTeam = dataManager.selectedTeam$ | async;
+    @let fines = selectedTeam !== null ? (selectedTeam.fines$ | async) : null;
+	@let payedFines = fines !== null ? getPayedFines(fines) : null;
+    @if (payedFines !== null) {
+	    <h3 class="metric-card__value">{{ payedFines | fineAmount }}</h3>
+    } @else {
+	    <div class="metric-card__skeleton" aria-hidden="true">
+		    <div class="metric-card__skeleton-line metric-card__skeleton-line--value"></div>
+	    </div>
+    }
+	<p class="metric-card__subvalue">All paid fines in this team</p>
+</article>

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { TopHeaderComponent } from '../../components/top-header/top-header.component';
 import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar.component';
+import { DashboardStatsComponent } from '../../components/dashboard-stats/dashboard-stats.component';
 import { Title } from '@angular/platform-browser';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { Result } from '@stevenkellner/typescript-common-functionality';
 
 @Component({
     selector: 'page-user-dashboard',
-    imports: [TopHeaderComponent, LeftSidebarComponent],
+    imports: [TopHeaderComponent, LeftSidebarComponent, DashboardStatsComponent],
     templateUrl: './user-dashboard.page.html',
     styleUrl: './user-dashboard.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

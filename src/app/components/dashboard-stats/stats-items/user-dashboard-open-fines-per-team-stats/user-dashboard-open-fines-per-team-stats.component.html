@@ -1,0 +1,21 @@
+<article class="metric-card metric-card--orange">
+    <div class="metric-card__icon metric-card__icon--orange">
+        <fa-icon [icon]="faClockRotateLeft"/>
+    </div>
+    <p class="metric-card__label">Open Fines Per Team</p>
+
+    @let user = appStateManager.user$ | async;
+    @let openFinesPerTeam = user !== null ? (getOpenFinesPerTeam$(user) | async) : null;
+    @if (openFinesPerTeam === null || openFinesPerTeam.length === 0) {
+        <p class="metric-card__subvalue">No team data available</p>
+    } @else {
+        <div class="stack-list">
+            @for (team of openFinesPerTeam; track team.teamName) {
+                <div class="stack-list__row">
+                    <span class="stack-list__meta stack-list__meta--large">{{ team.teamName }}</span>
+                    <span class="stack-list__value stack-list__value--large">{{ team.openFines | fineAmount }}</span>
+                </div>
+            }
+        </div>
+    }
+</article>

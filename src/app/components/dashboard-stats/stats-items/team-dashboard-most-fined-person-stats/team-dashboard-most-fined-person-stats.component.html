@@ -1,0 +1,29 @@
+<article class="metric-card metric-card--violet">
+    <div class="metric-card__icon metric-card__icon--violet">
+        <fa-icon [icon]="faTrophy"/>
+    </div>
+    <p class="metric-card__label">Most Fined Player</p>
+
+    @let selectedTeam = dataManager.selectedTeam$ | async;
+    @let persons = selectedTeam !== null ? (selectedTeam.persons$ | async) : null;
+    @let mostFinedPerson = persons !== null ? getMostFinedPerson(persons) : null;
+    @if (mostFinedPerson !== null) {
+        <div class="metric-card__person">
+            @if (mostFinedPerson.properties.profilePictureUrl !== null) {
+                <img class="metric-card__avatar" [src]="mostFinedPerson.properties.profilePictureUrl" [alt]="mostFinedPerson.properties.firstName" />
+            } @else {
+                <div class="metric-card__avatar metric-card__avatar--placeholder">
+                    <fa-icon [icon]="faUser" />
+                </div>
+            }
+            <div>
+                <h3 class="metric-card__value metric-card__value--small">
+                    {{ mostFinedPerson.properties.firstName }} {{ mostFinedPerson.properties.lastName }}
+                </h3>
+                <p class="metric-card__subvalue metric-card__subvalue--large">{{ mostFinedPerson.fineValues.total | fineAmount }}</p>
+            </div>
+        </div>
+    } @else {
+        <p class="metric-card__subvalue">No person data available</p>
+    }
+</article>

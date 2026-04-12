@@ -7,7 +7,8 @@ export class SummedFineValue {
         public items: Record<Fine.Amount.Item.Type, number> = {
             'crateOfBeer': 0
         },
-        public amount = Money.zero
+        public amount = Money.zero,
+        public count = 0
     ) {}
 
     private addFineAmount(fineAmount: Fine.Amount) {
@@ -15,12 +16,14 @@ export class SummedFineValue {
             this.amount = this.amount.added(fineAmount.amount);
         else if (fineAmount instanceof Fine.Amount.Item)
             this.items[fineAmount.item] += fineAmount.count;
+        this.count += 1;
     }
 
     private addSummedFineValue(summedFineValue: SummedFineValue) {
         this.amount = this.amount.added(summedFineValue.amount);
         for (const item of keys(summedFineValue.items))
             this.items[item] += summedFineValue.items[item];
+        this.count += summedFineValue.count;
     }
 
     public add(fineAmount: Fine.Amount | SummedFineValue) {
@@ -31,7 +34,7 @@ export class SummedFineValue {
     }
 
     public added(fineAmount: Fine.Amount | SummedFineValue): SummedFineValue {
-        const newValue = new SummedFineValue(this.items, this.amount);
+        const newValue = new SummedFineValue(this.items, this.amount, this.count);
         newValue.add(fineAmount);
         return newValue;
     }

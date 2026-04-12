@@ -1,0 +1,17 @@
+<article class="metric-card metric-card--red">
+    <div class="metric-card__icon metric-card__icon--red">
+        <fa-icon [icon]="faFileInvoice"/>
+    </div>
+    <p class="metric-card__label">Your Open Fines</p>
+
+    @let selectedTeam = dataManager.selectedTeam$ | async;
+    @let fines = selectedTeam !== null ? (selectedTeam.fines$ | async) : null;
+	@let openFines = fines !== null ? getOpenFines(fines) : null;
+    @if (openFines !== null) {
+	    <h3 class="metric-card__value">{{ openFines | fineAmount }}</h3>
+    } @else {
+	    <div class="metric-card__skeleton" aria-hidden="true">
+		    <div class="metric-card__skeleton-line metric-card__skeleton-line--value"></div>
+	    </div>
+    }
+</article>

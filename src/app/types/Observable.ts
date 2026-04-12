@@ -71,4 +71,17 @@ export namespace Observable {
         });
         return observable;
     }
+
+    export function combineArray<T, U>(observables: Array<Observable<T>>, combineFn: (values: Array<T>) => U): Observable<U> {
+        const combine = (values: Array<T | null>) => values.every(value => value !== null) ? combineFn(values as Array<T>) : null;
+        const observable = new Observable<U>(combine(observables.map(observable => observable.value)));
+        observables.forEach(obs => {
+            obs.subscribe({
+                next: () => observable.next(combine(observables.map(o => o.value))),
+                error: error => observable.error(error),
+                complete: () => observable.complete()
+            });
+        });
+        return observable;
+    }
 }
