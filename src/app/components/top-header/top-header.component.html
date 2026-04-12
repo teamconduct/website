@@ -22,18 +22,28 @@
             </p-overlaybadge>
 
             <!-- User Profile -->
+            @let userName = userName$ | async;
+            @let profilePictureUrl = profilePictureUrl$ | async;
             <p-button
                 type="button"
                 variant="text"
                 styleClass="hover-bg flex align-items-center gap-2 cursor-pointer px-2 py-1 border-round transition-duration-200"
                 [style]="{ background: 'none' }"
                 (onClick)="onProfileClick()">
-                <p-avatar
-                    [image]="userAvatar()"
-                    shape="circle"
-                    size="normal">
-                </p-avatar>
-                <span class="font-medium text-xl" [style]="{ color: colors.textDark, 'font-size': '0.9375rem' }">{{ userName() }}</span>
+                <span class="pr-1 flex align-items-center">
+                    @if (profilePictureUrl) {
+                        <p-avatar
+                            [image]="profilePictureUrl"
+                            shape="circle"
+                            size="normal">
+                        </p-avatar>
+                    } @else {
+                        <span class="w-2rem h-2rem border-circle flex align-items-center justify-content-center" [style]="{ background: colors.hoverBg }">
+                            <fa-icon [icon]="faUser" [style]="{ color: colors.textGray, 'font-size': '0.875rem' }"></fa-icon>
+                        </span>
+                    }
+                </span>
+                <span class="font-medium text-xl" [style]="{ color: colors.textDark, 'font-size': '0.9375rem' }">{{ userName }}</span>
             </p-button>
         </div>
     </div>

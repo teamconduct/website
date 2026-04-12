@@ -5,6 +5,7 @@ import { Dictionary, Flattable, values } from '@stevenkellner/typescript-common-
 import { collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 import { PersistedDataManagerState, PersistedDictionaryEntry, PersistedTeamData } from './data-manager.types';
 import { TeamData } from './team-data';
+import { AppStateManagerService } from '../app-state-manager/app-state-manager.service';
 
 @Injectable({
     providedIn: 'root'
@@ -26,6 +27,16 @@ export class DataManagerService {
     };
 
     private firestore = inject(Firestore);
+
+    private appStateManager = inject(AppStateManagerService);
+
+    public get selectedTeam$(): Observable<TeamData | null> {
+        return Observable.combine(this.appStateManager.selectedTeamId$, this.appStateManager.user$, (teamId, user) => {
+            if (teamId === null || user === null)
+                return null;
+            return this.teams.getOptional(teamId);
+        });
+    }
 
     public startObserve(user: User, changeDetector: ChangeDetectorRef) {
         if (this.isObserving && this.observingUserId === user.id.guidString)

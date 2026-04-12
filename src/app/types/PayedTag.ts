@@ -12,7 +12,7 @@ export class PayedTag {
     }
 
     public get severity(): Tag['severity'] {
-        switch (this.state) {
+        switch (this.state.type) {
         case 'payed':
             return 'secondary';
         case 'notPayed':

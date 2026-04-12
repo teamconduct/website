@@ -2,7 +2,7 @@ import { Fine, Money } from '@stevenkellner/team-conduct-api';
 import { inject, Pipe, PipeTransform } from '@angular/core';
 import { entries } from '@stevenkellner/typescript-common-functionality';
 import { SummedFineValue } from '../../types';
-import { ConfigurationService } from '../../services/configuration/configuration.service';
+import { DataManagerService } from '../../services/data-manager/data-manager.service';
 
 @Pipe({
     name: 'fineAmount',
@@ -10,12 +10,15 @@ import { ConfigurationService } from '../../services/configuration/configuration
 })
 export class FineAmountPipe implements PipeTransform {
 
-    private configurationService = inject(ConfigurationService);
+    private dataManager = inject(DataManagerService);
 
     public transform(fineAmount: Money | number | Fine.Amount | SummedFineValue): string {
-        const formatter = Intl.NumberFormat(this.configurationService.locale, {
+        const teamSettings = this.dataManager.selectedTeam$.value?.team$.value?.settings;
+        if (!teamSettings)
+            return '';
+        const formatter = Intl.NumberFormat(teamSettings.locale, {
             style: 'currency',
-            currency: this.configurationService.currency
+            currency: teamSettings.currency
         });
         if (typeof fineAmount === 'number')
             return formatter.format(fineAmount);

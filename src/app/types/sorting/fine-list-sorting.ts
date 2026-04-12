@@ -1,4 +1,4 @@
-import { Fine } from '@stevenkellner/team-conduct-api';
+import { Fine, PayedState } from '@stevenkellner/team-conduct-api';
 import { Sorting } from './Sorting';
 
 export const fineListSorting = new Sorting<'reason' | 'payed' | 'date' | 'amount', Fine>('payed', {
@@ -37,7 +37,7 @@ export const fineListSorting = new Sorting<'reason' | 'payed' | 'date' | 'amount
         compareFn: (lhs, rhs) => {
             if (lhs.payedState === rhs.payedState)
                 return 'equal';
-            if (lhs.payedState === 'notPayed')
+            if (lhs.payedState instanceof PayedState.NotPayed)
                 return 'less';
             return 'greater';
         },

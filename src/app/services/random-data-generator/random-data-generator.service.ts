@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { FirebaseFunctionsService } from '../firebase-functions/firebase-functions.service';
-import { Fine, FineTemplate, Money, Person, PersonProperties, Team, TeamRole } from '@stevenkellner/team-conduct-api';
+import { Fine, FineTemplate, Money, PayedState, Person, PersonProperties, Team, TeamRole } from '@stevenkellner/team-conduct-api';
 import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
 import { isProduction } from '../../../environments/environment';
-import { ConfigurationService } from '../configuration/configuration.service';
 
 @Injectable({
     providedIn: 'root'
@@ -52,70 +51,70 @@ export class RandomDataGeneratorService {
         }
     ];
 
-    private readonly developmentFines: Array<{ reason: string; payedState: 'payed' | 'notPayed'; amount: Fine.Amount }> = [
+    private readonly developmentFines: Array<{ reason: string; payedState: PayedState; amount: Fine.Amount }> = [
         {
             reason: 'Arrived after kick-off briefing',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(5, 0))
         },
         {
             reason: 'Forgot captain armband',
-            payedState: 'payed',
+            payedState: new PayedState.Payed(UtcDate.now),
             amount: Fine.Amount.money(new Money(8, 0))
         },
         {
             reason: 'No post-match clean-up help',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(10, 0))
         },
         {
             reason: 'Team event beverage contribution',
-            payedState: 'payed',
+            payedState: new PayedState.Payed(UtcDate.now),
             amount: Fine.Amount.item('crateOfBeer', 1)
         },
         {
             reason: 'Missed attendance confirmation',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(2, 50))
         },
         {
             reason: 'Training bibs not returned',
-            payedState: 'payed',
+            payedState: new PayedState.Payed(UtcDate.now),
             amount: Fine.Amount.money(new Money(4, 0))
         },
         {
             reason: 'Late cancellation',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(6, 0))
         },
         {
             reason: 'Locker room music fine',
-            payedState: 'payed',
+            payedState: new PayedState.Payed(UtcDate.now),
             amount: Fine.Amount.item('crateOfBeer', 2)
         },
         {
             reason: 'Equipment damage',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(15, 0))
         },
         {
             reason: 'Unsportsmanlike conduct',
-            payedState: 'payed',
+            payedState: new PayedState.Payed(UtcDate.now),
             amount: Fine.Amount.money(new Money(20, 0))
         },
         {
             reason: 'Missed training session',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(10, 0))
         },
         {
             reason: 'Uniform not cleaned',
-            payedState: 'payed',
+            payedState: new PayedState.Payed(UtcDate.now),
             amount: Fine.Amount.money(new Money(5, 50))
         },
         {
             reason: 'Late arrival to match',
-            payedState: 'notPayed',
+            payedState: new PayedState.NotPayed(),
             amount: Fine.Amount.money(new Money(8, 0))
         }
     ];
@@ -133,8 +132,6 @@ export class RandomDataGeneratorService {
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 
-    private configurationService = inject(ConfigurationService);
-
     public async createDevelopmentTeamsForNewUser(): Promise<void> {
         if (isProduction)
             return;
@@ -151,8 +148,8 @@ export class RandomDataGeneratorService {
                 sportCategory: null,
                 description: null,
                 paypalMeLink: null,
-                currency: this.configurationService.currency,
-                locale: this.configurationService.locale
+                currency: 'USD',
+                locale: 'en'
             });
 
             await this.firebaseFunctions.functions.person.roleEdit.execute({
@@ -206,7 +203,7 @@ export class RandomDataGeneratorService {
                 fine: new Fine(
                     Tagged.generate('fine'),
                     fine.payedState,
-                    UtcDate.now,
+                    UtcDate.now.advanced({ day: -index }),
                     fine.reason,
                     fine.amount
                 )

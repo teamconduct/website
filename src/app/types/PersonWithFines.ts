@@ -1,4 +1,4 @@
-import { Fine, Person } from '@stevenkellner/team-conduct-api';
+import { Fine, PayedState, Person } from '@stevenkellner/team-conduct-api';
 import { SummedFineValue } from './SummedFineValue';
 
 export class PersonWithFines extends Person {
@@ -21,9 +21,9 @@ export class PersonWithFines extends Person {
         );
         this.fineValues = fines.reduce((fineValues, fine) => {
             fineValues.total.add(fine.amount);
-            if (fine.payedState === 'payed')
+            if (fine.payedState instanceof PayedState.Payed)
                 fineValues.payed.add(fine.amount);
-            if (fine.payedState === 'notPayed')
+            if (fine.payedState instanceof PayedState.NotPayed)
                 fineValues.notPayed.add(fine.amount);
             return fineValues;
         }, { total: new SummedFineValue(), payed: new SummedFineValue(), notPayed: new SummedFineValue() })
