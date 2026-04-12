@@ -13,8 +13,6 @@ export class AppStateManagerService {
 
     public setUser(user: User | null) {
         this.user$.next(user);
-        if (user !== null && !user.teams.isEmpty)
-            this.setTeamId(user.teams.keys[0]);
     }
 
     public setTeamId(teamId: Team.Id) {

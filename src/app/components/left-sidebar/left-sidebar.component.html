@@ -1,82 +1,97 @@
-<aside class="fixed left-0 bg-white border-right-1 surface-border overflow-y-auto" style="width: 16rem; height: calc(100vh - 73px); top: 73px; scrollbar-width: none; -ms-overflow-style: none;">
-    <nav class="mt-3 p-3 flex flex-column h-full">
-        <!-- Top Section: Main Navigation -->
-        <ul class="list-none p-0 m-0 flex flex-column gap-3">
-            @for (item of topNavItems; track item.route) {
-                <li>
-                    <a href="#" class="flex align-items-center gap-2 px-3 py-2 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
-                       [class.text-gray-700]="currentRoute() !== item.route"
-                       [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
-                       [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
-                       [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
-                        <fa-icon [icon]="item.icon" style="width: 1.25rem; text-align: center; font-size: 1rem;"></fa-icon>
-                        <span class="flex-1">{{ item.label }}</span>
-                    </a>
-                </li>
-            }
-        </ul>
+@let user = (user$ | async);
+@let selectedTeamId = (selectedTeamId$ | async);
+@let hasSelectedTeam = selectedTeamId !== null;
 
-        @if (currentTeamName() !== null) {
+<aside class="left-sidebar">
+	<div class="left-sidebar__content">
+		<section class="sidebar-section">
+			<p class="sidebar-section__title">{{ labels.global }}</p>
 
-            <!-- Divider -->
-            <div class="my-3"
-                [style.background-color]="colors.dividerColor"
-                style="height: 2px; width: 100%; border-radius: 1px;">
-            </div>
+			<nav class="sidebar-nav">
+				@for (navItem of globalNavItems; track navItem.label) {
+					@if (navItem.route !== null) {
+						<a
+							class="nav-item"
+							routerLinkActive="nav-item--active"
+							[routerLinkActiveOptions]="{ exact: true }"
+							[routerLink]="navItem.route">
+							<fa-icon [icon]="navItem.icon" class="nav-item__icon"/>
+							<span>{{ navItem.label }}</span>
+						</a>
+					} @else {
+						<button class="nav-item nav-item--muted" type="button" disabled>
+							<fa-icon [icon]="navItem.icon" class="nav-item__icon"/>
+							<span>{{ navItem.label }}</span>
+							<small class="nav-item__badge">{{ labels.comingSoon }}</small>
+						</button>
+					}
+				}
+			</nav>
+		</section>
 
-            <!-- Bottom Section: Team Navigation -->
-            <div class="flex flex-column gap-2 border-round">
-                <div class="flex align-items-center gap-3 px-3 py-3 mb-2 border-round font-bold"
-                    [style.background-color]="colors.teamHeaderBg"
-                    [style.border-left]="'4px solid ' + colors.teamHeaderBorder"
-                    [style.padding-left]="'0.75rem'"
-                    style="font-size: 1.05rem;">
-                    <fa-icon [icon]="faFutbol" [style.color]="colors.textPrimary" style="font-size: 1.25rem;" size="lg"></fa-icon>
-                    <span class="flex-1 overflow-hidden text-overflow-ellipsis white-space-nowrap font-bold text-xl" [style.color]="colors.textPrimary">{{ currentTeamName() }}</span>
-                </div>
+		<section class="sidebar-section">
+			<p class="sidebar-section__title">{{ hasSelectedTeam ? getSelectedTeamName(user, selectedTeamId) : labels.teamContext }}</p>
 
-                <ul class="list-none p-0 m-0 flex flex-column gap-3">
-                    @for (item of teamNavItems; track item.route) {
-                        <li>
-                            <a href="#" class="flex align-items-center gap-2 px-3 py-2 ml-4 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
-                            [class.text-gray-700]="currentRoute() !== item.route"
-                            [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
-                            [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
-                            [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
-                                <fa-icon [icon]="item.icon" style="width: 1.25rem; text-align: center; font-size: 1rem;"></fa-icon>
-                                <span class="flex-1">{{ item.label }}</span>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
+			@if (user !== null && !user.teams.isEmpty) {
+				<div class="team-switcher" [class.team-switcher--open]="isTeamSwitcherOpen() || !hasSelectedTeam">
+					<button
+						class="team-switcher__toggle"
+						type="button"
+						[attr.aria-label]="labels.switchTeam"
+						[title]="labels.switchTeam"
+						(click)="toggleTeamSwitcher()">
+						<div class="team-switcher__toggle-content">
+							@if (getSelectedTeamLogoUrl(selectedTeamId); as selectedTeamLogoUrl) {
+								<img class="selected-team-card__logo" [src]="selectedTeamLogoUrl" [alt]="getSelectedTeamName(user, selectedTeamId)"/>
+							} @else if (!hasSelectedTeam) {
+								<div class="selected-team-card__logo selected-team-card__logo--no-team">
+									<fa-icon [icon]="faUsers"/>
+								</div>
+							} @else {
+								<div class="selected-team-card__logo selected-team-card__logo--fallback">
+									{{ getSelectedTeamName(user, selectedTeamId).charAt(0).toUpperCase() }}
+								</div>
+							}
+							<p class="team-switcher__name">{{ getSelectedTeamName(user, selectedTeamId) }}</p>
+						</div>
+						<span class="team-switcher__action">
+							<fa-icon [icon]="faRightLeft"/>
+						</span>
+					</button>
 
-        }
+					@if (isTeamSwitcherOpen() || !hasSelectedTeam) {
+						<div class="team-picker team-picker--integrated">
+							<div class="team-picker__list">
+								@for (teamProperties of user.teams.values; track teamProperties.teamId.guidString) {
+									<button
+										class="team-picker__item"
+										[class.team-picker__item--active]="isTeamSelected(teamProperties.teamId, selectedTeamId)"
+										type="button"
+										[disabled]="isTeamSelected(teamProperties.teamId, selectedTeamId)"
+										(click)="selectTeam(teamProperties.teamId)">
+										{{ getTeamDisplayName(teamProperties) }}
+									</button>
+								}
+							</div>
+						</div>
+					}
+				</div>
+			} @else if (!hasSelectedTeam) {
+				<div class="team-context-card">
+					<p class="team-context-card__headline">{{ labels.noTeamSelected }}</p>
+					<p class="team-context-card__description">{{ labels.noTeamSelectedDescription }}</p>
+				</div>
+			}
 
-        @if (otherTeams.length > 0) {
-
-            <!-- Divider -->
-            <div class="my-3"
-                [style.background-color]="colors.dividerColor"
-                style="height: 2px; width: 100%; border-radius: 1px;">
-            </div>
-
-            <!-- Other Teams Section -->
-            <ul class="list-none p-0 m-0 flex flex-column gap-3">
-                @for (item of otherTeams; track item.route) {
-                    <li>
-                        <a href="#" class="flex align-items-center gap-2 px-3 py-2 border-round no-underline font-medium cursor-pointer transition-all transition-duration-200"
-                        [class.text-gray-700]="currentRoute() !== item.route"
-                        [style.background-color]="currentRoute() === item.route ? colors.activeBg : 'transparent'"
-                        [style.border-left]="'4px solid ' + (currentRoute() === item.route ? colors.activeBorder : 'transparent')"
-                        [style.color]="currentRoute() === item.route ? colors.activeText : colors.textPrimary">
-                            <fa-icon [icon]="item.icon" style="width: 1.25rem; text-align: center; font-size: 1rem;"></fa-icon>
-                            <span class="flex-1">{{ item.label }}</span>
-                        </a>
-                    </li>
-                }
-            </ul>
-        }
-
-    </nav>
+			<nav class="sidebar-nav" [class.sidebar-nav--disabled]="!hasSelectedTeam">
+				@for (navItem of teamNavItems; track navItem.label) {
+					<button class="nav-item" type="button" [disabled]="!hasSelectedTeam || navItem.route === null">
+						<fa-icon [icon]="navItem.icon" class="nav-item__icon"/>
+						<span>{{ navItem.label }}</span>
+					    <small class="nav-item__badge">{{ labels.comingSoon }}</small>
+					</button>
+				}
+			</nav>
+		</section>
+	</div>
 </aside>
