@@ -7,7 +7,7 @@ import { routeNames } from '../../app.routes';
 import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
 import { RandomDataGeneratorService } from '../../services/random-data-generator/random-data-generator.service';
 import { SignInService } from '../../services/sign-in/sign-in.service';
-import { UserManagerService } from '../../services/user-manager/user-manager.service';
+import { AppStateManagerService } from '../../services/app-state-manager/app-state-manager.service';
 import { SignInLeftPanelComponent, SignInPanelComponent } from './index';
 import { SignInColorScheme, SIGN_IN_THEME } from './sign-in-theme';
 import { AuthProvider, FormRegisterResult, FormSubmitResult } from './types';
@@ -27,7 +27,7 @@ export class SignInPage implements OnInit {
     private readonly firebaseFunctions = inject(FirebaseFunctionsService);
     private readonly signInService = inject(SignInService);
     private readonly routerService = inject(Router);
-    private readonly userManager = inject(UserManagerService);
+    private readonly appStateManager = inject(AppStateManagerService);
     private readonly randomDataGeneratorService = inject(RandomDataGeneratorService);
     public readonly signInPanel = viewChild('signInPanel');
     private readonly signInPanelComponent = viewChild(SignInPanelComponent);
@@ -141,7 +141,7 @@ export class SignInPage implements OnInit {
         this.exitRegisterMode();
         this.finishRegistration();
 
-        this.userManager.setUser(registerResult.value);
+        this.appStateManager.setUser(registerResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 
@@ -205,7 +205,7 @@ export class SignInPage implements OnInit {
         }
 
         this.finishAuthentication(provider);
-        this.userManager.setUser(loginResult.value);
+        this.appStateManager.setUser(loginResult.value);
         await this.routerService.navigate([`/${routeNames.userDashboard}`]);
     }
 

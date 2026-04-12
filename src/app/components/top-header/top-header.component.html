@@ -9,14 +9,15 @@
         <!-- User Actions -->
         <div class="flex align-items-center gap-4">
             <!-- Notification Button -->
-            <p-overlaybadge [value]="notificationCount()" severity="danger" styleClass="top-07rem right-08rem" badgeSize="small">
+            @let notificationCount = (unreadNotificationsCount$ | async) ?? 0;
+            <p-overlaybadge [value]="notificationCount" severity="danger" styleClass="top-07rem right-08rem" badgeSize="small" [badgeDisabled]="notificationCount === 0">
                 <p-button
                     type="button"
                 variant="text"
                     styleClass="hover-bg flex align-items-center gap-2 border-none cursor-pointer px-2 py-1 border-round transition-duration-200"
                     [style]="{ color: colors.textGray, 'font-size': '1.5rem' }"
                     (onClick)="onNotificationClick()">
-                    <fa-icon [icon]="notificationCount() > 0 ? faSolidBell : faRegularBell"></fa-icon>
+                    <fa-icon [icon]="notificationCount > 0 ? faSolidBell : faRegularBell"></fa-icon>
                 </p-button>
             </p-overlaybadge>
 

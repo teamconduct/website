@@ -6,11 +6,41 @@ export class Observable<T> extends BehaviorSubject<T | null> {
         super(initialValue);
     }
 
+    public filter(predicateFn: (value: T) => boolean): Observable<T> {
+        const filter = (value: T | null) => value !== null && predicateFn(value) ? value : null;
+        const observable = new Observable<T>(filter(this.value));
+        this.subscribe({
+            next: value => {
+                const filteredValue = filter(value);
+                if (filteredValue !== null)
+                    observable.next(filteredValue);
+            },
+            error: error => observable.error(error),
+            complete: () => observable.complete()
+        });
+        return observable;
+    }
+
     public map<U>(transformFn: (value: T) => U): Observable<U> {
         const transform = (value: T | null) => value !== null ? transformFn(value) : null;
         const observable = new Observable<U>(transform(this.value));
         this.subscribe({
             next: value => observable.next(transform(value)),
+            error: error => observable.error(error),
+            complete: () => observable.complete()
+        });
+        return observable;
+    }
+
+    public compactMap<U>(transformFn: (value: T) => U | null): Observable<U> {
+        const transform = (value: T | null) => value !== null ? transformFn(value) : null;
+        const observable = new Observable<U>(transform(this.value));
+        this.subscribe({
+            next: value => {
+                const transformedValue = transform(value);
+                if (transformedValue !== null)
+                    observable.next(transformedValue);
+            },
             error: error => observable.error(error),
             complete: () => observable.complete()
         });

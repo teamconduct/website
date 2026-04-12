@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { Firestore } from '@angular/fire/firestore';
-import { TeamDataManagerService } from './team-data-manager.service';
+import { AppStateManagerService } from './app-state-manager.service';
 
-describe('TeamDataManagerService', () => {
-  let service: TeamDataManagerService;
+describe('AppStateManagerService', () => {
+  let service: AppStateManagerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -11,7 +11,7 @@ describe('TeamDataManagerService', () => {
         { provide: Firestore, useValue: jasmine.createSpyObj('Firestore', ['collection']) }
       ]
     });
-    service = TestBed.inject(TeamDataManagerService);
+    service = TestBed.inject(AppStateManagerService);
   });
 
   it('should be created', () => {

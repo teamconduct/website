@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { UserManagerService } from '../user-manager/user-manager.service';
 import { FirebaseFunctionsService } from '../firebase-functions/firebase-functions.service';
 import { Fine, FineTemplate, Money, Person, PersonProperties, Team, TeamRole } from '@stevenkellner/team-conduct-api';
 import { Tagged, UtcDate } from '@stevenkellner/typescript-common-functionality';
@@ -93,6 +92,31 @@ export class RandomDataGeneratorService {
             reason: 'Locker room music fine',
             payedState: 'payed',
             amount: Fine.Amount.item('crateOfBeer', 2)
+        },
+        {
+            reason: 'Equipment damage',
+            payedState: 'notPayed',
+            amount: Fine.Amount.money(new Money(15, 0))
+        },
+        {
+            reason: 'Unsportsmanlike conduct',
+            payedState: 'payed',
+            amount: Fine.Amount.money(new Money(20, 0))
+        },
+        {
+            reason: 'Missed training session',
+            payedState: 'notPayed',
+            amount: Fine.Amount.money(new Money(10, 0))
+        },
+        {
+            reason: 'Uniform not cleaned',
+            payedState: 'payed',
+            amount: Fine.Amount.money(new Money(5, 50))
+        },
+        {
+            reason: 'Late arrival to match',
+            payedState: 'notPayed',
+            amount: Fine.Amount.money(new Money(8, 0))
         }
     ];
 
@@ -106,8 +130,6 @@ export class RandomDataGeneratorService {
             roles: ['team-manager']
         }
     ];
-
-    private userManager = inject(UserManagerService);
 
     private firebaseFunctions = inject(FirebaseFunctionsService);
 

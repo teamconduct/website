@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { Firestore } from '@angular/fire/firestore';
-import { UserManagerService } from './user-manager.service';
+import { DataManagerService } from './data-manager.service';
 
-describe('UserManagerService', () => {
-  let service: UserManagerService;
+describe('DataManagerService', () => {
+  let service: DataManagerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -11,7 +11,7 @@ describe('UserManagerService', () => {
         { provide: Firestore, useValue: jasmine.createSpyObj('Firestore', ['collection']) }
       ]
     });
-    service = TestBed.inject(UserManagerService);
+    service = TestBed.inject(DataManagerService);
   });
 
   it('should be created', () => {

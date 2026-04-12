@@ -4,8 +4,8 @@ import { LeftSidebarComponent } from '../../components/left-sidebar/left-sidebar
 import { Title } from '@angular/platform-browser';
 import { Auth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { UserManagerService } from '../../services/user-manager/user-manager.service';
-import { TeamDataManagerService } from '../../services/team-data-manager/team-data-manager.service';
+import { AppStateManagerService } from '../../services/app-state-manager/app-state-manager.service';
+import { DataManagerService } from '../../services/data-manager/data-manager.service';
 import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
 import { routeNames } from '../../app.routes';
 import { Result } from '@stevenkellner/typescript-common-functionality';
@@ -25,9 +25,9 @@ export class UserDashboardPage implements OnInit {
 
     private readonly router = inject(Router);
 
-    private readonly userManager = inject(UserManagerService);
+    private readonly appStateManager = inject(AppStateManagerService);
 
-    private readonly teamDataManager = inject(TeamDataManagerService);
+    private readonly dataManager = inject(DataManagerService);
 
     private readonly firebaseFunctions = inject(FirebaseFunctionsService);
 
@@ -35,37 +35,27 @@ export class UserDashboardPage implements OnInit {
 
     public ngOnInit() {
         this.titleService.setTitle($localize `:User Dashboard Page Title:User Dashboard - Team Conduct`);
-        this.firebaseAuth.onAuthStateChanged(async user => {
+        this.firebaseAuth.onAuthStateChanged(async authUser => {
+            if (authUser === null)
+                return this.signOut();
+            let user = this.appStateManager.user$.value;
             if (user === null) {
-                this.teamDataManager.reset();
-                this.userManager.setUser(null);
-                void this.router.navigate([`/${routeNames.signIn}`]);
-            } else {
-                // Check if user is already set (e.g., from registration flow)
-                const existingUser = this.userManager.user$.value;
-                if (existingUser !== null) {
-                    // User already set from registration, skip login call
-                    return;
-                }
                 const loginResult = await this.firebaseFunctions.functions.user.login.executeWithResult(null);
-                if (Result.isFailure(loginResult) && loginResult.error.code === 'not-found') {
-                    this.teamDataManager.reset();
-                    this.userManager.setUser(null);
-                    void this.router.navigate([`/${routeNames.signIn}`]);
-                } else {
-                    this.userManager.setUser(loginResult.value);
-                    const teamId = this.userManager.selectedTeamId$.value;
-                    if (teamId !== null) {
-                        this.userManager.setTeamId(teamId);
-                        this.teamDataManager.startObserve(teamId, this.cdr);
-                        this.userManager.currentPersonId$.subscribe(currentPersonId => {
-                            if (currentPersonId === null)
-                                return;
-                            // void this.registerSubscribeNotifications(teamId, currentPersonId);
-                        });
-                    }
-                }
+                if (Result.isFailure(loginResult) && loginResult.error.code === 'not-found')
+                    return this.signOut();
+                user = loginResult.value;
             }
+            if (user === null)
+                return this.signOut();
+            this.appStateManager.setUser(user);
+            this.dataManager.startObserve(user, this.cdr);
         });
+    }
+
+    private async signOut(): Promise<void> {
+        await this.firebaseAuth.signOut();
+        this.dataManager.reset();
+        this.appStateManager.setUser(null);
+        void this.router.navigate([`/${routeNames.signIn}`]);
     }
 }

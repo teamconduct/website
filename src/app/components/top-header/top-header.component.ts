@@ -1,14 +1,17 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell as faSolidBell, faFutbol } from '@fortawesome/free-solid-svg-icons';
 import { faBell as faRegularBell } from '@fortawesome/free-regular-svg-icons';
 import { ButtonModule } from 'primeng/button';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { AvatarModule } from 'primeng/avatar';
+import { DataManagerService } from '../../services/data-manager/data-manager.service';
+import { AsyncPipe } from '@angular/common';
+import { map } from 'rxjs';
 
 @Component({
     selector: 'app-top-header',
-    imports: [FaIconComponent, ButtonModule, OverlayBadgeModule, AvatarModule],
+    imports: [FaIconComponent, ButtonModule, OverlayBadgeModule, AvatarModule, AsyncPipe],
     templateUrl: './top-header.component.html',
     styleUrl: './top-header.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,9 +29,14 @@ export class TopHeaderComponent {
         hoverBg: '#f3f4f6',
     };
 
-    readonly notificationCount = signal(3); // TODO: Replace with real data
     readonly userName = signal('Coach Martinez'); // TODO: Replace with real data
     readonly userAvatar = signal('https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg'); // TODO: Replace with real data
+
+    readonly dataManager = inject(DataManagerService);
+
+    readonly unreadNotificationsCount$ = this.dataManager.notifications$.pipe(
+        map(notifications => notifications?.values.filter(notification => !notification.isRead).length ?? 0)
+    );
 
     onNotificationClick(): void {
         console.log('Notifications clicked');
