@@ -1,7 +1,11 @@
 <section class="metrics-grid" aria-label="Dashboard stats">
     @if (type() === 'user') {
         <app-user-dashboard-fines-stats />
-        <app-user-dashboard-open-fines-per-team-stats />
+        @let user = appStateManager.user$ | async;
+        @if (user === null || user.teams.values.length > 1) {
+            <app-user-dashboard-open-fines-per-team-stats />
+        }
+        <app-user-dashboard-fine-frequency-stats />
         <app-user-dashboard-fines-per-interval-stats />
     } @else if (type() === 'team') {
         <app-team-dashboard-open-fines-stats />

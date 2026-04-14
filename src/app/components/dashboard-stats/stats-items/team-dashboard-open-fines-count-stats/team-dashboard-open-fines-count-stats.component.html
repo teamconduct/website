@@ -2,7 +2,7 @@
 	<div class="metric-card__icon metric-card__icon--orange">
 		<fa-icon [icon]="faClockRotateLeft"/>
 	</div>
-	<p class="metric-card__label">Open Fines Count</p>
+	<p class="metric-card__label">Total Open Fines Count</p>
 
     @let selectedTeam = dataManager.selectedTeam$ | async;
     @let fines = selectedTeam !== null ? (selectedTeam.fines$ | async) : null;
