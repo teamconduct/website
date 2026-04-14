@@ -6,16 +6,22 @@
 
     @let user = appStateManager.user$ | async;
     @let openFinesPerTeam = user !== null ? (getOpenFinesPerTeam$(user) | async) : null;
-    @if (openFinesPerTeam === null || openFinesPerTeam.length === 0) {
+    @if (openFinesPerTeam === null || openFinesPerTeam.visibleTeams.length === 0) {
         <p class="metric-card__subvalue">No team data available</p>
     } @else {
         <div class="stack-list">
-            @for (team of openFinesPerTeam; track team.teamName) {
+            @for (team of openFinesPerTeam.visibleTeams; track team.teamName) {
                 <div class="stack-list__row">
                     <span class="stack-list__meta stack-list__meta--large">{{ team.teamName }}</span>
+                    <span class="stack-list__connector" aria-hidden="true"></span>
                     <span class="stack-list__value stack-list__value--large">{{ team.openFines | fineAmount }}</span>
                 </div>
             }
         </div>
+        @if (openFinesPerTeam.hiddenTeamsCount > 0) {
+            <p class="metric-card__subvalue">
+                +{{ openFinesPerTeam.hiddenTeamsCount }} more team
+            </p>
+        }
     }
 </article>

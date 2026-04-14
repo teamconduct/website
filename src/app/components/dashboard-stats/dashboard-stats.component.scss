@@ -415,9 +415,17 @@
 .stack-list__row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 0.65rem;
     color: #1f2937;
     font-size: 0.82rem;
+}
+
+.stack-list__connector {
+    flex: 1 1 auto;
+    border-bottom: 1px dotted #b3bbc6;
+    align-self: center;
+    transform: translateY(0.12rem);
 }
 
 .stack-list__meta {

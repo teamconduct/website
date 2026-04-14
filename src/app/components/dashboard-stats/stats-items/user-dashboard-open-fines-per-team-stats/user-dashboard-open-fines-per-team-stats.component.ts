@@ -14,6 +14,11 @@ interface TeamOpenFineStats {
     openFines: SummedFineValue;
 }
 
+interface TeamOpenFineStatsViewModel {
+    visibleTeams: TeamOpenFineStats[];
+    hiddenTeamsCount: number;
+}
+
 @Component({
     selector: 'app-user-dashboard-open-fines-per-team-stats',
     imports: [FineAmountPipe, AsyncPipe, FaIconComponent],
@@ -22,13 +27,15 @@ interface TeamOpenFineStats {
 })
 export class UserDashboardOpenFinesPerTeamStatsComponent {
 
+    private static readonly maxVisibleTeams = 2;
+
     public appStateManager = inject(AppStateManagerService);
 
     public dataManager = inject(DataManagerService);
 
     public readonly faClockRotateLeft = faClockRotateLeft;
 
-    public getOpenFinesPerTeam$(user: User): Observable<TeamOpenFineStats[]> {
+    public getOpenFinesPerTeam$(user: User): Observable<TeamOpenFineStatsViewModel> {
         return Observable.combineArray(compactMap(user.teams.values, (teamProperties => {
             const team = this.dataManager.teams.getOptional(teamProperties.teamId);
             if (team === null)
@@ -38,14 +45,28 @@ export class UserDashboardOpenFinesPerTeamStatsComponent {
                 personId: teamProperties.personId,
                 persons,
             }));
-        })), teams => compactMap(teams, teamProperties => {
-            const person = teamProperties.persons.getOptional(teamProperties.personId);
-            if (person === null)
-                return null;
+        })), teams => {
+            const stats = compactMap(teams, teamProperties => {
+                const person = teamProperties.persons.getOptional(teamProperties.personId);
+                if (person === null)
+                    return null;
+                return {
+                    teamName: teamProperties.teamName,
+                    openFines: person.fineValues.notPayed,
+                };
+            });
+
+            const sortedStats = [...stats].sort((lhs, rhs) => {
+                const compareResult = SummedFineValue.compare(lhs.openFines, rhs.openFines);
+                if (compareResult === 'equal')
+                    return lhs.teamName.localeCompare(rhs.teamName);
+                return compareResult === 'greater' ? -1 : 1;
+            });
+
             return {
-                teamName: teamProperties.teamName,
-                openFines: person.fineValues.notPayed,
+                visibleTeams: sortedStats.slice(0, UserDashboardOpenFinesPerTeamStatsComponent.maxVisibleTeams),
+                hiddenTeamsCount: Math.max(0, sortedStats.length - UserDashboardOpenFinesPerTeamStatsComponent.maxVisibleTeams),
             };
-        }));
+        });
     }
 }
