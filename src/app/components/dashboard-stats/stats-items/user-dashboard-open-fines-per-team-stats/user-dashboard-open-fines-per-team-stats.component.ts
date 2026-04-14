@@ -63,6 +63,13 @@ export class UserDashboardOpenFinesPerTeamStatsComponent {
                 return compareResult === 'greater' ? -1 : 1;
             });
 
+            if (sortedStats.length === UserDashboardOpenFinesPerTeamStatsComponent.maxVisibleTeams + 1) {
+                return {
+                    visibleTeams: sortedStats,
+                    hiddenTeamsCount: 0,
+                };
+            }
+
             return {
                 visibleTeams: sortedStats.slice(0, UserDashboardOpenFinesPerTeamStatsComponent.maxVisibleTeams),
                 hiddenTeamsCount: Math.max(0, sortedStats.length - UserDashboardOpenFinesPerTeamStatsComponent.maxVisibleTeams),
