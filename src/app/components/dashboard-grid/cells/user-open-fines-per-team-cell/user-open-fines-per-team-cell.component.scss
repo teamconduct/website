@@ -1,0 +1,56 @@
+@use '../../dashboard-grid-shared' as grid;
+
+@include grid.host-block;
+
+.cell {
+    @include grid.card-surface;
+}
+
+.cell__header {
+    @include grid.card-header;
+    margin-bottom: 0.75rem;
+}
+
+.cell__title {
+    @include grid.card-title(1.2rem, 700);
+}
+
+.cell__link {
+    font-size: 0.75rem;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.row__name {
+    color: #1f2937;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.row__value {
+    color: #0f172a;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.row__bar {
+    grid-column: 1 / -1;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: #e5e7eb;
+    overflow: hidden;
+}
+
+.row__bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #3b82f6;
+}

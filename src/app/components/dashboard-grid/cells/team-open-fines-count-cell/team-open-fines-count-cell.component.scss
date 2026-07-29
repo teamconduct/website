@@ -1,0 +1,62 @@
+@use '../../dashboard-grid-shared' as grid;
+
+@include grid.host-block;
+
+.cell {
+    @include grid.card-surface;
+}
+
+.cell__title {
+    @include grid.card-title(0.95rem, 700);
+}
+
+.ring-wrap {
+    margin: 0.8rem auto 0;
+    width: 7.5rem;
+    height: 7.5rem;
+    position: relative;
+}
+
+.ring {
+    width: 100%;
+    height: 100%;
+}
+
+.ring__label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.ring__label strong {
+    color: #0f172a;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.ring__label span {
+    color: #64748b;
+    font-size: 0.7rem;
+}
+
+.stats {
+    margin-top: 0.85rem;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.stats div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #334155;
+}
+
+.stats strong {
+    color: #0f172a;
+}

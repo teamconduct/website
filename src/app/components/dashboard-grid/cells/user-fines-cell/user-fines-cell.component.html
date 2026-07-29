@@ -1,0 +1,38 @@
+<!-- section class="cell" aria-label="User monthly fine trend">
+	<header class="cell__header">
+		<h3 class="cell__title">Your Fine Trend</h3>
+		<div class="cell__period-wrap">
+			<select class="cell__period" aria-label="Select fine trend period" (change)="onPeriodChange($event)">
+				<option value="3m">Last 3 months</option>
+				<option value="6m" selected>Last 6 months</option>
+				<option value="12m">Last 12 months</option>
+				<option value="24m">Last 2 years</option>
+			</select>
+		</div>
+	</header>
+
+	@if (userFinesViewModel(); as vm) {
+        <p class="cell__value">{{ vm.totalFormatted }}</p>
+        <p class="cell__sub">{{ vm.subtitle }}</p>
+
+        <div class="cell__chart-wrap">
+            <p-chart type="line" [data]="vm.chartData" [options]="vm.chartOptions" class="cell__chart"></p-chart>
+        </div>
+
+        <div class="cell__footer">
+            <span
+                class="cell__delta"
+                [class.cell__delta--positive]="vm.deltaDirection === 'positive'"
+                [class.cell__delta--negative]="vm.deltaDirection === 'negative'"
+            >{{ vm.deltaText }}</span>
+            <span>{{ vm.deltaDescription }}</span>
+        </div>
+    } @else {
+        <div class="cell__skeleton" aria-label="Loading fine trend data">
+            <div class="cell__skeleton-line cell__skeleton-line--value"></div>
+            <div class="cell__skeleton-line cell__skeleton-line--sub"></div>
+            <div class="cell__skeleton-chart"></div>
+            <div class="cell__skeleton-line cell__skeleton-line--footer"></div>
+        </div>
+    }
+</section -->

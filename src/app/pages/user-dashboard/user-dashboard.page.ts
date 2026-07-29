@@ -10,10 +10,11 @@ import { DataManagerService } from '../../services/data-manager/data-manager.ser
 import { FirebaseFunctionsService } from '../../services/firebase-functions/firebase-functions.service';
 import { routeNames } from '../../app.routes';
 import { Result } from '@stevenkellner/typescript-common-functionality';
+import { DashboardGridComponent } from '../../components/dashboard-grid/dashboard-grid.component';
 
 @Component({
     selector: 'page-user-dashboard',
-    imports: [TopHeaderComponent, LeftSidebarComponent, DashboardStatsComponent],
+    imports: [TopHeaderComponent, LeftSidebarComponent, DashboardStatsComponent, DashboardGridComponent],
     templateUrl: './user-dashboard.page.html',
     styleUrl: './user-dashboard.page.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

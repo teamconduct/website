@@ -17,6 +17,17 @@ import { connectFirestoreEmulator, getFirestore, provideFirestore } from '@angul
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
 // import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 
+const emulatorPorts = {
+    auth: 9099,
+    firestore: 8080,
+    functions: 5001
+};
+
+const emulatorHost =
+    typeof globalThis !== 'undefined' && typeof globalThis.location !== 'undefined'
+        ? globalThis.location.hostname
+        : 'localhost';
+
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
@@ -42,20 +53,20 @@ export const appConfig: ApplicationConfig = {
             const auth = getAuth();
             auth.setPersistence(browserLocalPersistence);
             if (!isProduction)
-                connectAuthEmulator(auth, 'http://192.168.178.47:9099', { disableWarnings: true });
+                connectAuthEmulator(auth, `http://${emulatorHost}:${emulatorPorts.auth}`, { disableWarnings: true });
             return auth;
         }),
         provideFirestore(() => {
             const firestore = getFirestore();
             if (!isProduction)
-                connectFirestoreEmulator(firestore, '192.168.178.47', 8080);
+                connectFirestoreEmulator(firestore, emulatorHost, emulatorPorts.firestore);
             return firestore;
         }),
         provideFunctions(() => {
             const functions = getFunctions();
             functions.region = 'europe-west1';
             if (!isProduction)
-                connectFunctionsEmulator(functions, '192.168.178.47', 5001);
+                connectFunctionsEmulator(functions, emulatorHost, emulatorPorts.functions);
             return functions;
         })
         // provideMessaging(() => getMessaging())

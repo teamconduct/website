@@ -1,0 +1,17 @@
+<section class="cell" aria-label="Outstanding fines queue">
+	<h3 class="cell__title">Outstanding Queue</h3>
+
+	<div class="ring-wrap">
+		<p-chart type="doughnut" [data]="chartData" [options]="chartOptions" class="ring"></p-chart>
+		<div class="ring__label">
+			<strong>38</strong>
+			<span>open fines</span>
+		</div>
+	</div>
+
+	<div class="stats">
+		<div><span>Late</span><strong>14</strong></div>
+		<div><span>Cards</span><strong>11</strong></div>
+		<div><span>Other</span><strong>13</strong></div>
+	</div>
+</section>

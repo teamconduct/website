@@ -30,6 +30,7 @@
     "@stevenkellner/firebase-function": "^1.4.148",
     "@stevenkellner/team-conduct-api": "^2.0.23",
     "@stevenkellner/typescript-common-functionality": "^1.0.62",
+    "chart.js": "^4.5.1",
     "crypto-js": "^4.2.0",
     "ngx-cookie-service": "^21.1.0",
     "primeflex": "^4.0.0",

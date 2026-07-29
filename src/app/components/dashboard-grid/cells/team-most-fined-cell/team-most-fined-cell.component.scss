@@ -1,0 +1,54 @@
+@use '../../dashboard-grid-shared' as grid;
+
+@include grid.host-block;
+
+.cell {
+    @include grid.card-surface;
+}
+
+.cell__header {
+    @include grid.card-header;
+    margin-bottom: 0.6rem;
+}
+
+.cell__title {
+    @include grid.card-title(0.95rem, 700);
+}
+
+.cell__link {
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-top: 1px solid #f1f5f9;
+}
+
+.item__avatar {
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e2e8f0;
+    color: #334155;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.item__name {
+    color: #1f2937;
+    font-size: 0.82rem;
+}
+
+.item__value {
+    color: #0f172a;
+    font-size: 0.8rem;
+}

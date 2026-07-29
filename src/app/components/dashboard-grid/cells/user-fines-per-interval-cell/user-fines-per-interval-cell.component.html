@@ -1,0 +1,33 @@
+<section class="cell" aria-label="User trend and recent fines">
+	<header class="cell__header">
+		<h3 class="cell__title">Fine Trend and Settlements</h3>
+		<select class="cell__filter" aria-label="Select period">
+			<option>Last 6 Months</option>
+			<option>This Year</option>
+			<option>All Time</option>
+		</select>
+	</header>
+
+	<p-chart type="bar" [data]="chartData" [options]="chartOptions" class="cell__chart"></p-chart>
+
+	<div class="table">
+		<div class="table__row">
+			<span>Late to training</span>
+			<span>Dec 12</span>
+			<strong>$50</strong>
+			<span class="table__status table__status--open">Open</span>
+		</div>
+		<div class="table__row">
+			<span>Wrong kit</span>
+			<span>Dec 08</span>
+			<strong>$25</strong>
+			<span class="table__status table__status--paid">Paid</span>
+		</div>
+		<div class="table__row">
+			<span>Phone in meeting</span>
+			<span>Nov 28</span>
+			<strong>$100</strong>
+			<span class="table__status table__status--pending">Pending</span>
+		</div>
+	</div>
+</section>

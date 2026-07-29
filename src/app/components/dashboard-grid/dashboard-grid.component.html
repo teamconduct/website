@@ -1,0 +1,45 @@
+@if (type() === 'user') {
+    <section class="dashboard-grid" aria-label="User dashboard grid">
+        <div class="dashboard-grid__item">
+            <app-user-fines-cell />
+        </div>
+
+        <div class="dashboard-grid__item">
+            <app-user-open-fines-per-team-cell />
+        </div>
+
+        <div class="dashboard-grid__item">
+            <app-user-fine-frequency-cell />
+        </div>
+
+        <div class="dashboard-grid__item dashboard-grid__item--span-2">
+            <app-user-fines-per-interval-cell />
+        </div>
+
+        <div class="dashboard-grid__item">
+            <app-user-quick-actions-cell />
+        </div>
+    </section>
+} @else {
+    <section class="dashboard-grid" aria-label="Team dashboard grid">
+        <div class="dashboard-grid__item">
+            <app-team-open-fines-cell />
+        </div>
+
+        <div class="dashboard-grid__item">
+            <app-team-open-fines-count-cell />
+        </div>
+
+        <div class="dashboard-grid__item">
+            <app-team-most-fined-cell />
+        </div>
+
+        <div class="dashboard-grid__item dashboard-grid__item--span-2">
+            <app-team-payed-fines-cell />
+        </div>
+
+        <div class="dashboard-grid__item">
+            <app-team-quick-links-cell />
+        </div>
+    </section>
+}

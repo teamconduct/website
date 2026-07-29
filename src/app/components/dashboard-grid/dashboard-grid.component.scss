@@ -1,0 +1,28 @@
+:host {
+    display: block;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.dashboard-grid__item {
+    display: block;
+    min-width: 0;
+}
+
+.dashboard-grid__item > * {
+    height: 100%;
+}
+
+@media (min-width: 1100px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .dashboard-grid__item--span-2 {
+        grid-column: span 2;
+    }
+}

@@ -1,0 +1,24 @@
+<section class="cell" aria-label="Collections versus open fines">
+	<header class="cell__header">
+		<h3 class="cell__title">Collections vs Open</h3>
+		<span class="cell__chip">Quarterly</span>
+	</header>
+
+	<div class="legend">
+		<span><i class="dot dot--dark"></i>Collected</span>
+		<span><i class="dot dot--light"></i>Open</span>
+	</div>
+
+	<p-chart type="bar" [data]="chartData" [options]="chartOptions" class="chart"></p-chart>
+
+	<div class="totals">
+		<div>
+			<span>Collected</span>
+			<strong>$8,420</strong>
+		</div>
+		<div>
+			<span>Still Open</span>
+			<strong>$2,310</strong>
+		</div>
+	</div>
+</section>
